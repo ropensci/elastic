@@ -1,0 +1,4 @@
+export(elastic_search)
+export(elastic_start)
+export(elastic_stop)
+import(httr)
