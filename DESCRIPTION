@@ -1,18 +1,17 @@
 Package: elastic
-Maintainer: Scott Chamberlain <myrmecocystus@gmail.com>
-Author: Scott Chamberlain
-Version: 0.0.1
+Title: General purpose R interface to Elasticsearch
+Description: Easy R connector to Elasticsearch, a NoSQL database built on the
+    JVM. THis library interacts with the Elasticsearch HTTP API.
+Version: 0.0.2
+Date: 2013-12-11
 License: MIT
-Title: Easy R connector to Elasticsearch
-Description: Easy R connector to Elasticsearch.
+Authors@R: person("Scott", "Chamberlain", role = c("aut", "cre"),
+    email = "myrmecocystus@gmail.com")
 URL: https://github.com/schamberlain/elastic
 BugReports: https://github.com/schamberlain/elastic/issues
-Import: httr,
+Imports:
+    httr,
     plyr
 Suggests:
     testthat,
     roxygen2
-Collate:
-    'elastic_search.r'
-    'elastic_start.r'
-    'elastic_stop.r'

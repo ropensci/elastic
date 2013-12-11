@@ -1,5 +1,7 @@
 #' Full text search of any CouchDB databases using Elasticsearch.
-#'
+#' 
+#' @import httr 
+#' @importFrom plyr compact
 #' @param endpoint the endpoint, defaults to localhost (http://127.0.0.1)
 #' @param port port to connect to, defaults to 5984
 #' @param dbname Database name. (charcter)
@@ -27,7 +29,7 @@ elastic_search <- function(endpoint="http://127.0.0.1", port=9200, dbname, parse
   parsed <- content(out)
   if(verbose)
     message(paste("\nmatches -> ", round(parsed$hits$total,1), "\nscore -> ", round(parsed$hits$max_score,3), sep=""))  
-  class(parsed) <- "sofaes"
+  class(parsed) <- "elastic"
   return( parsed )
   
 #   if(parse_){

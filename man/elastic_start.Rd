@@ -2,8 +2,7 @@
 \alias{elastic_start}
 \title{Start indexing a CouchDB database using Elasticsearch.}
 \usage{
-  elastic_start(dbname, endpoint = "http://localhost",
-    port = 9200)
+elastic_start(dbname, endpoint = "http://localhost", port = 9200)
 }
 \arguments{
   \item{dbname}{Database name. (charcter)}
@@ -14,11 +13,11 @@
   \item{port}{port to connect to, defaults to 5984}
 }
 \description{
-  Start indexing a CouchDB database using Elasticsearch.
+Start indexing a CouchDB database using Elasticsearch.
 }
 \details{
-  The function returns TRUE. Though note that this can
-  result even if the database does not exist in CouchDB.
+The function returns TRUE. Though note that this can result
+even if the database does not exist in CouchDB.
 }
 \examples{
 \dontrun{
