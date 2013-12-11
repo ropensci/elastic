@@ -1,14 +1,15 @@
 Package: elastic
 Title: General purpose R interface to Elasticsearch
 Description: Easy R connector to Elasticsearch, a NoSQL database built on the
-    JVM. THis library interacts with the Elasticsearch HTTP API.
+    JVM. This library interacts with the Elasticsearch HTTP API, and includes 
+    tools for interacting with CouchDB iva the River plugin to Elasticsearch.
 Version: 0.0.2
 Date: 2013-12-11
-License: MIT
+License: MIT + file LICENSE
 Authors@R: person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "myrmecocystus@gmail.com")
-URL: https://github.com/schamberlain/elastic
-BugReports: https://github.com/schamberlain/elastic/issues
+URL: https://github.com/sckott/elastic
+BugReports: https://github.com/sckott/elastic/issues
 Imports:
     httr,
     plyr

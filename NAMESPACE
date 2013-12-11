@@ -1,5 +1,6 @@
+export(elastic_river_auth)
+export(elastic_river_start)
+export(elastic_river_stop)
 export(elastic_search)
-export(elastic_start)
-export(elastic_stop)
 import(httr)
 importFrom(plyr,compact)

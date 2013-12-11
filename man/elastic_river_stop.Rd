@@ -1,8 +1,8 @@
-\name{elastic_stop}
-\alias{elastic_stop}
+\name{elastic_river_stop}
+\alias{elastic_river_stop}
 \title{Stop indexing a CouchDB database using Elasticsearch.}
 \usage{
-elastic_stop(dbname, endpoint = "http://localhost", port = 9200)
+elastic_river_stop(dbname, endpoint = "http://localhost", port = 9200)
 }
 \arguments{
   \item{dbname}{Database name. (charcter)}
@@ -10,7 +10,7 @@ elastic_stop(dbname, endpoint = "http://localhost", port = 9200)
   \item{endpoint}{the endpoint, defaults to localhost
   (http://127.0.0.1)}
 
-  \item{port}{port to connect to, defaults to 5984}
+  \item{port}{port to connect to, defaults to 9200}
 }
 \description{
 Stop indexing a CouchDB database using Elasticsearch.
@@ -24,7 +24,11 @@ didn't mean to start indexing.
 }
 \examples{
 \dontrun{
-elastic_stop(dbname = "ggggg")
+elastic_river_stop(dbname = "dudedb")
 }
+}
+\references{
+See docs for the Elasticsearch River plugin \url{#} that
+lets you easily index CouchDB databases.
 }
 

@@ -1,8 +1,8 @@
-\name{elastic_start}
-\alias{elastic_start}
+\name{elastic_river_auth}
+\alias{elastic_river_auth}
 \title{Start indexing a CouchDB database using Elasticsearch.}
 \usage{
-elastic_start(dbname, endpoint = "http://localhost", port = 9200)
+elastic_river_auth(user = NULL, pwd = NULL)
 }
 \arguments{
   \item{dbname}{Database name. (charcter)}
@@ -10,7 +10,7 @@ elastic_start(dbname, endpoint = "http://localhost", port = 9200)
   \item{endpoint}{the endpoint, defaults to localhost
   (http://127.0.0.1)}
 
-  \item{port}{port to connect to, defaults to 5984}
+  \item{port}{port to connect to, defaults to 9200}
 }
 \description{
 Start indexing a CouchDB database using Elasticsearch.
@@ -21,8 +21,11 @@ even if the database does not exist in CouchDB.
 }
 \examples{
 \dontrun{
-sofa_createdb(dbname='shitty2')
-elastic_start(dbname="shitty2")
+elastic_river_auth(user="foo", pwd="bar")
 }
+}
+\references{
+See docs for the Elasticsearch River plugin \url{#} that
+lets you easily index CouchDB databases.
 }
 
