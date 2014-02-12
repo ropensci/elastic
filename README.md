@@ -50,7 +50,7 @@ key <- 'key'
 
 ### Install CouchDB River plugin for Elasticsearch
 
-+ Navigate to elastisearch di: `cd elasticsearch`
++ Navigate to elastisearch dir: `cd elasticsearch`
 + Install it: `bin/plugin -install elasticsearch/elasticsearch-river-couchdb/1.1.0`
 
 ### Start Elasticsearch

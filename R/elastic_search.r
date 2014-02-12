@@ -17,10 +17,15 @@
 #' lapply(results$hits$hits, function(x) x$`_source`) # get the document contents
 #' sapply(results$hits$hits, function(x) x$`_source`)[[1]][[1]] # get one of the documents contents'
 #' }
-elastic_search <- function(url="http://127.0.0.1", port=9200, dbname, parse=TRUE, 
+elastic_search <- function(url="http://127.0.0.1", port=9200, dbname=NULL, parse=TRUE, 
   verbose=TRUE, ...)
 {
-  call_ <- paste(paste(url, port, sep=":"), "/", dbname, "/_search", sep="")
+  if(is.null(dbname)){
+    call_ <- url
+  } else
+  {
+    call_ <- paste(paste(url, port, sep=":"), "/", dbname, "/_search", sep="")    
+  }
   args <- compact(list(...))
   out <- GET(call_, query=args)
   stop_for_status(out)
