@@ -14,7 +14,10 @@ elastic
 
 * This client is being developed under v1.0 of Elasticsearch.
 * It is early days for this client, so do help us by submitting bug reports and feature requests on the issue tracker.
-* 
+
+### Function names
+
+To avoid potential conflicts with other R packges, this package adds `es_` as a prefix to every function.
 
 ### Quick start
 
@@ -23,7 +26,7 @@ elastic
 Install dependencies
 
 ```coffee
-install.packages(c("rjson","plyr","httr","XML"))
+install.packages(c("rjson","plyr","httr"))
 ```
 
 Install elastic
@@ -35,21 +38,15 @@ install_github("ropensci/elastic")
 library(elastic)
 ```
 
-**Define stuff** Your base url and a key (if needed). This example should work. You do need to pass a key to the Public Library of Science search API, but it apparently doesn't need to be a real one.
-
-```coffee
-url <- 'http://localhost:9200/search'
-```
-
 ### Install Elasticsearch (on OSX)
 
-+ Download zip or tar file
++ Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/)
 + Unzip it: `unzip or untar`
-+ Move it: `sudo mv /path/to/elasticsearch-0.20.6 /usr/local`
++ Move it: `sudo mv /path/to/elasticsearch-1.0.0 /usr/local` (replace version with your verioon)
 + Navigate to /usr/local: `cd /usr/local`
-+ Add shortcut: `sudo ln -s elasticsearch-0.20.6 elasticsearch`
++ Add shortcut: `sudo ln -s elasticsearch-1.0.0 elasticsearch` (replace version with your verioon)
 
-### Install CouchDB River plugin for Elasticsearch
+### __Optionally__ install CouchDB River plugin for Elasticsearch
 
 + Navigate to elastisearch dir: `cd elasticsearch`
 + Install it: `bin/plugin -install elasticsearch/elasticsearch-river-couchdb/2.0.0.RC1`
@@ -109,7 +106,7 @@ curl -XGET "http://localhost:9200/sofadb/_search?q=road&pretty=true"
 #### In R...
 
 ```coffee
-elastic_search(dbname="sofadb", q="road")
+es_search(dbname="sofadb", q="road")
 ...
 
 $hits$hits[[3]]
