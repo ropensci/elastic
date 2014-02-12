@@ -1,7 +1,7 @@
 elastic
 =======
 
-[![Build Status](https://api.travis-ci.org/sckott/elastic.png)](https://travis-ci.org/sckott/elastic)
+[![Build Status](https://api.travis-ci.org/ropensci/elastic.png)](https://travis-ci.org/ropensci/elastic)
 
 **A general purpose R interface to [Elasticsearch](http://elasticsearch.org)**
 
@@ -24,20 +24,19 @@ Install dependencies
 install.packages(c("rjson","plyr","httr","XML"))
 ```
 
-Install solr
+Install elastic
 
 ```coffee
 install.packages("devtools")
 library(devtools)
-install_github("sckott/elastic")
+install_github("ropensci/elastic")
 library(elastic)
 ```
 
 **Define stuff** Your base url and a key (if needed). This example should work. You do need to pass a key to the Public Library of Science search API, but it apparently doesn't need to be a real one.
 
 ```coffee
-url <- 'http://localhost:92/search'
-key <- 'key'
+url <- 'http://localhost:9200/search'
 ```
 
 ### Install Elasticsearch (on OSX)
@@ -51,7 +50,7 @@ key <- 'key'
 ### Install CouchDB River plugin for Elasticsearch
 
 + Navigate to elastisearch dir: `cd elasticsearch`
-+ Install it: `bin/plugin -install elasticsearch/elasticsearch-river-couchdb/1.1.0`
++ Install it: `bin/plugin -install elasticsearch/elasticsearch-river-couchdb/2.0.0.RC1`
 
 ### Start Elasticsearch
 
