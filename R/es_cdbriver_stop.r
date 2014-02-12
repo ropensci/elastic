@@ -11,10 +11,10 @@
 #' @references See docs for the Elasticsearch River plugin \url{#} that lets you 
 #' 	  easily index CouchDB databases.
 #' @examples \dontrun{
-#' elastic_river_stop(dbname = "dudedb")
+#' es_cdbriver_stop(dbname = "mydb")
 #' }
 #' @export
-elastic_river_stop <- function(dbname, endpoint="http://localhost", port=9200)
+es_cdbriver_stop <- function(dbname, endpoint="http://localhost", port=9200)
 {
   call_ <- sprintf("%s:%s/_river/%s", endpoint, port, dbname)
   DELETE(url = call_)

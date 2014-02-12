@@ -1,8 +1,8 @@
-\name{elastic_river_stop}
-\alias{elastic_river_stop}
+\name{es_cdbriver_stop}
+\alias{es_cdbriver_stop}
 \title{Stop indexing a CouchDB database using Elasticsearch.}
 \usage{
-elastic_river_stop(dbname, endpoint = "http://localhost", port = 9200)
+es_cdbriver_stop(dbname, endpoint = "http://localhost", port = 9200)
 }
 \arguments{
   \item{dbname}{Database name. (charcter)}
@@ -24,7 +24,7 @@ didn't mean to start indexing.
 }
 \examples{
 \dontrun{
-elastic_river_stop(dbname = "dudedb")
+es_cdbriver_stop(dbname = "mydb")
 }
 }
 \references{

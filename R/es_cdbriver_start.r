@@ -9,12 +9,14 @@
 #' @references See docs for the Elasticsearch River plugin \url{#} that lets you 
 #' 	  easily index CouchDB databases.
 #' @examples \dontrun{
+#' library(devtools)
+#' install_github("sckott/sofa")
 #' library(sofa)
-#' sofa_createdb(dbname='alm_couchdb')
-#' elastic_river_start(dbname="alm_couchdb")
+#' sofa_createdb(dbname='mydb')
+#' es_cdbriver_start(dbname='mydb')
 #' }
 #' @export
-elastic_river_start <- function(dbname, endpoint="http://localhost", port=9200)
+es_cdbriver_start <- function(dbname, endpoint="http://localhost", port=9200)
 {
   call_ <- sprintf("%s:%s/_river/%s/_meta", endpoint, port, dbname)
   args <- paste0('{ "type" : "couchdb", "couchdb" : { "host" : "localhost", "port" : 5984, "db" : "', dbname, '", "filter" : null } }')

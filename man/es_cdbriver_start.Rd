@@ -1,8 +1,8 @@
-\name{elastic_river_auth}
-\alias{elastic_river_auth}
+\name{es_cdbriver_start}
+\alias{es_cdbriver_start}
 \title{Start indexing a CouchDB database using Elasticsearch.}
 \usage{
-elastic_river_auth(user = NULL, pwd = NULL)
+es_cdbriver_start(dbname, endpoint = "http://localhost", port = 9200)
 }
 \arguments{
   \item{dbname}{Database name. (charcter)}
@@ -21,7 +21,11 @@ even if the database does not exist in CouchDB.
 }
 \examples{
 \dontrun{
-elastic_river_auth(user="foo", pwd="bar")
+library(devtools)
+install_github("sckott/sofa")
+library(sofa)
+sofa_createdb(dbname='mydb')
+es_cdbriver_start(dbname='mydb')
 }
 }
 \references{

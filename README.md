@@ -12,7 +12,9 @@ elastic
 
 ### Notes
 
-XXXX
+* This client is being developed under v1.0 of Elasticsearch.
+* It is early days for this client, so do help us by submitting bug reports and feature requests on the issue tracker.
+* 
 
 ### Quick start
 
