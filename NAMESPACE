@@ -1,6 +1,8 @@
 export(es_cdbriver_auth)
 export(es_cdbriver_start)
 export(es_cdbriver_stop)
+export(es_connect)
+export(es_get)
 export(es_search)
 import(httr)
 importFrom(plyr,compact)
