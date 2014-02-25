@@ -3,7 +3,7 @@
 \title{Get documents via the get API.}
 \usage{
 es_get(conn, index = NULL, type = NULL, id = NULL, parse = TRUE,
-  verbose = TRUE, callopts = list(), ...)
+  source = FALSE, fields = NULL, callopts = list(), exists = FALSE)
 }
 \arguments{
   \item{conn}{Connection object describing base url, port,
@@ -39,6 +39,18 @@ for the documentation.
 \dontrun{
 init <- es_connect()
 es_get(init, index='twitter', type='tweet', id=1)
+
+# Just get source
+es_get(init, index='twitter', type='tweet', id=1, source=TRUE)
+
+# Get certain fields
+es_get(init, index='twitter', type='tweet', id=1, fields='user')
+
+# Just test for existence of the document
+es_get(init, index='twitter', type='tweet', id=1, exists=TRUE)
+
+# Get multiple documents in one call
+es_get(init, index='twitter', type='tweet', id=1:3)
 }
 }
 

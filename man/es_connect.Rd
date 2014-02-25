@@ -1,9 +1,12 @@
 \name{es_connect}
 \alias{es_connect}
+\alias{print.es_connect}
 \title{Set connection details to an Elasticsearch engine.}
 \usage{
 es_connect(url = "http://127.0.0.1", port = 9200, user = NULL,
   pwd = NULL)
+
+\method{print}{es_connect}(x)
 }
 \arguments{
   \item{url}{the url, defaults to localhost
@@ -28,6 +31,6 @@ Pass on the returned 'es_conn' object to other functions in
 this package.
 }
 \examples{
-es_connect()
+(conn <- es_connect())
 }
 

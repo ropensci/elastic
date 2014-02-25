@@ -12,7 +12,8 @@
 #' Pass on the returned 'es_conn' object to other functions in this package.
 #' @export
 #' @examples
-#' es_connect()
+#' (conn <- es_connect())
+#' 
 
 es_connect <- function(url="http://127.0.0.1", port=9200, user = NULL, pwd = NULL){
   ll <- list(url = url,
@@ -21,4 +22,15 @@ es_connect <- function(url="http://127.0.0.1", port=9200, user = NULL, pwd = NUL
              pwd = pwd)
   class(ll) <- 'es_conn'
   return( ll )
+}
+
+#' @method print es_connect
+#' @export
+#' @rdname es_connect
+print.es_connect <- function(x){
+  fun <- function(x) ifelse(is.null(x), 'NULL', x)
+  cat(paste('uri:      ', fun(x$url)), "\n")
+  cat(paste('port:     ', fun(x$port)), "\n")
+  cat(paste('username: ', fun(x$user)), "\n")
+  cat(paste('password: ', fun(x$pwd)))
 }

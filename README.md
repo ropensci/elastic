@@ -6,20 +6,20 @@ elastic
 **A general purpose R interface to [Elasticsearch](http://elasticsearch.org)**
 
 
-### Elasticsearch info
+## Elasticsearch info
 
 + [Elasticsearch home page](http://elasticsearch.org)
 
-### Notes
+## Notes
 
 * This client is being developed under v1.0 of Elasticsearch.
 * It is early days for this client, so do help us by submitting bug reports and feature requests on the issue tracker.
 
-### Function names
+## Function names
 
 To avoid potential conflicts with other R packges, this package adds `es_` as a prefix to every function.
 
-### Quick start
+## Quick start
 
 **Install**
 
@@ -38,13 +38,212 @@ install_github("ropensci/elastic")
 library(elastic)
 ```
 
-### Install Elasticsearch (on OSX)
+**Install Elasticsearch (on OSX)**
 
 + Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/)
 + Unzip it: `unzip or untar`
 + Move it: `sudo mv /path/to/elasticsearch-1.0.0 /usr/local` (replace version with your verioon)
 + Navigate to /usr/local: `cd /usr/local`
 + Add shortcut: `sudo ln -s elasticsearch-1.0.0 elasticsearch` (replace version with your verioon)
+
+
+### Initialization
+
+The function `es_connect` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The assigned object from a call to `es_connect` has to then be passed on to other functions.
+
+### Search
+
+```coffee
+init <- es_connect()
+es_search(init, index="twitter")
+...
+
+```coffee
+matches -> 6
+score -> 1
+$took
+[1] 1
+
+$timed_out
+[1] FALSE
+
+$`_shards`
+$`_shards`$total
+[1] 5
+
+$`_shards`$successful
+[1] 5
+
+$`_shards`$failed
+[1] 0
+
+
+$hits
+$hits$total
+[1] 6
+
+$hits$max_score
+[1] 1
+
+$hits$hits
+$hits$hits[[1]]
+$hits$hits[[1]]$`_index`
+[1] "twitter"
+```
+
+
+```coffee
+es_search(init, index="twitter", type="tweet", sort="message")
+```
+
+```coffee
+matches -> 3
+score -> NA
+$took
+[1] 2
+
+$timed_out
+[1] FALSE
+
+$`_shards`
+$`_shards`$total
+[1] 5
+
+$`_shards`$successful
+[1] 5
+
+$`_shards`$failed
+[1] 0
+
+
+$hits
+$hits$total
+[1] 3
+
+$hits$max_score
+NULL
+
+$hits$hits
+$hits$hits[[1]]
+$hits$hits[[1]]$`_index`
+[1] "twitter"
+
+$hits$hits[[1]]$`_type`
+[1] "tweet"
+
+$hits$hits[[1]]$`_id`
+[1] "3"
+
+$hits$hits[[1]]$`_score`
+NULL
+
+$hits$hits[[1]]$`_source`
+$hits$hits[[1]]$`_source`$user
+[1] "jane"
+
+$hits$hits[[1]]$`_source`$post_date
+[1] "2009-11-15T14:12:12"
+
+...
+```
+
+### Get documents
+
+Get document with id=1
+
+```coffee
+init <- es_connect()
+es_get(init, index='twitter', type='tweet', id=1)
+```
+
+```coffee
+http://127.0.0.1:9200/?=
+$ok
+[1] TRUE
+
+$status
+[1] 200
+
+$name
+[1] "Simon Williams"
+
+$version
+$version$number
+[1] "0.90.11"
+
+$version$build_hash
+[1] "11da1bacf39cec400fd97581668acb2c5450516c"
+
+$version$build_timestamp
+[1] "2014-02-03T15:27:39Z"
+
+$version$build_snapshot
+[1] FALSE
+
+$version$lucene_version
+[1] "4.6"
+
+
+$tagline
+[1] "You Know, for Search"
+
+attr(,"class")
+[1] "elastic"
+...
+```
+
+Get certain fields
+
+```coffee
+es_get(init, index='twitter', type='tweet', id=1, fields='user')
+```
+
+```coffee
+http://127.0.0.1:9200/?fields=user
+$ok
+[1] TRUE
+
+$status
+[1] 200
+
+$name
+[1] "Simon Williams"
+
+$version
+$version$number
+[1] "0.90.11"
+
+$version$build_hash
+[1] "11da1bacf39cec400fd97581668acb2c5450516c"
+
+$version$build_timestamp
+[1] "2014-02-03T15:27:39Z"
+
+$version$build_snapshot
+[1] FALSE
+
+$version$lucene_version
+[1] "4.6"
+
+
+$tagline
+[1] "You Know, for Search"
+
+attr(,"class")
+[1] "elastic"
+```
+
+Test for existence of the document
+
+```coffee
+es_get(init, index='twitter', type='tweet', id=1, exists=TRUE)
+```
+
+```coffee
+200 - OK
+```
+
+## CouchDB integration
 
 ### __Optionally__ install CouchDB River plugin for Elasticsearch
 
@@ -101,24 +300,4 @@ curl -XGET "http://localhost:9200/sofadb/_search?q=road&pretty=true"
     } ]
   }
 }
-```
-
-#### In R...
-
-```coffee
-es_search(dbname="sofadb", q="road")
-...
-
-$hits$hits[[3]]
-$hits$hits[[3]]$`_index`
-[1] "sofadb"
-
-$hits$hits[[3]]$`_type`
-[1] "sofadb"
-
-$hits$hits[[3]]$`_id`
-[1] "a1812100bd1dba00c2ed1cd507000277"
-
-$hits$hits[[3]]$`_score`
-[1] 1
 ```

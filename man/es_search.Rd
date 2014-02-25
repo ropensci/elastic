@@ -2,8 +2,8 @@
 \alias{es_search}
 \title{Full text search of any CouchDB databases using Elasticsearch.}
 \usage{
-es_search(url = "http://127.0.0.1", port = 9200, dbname = NULL,
-  parse = TRUE, verbose = TRUE, ...)
+es_search(conn, index = NULL, type = NULL, parse = TRUE, verbose = TRUE,
+  callopts = list(), ...)
 }
 \arguments{
   \item{url}{the url, defaults to localhost
@@ -34,17 +34,15 @@ for the documentation.
 }
 \examples{
 \dontrun{
-results <- es_search(dbname="rplos_db", q="scienceseeker")
-sapply(results$hits$hits, function(x) x$`_id`) # get the document IDs
-lapply(results$hits$hits, function(x) x$`_source`) # get the document contents
-sapply(results$hits$hits, function(x) x$`_source`)[[1]][[1]] # get one of the documents contents'
+init <- es_connect()
+es_search(init, index="twitter")
+es_search(init, index="twitter", type="tweet")
+es_search(init, index="twitter", type="mention")
+es_search(init, index="twitter", type="tweet", q="what")
+es_search(init, index="twitter", type="tweet", sort="message")
 
-
-doc1 <- '{"name":"james","icecream":"mint"}'
-doc2 <- '{"name":"jane","icecream":"rocky road"}'
-sofa_writedoc(dbname="mydb", doc=doc1)
-sofa_writedoc(dbname="mydb", doc=doc2)
-es_search(dbname="mydb", q="mint")
+# Get raw data
+es_search(init, index="twitter", type="tweet", parse=FALSE)
 }
 }
 

@@ -1,3 +1,4 @@
+S3method(print,es_connect)
 export(es_cdbriver_auth)
 export(es_cdbriver_start)
 export(es_cdbriver_stop)

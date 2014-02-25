@@ -12,30 +12,23 @@
 #'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
 #' @export
 #' @examples \dontrun{
-#' results <- es_search(dbname="rplos_db", q="scienceseeker")
-#' sapply(results$hits$hits, function(x) x$`_id`) # get the document IDs
-#' lapply(results$hits$hits, function(x) x$`_source`) # get the document contents
-#' sapply(results$hits$hits, function(x) x$`_source`)[[1]][[1]] # get one of the documents contents'
+#' init <- es_connect()
+#' es_search(init, index="twitter")
+#' es_search(init, index="twitter", type="tweet")
+#' es_search(init, index="twitter", type="mention")
+#' es_search(init, index="twitter", type="tweet", q="what")
+#' es_search(init, index="twitter", type="tweet", sort="message")
 #' 
-#' 
-#' doc1 <- '{"name":"james","icecream":"mint"}'
-#' doc2 <- '{"name":"jane","icecream":"rocky road"}'
-#' sofa_writedoc(dbname="mydb", doc=doc1)
-#' sofa_writedoc(dbname="mydb", doc=doc2)
-#' es_search(dbname="mydb", q="mint")
+#' # Get raw data
+#' es_search(init, index="twitter", type="tweet", parse=FALSE)
 #' }
 
-es_search <- function(url="http://127.0.0.1", port=9200, dbname=NULL, parse=TRUE, 
-  verbose=TRUE, ...)
+es_search <- function(conn, index=NULL, type=NULL, parse=TRUE, verbose=TRUE, callopts=list(), ...)
 {
-  if(is.null(dbname)){
-    call_ <- url
-  } else
-  {
-    call_ <- paste(paste(url, port, sep=":"), "/", dbname, "/_search", sep="")    
-  }
+  base <- paste(conn$url, ":", conn$port, sep="")
+  url <- paste(base, index, type, "_search", sep="/")
   args <- compact(list(...))
-  out <- GET(call_, query=args)
+  out <- GET(url, query=args)
   stop_for_status(out)
 
   if(!parse){
