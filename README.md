@@ -56,7 +56,7 @@ The function `es_connect` is used before doing anything else to set the connecti
 ```coffee
 init <- es_connect()
 es_search(init, index="twitter")
-...
+```
 
 ```coffee
 matches -> 6
@@ -189,7 +189,6 @@ $tagline
 
 attr(,"class")
 [1] "elastic"
-...
 ```
 
 Get certain fields
@@ -241,6 +240,135 @@ es_get(init, index='twitter', type='tweet', id=1, exists=TRUE)
 
 ```coffee
 200 - OK
+```
+
+### Get multiple documents via the multiget API
+
+Same index and type, different document ids
+
+```coffee
+es_mget(init, index="twitter", type="tweet", id=1:2)
+```
+
+```coffee
+$docs
+$docs[[1]]
+$docs[[1]]$`_index`
+[1] "twitter"
+
+$docs[[1]]$`_type`
+[1] "tweet"
+
+$docs[[1]]$`_id`
+[1] "1"
+
+$docs[[1]]$`_version`
+[1] 1
+
+$docs[[1]]$exists
+[1] TRUE
+
+$docs[[1]]$`_source`
+$docs[[1]]$`_source`$user
+[1] "kimchy"
+
+$docs[[1]]$`_source`$post_date
+[1] "2009-11-15T14:12:12"
+
+$docs[[1]]$`_source`$message
+[1] "trying out Elasticsearch"
+
+
+
+$docs[[2]]
+$docs[[2]]$`_index`
+[1] "twitter"
+
+$docs[[2]]$`_type`
+[1] "tweet"
+
+$docs[[2]]$`_id`
+[1] "2"
+
+$docs[[2]]$`_version`
+[1] 1
+
+$docs[[2]]$exists
+[1] TRUE
+
+$docs[[2]]$`_source`
+$docs[[2]]$`_source`$user
+[1] "scott"
+
+$docs[[2]]$`_source`$post_date
+[1] "2009-11-15T14:12:12"
+
+$docs[[2]]$`_source`$message
+[1] "what shit what what"
+
+```
+
+Different indeces, types, and ids
+
+```coffee
+es_mget(init, index_type_id=list(c("twitter","mention",1), c("appdotnet","share",1)))
+```
+
+```coffee
+$docs
+$docs[[1]]
+$docs[[1]]$`_index`
+[1] "twitter"
+
+$docs[[1]]$`_type`
+[1] "mention"
+
+$docs[[1]]$`_id`
+[1] "1"
+
+$docs[[1]]$`_version`
+[1] 1
+
+$docs[[1]]$exists
+[1] TRUE
+
+$docs[[1]]$`_source`
+$docs[[1]]$`_source`$user
+[1] "sam"
+
+$docs[[1]]$`_source`$post_date
+[1] "2009-11-15T14:12:12"
+
+$docs[[1]]$`_source`$message
+[1] "lorum ipsum"
+
+
+
+$docs[[2]]
+$docs[[2]]$`_index`
+[1] "appdotnet"
+
+$docs[[2]]$`_type`
+[1] "share"
+
+$docs[[2]]$`_id`
+[1] "1"
+
+$docs[[2]]$`_version`
+[1] 1
+
+$docs[[2]]$exists
+[1] TRUE
+
+$docs[[2]]$`_source`
+$docs[[2]]$`_source`$user
+[1] "bob"
+
+$docs[[2]]$`_source`$post_date
+[1] "2009-11-15T14:12:12"
+
+$docs[[2]]$`_source`$message
+[1] "hello world"
 ```
 
 ## CouchDB integration
