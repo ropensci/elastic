@@ -6,6 +6,8 @@
 #' ignored for now.
 #' @param pwd Password, if required for the connection. You can specify, but 
 #' ignored for now.
+#' @param x Object to print.
+#' @param ... Further args passed on to print for the es_conn class.
 #' @details The default configuration is set up for localhost access on port 9200,
 #' with no username or password.
 #' 
@@ -13,7 +15,6 @@
 #' @export
 #' @examples
 #' (conn <- es_connect())
-#' 
 
 es_connect <- function(url="http://127.0.0.1", port=9200, user = NULL, pwd = NULL){
   ll <- list(url = url,
@@ -24,10 +25,10 @@ es_connect <- function(url="http://127.0.0.1", port=9200, user = NULL, pwd = NUL
   return( ll )
 }
 
-#' @method print es_connect
+#' @method print es_conn
 #' @export
 #' @rdname es_connect
-print.es_connect <- function(x){
+print.es_conn <- function(x, ...){
   fun <- function(x) ifelse(is.null(x), 'NULL', x)
   cat(paste('uri:      ', fun(x$url)), "\n")
   cat(paste('port:     ', fun(x$port)), "\n")

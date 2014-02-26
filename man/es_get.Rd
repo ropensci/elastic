@@ -2,17 +2,13 @@
 \alias{es_get}
 \title{Get documents via the get API.}
 \usage{
-es_get(conn, index = NULL, type = NULL, id = NULL, parse = TRUE,
-  source = FALSE, fields = NULL, callopts = list(), exists = FALSE)
+es_get(conn, index = NULL, type = NULL, id = NULL, source = FALSE,
+  fields = NULL, exists = FALSE, raw = FALSE, callopts = list(),
+  verbose = TRUE, ...)
 }
 \arguments{
   \item{conn}{Connection object describing base url, port,
   and any authentication details.}
-
-  \item{url}{the url, defaults to localhost
-  (http://127.0.0.1)}
-
-  \item{port}{port to connect to, defaults to 5984}
 
   \item{index}{Index}
 
@@ -20,11 +16,22 @@ es_get(conn, index = NULL, type = NULL, id = NULL, parse = TRUE,
 
   \item{id}{Document id}
 
-  \item{verbose}{Verbosity (default) or not. Ignored if
-  parse=FALSE}
+  \item{source}{XXX}
+
+  \item{fields}{Fields to return from the response object.}
+
+  \item{exists}{XXX}
+
+  \item{raw}{If TRUE (default), data is parsed to list. If
+  FALSE, then raw JSON.}
+
+  \item{callopts}{Curl args passed on to httr::POST.}
+
+  \item{verbose}{If TRUE (default) the url call used
+  printed to console.}
 
   \item{...}{Further args passed on to elastic search HTTP
-  API.}
+  API as parameters.}
 }
 \description{
 Get documents via the get API.
@@ -40,17 +47,14 @@ for the documentation.
 init <- es_connect()
 es_get(init, index='twitter', type='tweet', id=1)
 
-# Just get source
-es_get(init, index='twitter', type='tweet', id=1, source=TRUE)
-
 # Get certain fields
 es_get(init, index='twitter', type='tweet', id=1, fields='user')
 
 # Just test for existence of the document
 es_get(init, index='twitter', type='tweet', id=1, exists=TRUE)
 
-# Get multiple documents in one call
-es_get(init, index='twitter', type='tweet', id=1:3)
+# Just get source (NOT WORKING RIGHT NOW)
+es_get(init, index='twitter', type='tweet', id=1, source=TRUE)
 }
 }
 

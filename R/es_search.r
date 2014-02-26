@@ -2,11 +2,13 @@
 #' 
 #' @import httr 
 #' @importFrom plyr compact
-#' @param url the url, defaults to localhost (http://127.0.0.1)
-#' @param port port to connect to, defaults to 5984
-#' @param dbname Database name. (charcter)
-#' @param parse If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
+#' @param conn Connection object describing base url, port, and any authentication 
+#' details.
+#' @param index Index
+#' @param type Document type
+#' @param raw If FALSE (default), data is parsed to list. If TRUE, then raw JSON.
 #' @param verbose Verbosity (default) or not. Ignored if parse=FALSE
+#' @param callopts Curl args passed on to httr::POST.
 #' @param ... Further args passed on to elastic search HTTP API.
 #' @details There are a lot of terms you can use for Elasticsearch. See here 
 #'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
@@ -20,29 +22,20 @@
 #' es_search(init, index="twitter", type="tweet", sort="message")
 #' 
 #' # Get raw data
-#' es_search(init, index="twitter", type="tweet", parse=FALSE)
+#' es_search(init, index="twitter", type="tweet", raw=TRUE)
 #' }
 
-es_search <- function(conn, index=NULL, type=NULL, parse=TRUE, verbose=TRUE, callopts=list(), ...)
+es_search <- function(conn, index=NULL, type=NULL, raw=FALSE, verbose=TRUE, callopts=list(), ...)
 {
   base <- paste(conn$url, ":", conn$port, sep="")
-  url <- paste(base, index, type, "_search", sep="/")
+  if(is.null(type)){ url <- paste(base, index, "_search", sep="/") } else {
+    url <- paste(base, index, type, "_search", sep="/")    
+  }
   args <- compact(list(...))
   out <- GET(url, query=args)
   stop_for_status(out)
-
-  if(!parse){
-    tt <- content(out, as="text")
-    class(tt) <- "elastic"
-    return( tt )
-  } else {
-    parsed <- content(out)
-    if(verbose)
-      max_score <- parsed$hits$max_score
-      message(paste("\nmatches -> ", round(parsed$hits$total,1), "\nscore -> ", 
-        ifelse(is.null(max_score), NA, round(max_score, 3)), sep="")
-      )
-    class(parsed) <- "elastic"
-    return( parsed )
-  }
+  if(verbose) message(URLdecode(out$url))
+  tt <- content(out, as="text")
+  class(tt) <- "elastic_search"
+  if(raw){ tt } else { es_parse(tt, verbose=verbose) }
 }

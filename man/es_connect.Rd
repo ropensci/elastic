@@ -1,12 +1,12 @@
 \name{es_connect}
 \alias{es_connect}
-\alias{print.es_connect}
+\alias{print.es_conn}
 \title{Set connection details to an Elasticsearch engine.}
 \usage{
 es_connect(url = "http://127.0.0.1", port = 9200, user = NULL,
   pwd = NULL)
 
-\method{print}{es_connect}(x)
+\method{print}{es_conn}(x, ...)
 }
 \arguments{
   \item{url}{the url, defaults to localhost
@@ -19,6 +19,11 @@ es_connect(url = "http://127.0.0.1", port = 9200, user = NULL,
 
   \item{pwd}{Password, if required for the connection. You
   can specify, but ignored for now.}
+
+  \item{x}{Object to print.}
+
+  \item{...}{Further args passed on to print for the
+  es_conn class.}
 }
 \description{
 Set connection details to an Elasticsearch engine.

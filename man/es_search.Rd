@@ -2,22 +2,24 @@
 \alias{es_search}
 \title{Full text search of any CouchDB databases using Elasticsearch.}
 \usage{
-es_search(conn, index = NULL, type = NULL, parse = TRUE, verbose = TRUE,
+es_search(conn, index = NULL, type = NULL, raw = FALSE, verbose = TRUE,
   callopts = list(), ...)
 }
 \arguments{
-  \item{url}{the url, defaults to localhost
-  (http://127.0.0.1)}
+  \item{conn}{Connection object describing base url, port,
+  and any authentication details.}
 
-  \item{port}{port to connect to, defaults to 5984}
+  \item{index}{Index}
 
-  \item{dbname}{Database name. (charcter)}
+  \item{type}{Document type}
 
-  \item{parse}{If TRUE (default), data is parsed to list.
-  If FALSE, then raw JSON.}
+  \item{raw}{If FALSE (default), data is parsed to list. If
+  TRUE, then raw JSON.}
 
   \item{verbose}{Verbosity (default) or not. Ignored if
   parse=FALSE}
+
+  \item{callopts}{Curl args passed on to httr::POST.}
 
   \item{...}{Further args passed on to elastic search HTTP
   API.}
@@ -42,7 +44,7 @@ es_search(init, index="twitter", type="tweet", q="what")
 es_search(init, index="twitter", type="tweet", sort="message")
 
 # Get raw data
-es_search(init, index="twitter", type="tweet", parse=FALSE)
+es_search(init, index="twitter", type="tweet", raw=TRUE)
 }
 }
 

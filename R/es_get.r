@@ -4,13 +4,16 @@
 #' @importFrom plyr compact
 #' @param conn Connection object describing base url, port, and any authentication 
 #' details.
-#' @param url the url, defaults to localhost (http://127.0.0.1)
-#' @param port port to connect to, defaults to 5984
 #' @param index Index
 #' @param type Document type
 #' @param id Document id
-#' @param verbose Verbosity (default) or not. Ignored if parse=FALSE
-#' @param ... Further args passed on to elastic search HTTP API.
+#' @param source XXX
+#' @param fields Fields to return from the response object.
+#' @param exists XXX
+#' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
+#' @param callopts Curl args passed on to httr::POST.
+#' @param verbose If TRUE (default) the url call used printed to console.
+#' @param ... Further args passed on to elastic search HTTP API as parameters.
 #' @details There are a lot of terms you can use for Elasticsearch. See here 
 #'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
 #' @export
@@ -28,8 +31,8 @@
 #' es_get(init, index='twitter', type='tweet', id=1, source=TRUE)
 #' }
 
-es_get <- function(conn, index=NULL, type=NULL, id=NULL, parse=TRUE, source=FALSE, 
-  fields=NULL, callopts=list(), exists=FALSE)
+es_get <- function(conn, index=NULL, type=NULL, id=NULL, source=FALSE, 
+  fields=NULL, exists=FALSE, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
   if(length(id) > 1){ # pass in request in body
     body <- toJSON(list(ids = as.character(id)))
@@ -39,7 +42,7 @@ es_get <- function(conn, index=NULL, type=NULL, id=NULL, parse=TRUE, source=FALS
   
   url <- paste(conn$url, ":", conn$port, sep="")
   if(source) url <- paste(url, '_source', sep="/")
-  args <- compact(list(fields = fields))
+  args <- compact(list(fields = fields, ...))
   
   if(exists){
     out <- HEAD(url, query=args, callopts)
@@ -48,62 +51,9 @@ es_get <- function(conn, index=NULL, type=NULL, id=NULL, parse=TRUE, source=FALS
   {
     out <- GET(url, query=args, callopts)
     stop_for_status(out)
-    
-    message(out$url)
-    
-    if(!parse){
-      tt <- content(out, as="text")
-      class(tt) <- "elastic"
-      return( tt )
-    } else {
-      parsed <- content(out)
-      class(parsed) <- "elastic"
-      return( parsed )
-    }
+    if(verbose) message(URLdecode(out$url))
+    tt <- content(out, as="text")
+    class(tt) <- "elastic_get"
+    if(raw){ tt } else { es_parse(tt) }
   }
 }
-
-
-# docs <- list(list('tweet', '1'), list('mention','1'))
-# docs <- lapply(docs, function(x){
-#   x[[1]] <- sprintf('"_type" : "%s"', x[[1]])
-#   x[[2]] <- sprintf('"_id" : "%s"', x[[2]])
-#   x
-# })
-# jsonlite::toJSON(list(docs = docs))
-#   
-# es_mget <- function(conn, ..., index=NULL, type=NULL, id=NULL, parse=TRUE, fields=NULL, 
-#                     callopts=list())
-# {
-#   base <- paste(conn$url, ":", conn$port, sep="")
-#   
-#   docs <- list(...)
-#   
-#   if(length(index)==1 & length(type)==1 & length(id) > 1){
-#     body <- toJSON(list(ids = as.character(id)))
-#     url <- paste(base, index, type, '_mget', sep="/")
-#   } else if(length(index)==1 & length(type)>1){
-#     body <- jsonlite::toJSON(list(docs = docs))
-#     url <- paste(base, index, '_mget', sep="/")
-#   } else if(length(index)==1 & length(type)==1 & length(id) > 1){
-#     body <- toJSON(list(ids = as.character(id)))
-#     url <- paste(base, index, type, '_mget', sep="/")
-#   }
-#   
-#   args <- compact(list(fields = if(is.null(fields)) { fields} else { paste(fields, collapse=",") } ))
-#   
-#   out <- POST(url, body = list(docs = docs), query = args, callopts)
-#   stop_for_status(out)
-#   
-#   message(out$url)
-#   
-#   if(!parse){
-#     tt <- content(out, as="text")
-#     class(tt) <- "elastic"
-#     return( tt )
-#   } else {
-#     parsed <- content(out)
-#     class(parsed) <- "elastic"
-#     return( parsed )
-#   }
-# }
