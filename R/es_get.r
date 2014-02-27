@@ -2,18 +2,10 @@
 #' 
 #' @import httr 
 #' @importFrom plyr compact
-#' @param conn Connection object describing base url, port, and any authentication 
-#' details.
-#' @param index Index
-#' @param type Document type
-#' @param id Document id
-#' @param source XXX
-#' @param fields Fields to return from the response object.
+#' 
+#' @template all
+#' @template get
 #' @param exists XXX
-#' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
-#' @param callopts Curl args passed on to httr::POST.
-#' @param verbose If TRUE (default) the url call used printed to console.
-#' @param ... Further args passed on to elastic search HTTP API as parameters.
 #' @details There are a lot of terms you can use for Elasticsearch. See here 
 #'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
 #' @export

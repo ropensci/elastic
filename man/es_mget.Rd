@@ -7,24 +7,12 @@ es_mget(conn, index = NULL, type = NULL, id = NULL, type_id = NULL,
   callopts = list(), verbose = TRUE, ...)
 }
 \arguments{
-  \item{conn}{Connection object of class es_conn from using
-  es_connect}
+  \item{conn}{Connection object describing base url, port,
+  and any authentication details.}
 
   \item{index}{Index}
 
   \item{type}{Document type}
-
-  \item{id}{Document id}
-
-  \item{type_id}{List of vectors of length 2, each with an
-  element for type and id.}
-
-  \item{index_type_id}{List of vectors of length 3, each
-  with an element for index, type, and id.}
-
-  \item{source}{XXX}
-
-  \item{fields}{Fields to return from the response object.}
 
   \item{raw}{If TRUE (default), data is parsed to list. If
   FALSE, then raw JSON.}
@@ -35,7 +23,19 @@ es_mget(conn, index = NULL, type = NULL, id = NULL, type_id = NULL,
   printed to console.}
 
   \item{...}{Further args passed on to elastic search HTTP
-  API.}
+  API as parameters.}
+
+  \item{id}{Document id}
+
+  \item{source}{XXX}
+
+  \item{fields}{Fields to return from the response object.}
+
+  \item{type_id}{List of vectors of length 2, each with an
+  element for type and id.}
+
+  \item{index_type_id}{List of vectors of length 3, each
+  with an element for index, type, and id.}
 }
 \description{
 Get multiple documents via the multiple get API.

@@ -371,6 +371,86 @@ $docs[[2]]$`_source`$message
 [1] "hello world"
 ```
 
+### Parsing
+
+`es_parse` is a general purpose parser function with extension methods `es_parse.es_search`, `es_parse.es_get`, and `es_parse.es_mget`, for parsing `es_search`, `es_get`, and `es_mget` function output, respectively. `es_parse` is used internally within those three functions (`es_search`, `es_get`, `es_mget`) to do parsing. You can optionally get back raw `json` from `es_search`, `es_get`, and `es_mget` setting parameter `raw=TRUE`, and then parsing after with `es_parse`.
+
+For example:
+
+```coffee
+init <- es_connect()
+(out <- es_mget(init, index="twitter", type="tweet", id=1:2, raw=TRUE))
+```
+
+```coffee
+[1] "{\"docs\":[{\"_index\":\"twitter\",\"_type\":\"tweet\",\"_id\":\"1\",\"error\":\"NoShardAvailableActionException[[twitter][2] null]\"},{\"_index\":\"twitter\",\"_type\":\"tweet\",\"_id\":\"2\",\"error\":\"NoShardAvailableActionException[[twitter][3] null]\"}]}"
+attr(,"class")
+[1] "elastic_mget"
+```
+
+Then parse
+
+```coffee
+es_parse(out)
+```
+
+```coffee
+$docs
+$docs[[1]]
+$docs[[1]]$`_index`
+[1] "twitter"
+
+$docs[[1]]$`_type`
+[1] "tweet"
+
+$docs[[1]]$`_id`
+[1] "1"
+
+$docs[[1]]$`_version`
+[1] 1
+
+$docs[[1]]$exists
+[1] TRUE
+
+$docs[[1]]$`_source`
+$docs[[1]]$`_source`$user
+[1] "kimchy"
+
+$docs[[1]]$`_source`$post_date
+[1] "2009-11-15T14:12:12"
+
+$docs[[1]]$`_source`$message
+[1] "trying out Elasticsearch"
+
+
+
+$docs[[2]]
+$docs[[2]]$`_index`
+[1] "twitter"
+
+$docs[[2]]$`_type`
+[1] "tweet"
+
+$docs[[2]]$`_id`
+[1] "2"
+
+$docs[[2]]$`_version`
+[1] 1
+
+$docs[[2]]$exists
+[1] TRUE
+
+$docs[[2]]$`_source`
+$docs[[2]]$`_source`$user
+[1] "scott"
+
+$docs[[2]]$`_source`$post_date
+[1] "2009-11-15T14:12:12"
+
+$docs[[2]]$`_source`$message
+[1] "what shit what what"
+```
+
 ## CouchDB integration
 
 ### __Optionally__ install CouchDB River plugin for Elasticsearch

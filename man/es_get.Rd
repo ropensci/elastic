@@ -14,14 +14,6 @@ es_get(conn, index = NULL, type = NULL, id = NULL, source = FALSE,
 
   \item{type}{Document type}
 
-  \item{id}{Document id}
-
-  \item{source}{XXX}
-
-  \item{fields}{Fields to return from the response object.}
-
-  \item{exists}{XXX}
-
   \item{raw}{If TRUE (default), data is parsed to list. If
   FALSE, then raw JSON.}
 
@@ -32,6 +24,14 @@ es_get(conn, index = NULL, type = NULL, id = NULL, source = FALSE,
 
   \item{...}{Further args passed on to elastic search HTTP
   API as parameters.}
+
+  \item{id}{Document id}
+
+  \item{source}{XXX}
+
+  \item{fields}{Fields to return from the response object.}
+
+  \item{exists}{XXX}
 }
 \description{
 Get documents via the get API.

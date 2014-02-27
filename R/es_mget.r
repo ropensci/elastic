@@ -4,19 +4,12 @@
 #' @importFrom plyr compact
 #' @importFrom rjson toJSON
 #' @importFrom RJSONIO toJSON
-#' @param conn Connection object of class es_conn from using es_connect
-#' @param index Index
-#' @param type Document type
-#' @param id Document id
+#' 
+#' @template all
+#' @template get
 #' @param type_id List of vectors of length 2, each with an element for type and id.
 #' @param index_type_id List of vectors of length 3, each with an element for index, 
 #' type, and id.
-#' @param source XXX
-#' @param fields Fields to return from the response object.
-#' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
-#' @param callopts Curl args passed on to httr::POST.
-#' @param verbose If TRUE (default) the url call used printed to console.
-#' @param ... Further args passed on to elastic search HTTP API.
 #' @details There are a lot of terms you can use for Elasticsearch. See here 
 #'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
 #' @export

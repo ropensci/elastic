@@ -13,16 +13,16 @@ es_search(conn, index = NULL, type = NULL, raw = FALSE, verbose = TRUE,
 
   \item{type}{Document type}
 
-  \item{raw}{If FALSE (default), data is parsed to list. If
-  TRUE, then raw JSON.}
-
-  \item{verbose}{Verbosity (default) or not. Ignored if
-  parse=FALSE}
+  \item{raw}{If TRUE (default), data is parsed to list. If
+  FALSE, then raw JSON.}
 
   \item{callopts}{Curl args passed on to httr::POST.}
 
+  \item{verbose}{If TRUE (default) the url call used
+  printed to console.}
+
   \item{...}{Further args passed on to elastic search HTTP
-  API.}
+  API as parameters.}
 }
 \description{
 Full text search of any CouchDB databases using
