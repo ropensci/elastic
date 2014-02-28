@@ -1,0 +1,38 @@
+\name{es_index}
+\alias{es_index}
+\title{Start or stop indexing a document or many documents.}
+\usage{
+es_index(conn, what = "start")
+}
+\arguments{
+  \item{dbname}{Database name. (charcter)}
+
+  \item{endpoint}{the endpoint, defaults to localhost
+  (http://127.0.0.1)}
+
+  \item{port}{port to connect to, defaults to 9200}
+
+  \item{what}{One of start (default) of stop.}
+}
+\description{
+Start or stop indexing a document or many documents.
+}
+\details{
+The function returns TRUE. Though note that this can result
+even if the database does not exist in CouchDB.
+}
+\examples{
+\dontrun{
+library(devtools)
+install_github("sckott/sofa")
+library(sofa)
+sofa_createdb(dbname='mydb')
+es_cdbriver_index(dbname='mydb')
+es_cdbriver_index(dbname='mydb', what='stop')
+}
+}
+\references{
+See docs for the Elasticsearch River plugin \url{#} that
+lets you easily index CouchDB databases.
+}
+
