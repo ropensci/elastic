@@ -9,6 +9,8 @@ elastic
 ## Elasticsearch info
 
 + [Elasticsearch home page](http://elasticsearch.org)
++ [API docs](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/index.html)
++ xxxx
 
 ## Notes
 

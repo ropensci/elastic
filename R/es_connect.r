@@ -16,11 +16,12 @@
 #' @examples
 #' (conn <- es_connect())
 
-es_connect <- function(url="http://127.0.0.1", port=9200, user = NULL, pwd = NULL){
+es_connect <- function(url="http://127.0.0.1", port=9200, user = NULL, pwd = NULL, key = NULL){
   ll <- list(url = url,
              port = port,
              user = user,
-             pwd = pwd)
+             pwd = pwd, 
+             key = key)
   class(ll) <- 'es_conn'
   return( ll )
 }
@@ -33,5 +34,6 @@ print.es_conn <- function(x, ...){
   cat(paste('uri:      ', fun(x$url)), "\n")
   cat(paste('port:     ', fun(x$port)), "\n")
   cat(paste('username: ', fun(x$user)), "\n")
-  cat(paste('password: ', fun(x$pwd)))
+  cat(paste('password: ', fun(x$pwd)), "\n")
+  cat(paste('api key:  ', fun(x$key)))
 }
