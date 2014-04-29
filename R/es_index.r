@@ -12,7 +12,7 @@
 #' @export
 #' @examples \dontrun{
 #' init <- es_connect()
-#' es_index(index='twitter', type='tweet', id=10)
+#' es_index(init, index='twitter', type='tweet', id=10)
 #' }
 
 es_index <- function(conn, index=NULL, type=NULL, id=NULL, source=FALSE, fields=NULL, 

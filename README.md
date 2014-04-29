@@ -43,11 +43,15 @@ library(elastic)
 **Install Elasticsearch (on OSX)**
 
 + Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/)
-+ Unzip it: `unzip or untar`
-+ Move it: `sudo mv /path/to/elasticsearch-1.0.0 /usr/local` (replace version with your verioon)
++ Unzip it: `unzip` or `untar`
++ Move it: `sudo mv /path/to/elasticsearch-1.1.1 /usr/local` (replace version with your verioon)
 + Navigate to /usr/local: `cd /usr/local`
-+ Add shortcut: `sudo ln -s elasticsearch-1.0.0 elasticsearch` (replace version with your verioon)
++ Add shortcut: `sudo ln -s elasticsearch-1.1.1 elasticsearch` (replace version with your verioon)
 
+**Start Elasticsearch**
+
+* Navigate to elasticsearch: `cd /usr/local/elasticsearch`
+* Start elasticsearch: `bin/elasticsearch -f`
 
 ### Initialization
 
