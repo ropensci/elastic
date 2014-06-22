@@ -51,7 +51,7 @@ library(elastic)
 **Start Elasticsearch**
 
 * Navigate to elasticsearch: `cd /usr/local/elasticsearch`
-* Start elasticsearch: `bin/elasticsearch -f`
+* Start elasticsearch: `bin/elasticsearch`
 
 ### Initialization
 

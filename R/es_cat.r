@@ -1,4 +1,4 @@
-#' Use the cat api.
+#' Use the cat Elasticsearch api.
 #' 
 #' @import httr 
 #' @importFrom plyr compact
