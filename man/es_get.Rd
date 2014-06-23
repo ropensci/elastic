@@ -3,14 +3,11 @@
 \alias{es_get}
 \title{Get documents via the get API.}
 \usage{
-es_get(conn, index = NULL, type = NULL, id = NULL, source = FALSE,
+es_get(index = NULL, type = NULL, id = NULL, source = FALSE,
   fields = NULL, exists = FALSE, raw = FALSE, callopts = list(),
   verbose = TRUE, ...)
 }
 \arguments{
-\item{conn}{Connection object describing base url, port, and any authentication
-details.}
-
 \item{index}{Index}
 
 \item{type}{Document type}
@@ -40,7 +37,6 @@ There are a lot of terms you can use for Elasticsearch. See here
 }
 \examples{
 \dontrun{
-init <- es_connect()
 es_get(init, index='twitter', type='tweet', id=1)
 
 # Get certain fields

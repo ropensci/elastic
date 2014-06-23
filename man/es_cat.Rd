@@ -3,14 +3,11 @@
 \alias{es_cat}
 \title{Use the cat Elasticsearch api.}
 \usage{
-es_cat(conn, index = NULL, type = NULL, id = NULL, source = FALSE,
+es_cat(index = NULL, type = NULL, id = NULL, source = FALSE,
   fields = NULL, exists = FALSE, raw = FALSE, callopts = list(),
   verbose = TRUE, ...)
 }
 \arguments{
-\item{conn}{Connection object describing base url, port, and any authentication
-details.}
-
 \item{index}{Index}
 
 \item{type}{Document type}
@@ -40,8 +37,8 @@ There are a lot of terms you can use for Elasticsearch. See here
 }
 \examples{
 \dontrun{
-init <- es_connect()
-es_cat(init, index='twitter', type='tweet', id=1)
+es_cat(index='twitter', type='tweet', id=1)
+es_cat(index='mran', id=1)
 }
 }
 

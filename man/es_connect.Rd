@@ -4,8 +4,8 @@
 \alias{print.es_conn}
 \title{Set connection details to an Elasticsearch engine.}
 \usage{
-es_connect(url = "http://127.0.0.1", port = 9200, user = NULL,
-  pwd = NULL, key = NULL)
+es_connect(base = "http://127.0.0.1", port = 9200, user = NULL,
+  pwd = NULL, key = NULL, ...)
 
 \method{print}{es_conn}(x, ...)
 }
@@ -34,6 +34,8 @@ with no username or password.
 Pass on the returned 'es_conn' object to other functions in this package.
 }
 \examples{
+\dontrun{
 (conn <- es_connect())
+}
 }
 

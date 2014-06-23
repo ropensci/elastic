@@ -8,9 +8,6 @@ es_mget(conn, index = NULL, type = NULL, id = NULL, type_id = NULL,
   callopts = list(), verbose = TRUE, ...)
 }
 \arguments{
-\item{conn}{Connection object describing base url, port, and any authentication
-details.}
-
 \item{index}{Index}
 
 \item{type}{Document type}

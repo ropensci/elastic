@@ -10,13 +10,15 @@
 #'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
 #' @export
 #' @examples \dontrun{
-#' init <- es_connect()
-#' es_cat(init, index='twitter', type='tweet', id=1)
+#' es_cat(index='twitter', type='tweet', id=1)
+#' es_cat(index='mran', id=1)
 #' }
 
-es_cat <- function(conn, index=NULL, type=NULL, id=NULL, source=FALSE, 
+es_cat <- function(index=NULL, type=NULL, id=NULL, source=FALSE, 
   fields=NULL, exists=FALSE, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
+  conn <- es_get_auth()
+  
   if(length(id) > 1){ # pass in request in body
     body <- toJSON(list(ids = as.character(id)))
   }

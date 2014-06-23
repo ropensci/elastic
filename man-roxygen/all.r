@@ -1,5 +1,3 @@
-#' @param conn Connection object describing base url, port, and any authentication 
-#' details.
 #' @param index Index
 #' @param type Document type
 #' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.

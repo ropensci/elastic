@@ -10,7 +10,6 @@
 #'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
 #' @export
 #' @examples \dontrun{
-#' init <- es_connect()
 #' es_get(init, index='twitter', type='tweet', id=1)
 #' 
 #' # Get certain fields
@@ -23,18 +22,20 @@
 #' es_get(init, index='twitter', type='tweet', id=1, source=TRUE)
 #' }
 
-es_get <- function(conn, index=NULL, type=NULL, id=NULL, source=FALSE, 
+es_get <- function(index=NULL, type=NULL, id=NULL, source=FALSE, 
   fields=NULL, exists=FALSE, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
-  if(length(id) > 1){ # pass in request in body
-    body <- toJSON(list(ids = as.character(id)))
-  }
+  conn <- es_get_auth()
   
   if(!is.null(fields)) fields <- paste(fields, collapse=",")
   
-  url <- paste(conn$url, ":", conn$port, sep="")
+  url <- paste(conn$base, ":", conn$port, sep="")
   if(source) url <- paste(url, '_source', sep="/")
-  args <- compact(list(fields = fields, ...))
+  args <- compact(list(fields = fields, id=id, ...))
+  
+  if(length(id) > 1){ # pass in request in body
+    body <- toJSON(list(ids = as.character(id)))
+  } else{ url <- sprintf("%s/%s/%s", url, type, id) }
   
   if(exists){
     out <- HEAD(url, query=args, callopts)
