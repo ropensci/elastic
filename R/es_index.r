@@ -11,13 +11,14 @@
 #'     easily index CouchDB databases.
 #' @export
 #' @examples \dontrun{
-#' init <- es_connect()
-#' es_index(init, index='twitter', type='tweet', id=10)
+#' es_index(index='twitter', type='tweet', id=10)
 #' }
 
-es_index <- function(conn, index=NULL, type=NULL, id=NULL, source=FALSE, fields=NULL, 
+es_index <- function(index=NULL, type=NULL, id=NULL, source=FALSE, fields=NULL, 
   exists=FALSE, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
+  conn <- es_get_auth()
+  
   if(length(id) > 1){ # pass in request in body
     body <- toJSON(list(ids = as.character(id)))
   }

@@ -20,8 +20,10 @@
 
 es_connect <- function(base="http://127.0.0.1", port=9200, user = NULL, pwd = NULL, key = NULL, ...)
 {  
-  if(grepl('localhost|127.0.0.1', base))
-    base <- paste(base, port, sep = ":")
+  auth <- es_auth(es_base = base, es_port = port)
+  
+  if(grepl('localhost|127.0.0.1', auth$base))
+    base <- paste(auth$base, auth$port, sep = ":")
   res <- tryCatch(GET(base, ...), error=function(e) e)
   if("error" %in% class(res)){
     stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting", url), call. = FALSE)
@@ -29,9 +31,9 @@ es_connect <- function(base="http://127.0.0.1", port=9200, user = NULL, pwd = NU
   if(res$status_code > 200)
     stop(sprintf("Error:", res$headers$statusmessage), call. = FALSE)
   tt <- content(res, as = "text")
-  out <- fromJSON(tt, simplifyWithNames = FALSE)
+  out <- RJSONIO::fromJSON(tt, simplifyWithNames = FALSE)
   
-  ll <- list(base = base, port = port, user = user, pwd = pwd, key = key, es_deets = out)
+  ll <- list(base = auth$base, port = auth$port, user = user, pwd = pwd, key = key, es_deets = out)
   
   class(ll) <- 'es_conn'
   return( ll )
@@ -42,7 +44,7 @@ es_connect <- function(base="http://127.0.0.1", port=9200, user = NULL, pwd = NU
 #' @rdname es_connect
 print.es_conn <- function(x, ...){
   fun <- function(x) ifelse(is.null(x), 'NULL', x)
-  cat(paste('uri:      ', fun(x$url)), "\n")
+  cat(paste('uri:      ', fun(x$base)), "\n")
   cat(paste('port:     ', fun(x$port)), "\n")
   cat(paste('username: ', fun(x$user)), "\n")
   cat(paste('password: ', fun(x$pwd)), "\n")

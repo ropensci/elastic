@@ -3,7 +3,7 @@
 \alias{es_index}
 \title{Start or stop indexing a document or many documents.}
 \usage{
-es_index(conn, index = NULL, type = NULL, id = NULL, source = FALSE,
+es_index(index = NULL, type = NULL, id = NULL, source = FALSE,
   fields = NULL, exists = FALSE, raw = FALSE, callopts = list(),
   verbose = TRUE, ...)
 }
@@ -25,8 +25,7 @@ The function returns TRUE. Though note that this can result even
 }
 \examples{
 \dontrun{
-init <- es_connect()
-es_index(init, index='twitter', type='tweet', id=10)
+es_index(index='twitter', type='tweet', id=10)
 }
 }
 \references{

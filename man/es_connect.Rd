@@ -22,6 +22,8 @@ ignored for now.}
 
 \item{key}{An API key}
 
+\item{x}{Object to print}
+
 \item{...}{Further args passed on to print for the es_conn class.}
 }
 \description{
