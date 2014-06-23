@@ -3,7 +3,7 @@
 \alias{es_bulk}
 \title{Use the bulk API to insert or delete documents.}
 \usage{
-es_bulk(conn, index = NULL, type = NULL, id = NULL, type_id = NULL,
+es_bulk(index = NULL, type = NULL, id = NULL, type_id = NULL,
   index_type_id = NULL, source = NULL, fields = NULL, raw = FALSE,
   callopts = list(), verbose = TRUE, ...)
 }

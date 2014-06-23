@@ -18,7 +18,7 @@
 #' es_bulk(init, index="twitter", type="tweet", id=1:2)
 #' }
 
-es_bulk <- function(conn, index=NULL, type=NULL, id=NULL, type_id=NULL, index_type_id=NULL,
+es_bulk <- function(index=NULL, type=NULL, id=NULL, type_id=NULL, index_type_id=NULL,
   source=NULL, fields=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
   message("not done yet")

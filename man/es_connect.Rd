@@ -10,7 +10,7 @@ es_connect(base = "http://127.0.0.1", port = 9200, user = NULL,
 \method{print}{es_conn}(x, ...)
 }
 \arguments{
-\item{url}{the url, defaults to localhost (http://127.0.0.1)}
+\item{base}{The base url, defaults to localhost (http://127.0.0.1)}
 
 \item{port}{port to connect to, defaults to 5984}
 
@@ -20,7 +20,7 @@ ignored for now.}
 \item{pwd}{Password, if required for the connection. You can specify, but
 ignored for now.}
 
-\item{x}{Object to print.}
+\item{key}{An API key}
 
 \item{...}{Further args passed on to print for the es_conn class.}
 }
