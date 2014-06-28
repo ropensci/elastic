@@ -41,7 +41,7 @@ es_mget <- function(index=NULL, type=NULL, id=NULL, type_id=NULL, index_type_id=
   
   base <- paste(conn$url, ":", conn$port, sep="")
   fields <- if(is.null(fields)) { fields} else { paste(fields, collapse=",") } 
-  args <- compact(list(...))
+  args <- es_compact(list(...))
   
   # One index, one type, one to many ids
   if(length(index)==1 & length(unique(type))==1 & length(id) > 1){

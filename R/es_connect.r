@@ -18,7 +18,7 @@
 #' (conn <- es_connect())
 #' }
 
-es_connect <- function(base="http://127.0.0.1", port=9200, user = NULL, pwd = NULL, key = NULL, ...)
+es_connect <- function(es_base="http://127.0.0.1", es_port=9200, user = NULL, pwd = NULL, key = NULL, ...)
 {  
   auth <- es_get_auth()
   

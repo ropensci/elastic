@@ -4,6 +4,7 @@
 \alias{es_parse.elastic_get}
 \alias{es_parse.elastic_mget}
 \alias{es_parse.elastic_search}
+\alias{es_parse.elastic_status}
 \title{Parse raw data from es_get, es_mget, or es_search.}
 \usage{
 es_parse(input, parsetype, verbose)
@@ -13,6 +14,9 @@ es_parse(input, parsetype, verbose)
 \method{es_parse}{elastic_mget}(input, parsetype = "list", verbose = FALSE)
 
 \method{es_parse}{elastic_search}(input, parsetype = "list",
+  verbose = FALSE)
+
+\method{es_parse}{elastic_status}(input, parsetype = "list",
   verbose = FALSE)
 }
 \arguments{

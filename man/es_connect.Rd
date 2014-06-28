@@ -4,7 +4,7 @@
 \alias{print.es_conn}
 \title{Set connection details to an Elasticsearch engine.}
 \usage{
-es_connect(base = "http://127.0.0.1", port = 9200, user = NULL,
+es_connect(es_base = "http://127.0.0.1", es_port = 9200, user = NULL,
   pwd = NULL, key = NULL, ...)
 
 \method{print}{es_conn}(x, ...)

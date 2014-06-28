@@ -7,7 +7,7 @@ es_search <- function(conn, url="http://127.0.0.1", port=9200, dbname=NULL, pars
   {
     call_ <- paste(paste(url, port, sep=":"), "/", dbname, "/_search", sep="")    
   }
-  args <- compact(list(...))
+  args <- es_compact(list(...))
   out <- GET(call_, query=args)
   stop_for_status(out)
 

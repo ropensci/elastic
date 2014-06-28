@@ -28,7 +28,7 @@ es_search <- function(index=NULL, type=NULL, raw=FALSE, verbose=TRUE, callopts=l
   if(is.null(type)){ url <- paste(base, index, "_search", sep="/") } else {
     url <- paste(base, index, type, "_search", sep="/")    
   }
-  args <- compact(list(...))
+  args <- es_compact(list(...))
   out <- GET(url, query=args, callopts)
   stop_for_status(out)
   if(verbose) message(URLdecode(out$url))

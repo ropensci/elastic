@@ -27,7 +27,7 @@ es_cat <- function(index=NULL, type=NULL, id=NULL, source=FALSE,
   
   url <- paste(conn$url, ":", conn$port, sep="")
   if(source) url <- paste(url, '_source', sep="/")
-  args <- compact(list(fields = fields, ...))
+  args <- es_compact(list(fields = fields, ...))
   
   if(exists){
     out <- HEAD(url, query=args, callopts)
