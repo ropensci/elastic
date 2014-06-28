@@ -1,4 +1,4 @@
-#' Execute a query and get the number of matches for that query.
+#' Elasticsearch cluster endpoints
 #'
 #' @import httr
 #' @export
