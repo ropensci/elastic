@@ -19,11 +19,7 @@ es_parse <- function(input, parsetype, verbose){
 #' @rdname es_parse
 es_parse.elastic_get <- function(input, parsetype='list', verbose=FALSE)
 {
-  assert_that(is(input, "elastic_get"))
-  tt <- rjson::fromJSON(input)
-  if(parsetype=='list'){ NULL } else {
-    message("parsetype='df' not supported yet")
-  }
+  parse_help(input, "elastic_get", parsetype)
   return( tt )
 }
 
@@ -32,11 +28,7 @@ es_parse.elastic_get <- function(input, parsetype='list', verbose=FALSE)
 #' @rdname es_parse
 es_parse.elastic_mget <- function(input, parsetype='list', verbose=FALSE)
 {
-  assert_that(is(input, "elastic_mget"))
-  tt <- rjson::fromJSON(input)
-  if(parsetype=='list'){ NULL } else {
-    message("parsetype='df' not supported yet")
-  }
+  parse_help(input, "elastic_mget", parsetype)
   return( tt )
 }
 
@@ -45,12 +37,7 @@ es_parse.elastic_mget <- function(input, parsetype='list', verbose=FALSE)
 #' @rdname es_parse
 es_parse.elastic_search <- function(input, parsetype='list', verbose=FALSE)
 {
-  assert_that(is(input, "elastic_search"))
-  tt <- rjson::fromJSON(input)
-  if(parsetype=='list'){ NULL } else {
-    message("parsetype='df' not supported yet")
-  }
-
+  parse_help(input, "elastic_search", parsetype)
   if(verbose){
     max_score <- tt$hits$max_score
     message(paste("\nmatches -> ", round(tt$hits$total,1), "\nscore -> ",
@@ -65,12 +52,7 @@ es_parse.elastic_search <- function(input, parsetype='list', verbose=FALSE)
 #' @rdname es_parse
 es_parse.elastic_status <- function(input, parsetype='list', verbose=FALSE)
 {
-  assert_that(is(input, "elastic_status"))
-  tt <- rjson::fromJSON(input)
-  if(parsetype=='list'){ NULL } else {
-    message("parsetype='df' not supported yet")
-  }
-  
+  parse_help(input, "elastic_status", parsetype)
   if(verbose){
     shards <- tt$`_shards`
     message(paste("\nshards -> ", shards$total, "\nsuccessful -> ", shards$successful, sep="")
@@ -84,16 +66,43 @@ es_parse.elastic_status <- function(input, parsetype='list', verbose=FALSE)
 #' @rdname es_parse
 es_parse.elastic_stats <- function(input, parsetype='list', verbose=FALSE)
 {
-  assert_that(is(input, "elastic_stats"))
-  tt <- rjson::fromJSON(input)
-  if(parsetype=='list'){ NULL } else {
-    message("parsetype='df' not supported yet")
-  }
-  
+  parse_help(input, "elastic_stats", parsetype)
   if(verbose){
     shards <- tt$`_shards`
     message(paste("\nshards -> ", shards$total, "\nsuccessful -> ", shards$successful, sep="")
     )
   }
   return( tt )
+}
+
+#' @method es_parse elastic_cluster_health
+#' @export
+#' @rdname es_parse
+es_parse.elastic_cluster_health <- function(input, parsetype='list', verbose=TRUE)
+{
+  parse_help(input, "elastic_cluster_health", parsetype) 
+  if(verbose){
+    message(paste("\ncluster_name -> ", tt$cluster_name, "\nstatus -> ", tt$status, sep=""))
+  }
+  return( tt )
+}
+
+#' @method es_parse elastic_cluster_health
+#' @export
+#' @rdname es_parse
+es_parse.elastic_cluster_ <- function(input, parsetype='list', verbose=TRUE)
+{
+  parse_help(input, "elastic_cluster_health", parsetype) 
+  if(verbose){
+    message(paste("\ncluster_name -> ", tt$cluster_name, "\nstatus -> ", tt$status, sep=""))
+  }
+  return( tt )
+}
+
+parse_help <- function(input, clazz, parsetype){
+  assert_that(is(input, clazz))
+  tt <<- rjson::fromJSON(input)
+  if(parsetype=='list'){ NULL } else {
+    message("parsetype='df' not supported yet")
+  }
 }

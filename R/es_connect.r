@@ -26,7 +26,7 @@ es_connect <- function(es_base="http://127.0.0.1", es_port=9200, user = NULL, pw
     base <- paste(auth$base, auth$port, sep = ":")
   res <- tryCatch(GET(base, ...), error=function(e) e)
   if("error" %in% class(res)){
-    stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting", url), call. = FALSE)
+    stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting", base), call. = FALSE)
   }
   if(res$status_code > 200)
     stop(sprintf("Error:", res$headers$statusmessage), call. = FALSE)
