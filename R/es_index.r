@@ -17,7 +17,7 @@
 es_index <- function(index=NULL, type=NULL, id=NULL, source=FALSE, fields=NULL, 
   exists=FALSE, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
-  conn <- es_get_auth()
+  conn <- es_connect()
   
   if(length(id) > 1){ # pass in request in body
     body <- toJSON(list(ids = as.character(id)))

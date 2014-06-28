@@ -20,7 +20,7 @@
 
 es_connect <- function(base="http://127.0.0.1", port=9200, user = NULL, pwd = NULL, key = NULL, ...)
 {  
-  auth <- es_auth(es_base = base, es_port = port)
+  auth <- es_get_auth()
   
   if(grepl('localhost|127.0.0.1', auth$base))
     base <- paste(auth$base, auth$port, sep = ":")

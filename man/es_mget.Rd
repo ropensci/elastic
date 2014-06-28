@@ -3,7 +3,7 @@
 \alias{es_mget}
 \title{Get multiple documents via the multiple get API.}
 \usage{
-es_mget(conn, index = NULL, type = NULL, id = NULL, type_id = NULL,
+es_mget(index = NULL, type = NULL, id = NULL, type_id = NULL,
   index_type_id = NULL, source = NULL, fields = NULL, raw = FALSE,
   callopts = list(), verbose = TRUE, ...)
 }
@@ -40,26 +40,24 @@ There are a lot of terms you can use for Elasticsearch. See here
 }
 \examples{
 \dontrun{
-init <- es_connect()
-
 # Same index and type
-es_mget(init, index="twitter", type="tweet", id=1:2)
-tmp <- es_mget(init, index="twitter", type="tweet", id=1:2, raw=TRUE)
+es_mget(index="twitter", type="tweet", id=1:2)
+tmp <- es_mget(index="twitter", type="tweet", id=1:2, raw=TRUE)
 es_parse(tmp)
-es_mget(init, index="twitter", type="tweet", id=1:2, fields='user')
-es_mget(init, index="twitter", type="tweet", id=1:2, source=TRUE)
+es_mget(index="twitter", type="tweet", id=1:2, fields='user')
+es_mget(index="twitter", type="tweet", id=1:2, source=TRUE)
 
-library(httr)
-es_mget(init, index="twitter", type="tweet", id=1:2, callopts=verbose())
+library("httr")
+es_mget(index="twitter", type="tweet", id=1:2, callopts=verbose())
 
 # Same index, but different types
-es_mget(init, index="twitter", type_id=list(c("tweet",1), c("mention",2)))
-es_mget(init, index="twitter", type_id=list(c("tweet",1), c("mention",2)), fields='user')
-es_mget(init, index="twitter", type_id=list(c("tweet",1), c("mention",2)), fields=c('user','message'))
+es_mget(index="twitter", type_id=list(c("tweet",1), c("mention",2)))
+es_mget(index="twitter", type_id=list(c("tweet",1), c("mention",2)), fields='user')
+es_mget(index="twitter", type_id=list(c("tweet",1), c("mention",2)), fields=c('user','message'))
 
 # Different indeces and different types
 # pass in separately
-es_mget(init, index_type_id=list(c("twitter","mention",1), c("appdotnet","share",1)))
+es_mget(index_type_id=list(c("twitter","mention",1), c("appdotnet","share",1)))
 }
 }
 

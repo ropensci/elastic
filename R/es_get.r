@@ -10,22 +10,22 @@
 #'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
 #' @export
 #' @examples \dontrun{
-#' es_get(init, index='twitter', type='tweet', id=1)
+#' es_get(index='twitter', type='tweet', id=1)
 #' 
 #' # Get certain fields
-#' es_get(init, index='twitter', type='tweet', id=1, fields='user')
+#' es_get(index='twitter', type='tweet', id=1, fields='user')
 #' 
 #' # Just test for existence of the document
-#' es_get(init, index='twitter', type='tweet', id=1, exists=TRUE)
+#' es_get(index='twitter', type='tweet', id=1, exists=TRUE)
 #' 
 #' # Just get source (NOT WORKING RIGHT NOW)
-#' es_get(init, index='twitter', type='tweet', id=1, source=TRUE)
+#' es_get(index='twitter', type='tweet', id=1, source=TRUE)
 #' }
 
 es_get <- function(index=NULL, type=NULL, id=NULL, source=FALSE, 
   fields=NULL, exists=FALSE, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
-  conn <- es_get_auth()
+  conn <- es_connect()
   
   if(!is.null(fields)) fields <- paste(fields, collapse=",")
   
