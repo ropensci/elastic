@@ -69,9 +69,12 @@ There are a lot of terms you can use for Elasticsearch. See here
 \examples{
 \dontrun{
 es_cluster(what='health')
-es_cluster(what='state')
-es_cluster(what='settings')
+es_cluster('state')
+es_cluster('settings')
+es_cluster('stats')
 es_cluster('pending_tasks')
+
+es_cluster('health', raw=TRUE)
 }
 }
 

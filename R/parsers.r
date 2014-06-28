@@ -90,12 +90,54 @@ es_parse.elastic_cluster_health <- function(input, parsetype='list', verbose=TRU
 #' @method es_parse elastic_cluster_health
 #' @export
 #' @rdname es_parse
-es_parse.elastic_cluster_ <- function(input, parsetype='list', verbose=TRUE)
+es_parse.elastic_cluster_health <- function(input, parsetype='list', verbose=TRUE)
 {
   parse_help(input, "elastic_cluster_health", parsetype) 
   if(verbose){
     message(paste("\ncluster_name -> ", tt$cluster_name, "\nstatus -> ", tt$status, sep=""))
   }
+  return( tt )
+}
+
+#' @method es_parse elastic_cluster_state
+#' @export
+#' @rdname es_parse
+es_parse.elastic_cluster_state <- function(input, parsetype='list', verbose=TRUE)
+{
+  parse_help(input, "elastic_cluster_state", parsetype)
+  if(verbose){
+    message(paste("\ncluster_name -> ", tt$cluster_name, "\nversion -> ", tt$version, sep=""))
+  }
+  return( tt )
+}
+
+#' @method es_parse elastic_cluster_settings
+#' @export
+#' @rdname es_parse
+es_parse.elastic_cluster_settings <- function(input, parsetype='list', verbose=TRUE)
+{
+  parse_help(input, "elastic_cluster_settings", parsetype)
+  return( tt )
+}
+
+#' @method es_parse elastic_cluster_stats
+#' @export
+#' @rdname es_parse
+es_parse.elastic_cluster_stats <- function(input, parsetype='list', verbose=TRUE)
+{
+  parse_help(input, "elastic_cluster_stats", parsetype)
+  if(verbose){
+    message(paste("\ntimestamp -> ", tt$timestamp, "\ncluster_name -> ", tt$cluster_name, "\nstatus -> ", tt$status, sep=""))
+  }
+  return( tt )
+}
+
+#' @method es_parse elastic_cluster_pending_tasks
+#' @export
+#' @rdname es_parse
+es_parse.elastic_cluster_pending_tasks <- function(input, parsetype='list', verbose=TRUE)
+{
+  parse_help(input, "elastic_cluster_pending_tasks", parsetype)
   return( tt )
 }
 
