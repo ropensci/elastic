@@ -3,7 +3,8 @@
 \alias{es_GET}
 \title{Wrapper around httr::GET for this package}
 \usage{
-es_GET(path, index = NULL, type = NULL, clazz = NULL, raw, callopts, ...)
+es_GET(path, index = NULL, type = NULL, metric = NULL, clazz = NULL,
+  raw, callopts, ...)
 }
 \arguments{
 \item{path}{Elasticsearch API endpoint path}

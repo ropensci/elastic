@@ -18,7 +18,7 @@
 
 es_count <- function(index=NULL, type=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
-  out <- es_GET('_count', NULL, index, type, raw, callopts, ...)
+  out <- es_GET('_count', index, type, NULL, raw, callopts, ...)
   rjson::fromJSON(out)$count
 }
 

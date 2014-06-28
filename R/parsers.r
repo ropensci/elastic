@@ -78,3 +78,22 @@ es_parse.elastic_status <- function(input, parsetype='list', verbose=FALSE)
   }
   return( tt )
 }
+
+#' @method es_parse elastic_stats
+#' @export
+#' @rdname es_parse
+es_parse.elastic_stats <- function(input, parsetype='list', verbose=FALSE)
+{
+  assert_that(is(input, "elastic_stats"))
+  tt <- rjson::fromJSON(input)
+  if(parsetype=='list'){ NULL } else {
+    message("parsetype='df' not supported yet")
+  }
+  
+  if(verbose){
+    shards <- tt$`_shards`
+    message(paste("\nshards -> ", shards$total, "\nsuccessful -> ", shards$successful, sep="")
+    )
+  }
+  return( tt )
+}
