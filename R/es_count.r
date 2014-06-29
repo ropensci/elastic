@@ -62,9 +62,9 @@ es_status <- function(callopts=list(), raw=FALSE, verbose=TRUE, ...)
 #' 
 #' @export
 #' @examples \dontrun{
-#' es_info()
+#' es_connection()
 #' }
 
-es_info <- function(){
+es_connection <- function(){
   es_connect()
 }
