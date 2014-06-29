@@ -3,7 +3,7 @@
 \alias{es_nodes}
 \title{Elasticsearch nodes endpoints.}
 \usage{
-es_nodes(what = "stats", index = NULL, metric = NULL, raw = FALSE,
+es_nodes(what = "stats", node = NULL, metric = NULL, raw = FALSE,
   callopts = list(), verbose = TRUE, ...)
 }
 \arguments{
@@ -31,13 +31,35 @@ Elasticsearch nodes endpoints.
 \details{
 There are a lot of terms you can use for Elasticsearch. See here
    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
+
+By default, all stats are returned. You can limit this by combining any of indices, os, process,
+jvm, network, transport, http, fs, breaker and thread_pool. With the metric parameter you can
+select zero or more of:
+
+\itemize{
+ \item indices Indices stats about size, document count, indexing and deletion times, search
+ times, field cache size, merges and flushes
+ \item fs File system information, data path, free disk space, read/write stats
+ \item http HTTP connection information
+ \item jvm JVM stats, memory pool information, garbage collection, buffer pools
+ \item network TCP information
+ \item os Operating system stats, load average, cpu, mem, swap
+ \item process Process statistics, memory consumption, cpu usage, open file descriptors
+ \item thread_pool Statistics about each thread pool, including current size, queue and rejected
+ tasks
+ \item transport Transport statistics about sent and received bytes in cluster communication
+ \item breaker Statistics about the field data circuit breaker
+}
 }
 \examples{
 \dontrun{
 es_nodes('stats')
+es_nodes('stats', node='0KQ7ut7dTKqnzJJeDVCUug')
 es_nodes('stats', metric='get')
+es_nodes('stats', metric='jvm')
 es_nodes('stats', metric=c('os','process'))
 es_nodes('info')
+es_nodes('info', metric='process')
 }
 }
 

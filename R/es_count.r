@@ -12,13 +12,12 @@
 #' 
 #' @examples \dontrun{
 #' es_count(index='mran')
-#' es_count(index='mran', raw=TRUE)
 #' es_count(index='twitter')
 #' }
 
-es_count <- function(index=NULL, type=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
+es_count <- function(index=NULL, type=NULL, callopts=list(), verbose=TRUE, ...)
 {
-  out <- es_GET('_count', index, type, NULL, raw, callopts, ...)
+  out <- es_GET('_count', index, type, NULL, NULL, NULL, FALSE, callopts, ...)
   rjson::fromJSON(out)$count
 }
 
@@ -39,7 +38,7 @@ es_count <- function(index=NULL, type=NULL, raw=FALSE, callopts=list(), verbose=
 
 es_aliases <- function(callopts=list(), raw=FALSE, verbose=TRUE, ...)
 {
-  out <- es_GET('_aliases', NULL, NULL, NULL, raw, callopts, ...)
+  out <- es_GET('_aliases', NULL, NULL, NULL, NULL, NULL, raw, callopts, ...)
   if(raw) out else names(rjson::fromJSON(out))
 }
 
@@ -53,7 +52,7 @@ es_aliases <- function(callopts=list(), raw=FALSE, verbose=TRUE, ...)
 
 es_status <- function(callopts=list(), raw=FALSE, verbose=TRUE, ...)
 {
-  es_GET('_status', NULL, NULL, 'elastic_status', raw, callopts, ...)
+  es_GET('_status', NULL, NULL, NULL, NULL, 'elastic_status', raw, callopts, ...)
 }
 
 #' Get info on your Elasticsearch cluster

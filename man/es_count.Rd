@@ -3,8 +3,8 @@
 \alias{es_count}
 \title{Execute a query and get the number of matches for that query.}
 \usage{
-es_count(index = NULL, type = NULL, raw = FALSE, callopts = list(),
-  verbose = TRUE, ...)
+es_count(index = NULL, type = NULL, callopts = list(), verbose = TRUE,
+  ...)
 }
 \arguments{
 \item{index}{Index}
@@ -37,7 +37,6 @@ There are a lot of terms you can use for Elasticsearch. See here
 \examples{
 \dontrun{
 es_count(index='mran')
-es_count(index='mran', raw=TRUE)
 es_count(index='twitter')
 }
 }
