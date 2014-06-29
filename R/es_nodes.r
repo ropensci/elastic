@@ -15,6 +15,11 @@
 #' es_nodes('stats', metric=c('os','process'))
 #' es_nodes('info')
 #' }
+#' 
+#' @examples \donttest{
+#' es_nodes('shutdown')
+#' es_nodes('hot_threads')
+#' }
 
 es_nodes <- function(what='stats', index=NULL, metric=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {

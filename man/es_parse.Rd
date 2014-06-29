@@ -69,4 +69,5 @@ but if you output raw data from es_* functions using raw=TRUE, then you can use 
 function to parse that data (a es_* S3 object) after the fact to a list of
 data.frame's for easier consumption.
 }
+\keyword{internal}
 

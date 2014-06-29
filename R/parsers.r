@@ -17,6 +17,7 @@ es_parse <- function(input, parsetype, verbose){
 #' @method es_parse elastic_get
 #' @export
 #' @rdname es_parse
+#' @keywords internal
 es_parse.elastic_get <- function(input, parsetype='list', verbose=FALSE)
 {
   parse_help(input, "elastic_get", parsetype)
@@ -26,6 +27,7 @@ es_parse.elastic_get <- function(input, parsetype='list', verbose=FALSE)
 #' @method es_parse elastic_mget
 #' @export
 #' @rdname es_parse
+#' @keywords internal
 es_parse.elastic_mget <- function(input, parsetype='list', verbose=FALSE)
 {
   parse_help(input, "elastic_mget", parsetype)
@@ -35,6 +37,7 @@ es_parse.elastic_mget <- function(input, parsetype='list', verbose=FALSE)
 #' @method es_parse elastic_search
 #' @export
 #' @rdname es_parse
+#' @keywords internal
 es_parse.elastic_search <- function(input, parsetype='list', verbose=FALSE)
 {
   parse_help(input, "elastic_search", parsetype)
@@ -50,6 +53,7 @@ es_parse.elastic_search <- function(input, parsetype='list', verbose=FALSE)
 #' @method es_parse elastic_status
 #' @export
 #' @rdname es_parse
+#' @keywords internal
 es_parse.elastic_status <- function(input, parsetype='list', verbose=FALSE)
 {
   parse_help(input, "elastic_status", parsetype)
@@ -64,6 +68,7 @@ es_parse.elastic_status <- function(input, parsetype='list', verbose=FALSE)
 #' @method es_parse elastic_stats
 #' @export
 #' @rdname es_parse
+#' @keywords internal
 es_parse.elastic_stats <- function(input, parsetype='list', verbose=FALSE)
 {
   parse_help(input, "elastic_stats", parsetype)
@@ -78,9 +83,10 @@ es_parse.elastic_stats <- function(input, parsetype='list', verbose=FALSE)
 #' @method es_parse elastic_cluster_health
 #' @export
 #' @rdname es_parse
+#' @keywords internal
 es_parse.elastic_cluster_health <- function(input, parsetype='list', verbose=TRUE)
 {
-  parse_help(input, "elastic_cluster_health", parsetype) 
+  parse_help(input, "elastic_cluster_health", parsetype)
   if(verbose){
     message(paste("\ncluster_name -> ", tt$cluster_name, "\nstatus -> ", tt$status, sep=""))
   }
@@ -90,9 +96,10 @@ es_parse.elastic_cluster_health <- function(input, parsetype='list', verbose=TRU
 #' @method es_parse elastic_cluster_health
 #' @export
 #' @rdname es_parse
+#' @keywords internal
 es_parse.elastic_cluster_health <- function(input, parsetype='list', verbose=TRUE)
 {
-  parse_help(input, "elastic_cluster_health", parsetype) 
+  parse_help(input, "elastic_cluster_health", parsetype)
   if(verbose){
     message(paste("\ncluster_name -> ", tt$cluster_name, "\nstatus -> ", tt$status, sep=""))
   }
@@ -102,6 +109,7 @@ es_parse.elastic_cluster_health <- function(input, parsetype='list', verbose=TRU
 #' @method es_parse elastic_cluster_state
 #' @export
 #' @rdname es_parse
+#' @keywords internal
 es_parse.elastic_cluster_state <- function(input, parsetype='list', verbose=TRUE)
 {
   parse_help(input, "elastic_cluster_state", parsetype)
@@ -114,6 +122,7 @@ es_parse.elastic_cluster_state <- function(input, parsetype='list', verbose=TRUE
 #' @method es_parse elastic_cluster_settings
 #' @export
 #' @rdname es_parse
+#' @keywords internal
 es_parse.elastic_cluster_settings <- function(input, parsetype='list', verbose=TRUE)
 {
   parse_help(input, "elastic_cluster_settings", parsetype)
@@ -123,6 +132,7 @@ es_parse.elastic_cluster_settings <- function(input, parsetype='list', verbose=T
 #' @method es_parse elastic_cluster_stats
 #' @export
 #' @rdname es_parse
+#' @keywords internal
 es_parse.elastic_cluster_stats <- function(input, parsetype='list', verbose=TRUE)
 {
   parse_help(input, "elastic_cluster_stats", parsetype)
@@ -135,6 +145,7 @@ es_parse.elastic_cluster_stats <- function(input, parsetype='list', verbose=TRUE
 #' @method es_parse elastic_cluster_pending_tasks
 #' @export
 #' @rdname es_parse
+#' @keywords internal
 es_parse.elastic_cluster_pending_tasks <- function(input, parsetype='list', verbose=TRUE)
 {
   parse_help(input, "elastic_cluster_pending_tasks", parsetype)
@@ -143,6 +154,7 @@ es_parse.elastic_cluster_pending_tasks <- function(input, parsetype='list', verb
 
 #' @method es_parse elastic_nodes_stats
 #' @rdname es_parse
+#' @keywords internal
 es_parse.elastic_nodes_stats <- function(input, parsetype='list', verbose=TRUE)
 {
   parse_help(input, "elastic_nodes_stats", parsetype)
@@ -151,6 +163,7 @@ es_parse.elastic_nodes_stats <- function(input, parsetype='list', verbose=TRUE)
 
 #' @method es_parse elastic_nodes_info
 #' @rdname es_parse
+#' @keywords internal
 es_parse.elastic_nodes_info <- function(input, parsetype='list', verbose=TRUE)
 {
   parse_help(input, "elastic_nodes_info", parsetype)
