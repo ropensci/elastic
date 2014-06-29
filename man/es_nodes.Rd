@@ -3,8 +3,8 @@
 \alias{es_nodes}
 \title{Elasticsearch nodes endpoints.}
 \usage{
-es_nodes(what = "health", index = NULL, raw = FALSE, callopts = list(),
-  verbose = TRUE, ...)
+es_nodes(what = "stats", index = NULL, metric = NULL, raw = FALSE,
+  callopts = list(), verbose = TRUE, ...)
 }
 \arguments{
 \item{index}{Index}
@@ -34,7 +34,10 @@ There are a lot of terms you can use for Elasticsearch. See here
 }
 \examples{
 \dontrun{
-es_nodes()
+es_nodes('stats')
+es_nodes('stats', metric='get')
+es_nodes('stats', metric=c('os','process'))
+es_nodes('info')
 }
 }
 

@@ -1,6 +1,7 @@
 #' Elasticsearch nodes endpoints.
 #'
 #' @import httr
+#' @export
 #'
 #' @template all
 #' @template get
@@ -9,18 +10,18 @@
 #'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
 #'
 #' @examples \dontrun{
-#' es_nodes()
+#' es_nodes('stats')
+#' es_nodes('stats', metric='get')
+#' es_nodes('stats', metric=c('os','process'))
+#' es_nodes('info')
 #' }
 
-es_nodes <- function(what='health', index=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
+es_nodes <- function(what='stats', index=NULL, metric=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
-  message("not working yet...")
-#   what2 <- switch(what, 
-#                   health = '_cluster/health',
-#                   state = '_cluster/state',
-#                   stats = '_cluster/stats',
-#                   reroute = '_cluster/reroute',
-#                   settings = '_cluster/settings',
-#                   pending_tasks = '_cluster/pending_tasks')
-#   es_GET(what2, index, NULL, NULL, sprintf('elastic_cluster_%s', what), raw, callopts, ...)
+  what2 <- switch(what,
+                  stats = '_nodes/stats',
+                  info = '_nodes/info',
+                  hot_threads = '_nodes/hot_threads',
+                  shutdown = '_nodes/shutdown')
+  es_GET(what2, index, NULL, metric, sprintf('elastic_nodes_%s', what), raw, callopts, ...)
 }

@@ -8,6 +8,8 @@
 \alias{es_parse.elastic_cluster_stats}
 \alias{es_parse.elastic_get}
 \alias{es_parse.elastic_mget}
+\alias{es_parse.elastic_nodes_info}
+\alias{es_parse.elastic_nodes_stats}
 \alias{es_parse.elastic_search}
 \alias{es_parse.elastic_stats}
 \alias{es_parse.elastic_status}
@@ -43,6 +45,12 @@ es_parse(input, parsetype, verbose)
   verbose = TRUE)
 
 \method{es_parse}{elastic_cluster_pending_tasks}(input, parsetype = "list",
+  verbose = TRUE)
+
+\method{es_parse}{elastic_nodes_stats}(input, parsetype = "list",
+  verbose = TRUE)
+
+\method{es_parse}{elastic_nodes_info}(input, parsetype = "list",
   verbose = TRUE)
 }
 \arguments{

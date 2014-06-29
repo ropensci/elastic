@@ -141,6 +141,22 @@ es_parse.elastic_cluster_pending_tasks <- function(input, parsetype='list', verb
   return( tt )
 }
 
+#' @method es_parse elastic_nodes_stats
+#' @rdname es_parse
+es_parse.elastic_nodes_stats <- function(input, parsetype='list', verbose=TRUE)
+{
+  parse_help(input, "elastic_nodes_stats", parsetype)
+  return( tt )
+}
+
+#' @method es_parse elastic_nodes_info
+#' @rdname es_parse
+es_parse.elastic_nodes_info <- function(input, parsetype='list', verbose=TRUE)
+{
+  parse_help(input, "elastic_nodes_info", parsetype)
+  return( tt )
+}
+
 parse_help <- function(input, clazz, parsetype){
   assert_that(is(input, clazz))
   tt <<- rjson::fromJSON(input)
