@@ -11,7 +11,8 @@
 es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL, 
                    clazz=NULL, raw, callopts, ...) 
 {
-  conn <- es_connect()
+#   conn <- es_connect()
+  conn <- es_get_auth()
   url <- paste(conn$base, ":", conn$port, sep="")
   if(is.null(index) && is.null(type)){ url <- paste(url, path, sep="/") } else
     if(is.null(type) && !is.null(index)){ url <- paste(url, index, path, sep="/") } else {
