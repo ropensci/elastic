@@ -37,6 +37,7 @@ There are a lot of terms you can use for Elasticsearch. See here
 \examples{
 \dontrun{
 es_count(index='mran')
+es_count(index='mran', type='metadata')
 es_count(index='twitter')
 }
 }

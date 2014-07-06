@@ -15,26 +15,63 @@
 #' Pass on the returned 'es_conn' object to other functions in this package.
 #' @export
 #' @examples \dontrun{
-#' (conn <- es_connect())
+#' # the default is set to localhost and port 9200
+#' es_connect()
+#' 
+#' # or set to a different base url
+#' es_connect('http://162.243.152.56')
 #' }
 
-es_connect <- function(es_base="http://127.0.0.1", es_port=9200, user = NULL, pwd = NULL, key = NULL, ...)
+es_connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL, es_pwd = NULL, 
+                       es_key = NULL, force = FALSE, ...)
 {  
-  auth <- es_get_auth()
+  auth <- es_get_auth(es_base=es_base, es_port=es_port, force = force)
   
-  if(grepl('localhost|127.0.0.1', auth$base))
-    base <- paste(auth$base, auth$port, sep = ":")
-  res <- tryCatch(GET(base, ...), error=function(e) e)
+#   if(grepl('localhost|127.0.0.1', auth$base))
+#     base <- paste(auth$base, auth$port, sep = ":")
+  if(is.null(auth$port)){
+    baseurl <- auth$base
+  } else
+  {  baseurl <- paste(auth$base, auth$port, sep = ":") }
+  res <- tryCatch(GET(baseurl, ...), error=function(e) e)
   if("error" %in% class(res)){
-    stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting", base), call. = FALSE)
+    stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting", baseurl), call. = FALSE)
   }
   if(res$status_code > 200)
     stop(sprintf("Error:", res$headers$statusmessage), call. = FALSE)
   tt <- content(res, as = "text")
   out <- RJSONIO::fromJSON(tt, simplifyWithNames = FALSE)
   
-  ll <- list(base = auth$base, port = auth$port, user = user, pwd = pwd, key = key, es_deets = out)
+  ll <- list(base = auth$base, port = auth$port, user = es_user, pwd = es_pwd, key = es_key, es_deets = out)
   
+  class(ll) <- 'es_conn'
+  return( ll )
+}
+
+#' Get info on your Elasticsearch cluster
+#' 
+#' Calls \link{es_connect} internally
+#' 
+#' @export
+#' @examples \dontrun{
+#' es_connection()
+#' }
+
+es_connection <- function(){
+  auth <- list(base=getOption("es_base"), port=getOption("es_port"))
+  if(is.null(auth$port)){
+    baseurl <- auth$base
+  } else
+  {  baseurl <- paste(auth$base, auth$port, sep = ":") }
+  res <- tryCatch(GET(baseurl), error=function(e) e)
+  if("error" %in% class(res)){
+    stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting", baseurl), call. = FALSE)
+  }
+  if(res$status_code > 200)
+    stop(sprintf("Error:", res$headers$statusmessage), call. = FALSE)
+  tt <- content(res, as = "text")
+  out <- RJSONIO::fromJSON(tt, simplifyWithNames = FALSE)
+  ll <- list(base=auth$base, port=auth$port, user = NULL, pwd = NULL, key = NULL, es_deets = out)
   class(ll) <- 'es_conn'
   return( ll )
 }
@@ -82,9 +119,9 @@ print.es_conn <- function(x, ...){
 #'  \code{options(es_key = '<port>')}
 #' }
 
-es_auth <- function(es_base=NULL, es_port=NULL, es_user=NULL, es_pwd=NULL, es_key=NULL, force=FALSE) 
+es_auth <- function(es_base=NULL, es_port=NULL, es_user=NULL, es_pwd=NULL, es_key=NULL, force=FALSE)
 {
-  
+#   list(es_base=es_base, es_port=es_port)
   base <- ifnull(es_base, 'es_base')
   port <- ifnull(es_port, 'es_port')
   user <- ifnull(es_user, 'es_user')
@@ -121,6 +158,8 @@ es_auth <- function(es_base=NULL, es_port=NULL, es_user=NULL, es_pwd=NULL, es_ke
     options(es_port = port)
   } else { port <- port }
   
+  options(es_base = base)
+  options(es_port = port)
   list(base = base, port = port)
 }
 
@@ -128,11 +167,12 @@ ifnull <- function(x, y){
   if(is.null(x)) getOption(y, default = "") else x
 }
 
-es_get_auth <- function(){
-  base <- getOption("es_base")
-  port <- getOption("es_port")
+es_get_auth <- function(es_base=NULL, es_port=NULL, force=FALSE){
+  if(is.null(es_base)) es_base <- getOption("es_base")
+  if(is.null(es_port)) es_port <- getOption("es_port")
   
-  if(is.null(base) | is.null(port)) es_auth()
+#   if(is.null(base) | is.null(port)) 
+  es_auth(es_base=es_base, es_port=es_port, force = force)
   
   base <- getOption("es_base")
   port <- getOption("es_port")

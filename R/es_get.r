@@ -25,7 +25,7 @@
 es_get <- function(index=NULL, type=NULL, id=NULL, source=FALSE, 
   fields=NULL, exists=FALSE, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
-  conn <- es_connect()
+  conn <- es_get_auth()
   
   if(!is.null(fields)) fields <- paste(fields, collapse=",")
   

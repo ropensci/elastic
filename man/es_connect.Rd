@@ -4,8 +4,8 @@
 \alias{print.es_conn}
 \title{Set connection details to an Elasticsearch engine.}
 \usage{
-es_connect(es_base = "http://127.0.0.1", es_port = 9200, user = NULL,
-  pwd = NULL, key = NULL, ...)
+es_connect(es_base = "http://127.0.0.1", es_port = 9200, es_user = NULL,
+  es_pwd = NULL, es_key = NULL, force = FALSE, ...)
 
 \method{print}{es_conn}(x, ...)
 }
@@ -37,7 +37,11 @@ Pass on the returned 'es_conn' object to other functions in this package.
 }
 \examples{
 \dontrun{
-(conn <- es_connect())
+# the default is set to localhost and port 9200
+es_connect()
+
+# or set to a different base url
+es_connect('http://162.243.152.56')
 }
 }
 
