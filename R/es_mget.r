@@ -15,11 +15,11 @@
 #' @export
 #' @examples \dontrun{
 #' # Same index and type
-#' es_mget(index="twitter", type="tweet", id=1:2)
-#' tmp <- es_mget(index="twitter", type="tweet", id=1:2, raw=TRUE)
+#' es_mget(index="mran", type="metadata", id=c('plyr','ggplot2'))
+#' tmp <- es_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), raw=TRUE)
 #' es_parse(tmp)
-#' es_mget(index="twitter", type="tweet", id=1:2, fields='user')
-#' es_mget(index="twitter", type="tweet", id=1:2, source=TRUE)
+#' es_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), fields='description')
+#' es_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), source=TRUE)
 #' 
 #' library("httr")
 #' es_mget(index="twitter", type="tweet", id=1:2, callopts=verbose())
@@ -37,9 +37,9 @@
 es_mget <- function(index=NULL, type=NULL, id=NULL, type_id=NULL, index_type_id=NULL,
   source=NULL, fields=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
-  conn <- es_connect()
+  conn <- es_get_auth()
   
-  base <- paste(conn$url, ":", conn$port, sep="")
+  base <- paste(conn$base, ":", conn$port, sep="")
   fields <- if(is.null(fields)) { fields} else { paste(fields, collapse=",") } 
   args <- es_compact(list(...))
   

@@ -41,11 +41,11 @@ There are a lot of terms you can use for Elasticsearch. See here
 \examples{
 \dontrun{
 # Same index and type
-es_mget(index="twitter", type="tweet", id=1:2)
-tmp <- es_mget(index="twitter", type="tweet", id=1:2, raw=TRUE)
+es_mget(index="mran", type="metadata", id=c('plyr','ggplot2'))
+tmp <- es_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), raw=TRUE)
 es_parse(tmp)
-es_mget(index="twitter", type="tweet", id=1:2, fields='user')
-es_mget(index="twitter", type="tweet", id=1:2, source=TRUE)
+es_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), fields='description')
+es_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), source=TRUE)
 
 library("httr")
 es_mget(index="twitter", type="tweet", id=1:2, callopts=verbose())
