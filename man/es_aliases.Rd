@@ -6,13 +6,13 @@
 es_aliases(callopts = list(), raw = FALSE, verbose = TRUE, ...)
 }
 \arguments{
-\item{...}{Further args passed on to elastic search HTTP API as parameters.}
-
-\item{callopts}{Curl args passed on to httr::POST.}
+\item{callopts}{Curl args passed on to httr::GET.}
 
 \item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
 
 \item{verbose}{If TRUE (default) the url call used printed to console.}
+
+\item{...}{Further args passed on to elastic search HTTP API as parameters.}
 }
 \description{
 See \code{es_status} for more details on indices.

@@ -1,8 +1,11 @@
-#' Get a list of your indices, just the names.
-#'
-#' See \code{es_status} for more details on indices.
+#' Get status details for your cluster.
 #' 
 #' @export
+#' 
+#' @param callopts Curl args passed on to httr::GET.
+#' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
+#' @param verbose If TRUE (default) the url call used printed to console.
+#' @param ... Further args passed on to elastic search HTTP API as parameters.
 #'
 #' @examples \dontrun{
 #' es_status()
