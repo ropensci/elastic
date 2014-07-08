@@ -3,42 +3,48 @@
 \alias{es_cat}
 \title{Use the cat Elasticsearch api.}
 \usage{
-es_cat(index = NULL, type = NULL, id = NULL, source = FALSE,
-  fields = NULL, exists = FALSE, raw = FALSE, callopts = list(),
-  verbose = TRUE, ...)
+es_cat(what = "", verbose = FALSE, index = NULL)
 }
 \arguments{
-\item{index}{Index}
-
-\item{type}{Document type}
-
-\item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
-
-\item{callopts}{Curl args passed on to httr::POST.}
+\item{what}{What to print, one of '', aliases, allocation, count, segments, health, indices,
+master, nodes, pending_tasks, plugins, recovery, thread_pool, or shards.}
 
 \item{verbose}{If TRUE (default) the url call used printed to console.}
 
-\item{...}{Further args passed on to elastic search HTTP API as parameters.}
-
-\item{id}{Document id}
-
-\item{source}{XXX}
-
-\item{fields}{Fields to return from the response object.}
-
-\item{exists}{XXX}
+\item{index}{Index name}
 }
 \description{
 Use the cat Elasticsearch api.
 }
 \details{
-There are a lot of terms you can use for Elasticsearch. See here
-   \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
+See \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/cat.html}
+for the cat API documentation.
 }
 \examples{
 \dontrun{
-es_cat(index='twitter', type='tweet', id=1)
-es_cat(index='mran', id=1)
+es_cat()
+es_cat('aliases')
+es_cat('aliases', index='mran')
+es_cat('allocation')
+es_cat('allocation', verbose=TRUE)
+es_cat('count')
+es_cat('count', index='mran')
+es_cat('count', index='twitter')
+es_cat('segments')
+es_cat('segments', index='mran')
+es_cat('health')
+es_cat('indices')
+es_cat('indices', index='movies')
+es_cat('indices', index='mran')
+es_cat('indices', index='mran', verbose=TRUE)
+es_cat('master')
+es_cat('nodes')
+es_cat('pending_tasks')
+es_cat('plugins')
+es_cat('recovery')
+es_cat('recovery', index='mran')
+es_cat('thread_pool')
+es_cat('shards')
 }
 }
 

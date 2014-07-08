@@ -1,44 +1,52 @@
 #' Use the cat Elasticsearch api.
 #' 
-#' @import httr 
-#' @importFrom plyr compact
-#' 
-#' @template all
-#' @template get
-#' @param exists XXX
-#' @details There are a lot of terms you can use for Elasticsearch. See here 
-#'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
 #' @export
+#' @import httr 
+#' 
+#' @param what What to print, one of '', aliases, allocation, count, segments, health, indices, 
+#' master, nodes, pending_tasks, plugins, recovery, thread_pool, or shards. 
+#' @param verbose If TRUE (default) the url call used printed to console.
+#' @param index Index name
+#' 
+#' @details See \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/cat.html} 
+#' for the cat API documentation.
+#'
 #' @examples \dontrun{
-#' es_cat(index='twitter', type='tweet', id=1)
-#' es_cat(index='mran', id=1)
+#' es_cat()
+#' es_cat('aliases')
+#' es_cat('aliases', index='mran')
+#' es_cat('allocation')
+#' es_cat('allocation', verbose=TRUE)
+#' es_cat('count')
+#' es_cat('count', index='mran')
+#' es_cat('count', index='twitter')
+#' es_cat('segments')
+#' es_cat('segments', index='mran')
+#' es_cat('health')
+#' es_cat('indices')
+#' es_cat('indices', index='movies')
+#' es_cat('indices', index='mran')
+#' es_cat('indices', index='mran', verbose=TRUE)
+#' es_cat('master')
+#' es_cat('nodes')
+#' es_cat('pending_tasks')
+#' es_cat('plugins')
+#' es_cat('recovery')
+#' es_cat('recovery', index='mran')
+#' es_cat('thread_pool')
+#' es_cat('shards')
 #' }
 
-es_cat <- function(index=NULL, type=NULL, id=NULL, source=FALSE, 
-  fields=NULL, exists=FALSE, raw=FALSE, callopts=list(), verbose=TRUE, ...)
+es_cat <- function(what='', verbose=FALSE, index=NULL)
 {
   conn <- es_get_auth()
-  
-  if(length(id) > 1){ # pass in request in body
-    body <- toJSON(list(ids = as.character(id)))
-  }
-  
   if(!is.null(fields)) fields <- paste(fields, collapse=",")
-  
-  url <- paste(conn$url, ":", conn$port, sep="")
-  if(source) url <- paste(url, '_source', sep="/")
-  args <- es_compact(list(fields = fields, ...))
-  
-  if(exists){
-    out <- HEAD(url, query=args, callopts)
-    message(paste(out$headers[c('status','statusmessage')], collapse=" - "))
-  } else
-  {
-    out <- GET(url, query=args, callopts)
-    stop_for_status(out)
-    if(verbose) message(URLdecode(out$url))
-    tt <- content(out, as="text")
-    class(tt) <- "elastic_get"
-    if(raw){ tt } else { es_parse(tt) }
-  }
+  url <- sprintf("%s:%s/_cat/%s", conn$base, conn$port, what)
+  if(!is.null(index)) url <- paste0(url, '/', index)  
+  args <- es_compact(list(v = if(verbose) '' else NULL))
+  out <- GET(url, query=args)
+  stop_for_status(out)
+  if(verbose) message(URLdecode(out$url))
+  dat <- content(out, as = "text")
+  if(identical(dat, "")) message("Nothing to print") else cat(dat)
 }
