@@ -74,6 +74,7 @@ es_cluster('settings')
 es_cluster('stats')
 es_cluster('pending_tasks')
 
+# raw json data
 es_cluster('health', raw=TRUE)
 }
 }
