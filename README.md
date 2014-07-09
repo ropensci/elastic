@@ -53,15 +53,20 @@ library(elastic)
 * Navigate to elasticsearch: `cd /usr/local/elasticsearch`
 * Start elasticsearch: `bin/elasticsearch`
 
+I create a little bash shortcut called `es` that does both of the above commands in one step.
+
 ### Initialization
 
-The function `es_connect` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The assigned object from a call to `es_connect` has to then be passed on to other functions.
+The function `es_connect` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `es_connect` are written to your options for the current session, and are used by `elastic` functions.
+
+```
+es_connect()
+```
 
 ### Search
 
 ```coffee
-init <- es_connect()
-es_search(init, index="twitter")
+es_search(index="twitter")
 ```
 
 ```coffee
@@ -99,7 +104,7 @@ $hits$hits[[1]]$`_index`
 
 
 ```coffee
-es_search(init, index="twitter", type="tweet", sort="message")
+es_search(index="twitter", type="tweet", sort="message")
 ```
 
 ```coffee
@@ -158,8 +163,7 @@ $hits$hits[[1]]$`_source`$post_date
 Get document with id=1
 
 ```coffee
-init <- es_connect()
-es_get(init, index='twitter', type='tweet', id=1)
+es_get(index='twitter', type='tweet', id=1)
 ```
 
 ```coffee
@@ -200,7 +204,7 @@ attr(,"class")
 Get certain fields
 
 ```coffee
-es_get(init, index='twitter', type='tweet', id=1, fields='user')
+es_get(index='twitter', type='tweet', id=1, fields='user')
 ```
 
 ```coffee
@@ -241,7 +245,7 @@ attr(,"class")
 Test for existence of the document
 
 ```coffee
-es_get(init, index='twitter', type='tweet', id=1, exists=TRUE)
+es_get(index='twitter', type='tweet', id=1, exists=TRUE)
 ```
 
 ```coffee
@@ -253,7 +257,7 @@ es_get(init, index='twitter', type='tweet', id=1, exists=TRUE)
 Same index and type, different document ids
 
 ```coffee
-es_mget(init, index="twitter", type="tweet", id=1:2)
+es_mget(index="twitter", type="tweet", id=1:2)
 ```
 
 ```coffee
@@ -317,7 +321,7 @@ $docs[[2]]$`_source`$message
 Different indeces, types, and ids
 
 ```coffee
-es_mget(init, index_type_id=list(c("twitter","mention",1), c("appdotnet","share",1)))
+es_mget(index_type_id=list(c("twitter","mention",1), c("appdotnet","share",1)))
 ```
 
 ```coffee
@@ -384,8 +388,7 @@ $docs[[2]]$`_source`$message
 For example:
 
 ```coffee
-init <- es_connect()
-(out <- es_mget(init, index="twitter", type="tweet", id=1:2, raw=TRUE))
+(out <- es_mget(index="twitter", type="tweet", id=1:2, raw=TRUE))
 ```
 
 ```coffee
