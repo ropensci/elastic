@@ -54,8 +54,8 @@ open, closed or both.}
 
 \item{human}{Whether to return time and byte values in human-readable format.}
 
-\item{level}{Return stats aggregated at cluster, index or shard level. (“cluster”, “indices”
-or “shards”, default: “indices”)}
+\item{level}{Return stats aggregated at cluster, index or shard level. ('cluster', 'indices'
+or 'shards', default: 'indices')}
 
 \item{types}{A comma-separated list of document types for the indexing index metric}
 }
