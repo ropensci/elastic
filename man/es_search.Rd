@@ -38,6 +38,7 @@ es_search(index="twitter", type="tweet", sort="message")
 es_search(index="twitter", type="tweet", raw=TRUE)
 
 # Curl debugging
+library('httr')
 es_search(index="twitter", type="tweet", callopts=verbose())
 }
 }
