@@ -20,6 +20,7 @@ es_parse <- function(input, parsetype, verbose){
 #' @keywords internal
 es_parse.elastic_get <- function(input, parsetype='list', verbose=FALSE)
 {
+  tt <- NULL
   parse_help(input, "elastic_get", parsetype)
   return( tt )
 }
@@ -30,6 +31,7 @@ es_parse.elastic_get <- function(input, parsetype='list', verbose=FALSE)
 #' @keywords internal
 es_parse.elastic_mget <- function(input, parsetype='list', verbose=FALSE)
 {
+  tt <- NULL
   parse_help(input, "elastic_mget", parsetype)
   return( tt )
 }
@@ -40,6 +42,7 @@ es_parse.elastic_mget <- function(input, parsetype='list', verbose=FALSE)
 #' @keywords internal
 es_parse.elastic_search <- function(input, parsetype='list', verbose=FALSE)
 {
+  tt <- NULL
   parse_help(input, "elastic_search", parsetype)
   if(verbose){
     max_score <- tt$hits$max_score
@@ -56,6 +59,7 @@ es_parse.elastic_search <- function(input, parsetype='list', verbose=FALSE)
 #' @keywords internal
 es_parse.elastic_status <- function(input, parsetype='list', verbose=FALSE)
 {
+  tt <- NULL
   parse_help(input, "elastic_status", parsetype)
   if(verbose){
     shards <- tt$`_shards`
@@ -71,6 +75,7 @@ es_parse.elastic_status <- function(input, parsetype='list', verbose=FALSE)
 #' @keywords internal
 es_parse.elastic_stats <- function(input, parsetype='list', verbose=FALSE)
 {
+  tt <- NULL
   parse_help(input, "elastic_stats", parsetype)
   if(verbose){
     shards <- tt$`_shards`
@@ -86,6 +91,7 @@ es_parse.elastic_stats <- function(input, parsetype='list', verbose=FALSE)
 #' @keywords internal
 es_parse.elastic_cluster_health <- function(input, parsetype='list', verbose=TRUE)
 {
+  tt <- NULL
   parse_help(input, "elastic_cluster_health", parsetype)
   if(verbose){
     message(paste("\ncluster_name -> ", tt$cluster_name, "\nstatus -> ", tt$status, sep=""))
@@ -99,6 +105,7 @@ es_parse.elastic_cluster_health <- function(input, parsetype='list', verbose=TRU
 #' @keywords internal
 es_parse.elastic_cluster_health <- function(input, parsetype='list', verbose=TRUE)
 {
+  tt <- NULL
   parse_help(input, "elastic_cluster_health", parsetype)
   if(verbose){
     message(paste("\ncluster_name -> ", tt$cluster_name, "\nstatus -> ", tt$status, sep=""))
@@ -112,6 +119,7 @@ es_parse.elastic_cluster_health <- function(input, parsetype='list', verbose=TRU
 #' @keywords internal
 es_parse.elastic_cluster_state <- function(input, parsetype='list', verbose=TRUE)
 {
+  tt <- NULL
   parse_help(input, "elastic_cluster_state", parsetype)
   if(verbose){
     message(paste("\ncluster_name -> ", tt$cluster_name, "\nversion -> ", tt$version, sep=""))
@@ -125,6 +133,7 @@ es_parse.elastic_cluster_state <- function(input, parsetype='list', verbose=TRUE
 #' @keywords internal
 es_parse.elastic_cluster_settings <- function(input, parsetype='list', verbose=TRUE)
 {
+  tt <- NULL
   parse_help(input, "elastic_cluster_settings", parsetype)
   return( tt )
 }
@@ -135,6 +144,7 @@ es_parse.elastic_cluster_settings <- function(input, parsetype='list', verbose=T
 #' @keywords internal
 es_parse.elastic_cluster_stats <- function(input, parsetype='list', verbose=TRUE)
 {
+  tt <- NULL
   parse_help(input, "elastic_cluster_stats", parsetype)
   if(verbose){
     message(paste("\ntimestamp -> ", tt$timestamp, "\ncluster_name -> ", tt$cluster_name, "\nstatus -> ", tt$status, sep=""))
@@ -148,6 +158,7 @@ es_parse.elastic_cluster_stats <- function(input, parsetype='list', verbose=TRUE
 #' @keywords internal
 es_parse.elastic_cluster_pending_tasks <- function(input, parsetype='list', verbose=TRUE)
 {
+  tt <- NULL
   parse_help(input, "elastic_cluster_pending_tasks", parsetype)
   return( tt )
 }
@@ -157,6 +168,7 @@ es_parse.elastic_cluster_pending_tasks <- function(input, parsetype='list', verb
 #' @keywords internal
 es_parse.elastic_nodes_stats <- function(input, parsetype='list', verbose=TRUE)
 {
+  tt <- NULL
   parse_help(input, "elastic_nodes_stats", parsetype)
   return( tt )
 }
@@ -166,6 +178,7 @@ es_parse.elastic_nodes_stats <- function(input, parsetype='list', verbose=TRUE)
 #' @keywords internal
 es_parse.elastic_nodes_info <- function(input, parsetype='list', verbose=TRUE)
 {
+  tt <- NULL
   parse_help(input, "elastic_nodes_info", parsetype)
   return( tt )
 }
