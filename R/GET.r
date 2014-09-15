@@ -8,7 +8,7 @@
 #' @param raw Raw JSON results as string
 #' @param callopts Curl options
 #' @param ... Further args passed to Elasticsearch
-es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL, 
+elastic_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL, 
                    clazz=NULL, raw, callopts, ...) 
 {
   #   conn <- es_connect()

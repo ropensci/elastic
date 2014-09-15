@@ -50,5 +50,5 @@ es_nodes <- function(what='stats', node=NULL, metric=NULL, raw=FALSE, callopts=l
                   info = '_nodes/info',
                   hot_threads = '_nodes/hot_threads',
                   shutdown = '_nodes/shutdown')
-  es_GET(what2, NULL, NULL, NULL, node, sprintf('elastic_nodes_%s', what), raw, callopts, ...)
+  elastic_GET(what2, NULL, NULL, NULL, node, sprintf('elastic_nodes_%s', what), raw, callopts, ...)
 }

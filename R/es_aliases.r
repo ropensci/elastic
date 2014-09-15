@@ -17,6 +17,6 @@
 
 es_aliases <- function(callopts=list(), raw=FALSE, verbose=TRUE, ...)
 {
-  out <- es_GET('_aliases', NULL, NULL, NULL, NULL, NULL, raw, callopts, ...)
+  out <- elastic_GET('_aliases', NULL, NULL, NULL, NULL, NULL, raw, callopts, ...)
   if(raw) out else names(rjson::fromJSON(out))
 }

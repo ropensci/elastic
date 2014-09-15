@@ -41,5 +41,5 @@
 
 es_stats <- function(index=NULL, type=NULL, metric=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
-  es_GET('_stats', index, type, metric, 'elastic_stats', raw, callopts, ...)
+  elastic_GET('_stats', index, type, metric, 'elastic_stats', raw, callopts, ...)
 }

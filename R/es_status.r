@@ -13,5 +13,5 @@
 
 es_status <- function(callopts=list(), raw=FALSE, verbose=TRUE, ...)
 {
-  es_GET('_status', NULL, NULL, NULL, NULL, 'elastic_status', raw, callopts, ...)
+  elastic_GET('_status', NULL, NULL, NULL, NULL, 'elastic_status', raw, callopts, ...)
 }

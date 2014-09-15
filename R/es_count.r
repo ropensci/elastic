@@ -20,6 +20,6 @@
 
 es_count <- function(index=NULL, type=NULL, callopts=list(), verbose=TRUE, ...)
 {
-  out <- es_GET('_count', index, type, NULL, NULL, NULL, FALSE, callopts, ...)
+  out <- elastic_GET('_count', index, type, NULL, NULL, NULL, FALSE, callopts, ...)
   rjson::fromJSON(out)$count
 }

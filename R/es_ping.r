@@ -9,6 +9,6 @@
 
 es_ping <- function(raw=FALSE, callopts=list())
 {
-  tmp <- es_GET("", NULL, NULL, NULL, NULL, NULL, FALSE, callopts)
+  tmp <- elastic_GET("", NULL, NULL, NULL, NULL, NULL, FALSE, callopts)
   if(raw) tmp else rjson::fromJSON(tmp)
 }
