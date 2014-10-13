@@ -1,7 +1,6 @@
 #' Use the bulk API to insert or delete documents.
 #'
 #' @import httr
-#' @importFrom plyr compact
 #'
 #' @template all
 #' @template get

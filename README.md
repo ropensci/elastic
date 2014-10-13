@@ -29,7 +29,7 @@ To avoid potential conflicts with other R packges, this package adds `es_` as a 
 Install dependencies
 
 ```coffee
-install.packages(c("jsonlite","plyr","httr"))
+install.packages(c("jsonlite","httr"))
 ```
 
 Install elastic

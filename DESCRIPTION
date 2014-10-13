@@ -12,7 +12,6 @@ URL: https://github.com/sckott/elastic
 BugReports: https://github.com/sckott/elastic/issues
 Imports:
     httr,
-    plyr,
     jsonlite,
     assertthat
 Suggests:

@@ -1,7 +1,6 @@
 #' Get multiple documents via the multiple get API.
 #'
 #' @import httr
-#' @importFrom plyr compact
 #'
 #' @template all
 #' @template get
