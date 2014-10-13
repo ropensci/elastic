@@ -56,6 +56,20 @@ library(elastic)
 
 I create a little bash shortcut called `es` that does both of the above commands in one step.
 
+**Get some data**
+
+If you need some data to play with, the shakespeare dataset is a good one to start with. First, download the dataset using curl or wget:
+
+```sh
+curl -XGET http://www.elasticsearch.org/guide/en/kibana/current/snippets/shakespeare.json > shakespeare.json
+```
+
+Then load the data into Elasticsearch. This may take up to 10 minutes or so.
+
+```sh
+curl -XPUT localhost:9200/_bulk --data-binary @shakespeare.json
+```
+
 ### Initialization
 
 The function `es_connect` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `es_connect` are written to your options for the current session, and are used by `elastic` functions.
