@@ -2,14 +2,11 @@
 #' 
 #' @import httr 
 #' @importFrom plyr compact
+#' @export
 #' 
 #' @template all
-#' @details There are a lot of terms you can use for Elasticsearch. See here 
-#'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
-#' \itemize{
-#'  \item 
-#' }
-#' @export
+#' @template searchparams
+#' 
 #' @examples \dontrun{
 #' es_search(index="twitter")
 #' es_search(index="twitter", type="tweet")
