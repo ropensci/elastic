@@ -1,32 +1,32 @@
 #' Set connection details to an Elasticsearch engine.
-#' 
+#'
 #' @param base The base url, defaults to localhost (http://127.0.0.1)
 #' @param port port to connect to, defaults to 5984
-#' @param user User name, if required for the connection. You can specify, but 
+#' @param user User name, if required for the connection. You can specify, but
 #' ignored for now.
-#' @param pwd Password, if required for the connection. You can specify, but 
+#' @param pwd Password, if required for the connection. You can specify, but
 #' ignored for now.
 #' @param key An API key
 #' @param x Object to print
 #' @param ... Further args passed on to print for the es_conn class.
 #' @details The default configuration is set up for localhost access on port 9200,
 #' with no username or password.
-#' 
+#'
 #' Pass on the returned 'es_conn' object to other functions in this package.
 #' @export
 #' @examples \dontrun{
 #' # the default is set to localhost and port 9200
 #' es_connect()
-#' 
+#'
 #' # or set to a different base url
 #' es_connect('http://162.243.152.56')
 #' }
 
-es_connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL, es_pwd = NULL, 
+es_connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL, es_pwd = NULL,
                        es_key = NULL, force = FALSE, ...)
-{  
+{
   auth <- es_get_auth(es_base=es_base, es_port=es_port, force = force)
-  
+
 #   if(grepl('localhost|127.0.0.1', auth$base))
 #     base <- paste(auth$base, auth$port, sep = ":")
   if(is.null(auth$port)){
@@ -40,18 +40,18 @@ es_connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL,
   if(res$status_code > 200)
     stop(sprintf("Error:", res$headers$statusmessage), call. = FALSE)
   tt <- content(res, as = "text")
-  out <- RJSONIO::fromJSON(tt, simplifyWithNames = FALSE)
-  
+  out <- jsonlite::fromJSON(tt, FALSE)
+
   ll <- list(base = auth$base, port = auth$port, user = es_user, pwd = es_pwd, key = es_key, es_deets = out)
-  
+
   class(ll) <- 'es_conn'
   return( ll )
 }
 
 #' Get info on your Elasticsearch cluster
-#' 
+#'
 #' Calls \link{es_connect} internally
-#' 
+#'
 #' @export
 #' @examples \dontrun{
 #' es_connection()
@@ -70,7 +70,7 @@ es_connection <- function(){
   if(res$status_code > 200)
     stop(sprintf("Error:", res$headers$statusmessage), call. = FALSE)
   tt <- content(res, as = "text")
-  out <- RJSONIO::fromJSON(tt, simplifyWithNames = FALSE)
+  out <- jsonlite::fromJSON(tt, FALSE)
   ll <- list(base=auth$base, port=auth$port, user = NULL, pwd = NULL, key = NULL, es_deets = out)
   class(ll) <- 'es_conn'
   return( ll )
@@ -96,9 +96,9 @@ print.es_conn <- function(x, ...){
 
 
 #' Set authentication details
-#' 
+#'
 #' Only base url and port and used right now. Will add use or username, password, key, etc. later.
-#' 
+#'
 #' @param es_base (character) Base url
 #' @param es_port (character) Port
 #' @param es_user (character) User name
@@ -114,7 +114,7 @@ print.es_conn <- function(x, ...){
 #'  you for new id and key.
 #'  \item Set your options using the function \code{options}. See examples.
 #'  \item Set your options in your .Rprofile file with entries
-#'  \code{options(es_base = '<clientid>')}, \code{options(es_port = '<port>')}, 
+#'  \code{options(es_base = '<clientid>')}, \code{options(es_port = '<port>')},
 #'  \code{options(es_user = '<port>')}, \code{options(es_pwd = '<port>')}, and
 #'  \code{options(es_key = '<port>')}
 #' }
@@ -127,7 +127,7 @@ es_auth <- function(es_base=NULL, es_port=NULL, es_user=NULL, es_pwd=NULL, es_ke
   user <- ifnull(es_user, 'es_user')
   pwd <- ifnull(es_pwd, 'es_pwd')
   key <- ifnull(es_key, 'es_key')
-  
+
   if (identical(base, "") || force){
     if (!interactive()) {
       stop("Please set option variable es_base to your base url for your Elasticsearch server",
@@ -142,7 +142,7 @@ es_auth <- function(es_base=NULL, es_port=NULL, es_user=NULL, es_pwd=NULL, es_ke
     message("Updating es_base option var\n")
     options(es_base = base)
   } else { base <- base }
-  
+
   if (identical(port, "") || force){
     if (!interactive()) {
       stop("Please set option var es_port to your Elasticsearch port",
@@ -157,7 +157,7 @@ es_auth <- function(es_base=NULL, es_port=NULL, es_user=NULL, es_pwd=NULL, es_ke
     message("Updating es_port option var")
     options(es_port = port)
   } else { port <- port }
-  
+
   options(es_base = base)
   options(es_port = port)
   list(base = base, port = port)
@@ -170,12 +170,12 @@ ifnull <- function(x, y){
 es_get_auth <- function(es_base=NULL, es_port=NULL, force=FALSE){
   if(is.null(es_base)) es_base <- getOption("es_base")
   if(is.null(es_port)) es_port <- getOption("es_port")
-  
-#   if(is.null(base) | is.null(port)) 
+
+#   if(is.null(base) | is.null(port))
   es_auth(es_base=es_base, es_port=es_port, force = force)
-  
+
   base <- getOption("es_base")
   port <- getOption("es_port")
-  
+
   list(base=base, port=port)
 }

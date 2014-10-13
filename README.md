@@ -24,12 +24,12 @@ To avoid potential conflicts with other R packges, this package adds `es_` as a 
 
 ## Quick start
 
-**Install**
+### Install elastic
 
 Install dependencies
 
 ```coffee
-install.packages(c("rjson","plyr","httr"))
+install.packages(c("jsonlite","plyr","httr"))
 ```
 
 Install elastic
@@ -41,7 +41,7 @@ install_github("ropensci/elastic")
 library(elastic)
 ```
 
-**Install Elasticsearch (on OSX)**
+### Install Elasticsearch (on OSX)
 
 + Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/)
 + Unzip it: `unzip` or `untar`
@@ -49,16 +49,18 @@ library(elastic)
 + Navigate to /usr/local: `cd /usr/local`
 + Add shortcut: `sudo ln -s elasticsearch-1.3.4 elasticsearch` (replace version with your verioon)
 
-**Start Elasticsearch**
+### Start Elasticsearch
 
 * Navigate to elasticsearch: `cd /usr/local/elasticsearch`
 * Start elasticsearch: `bin/elasticsearch`
 
 I create a little bash shortcut called `es` that does both of the above commands in one step.
 
-**Get some data**
+### Get some data
 
-If you need some data to play with, the shakespeare dataset is a good one to start with. First, download the dataset using curl or wget:
+#### Shakespeare data
+
+If you need some big data to play with, the shakespeare dataset is a good one to start with. First, download the dataset using curl or wget:
 
 ```sh
 curl -XGET http://www.elasticsearch.org/guide/en/kibana/current/snippets/shakespeare.json > shakespeare.json
@@ -68,6 +70,20 @@ Then load the data into Elasticsearch. This may take up to 10 minutes or so.
 
 ```sh
 curl -XPUT localhost:9200/_bulk --data-binary @shakespeare.json
+```
+
+#### Public Library of Science (PLOS) data
+
+Some smaller data can be retrieved from the PLOS search API. First, download the dataset using `curl`, and pipe through [jq](http://stedolan.github.io/jq/) to get only the `docs` elements:
+
+```sh
+curl -XGET "http://api.plos.org/search?wt=json&q=*:*&rows=1000" | jq ".response.docs" > json.plos
+```
+
+Then load the data into Elasticsearch. This may take up to 10 minutes or so.
+
+```sh
+curl -XPUT localhost:9200/_bulk --data-binary @plos.json
 ```
 
 ### Initialization

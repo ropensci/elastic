@@ -1,5 +1,5 @@
 #' Ping an Elasticsearch server.
-#' 
+#'
 #' @export
 #' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
 #' @param callopts Curl args passed on to httr::POST.
@@ -10,5 +10,5 @@
 es_ping <- function(raw=FALSE, callopts=list())
 {
   tmp <- elastic_GET("", NULL, NULL, NULL, NULL, NULL, FALSE, callopts)
-  if(raw) tmp else rjson::fromJSON(tmp)
+  if(raw) tmp else jsonlite::fromJSON(tmp, FALSE)
 }

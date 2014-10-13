@@ -14,8 +14,6 @@ Imports:
     httr,
     plyr,
     jsonlite,
-    RJSONIO,
-    rjson,
     assertthat
 Suggests:
     testthat,

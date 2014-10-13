@@ -32,5 +32,12 @@
 
 es_search <- function(index=NULL, type=NULL, raw=FALSE, callopts=list(), ...)
 {
-  elastic_GET(path = "_search", index, type, NULL, NULL, clazz = 'elastic_search', raw, callopts, ...)
+  elastic_GET(path = "_search", 
+              index = index, 
+              type = type, 
+              metric = NULL, 
+              node = NULL, 
+              clazz = 'elastic_search', 
+              raw = raw, 
+              callopts = callopts, ...)
 }

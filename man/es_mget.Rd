@@ -41,7 +41,7 @@ There are a lot of terms you can use for Elasticsearch. See here
 \examples{
 \dontrun{
 # Same index and type
-es_mget(index="mran", type="metadata", id=c('plyr','ggplot2'))
+es_mget(index="shakespeare", type="line", id=c(9,10))
 tmp <- es_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), raw=TRUE)
 es_parse(tmp)
 es_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), fields='description')
@@ -51,12 +51,14 @@ library("httr")
 es_mget(index="twitter", type="tweet", id=1:2, callopts=verbose())
 
 # Same index, but different types
+es_mget(index="shakespeare", type_id=list(c("scene",1), c("line",20)))
 es_mget(index="twitter", type_id=list(c("tweet",1), c("mention",2)))
 es_mget(index="twitter", type_id=list(c("tweet",1), c("mention",2)), fields='user')
 es_mget(index="twitter", type_id=list(c("tweet",1), c("mention",2)), fields=c('user','message'))
 
 # Different indeces and different types
 # pass in separately
+es_mget(index_type_id=list(c("shakespeare","line",1), c("appdotnet","share",1)))
 es_mget(index_type_id=list(c("twitter","mention",1), c("appdotnet","share",1)))
 }
 }
