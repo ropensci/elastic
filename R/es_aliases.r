@@ -18,5 +18,5 @@
 es_aliases <- function(callopts=list(), raw=FALSE, verbose=TRUE, ...)
 {
   out <- elastic_GET('_aliases', NULL, NULL, NULL, NULL, NULL, raw, callopts, ...)
-  if(raw) out else names(rjson::fromJSON(out))
+  if(raw) out else names(jsonlite::fromJSON(out, FALSE))
 }

@@ -3,7 +3,7 @@
 \alias{es_cat}
 \title{Use the cat Elasticsearch api.}
 \usage{
-es_cat(what = "", verbose = FALSE, index = NULL)
+es_cat(what = "", verbose = FALSE, index = NULL, fields = NULL)
 }
 \arguments{
 \item{what}{What to print, one of '', aliases, allocation, count, segments, health, indices,
@@ -12,6 +12,8 @@ master, nodes, pending_tasks, plugins, recovery, thread_pool, or shards.}
 \item{verbose}{If TRUE (default) the url call used printed to console.}
 
 \item{index}{Index name}
+
+\item{fields}{Fields to return, only used with \code{fielddata}}
 }
 \description{
 Use the cat Elasticsearch api.
@@ -22,7 +24,7 @@ for the cat API documentation.
 }
 \examples{
 \dontrun{
-es_cat()
+es_cat() # list Elasticsearch cat endpoints
 es_cat('aliases')
 es_cat('aliases', index='mran')
 es_cat('allocation')
@@ -41,10 +43,13 @@ es_cat('master')
 es_cat('nodes')
 es_cat('pending_tasks')
 es_cat('plugins')
-es_cat('recovery')
+es_cat('recovery', verbose=TRUE)
 es_cat('recovery', index='mran')
 es_cat('thread_pool')
+es_cat('thread_pool', verbose=TRUE)
 es_cat('shards')
+es_cat('fielddata')
+es_cat('fielddata', fields='body')
 }
 }
 

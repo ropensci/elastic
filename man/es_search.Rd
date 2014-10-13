@@ -75,6 +75,7 @@ res$hits$total
 es_search(index="shakespeare", q="what")
 res <- es_search(index="shakespeare", q="snapshotDate>='2013-10-01'")
 es_search(index="shakespeare", q="createdTime>='2013-10-01'")
+es_search(index="shakespeare", size=3, explain=TRUE)
 
 # Get raw data
 es_search(index="twitter", type="tweet", raw=TRUE)

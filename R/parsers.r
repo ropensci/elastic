@@ -1,7 +1,7 @@
 #' Parse raw data from es_get, es_mget, or es_search.
 #'
 #' @import assertthat
-#' @importFrom rjson fromJSON
+#' @importFrom jsonlite fromJSON
 #' @param input Output from solr_facet
 #' @param parsetype One of 'list' or 'df' (data.frame). Only list possible for now.
 #' @param verbose Print messages or not (default: FALSE).
@@ -185,7 +185,7 @@ es_parse.elastic_nodes_info <- function(input, parsetype='list', verbose=TRUE)
 
 parse_help <- function(input, clazz, parsetype){
   assert_that(is(input, clazz))
-  tt <<- rjson::fromJSON(input)
+  tt <<- jsonlite::fromJSON(input, FALSE)
   if(parsetype=='list'){ NULL } else {
     message("parsetype='df' not supported yet")
   }

@@ -13,6 +13,7 @@ BugReports: https://github.com/sckott/elastic/issues
 Imports:
     httr,
     plyr,
+    jsonlite,
     RJSONIO,
     rjson,
     assertthat

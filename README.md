@@ -45,9 +45,9 @@ library(elastic)
 
 + Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/)
 + Unzip it: `unzip` or `untar`
-+ Move it: `sudo mv /path/to/elasticsearch-1.1.1 /usr/local` (replace version with your verioon)
++ Move it: `sudo mv /path/to/elasticsearch-1.3.4 /usr/local` (replace version with your verioon)
 + Navigate to /usr/local: `cd /usr/local`
-+ Add shortcut: `sudo ln -s elasticsearch-1.1.1 elasticsearch` (replace version with your verioon)
++ Add shortcut: `sudo ln -s elasticsearch-1.3.4 elasticsearch` (replace version with your verioon)
 
 **Start Elasticsearch**
 
