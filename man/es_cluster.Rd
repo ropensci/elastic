@@ -7,6 +7,9 @@ es_cluster(what = "health", index = NULL, raw = FALSE,
   callopts = list(), verbose = TRUE, ...)
 }
 \arguments{
+\item{what}{Which cluster endpiont to use, one of health, state, stats, reroute, settings, or
+pending_tasks.}
+
 \item{index}{Index}
 
 \item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
@@ -18,12 +21,6 @@ es_cluster(what = "health", index = NULL, raw = FALSE,
 \item{...}{Further args passed on to elastic search HTTP API as parameters.}
 
 \item{type}{Document type}
-
-\item{id}{Document id}
-
-\item{source}{XXX}
-
-\item{fields}{Fields to return from the response object.}
 
 \item{metric}{A comma-separated list of metrics to display. Possible values: '_all',
 'completion', 'docs', 'fielddata', 'filter_cache', 'flush', 'get', 'id_cache', 'indexing',
@@ -61,10 +58,6 @@ or 'shards', default: 'indices')}
 }
 \description{
 Elasticsearch cluster endpoints
-}
-\details{
-There are a lot of terms you can use for Elasticsearch. See here
-   \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
 }
 \examples{
 \dontrun{

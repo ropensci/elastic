@@ -4,6 +4,8 @@
 #' @param path Elasticsearch API endpoint path
 #' @param index Elasticsearch index
 #' @param type Elasticsearch type
+#' @param metric A metric to get
+#' @param node The node
 #' @param clazz Class to outupt
 #' @param raw Raw JSON results as string
 #' @param callopts Curl options

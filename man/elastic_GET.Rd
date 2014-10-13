@@ -13,6 +13,10 @@ elastic_GET(path, index = NULL, type = NULL, metric = NULL, node = NULL,
 
 \item{type}{Elasticsearch type}
 
+\item{metric}{A metric to get}
+
+\item{node}{The node}
+
 \item{clazz}{Class to outupt}
 
 \item{raw}{Raw JSON results as string}

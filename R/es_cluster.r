@@ -1,10 +1,10 @@
 #' Elasticsearch cluster endpoints
 #'
-#' @import httr
 #' @export
 #'
 #' @template all
-#' @template get
+#' @param what Which cluster endpiont to use, one of health, state, stats, reroute, settings, or
+#' pending_tasks. 
 #' @param metric A comma-separated list of metrics to display. Possible values: '_all',
 #' 'completion', 'docs', 'fielddata', 'filter_cache', 'flush', 'get', 'id_cache', 'indexing',
 #' 'merge', 'percolate', 'refresh', 'search', 'segments', 'store', 'warmer'
@@ -27,9 +27,6 @@
 #' @param level Return stats aggregated at cluster, index or shard level. ('cluster', 'indices'
 #' or 'shards', default: 'indices')
 #' @param types A comma-separated list of document types for the indexing index metric
-#'
-#' @details There are a lot of terms you can use for Elasticsearch. See here
-#'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
 #'
 #' @examples \dontrun{
 #' es_cluster(what='health')
