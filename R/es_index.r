@@ -12,6 +12,8 @@
 #' @export
 #' @examples \dontrun{
 #' es_index(index='twitter', type='tweet', id=10)
+#' 
+#' es_index(index='things', type='tweet', id=10)
 #' }
 
 es_index <- function(index=NULL, type=NULL, id=NULL, source=FALSE, fields=NULL, 

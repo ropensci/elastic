@@ -6,6 +6,9 @@
 #' @template all
 #' @details There are a lot of terms you can use for Elasticsearch. See here 
 #'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
+#' \itemize{
+#'  \item 
+#' }
 #' @export
 #' @examples \dontrun{
 #' es_search(index="twitter")
@@ -13,6 +16,13 @@
 #' es_search(index="twitter", type="mention")
 #' es_search(index="twitter", type="tweet", q="what")
 #' es_search(index="twitter", type="tweet", sort="message")
+#' 
+#' res <- es_search(index="mran", q="snapshotDate>='2013-10-01'")
+#' res$hits$total
+#' 
+#' es_search(index="shakespeare", q="what")
+#' res <- es_search(index="shakespeare", q="snapshotDate>='2013-10-01'")
+#' es_search(index="shakespeare", q="createdTime>='2013-10-01'")
 #' 
 #' # Get raw data
 #' es_search(index="twitter", type="tweet", raw=TRUE)
@@ -22,7 +32,7 @@
 #' es_search(index="twitter", type="tweet", callopts=verbose())
 #' }
 
-es_search <- function(index=NULL, type=NULL, raw=FALSE, verbose=TRUE, callopts=list(), ...)
+es_search <- function(index=NULL, type=NULL, raw=FALSE, callopts=list(), ...)
 {
   elastic_GET(path = "_search", index, type, NULL, NULL, clazz = 'elastic_search', raw, callopts, ...)
 #   conn <- es_get_auth()
