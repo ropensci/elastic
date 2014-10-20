@@ -2,11 +2,13 @@
 #'
 #' @import httr
 #' @export
-#' @template all
+#' @param index Index name
+#' @param type Document type
+#' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
+#' @param callopts Curl args passed on to httr::POST.
 #' @param query Query, either a list or json.
+#' @param ... Further args passed on to elastic search HTTP API as parameters. Not used right now.
 #' @examples \dontrun{ 
-#' aggs <- list(stats = list(terms = list(field = "client_ip")))
-#' 
 #' # pass in as an R list
 #' aggs <- list(aggs = list(stats = list(terms = list(field = "text_entry"))))
 #' es_search_body(index="shakespeare", query=aggs)

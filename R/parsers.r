@@ -183,9 +183,10 @@ es_parse.elastic_nodes_info <- function(input, parsetype='list', verbose=TRUE)
   return( tt )
 }
 
-parse_help <- function(input, clazz, parsetype){
+parse_help <- function(input, clazz, parsetype, evn = parent.frame()){
   assert_that(is(input, clazz))
-  tt <<- jsonlite::fromJSON(input, FALSE)
+#   tt <<- jsonlite::fromJSON(input, FALSE)
+  assign('tt', jsonlite::fromJSON(input, FALSE), envir = parent.frame())
   if(parsetype=='list'){ NULL } else {
     message("parsetype='df' not supported yet")
   }

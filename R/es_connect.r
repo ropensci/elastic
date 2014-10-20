@@ -1,13 +1,13 @@
 #' Set connection details to an Elasticsearch engine.
 #'
-#' @param base The base url, defaults to localhost (http://127.0.0.1)
-#' @param port port to connect to, defaults to 5984
-#' @param user User name, if required for the connection. You can specify, but
+#' @param es_base The base url, defaults to localhost (http://127.0.0.1)
+#' @param es_port port to connect to, defaults to 5984
+#' @param es_user User name, if required for the connection. You can specify, but
 #' ignored for now.
-#' @param pwd Password, if required for the connection. You can specify, but
+#' @param es_pwd Password, if required for the connection. You can specify, but
 #' ignored for now.
-#' @param key An API key
-#' @param x Object to print
+#' @param es_key An API key
+#' @param force Force re-authorization.
 #' @param ... Further args passed on to print for the es_conn class.
 #' @details The default configuration is set up for localhost access on port 9200,
 #' with no username or password.
@@ -76,9 +76,7 @@ es_connection <- function(){
   return( ll )
 }
 
-#' @method print es_conn
 #' @export
-#' @rdname es_connect
 print.es_conn <- function(x, ...){
   fun <- function(x) ifelse(is.null(x), 'NULL', x)
   cat(paste('uri:      ', fun(x$base)), "\n")

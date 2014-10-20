@@ -3,8 +3,13 @@
 #' @import httr
 #' @export
 #'
-#' @template all
-#' @template get
+#' @param what One of stats, info, hot_threads, or shutdown
+#' @param node The node
+#' @param metric A metric to get
+#' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
+#' @param callopts Curl args passed on to httr::POST.
+#' @param verbose If TRUE (default) the url call used printed to console.
+#' @param ... Further args passed on to elastic search HTTP API as parameters.
 #'
 #' @details There are a lot of terms you can use for Elasticsearch. See here
 #'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.

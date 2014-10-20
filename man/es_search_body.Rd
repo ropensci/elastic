@@ -7,7 +7,7 @@ es_search_body(index = NULL, type = NULL, raw = FALSE,
   callopts = list(), query = list(), ...)
 }
 \arguments{
-\item{index}{Index}
+\item{index}{Index name}
 
 \item{type}{Document type}
 
@@ -17,17 +17,13 @@ es_search_body(index = NULL, type = NULL, raw = FALSE,
 
 \item{query}{Query, either a list or json.}
 
-\item{...}{Further args passed on to elastic search HTTP API as parameters.}
-
-\item{verbose}{If TRUE (default) the url call used printed to console.}
+\item{...}{Further args passed on to elastic search HTTP API as parameters. Not used right now.}
 }
 \description{
 Full text search of Elasticsearch - body requests.
 }
 \examples{
 \dontrun{
-aggs <- list(stats = list(terms = list(field = "client_ip")))
-
 # pass in as an R list
 aggs <- list(aggs = list(stats = list(terms = list(field = "text_entry"))))
 es_search_body(index="shakespeare", query=aggs)

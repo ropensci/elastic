@@ -1,10 +1,17 @@
 #' Start or stop indexing a document or many documents.
 #'
 #' @import httr
-#' @param dbname Database name. (character)
-#' @param endpoint the endpoint, defaults to localhost (http://127.0.0.1)
-#' @param port port to connect to, defaults to 9200
-#' @param what One of start (default) of stop.
+#' @param index Index name
+#' @param type Document type
+#' @param id Document id
+#' @param source Ignored for now
+#' @param fields Fields to add.
+#' @param exists (logical) Exists or not
+#' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
+#' @param callopts Curl args passed on to httr::POST.
+#' @param verbose If TRUE (default) the url call used printed to console.
+#' @param ... Further args passed on to elastic search HTTP API as parameters.
+#' 
 #' @details The function returns TRUE. Though note that this can result even 
 #'    if the database does not exist in CouchDB. 
 #' @references See docs for the Elasticsearch River plugin \url{#} that lets you 

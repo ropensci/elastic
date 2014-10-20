@@ -3,8 +3,11 @@
 #' @import httr
 #' @export
 #'
-#' @template all
-#' @template searchparams
+#' @param index Index
+#' @param type Document type
+#' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
+#' @param callopts Curl args passed on to httr::POST.
+#' @param ... Further args passed on to elastic search HTTP API as parameters.
 #'
 #' @examples \dontrun{
 #' es_search(index="twitter")

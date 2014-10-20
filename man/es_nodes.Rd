@@ -7,6 +7,12 @@ es_nodes(what = "stats", node = NULL, metric = NULL, raw = FALSE,
   callopts = list(), verbose = TRUE, ...)
 }
 \arguments{
+\item{what}{One of stats, info, hot_threads, or shutdown}
+
+\item{node}{The node}
+
+\item{metric}{A metric to get}
+
 \item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
 
 \item{callopts}{Curl args passed on to httr::POST.}
@@ -14,16 +20,6 @@ es_nodes(what = "stats", node = NULL, metric = NULL, raw = FALSE,
 \item{verbose}{If TRUE (default) the url call used printed to console.}
 
 \item{...}{Further args passed on to elastic search HTTP API as parameters.}
-
-\item{index}{Index}
-
-\item{type}{Document type}
-
-\item{id}{Document id}
-
-\item{source}{XXX}
-
-\item{fields}{Fields to return from the response object.}
 }
 \description{
 Elasticsearch nodes endpoints.

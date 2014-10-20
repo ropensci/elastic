@@ -8,13 +8,25 @@ es_index(index = NULL, type = NULL, id = NULL, source = FALSE,
   verbose = TRUE, ...)
 }
 \arguments{
-\item{dbname}{Database name. (character)}
+\item{index}{Index name}
 
-\item{endpoint}{the endpoint, defaults to localhost (http://127.0.0.1)}
+\item{type}{Document type}
 
-\item{port}{port to connect to, defaults to 9200}
+\item{id}{Document id}
 
-\item{what}{One of start (default) of stop.}
+\item{source}{Ignored for now}
+
+\item{fields}{Fields to add.}
+
+\item{exists}{(logical) Exists or not}
+
+\item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
+
+\item{callopts}{Curl args passed on to httr::POST.}
+
+\item{verbose}{If TRUE (default) the url call used printed to console.}
+
+\item{...}{Further args passed on to elastic search HTTP API as parameters.}
 }
 \description{
 Start or stop indexing a document or many documents.

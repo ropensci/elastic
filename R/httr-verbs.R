@@ -64,7 +64,6 @@ elastic_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts,
     }
   
   args <- check_inputs(query)
-#   tt <- POST(url, body=args, callopts, ...)
   tt <- POST(url, body=args, callopts, encode = "json")
   if(tt$status_code > 202){
     if(tt$status_code > 202) stop(tt$headers$statusmessage)
@@ -73,7 +72,7 @@ elastic_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts,
   res <- content(tt, as = "text")
   if(!is.null(clazz)){ 
     class(res) <- clazz
-    if(raw) res else es_parse(res)
+    if(raw) res else es_parse(input = res)
   } else { res }
 }
 
