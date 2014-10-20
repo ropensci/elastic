@@ -1,4 +1,4 @@
-#' Full text search of any CouchDB databases using Elasticsearch.
+#' Full text search of Elasticsearch - URI requests
 #'
 #' @import httr
 #' @export
@@ -27,6 +27,8 @@
 #' # Curl debugging
 #' library('httr')
 #' es_search(index="twitter", type="tweet", callopts=verbose())
+#' 
+#' es_search(index="shakespeare", size=0, aggs = )
 #' }
 
 es_search <- function(index=NULL, type=NULL, raw=FALSE, callopts=list(), ...)
