@@ -25,6 +25,28 @@ es_parse.elastic_get <- function(input, parsetype='list', verbose=FALSE)
   return( tt )
 }
 
+#' @method es_parse index_delete
+#' @export
+#' @rdname es_parse
+#' @keywords internal
+es_parse.index_delete <- function(input, parsetype='list', verbose=FALSE)
+{
+  # tt <- NULL
+  parse_help(input, "index_delete", parsetype)
+  return( tt )
+}
+
+#' @method es_parse bulk_make
+#' @export
+#' @rdname es_parse
+#' @keywords internal
+es_parse.bulk_make <- function(input, parsetype='list', verbose=FALSE)
+{
+  # tt <- NULL
+  parse_help(input, "bulk_make", parsetype)
+  return( tt )
+}
+
 #' @method es_parse elastic_mget
 #' @export
 #' @rdname es_parse

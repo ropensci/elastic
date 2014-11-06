@@ -1,68 +1,53 @@
-#' Use the bulk API to insert or delete documents.
-#'
-#' @import httr
-#'
-#' @template all
-#' @template get
-#' @param type_id List of vectors of length 2, each with an element for type and id.
-#' @param index_type_id List of vectors of length 3, each with an element for index,
-#' type, and id.
-#' @details There are a lot of terms you can use for Elasticsearch. See here
-#'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
+#' Use the bulk API to create, index, update, or delete documents.
+#' 
 #' @export
-#' @examples \dontrun{
-#' init <- es_connect()
-#' es_bulk(init, index="twitter", type="tweet", id=1:2)
+#' @param filename Path to a file to load in the bulk API
+#' @param raw (logical) Get raw JSON back or not.
+#' @param callopts Pass on options to POST call.
+#' @param n Number of documents to get from PLOS API.
+#' @details More on the Bulk API: 
+#'    \url{http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/bulk.html}.
+#' @examples \donttest{
+#' make_bulk_plos(1000, filename = "~/plos_data.json")
+#' es_bulk(file="~/plos_data.json")
+#' es_aliases()
+#' es_index_delete(index='plos')
+#' es_aliases()
 #' }
 
-es_bulk <- function(index=NULL, type=NULL, id=NULL, type_id=NULL, index_type_id=NULL,
-  source=NULL, fields=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
+es_bulk <- function(filename, raw=FALSE, callopts=list())
 {
-  message("not done yet")
-  # base <- paste(conn$url, ":", conn$port, sep="")
-  # fields <- if(is.null(fields)) { fields} else { paste(fields, collapse=",") }
-  # args <- es_compact(list(...))
+  conn <- es_get_auth()
+  url <- paste0(conn$base, ":", conn$port, '/_bulk')
+  tt <- POST(url, body=upload_file(filename), callopts, encode = "json")
+  if(tt$status_code > 202){
+    if(tt$status_code > 202) stop(tt$headers$statusmessage)
+    if(content(tt)$status == "ERROR") stop(content(tt)$error_message)
+  }
+  res <- content(tt, as = "text")
+  res <- structure(res, class="bulk_make")
+  if(raw) res else es_parse(res)
+}
 
-  # # One index, one type, one to many ids
-  # if(length(index)==1 & length(unique(type))==1 & length(id) > 1){
+#' @export
+#' @rdname es_bulk
+make_bulk_plos <- function(n = 1000, filename = "~/plos_data.json"){
+  url <- "http://api.plos.org/search"
+  res <- solr_search(q='*:*', fl=c('id','title'), fq='doc_type:full', rows = n, base=url, parsetype = "list")
+  docs <- res$response$docs
+  
+  unlink(filename)
+  
+  for(i in seq_along(docs)){
+    dat <- list(index = list(`_index` = "plos", `_type` = "article", `_id` = i-1))
+    cat(proc_doc(dat), sep = "\n", file = filename, append = TRUE)
+    cat(proc_doc(docs[[i]]), sep = "\n", file = filename, append = TRUE)
+  }
+  
+  message(sprintf("File written to %s", filename))
+}
 
-  #   body <- jsonlite::toJSON(list("ids" = id))
-  #   url <- paste(base, index, type, '_mget', sep="/")
-  #   out <- POST(url, body = body, multipart = FALSE, callopts, query = args)
-
-  # }
-  # # One index, many types, one to many ids
-  # else if(length(index)==1 & length(type)>1 | !is.null(type_id)){
-
-  #   # check for 2 elements in each element
-  #   assert_that(all(sapply(type_id, function(x) length(x) == 2)))
-  #   docs <- lapply(type_id, function(x){
-  #     list(`_type` = x[[1]], `_id` = x[[2]])
-  #   })
-  #   docs <- lapply(docs, function(y) c(y, "_source" = source, "_fields" = fields))
-  #   tt <- jsonlite::toJSON(list("docs" = docs))
-  #   url <- paste(base, index, '_mget', sep="/")
-  #   out <- POST(url, body = tt, multipart = FALSE, callopts, query = args)
-
-  # }
-  # # Many indeces, many types, one to many ids
-  # else if(length(index)>1 | !is.null(index_type_id)){
-
-  #   # check for 3 elements in each element
-  #   assert_that(all(sapply(index_type_id, function(x) length(x) == 3)))
-  #   docs <- lapply(index_type_id, function(x){
-  #     list(`_index` = x[[1]], `_type` = x[[2]], `_id` = x[[3]])
-  #   })
-  #   tt <- jsonlite::toJSON(list("docs" = docs))
-  #   url <- paste(base, '_mget', sep="/")
-  #   out <- POST(url, body = tt, multipart = FALSE, callopts, query = args)
-
-  # }
-
-  # stop_for_status(out)
-  # if(verbose) message(URLdecode(out$url))
-  # tt <- content(out, as="text")
-  # class(tt) <- "elastic_mget"
-
-  # if(raw){ tt } else { es_parse(tt) }
+proc_doc <- function(x){
+  b <- jsonlite::toJSON(x, auto_unbox = TRUE)
+  gsub("\\[|\\]", "", as.character(b))
 }

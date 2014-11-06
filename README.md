@@ -45,7 +45,7 @@ library(elastic)
 
 + Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/)
 + Unzip it: `unzip` or `untar`
-+ Move it: `sudo mv /path/to/elasticsearch-1.3.4 /usr/local` (replace version with your verioon)
++ Move it: `sudo mv /path/to/elasticsearch-1.3.4 /usr/local` (replace version with your version)
 + Navigate to /usr/local: `cd /usr/local`
 + Add shortcut: `sudo ln -s elasticsearch-1.3.4 elasticsearch` (replace version with your verioon)
 
@@ -77,7 +77,11 @@ curl -XPUT localhost:9200/_bulk --data-binary @shakespeare.json
 Some smaller data can be retrieved from the PLOS search API. First, download the dataset using `curl`, and pipe through [jq](http://stedolan.github.io/jq/) to get only the `docs` elements:
 
 ```sh
-curl -XGET "http://api.plos.org/search?wt=json&q=*:*&rows=1000" | jq ".response.docs" > json.plos
+curl -XGET "http://api.plos.org/search?q=*:*&fl=id,title&fq=doc_type:full&rows=10&wt=json" | jq ".response.docs" > json.plos
+
+curl -XGET "http://api.plos.org/search?q=*:*&fl=id,title&fq=doc_type:full&rows=10&wt=json" | jq '{"index":{"_index":"plos","_type":"article","_id":0}}\n{.response.docs}'
+
+curl -XGET "http://api.plos.org/search?q=*:*&fl=id,title&fq=doc_type:full&rows=10&wt=json" | jq '{index:{_index:plos,_type:article, _id:0}} {.response.docs}'
 ```
 
 Then load the data into Elasticsearch. This may take up to 10 minutes or so.
