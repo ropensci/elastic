@@ -1,1 +1,1 @@
-es_compact <- function (l) Filter(Negate(is.null), l)
+ec <- function (l) Filter(Negate(is.null), l)

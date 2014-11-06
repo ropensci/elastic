@@ -30,7 +30,7 @@ es_get <- function(index=NULL, type=NULL, id=NULL, source=FALSE,
   if(!is.null(fields)) fields <- paste(fields, collapse=",")
 
   url <- paste(conn$base, ":", conn$port, sep="")
-  args <- es_compact(list(fields = fields, ...))
+  args <- ec(list(fields = fields, ...))
   url <- sprintf("%s/%s/%s/%s", url, index, type, id)
   if(source) url <- paste(url, '_source', sep="/")
 

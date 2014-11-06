@@ -17,7 +17,7 @@ elastic_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL,
     url <- paste(url, paste(metric, collapse = ","), sep = "/")
   }  
   
-  args <- es_compact(list(...))
+  args <- ec(list(...))
   tt <- GET(url, query=args, callopts)
   if(tt$status_code > 202){
     if(tt$status_code > 202) stop(tt$headers$statusmessage)

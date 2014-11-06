@@ -33,7 +33,7 @@ es_analyze <- function(text=NULL, field=NULL, index=NULL, analyzer=NULL, tokeniz
     url <- sprintf("%s:%s/%s/_analyze", conn$base, conn$port, cl(index)) 
   else 
     url <- sprintf("%s:%s/_analyze", conn$base, conn$port)
-  args <- es_compact(list(text=text, analyzer=analyzer, tokenizer=tokenizer, filters=filters, 
+  args <- ec(list(text=text, analyzer=analyzer, tokenizer=tokenizer, filters=filters, 
                           char_filters=char_filters, field=field))
   analyze_GET(url, args, callopts)$tokens
 }

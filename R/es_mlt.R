@@ -73,7 +73,7 @@ es_mlt <- function(index, type, id, doc_type=NULL, body=NULL,
 {
   conn <- es_connect()
   url <- sprintf("%s:%s/%s/%s/%s/%s", conn$base, conn$port, index, type, id, "_mlt")
-  args <- es_compact(list(doc_type=doc_type, id=id, body=body, boost_terms=boost_terms, 
+  args <- ec(list(doc_type=doc_type, id=id, body=body, boost_terms=boost_terms, 
     include=include, max_doc_freq=max_doc_freq, max_query_terms=max_query_terms, 
     max_word_length=max_word_length, min_doc_freq=min_doc_freq, min_term_freq=min_term_freq, 
     min_word_length=min_word_length, mlt_fields=mlt_fields, percent_terms_to_match=percent_terms_to_match, 
