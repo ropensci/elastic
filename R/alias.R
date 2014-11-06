@@ -1,16 +1,12 @@
-#' Elasticsearch indices APIs
+#' Elasticsearch alias APIs
 #'
-#' @param index A comma-separated list of index names
-#' @param features A comma-separated list of features. One or more of settings, mappings,
-#' warmers or aliases
-#' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
-#' @param callopts Curl args passed on to httr::POST.
-#' @param verbose If TRUE (default) the url call used printed to console.
-#' @param ... Further args passed on to elastic search HTTP API as parameters.
-#' @param type Document type
-#' @param id Document id
-#' @param fields Fields to add.
-#'
+#' @param index An index name
+#' @param alias An alias name
+#' @param ignore_unavailable (logical) What to do is an specified index name doesn’t exist. If set 
+#' to TRUE then those indices are ignored.
+#' @param routing Ignored for now
+#' @param filter Ignored for now
+#' @param callopts Curl args passed on to \code{\link[httr]{POST}}
 #' @examples \donttest{
 #' # Retrieve a specified alias
 #' es_alias_get(index="plos")

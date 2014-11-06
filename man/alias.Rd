@@ -6,7 +6,7 @@
 \alias{es_alias_exists}
 \alias{es_alias_get}
 \alias{es_aliases_get}
-\title{Elasticsearch indices APIs}
+\title{Elasticsearch alias APIs}
 \usage{
 es_alias_get(index = NULL, alias = NULL, ignore_unavailable = FALSE,
   callopts = list())
@@ -22,27 +22,21 @@ es_alias_create(index = NULL, alias, routing = NULL, filter = NULL,
 es_alias_delete(index = NULL, alias, callopts = list())
 }
 \arguments{
-\item{index}{A comma-separated list of index names}
+\item{index}{An index name}
 
-\item{callopts}{Curl args passed on to httr::POST.}
+\item{alias}{An alias name}
 
-\item{features}{A comma-separated list of features. One or more of settings, mappings,
-warmers or aliases}
+\item{ignore_unavailable}{(logical) What to do is an specified index name doesn’t exist. If set
+to TRUE then those indices are ignored.}
 
-\item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
+\item{callopts}{Curl args passed on to \code{\link[httr]{POST}}}
 
-\item{verbose}{If TRUE (default) the url call used printed to console.}
+\item{routing}{Ignored for now}
 
-\item{...}{Further args passed on to elastic search HTTP API as parameters.}
-
-\item{type}{Document type}
-
-\item{id}{Document id}
-
-\item{fields}{Fields to add.}
+\item{filter}{Ignored for now}
 }
 \description{
-Elasticsearch indices APIs
+Elasticsearch alias APIs
 }
 \examples{
 \donttest{
