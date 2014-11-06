@@ -1,15 +1,4 @@
-#' GET wrapper
-#' @keywords internal
-#' @rdname httr-verbs
-#' @param path Elasticsearch API endpoint path
-#' @param index Elasticsearch index
-#' @param type Elasticsearch type
-#' @param metric A metric to get
-#' @param node The node
-#' @param clazz Class to outupt
-#' @param raw Raw JSON results as string
-#' @param callopts Curl options
-#' @param ... Further args passed to Elasticsearch
+# GET wrapper
 elastic_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL, 
                         clazz=NULL, raw, callopts, ...) 
 {
@@ -39,6 +28,20 @@ elastic_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL,
     class(res) <- clazz
     if(raw) res else es_parse(res)
   } else { res }
+}
+
+index_GET <- function(path, index, features, raw, callopts, ...) 
+{
+  conn <- es_get_auth()
+  url <- paste0(conn$base, ":", conn$port, "/", paste0(index, collapse = ","))
+  if(!is.null(features)) features <- paste0(paste0("_", features), collapse = ",")
+  if(!is.null(features)) url <- paste0(url, "/", features)
+  tt <- GET(url, callopts)
+  if(tt$status_code > 202){
+    if(tt$status_code > 202) stop(tt$headers$statusmessage)
+    if(content(tt)$status == "ERROR") stop(content(tt)$error_message)
+  }
+  jsonlite::fromJSON(content(tt, as = "text"), FALSE)
 }
 
 #' POST wrapper
