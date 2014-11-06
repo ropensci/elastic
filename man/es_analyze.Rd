@@ -8,19 +8,19 @@ es_analyze(text = NULL, field = NULL, index = NULL, analyzer = NULL,
   callopts = list())
 }
 \arguments{
-\item{text}{– The text on which the analysis should be performed (when request body is not used)}
+\item{text}{The text on which the analysis should be performed (when request body is not used)}
 
-\item{field}{– Use the analyzer configured for this field (instead of passing the analyzer name)}
+\item{field}{Use the analyzer configured for this field (instead of passing the analyzer name)}
 
-\item{index}{– The name of the index to scope the operation}
+\item{index}{The name of the index to scope the operation}
 
-\item{analyzer}{– The name of the analyzer to use}
+\item{analyzer}{The name of the analyzer to use}
 
-\item{tokenizer}{– The name of the tokenizer to use for the analysis}
+\item{tokenizer}{The name of the tokenizer to use for the analysis}
 
-\item{filters}{– A comma-separated list of filters to use for the analysis}
+\item{filters}{A comma-separated list of filters to use for the analysis}
 
-\item{char_filters}{– A comma-separated list of character filters to use for the analysis}
+\item{char_filters}{A comma-separated list of character filters to use for the analysis}
 
 \item{callopts}{Curl args passed on to httr::POST.}
 }

@@ -2,13 +2,13 @@
 #' 
 #' @export
 #' 
-#' @param text – The text on which the analysis should be performed (when request body is not used)
-#' @param field – Use the analyzer configured for this field (instead of passing the analyzer name)
-#' @param index – The name of the index to scope the operation
-#' @param analyzer – The name of the analyzer to use
-#' @param tokenizer – The name of the tokenizer to use for the analysis
-#' @param filters – A comma-separated list of filters to use for the analysis
-#' @param char_filters – A comma-separated list of character filters to use for the analysis
+#' @param text The text on which the analysis should be performed (when request body is not used)
+#' @param field Use the analyzer configured for this field (instead of passing the analyzer name)
+#' @param index The name of the index to scope the operation
+#' @param analyzer The name of the analyzer to use
+#' @param tokenizer The name of the tokenizer to use for the analysis
+#' @param filters A comma-separated list of filters to use for the analysis
+#' @param char_filters A comma-separated list of character filters to use for the analysis
 #' @param callopts Curl args passed on to httr::POST.
 #' @references 
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-analyze.html} 
