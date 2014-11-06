@@ -1,4 +1,4 @@
-#' More like this query.
+#' More like this API request.
 #'
 #' @export
 #'
