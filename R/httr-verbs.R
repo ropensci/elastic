@@ -44,19 +44,6 @@ index_GET <- function(path, index, features, raw, callopts, ...)
   jsonlite::fromJSON(content(tt, as = "text"), FALSE)
 }
 
-#' POST wrapper
-#' @keywords internal
-#' @rdname httr-verbs
-#' @param path Elasticsearch API endpoint path
-#' @param index Elasticsearch index
-#' @param type Elasticsearch type
-#' @param clazz Class to outupt
-#' @param raw Raw JSON results as string
-#' @param callopts Curl options
-#' @param query Query list or string to be passed on to body of the \code{POST} call.
-#' @param ... Further args passed to Elasticsearch. If passed in as list, converted to JSON, if 
-#' passed in as character, validate the json (using \code{jsonlite::validate}), then pass in 
-#' to request. 
 elastic_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, query, ...) 
 {
   conn <- es_get_auth()
