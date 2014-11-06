@@ -38,18 +38,3 @@ es_flush <- function(index=NULL, force=FALSE, full=FALSE, wait_if_ongoing=FALSE,
   args <- ec(list(force=as_log(force), full=as_log(full), wait_if_ongoing=as_log(wait_if_ongoing)))
   cc_POST(url, args, callopts)
 }
-
-cc_POST <- function(url, args, callopts, ...){
-  tt <- POST(url, body=args, callopts, encode = "json")
-  if(tt$status_code > 202){
-    if(tt$status_code > 202) stop(tt$headers$statusmessage)
-    if(content(tt)$status == "ERROR") stop(content(tt)$error_message)
-  }
-  res <- content(tt, as = "text")
-  jsonlite::fromJSON(res, FALSE)
-}
-
-as_log <- function(x){
-  stopifnot(is.logical(x))
-  if(x) 'true' else NULL
-}

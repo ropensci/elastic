@@ -43,8 +43,3 @@ cc_POST <- function(url, args, callopts, ...){
   res <- content(tt, as = "text")
   jsonlite::fromJSON(res, FALSE)
 }
-
-as_log <- function(x){
-  stopifnot(is.logical(x))
-  if(x) 'true' else NULL
-}
