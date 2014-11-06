@@ -54,7 +54,7 @@ es_mget <- function(index=NULL, type=NULL, id=NULL, type_id=NULL, index_type_id=
   else if(length(index)==1 & length(type)>1 | !is.null(type_id)){
 
     # check for 2 elements in each element
-    assert_that(all(sapply(type_id, function(x) length(x) == 2)))
+    stopifnot(all(sapply(type_id, function(x) length(x) == 2)))
     docs <- lapply(type_id, function(x){
       list(`_type` = x[[1]], `_id` = x[[2]])
     })
@@ -68,7 +68,7 @@ es_mget <- function(index=NULL, type=NULL, id=NULL, type_id=NULL, index_type_id=
   else if(length(index)>1 | !is.null(index_type_id)){
 
     # check for 3 elements in each element
-    assert_that(all(sapply(index_type_id, function(x) length(x) == 3)))
+    stopifnot(all(sapply(index_type_id, function(x) length(x) == 3)))
     docs <- lapply(index_type_id, function(x){
       list(`_index` = x[[1]], `_type` = x[[2]], `_id` = x[[3]])
     })

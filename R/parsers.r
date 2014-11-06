@@ -1,6 +1,5 @@
 #' Parse raw data from es_get, es_mget, or es_search.
 #'
-#' @import assertthat
 #' @importFrom jsonlite fromJSON toJSON
 #' @param input Output from solr_facet
 #' @param parsetype One of 'list' or 'df' (data.frame). Only list possible for now.
@@ -206,7 +205,7 @@ es_parse.elastic_nodes_info <- function(input, parsetype='list', verbose=TRUE)
 }
 
 parse_help <- function(input, clazz, parsetype, evn = parent.frame()){
-  assert_that(is(input, clazz))
+  stopifnot(is(input, clazz))
 #   tt <<- jsonlite::fromJSON(input, FALSE)
   assign('tt', jsonlite::fromJSON(input, FALSE), envir = parent.frame())
   if(parsetype=='list'){ NULL } else {
