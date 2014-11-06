@@ -1,4 +1,4 @@
-#' Start or stop indexing a document or many documents.
+#' Create an index.
 #'
 #' @import httr
 #' @param index Index name
@@ -18,12 +18,12 @@
 #'     easily index CouchDB databases.
 #' @export
 #' @examples \dontrun{
-#' es_index(index='twitter', type='tweet', id=10)
+#' es_index_create(index='twitter', type='tweet', id=10)
 #' 
-#' es_index(index='things', type='tweet', id=10)
+#' es_index_create(index='things', type='tweet', id=10)
 #' }
 
-es_index <- function(index=NULL, type=NULL, id=NULL, source=FALSE, fields=NULL, 
+es_index_create <- function(index=NULL, type=NULL, id=NULL, source=FALSE, fields=NULL, 
   exists=FALSE, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
   conn <- es_connect()

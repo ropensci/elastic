@@ -21,9 +21,8 @@ More on the Bulk API:
 }
 \examples{
 \donttest{
-make_bulk_plos(1000, filename = "~/plos_data.json")
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-es_bulk(file="~/plos_data.json")
+es_bulk(file=plosdat)
 es_aliases()
 es_index_delete(index='plos')
 es_aliases()
