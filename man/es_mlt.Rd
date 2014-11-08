@@ -16,6 +16,8 @@ es_mlt(index, type, id, doc_type = NULL, body = NULL, boost_terms = NULL,
 \arguments{
 \item{index}{The name of the index}
 
+\item{type}{xxx}
+
 \item{id}{The document ID}
 
 \item{doc_type}{The type of the document (use _all to fetch the first document matching the ID
@@ -68,6 +70,8 @@ the index containing the document)}
 same type as the document)}
 
 \item{stop_words}{A list of stop words to be ignored}
+
+\item{like_text}{xxx}
 
 \item{callopts}{curl options passed on to \code{\link[httr]{GET}}}
 }

@@ -2,7 +2,7 @@
 #'
 #' @param index An index name
 #' @param alias An alias name
-#' @param ignore_unavailable (logical) What to do is an specified index name doesn’t exist. If set 
+#' @param ignore_unavailable (logical) What to do if an specified index name doesn't exist. If set 
 #' to TRUE then those indices are ignored.
 #' @param routing Ignored for now
 #' @param filter Ignored for now

@@ -26,7 +26,7 @@ es_alias_delete(index = NULL, alias, callopts = list())
 
 \item{alias}{An alias name}
 
-\item{ignore_unavailable}{(logical) What to do is an specified index name doesn’t exist. If set
+\item{ignore_unavailable}{(logical) What to do if an specified index name doesn't exist. If set
 to TRUE then those indices are ignored.}
 
 \item{callopts}{Curl args passed on to \code{\link[httr]{POST}}}

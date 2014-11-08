@@ -3,6 +3,8 @@
 #' @export
 #'
 #' @param index The name of the index
+#' @param type xxx
+#' @param like_text xxx
 #' @param doc_type The type of the document (use _all to fetch the first document matching the ID 
 #' across all types)
 #' @param id The document ID

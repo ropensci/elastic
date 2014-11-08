@@ -13,10 +13,6 @@ es_benchmark(raw = FALSE, callopts = list(), query = list(), ...)
 \item{query}{Query, either a list or json.}
 
 \item{...}{Further args passed on to elastic search HTTP API as parameters. Not used right now.}
-
-\item{index}{Index name}
-
-\item{type}{Document type}
 }
 \description{
 Run benchmark tests
@@ -24,7 +20,8 @@ Run benchmark tests
 \examples{
 \donttest{
 # pass in as an R list
-args <- list(name = "b1", competitors = list(name = "c1", requests = list(query = list(match = "a*"))))
+args <- list(name = "b1",
+   competitors = list(name = "c1", requests = list(query = list(match = "a*"))))
 es_benchmark(index="shakespeare", query=aggs)
 
 # or pass in as json query with newlines, easy to read
@@ -50,7 +47,7 @@ match <- '{"query": {"match" : {"text_entry" : "Two Gentlemen"}}}'
 es_search_body(index="shakespeare", query=match)
 
 # multi-match (multiple fields that is) query
-mmatch <- '{"query": {"multi_match" : {"query" : "henry", "fields": ["text_entry","play_name"]}}}'
+mmatch <- '{"query": {"multi_match" : {"query" : "henry","fields":["text_entry","play_name"]}}}'
 es_search_body(index="shakespeare", query=mmatch)
 
 # bool query
