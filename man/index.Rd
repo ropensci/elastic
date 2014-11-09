@@ -6,6 +6,10 @@
 \alias{es_index_exists}
 \alias{es_index_get}
 \alias{es_index_open}
+\alias{es_index_recovery}
+\alias{es_index_segments}
+\alias{es_index_stats}
+\alias{es_index_status}
 \alias{index}
 \title{Elasticsearch indices APIs}
 \usage{
@@ -22,11 +26,22 @@ es_index_create(index = NULL, type = NULL, id = NULL, fields = NULL,
 es_index_close(index, callopts = list())
 
 es_index_open(index, callopts = list())
+
+es_index_stats(index = NULL, metric = NULL, completion_fields = NULL,
+  fielddata_fields = NULL, fields = NULL, groups = NULL,
+  level = "indices", callopts = list())
+
+es_index_status(index = NULL, callopts = list())
+
+es_index_segments(index = NULL, callopts = list())
+
+es_index_recovery(index = NULL, detailed = FALSE, active_only = FALSE,
+  callopts = list())
 }
 \arguments{
-\item{index}{A comma-separated list of index names}
+\item{index}{(character) A character vector of index names}
 
-\item{features}{A comma-separated list of features. One or more of settings, mappings,
+\item{features}{(character) A character vector of features. One or more of settings, mappings,
 warmers or aliases}
 
 \item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
@@ -37,11 +52,31 @@ warmers or aliases}
 
 \item{...}{Further args passed on to elastic search HTTP API as parameters.}
 
-\item{type}{Document type}
+\item{type}{(character) Document type}
 
 \item{id}{Document id}
 
-\item{fields}{Fields to add.}
+\item{fields}{(character) Fields to add.}
+
+\item{metric}{(character) A character vector of metrics to display. Possible values: “_all”, “completion”,
+“docs”, “fielddata”, “filter_cache”, “flush”, “get”, “id_cache”, “indexing”, “merge”,
+“percolate”, “refresh”, “search”, “segments”, “store”, “warmer”.}
+
+\item{completion_fields}{(character) A character vector of fields for completion metric
+(supports wildcards)}
+
+\item{fielddata_fields}{(character) A character vector of fields for fielddata metric
+(supports wildcards)}
+
+\item{groups}{(character) A character vector of search groups for search statistics.}
+
+\item{level}{(character) Return stats aggregated on "cluster", "indices" (default) or "shards"}
+
+\item{detailed}{(logical) Whether to display detailed information about shard recovery
+(default: FALSE)}
+
+\item{active_only}{(logical) Display only those recoveries that are currently on-going
+(default: FALSE)}
 }
 \description{
 Elasticsearch indices APIs
@@ -70,6 +105,34 @@ es_index_close('plos')
 
 # open an index
 es_index_open('plos')
+
+# Get status of an index
+es_index_status('plos')
+es_index_status(c('plos','gbif'))
+
+# Get stats on an index
+es_index_stats('plos')
+es_index_stats(c('plos','gbif'))
+es_index_stats(c('plos','gbif'), metric='refresh')
+es_index_stats('shakespeare', metric='completion')
+es_index_stats('shakespeare', metric='completion', completion_fields = "completion")
+es_index_stats('shakespeare', metric='fielddata')
+es_index_stats('shakespeare', metric='fielddata', fielddata_fields = "evictions")
+es_index_stats('plos', level="indices")
+es_index_stats('plos', level="cluster")
+es_index_stats('plos', level="shards")
+
+# Get segments information that a Lucene index (shard level) is built with
+es_index_segments()
+es_index_segments('plos')
+es_index_segments(c('plos','gbif'))
+
+# Get recovery information that provides insight into on-going index shard recoveries
+es_index_recovery()
+es_index_recovery('plos')
+es_index_recovery(c('plos','gbif'))
+es_index_recovery("plos", detailed = TRUE)
+es_index_recovery("plos", active_only = TRUE)
 }
 }
 \author{

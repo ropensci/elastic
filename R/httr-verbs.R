@@ -81,7 +81,7 @@ es_PUT <- function(url, body = list(), ...)
   jsonlite::fromJSON(content(tt, "text"), FALSE)
 }
 
-es_map_GET <- function(url, query = list(), ...) 
+es_GET_ <- function(url, query = list(), ...) 
 {
   tt <- GET(url, query=query, ...)
   if(tt$status_code > 202) stop(content(tt)$error)
