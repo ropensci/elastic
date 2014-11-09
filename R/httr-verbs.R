@@ -66,6 +66,28 @@ elastic_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts,
   } else { res }
 }
 
+es_DELETE <- function(url, query = list(), ...) 
+{
+  tt <- DELETE(url, query=query, ...)
+  if(tt$status_code > 202) stop(content(tt)$error)
+  jsonlite::fromJSON(content(tt, "text"), FALSE)
+}
+
+es_PUT <- function(url, body = list(), ...) 
+{
+  body <- check_inputs(body)
+  tt <- PUT(url, body=body, encode = 'json', ...)
+  if(tt$status_code > 202) stop(content(tt)$error)
+  jsonlite::fromJSON(content(tt, "text"), FALSE)
+}
+
+es_GET <- function(url, query = list(), ...) 
+{
+  tt <- GET(url, query=query, ...)
+  if(tt$status_code > 202) stop(content(tt)$error)
+  jsonlite::fromJSON(content(tt, "text"), FALSE)
+}
+
 check_inputs <- function(x){
   if(is.character(x)){
     # replace newlines

@@ -15,7 +15,6 @@ knitr::opts_chunk$set(
 
 **A general purpose R interface to [Elasticsearch](http://elasticsearch.org)**
 
-
 ## Elasticsearch info
 
 + [Elasticsearch home page](http://elasticsearch.org)
