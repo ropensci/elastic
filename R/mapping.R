@@ -16,9 +16,9 @@
 #'  \item es_field_mapping_get - http://bit.ly/1wHKgCA 
 #' }
 #' 
-#' \stong{NOTE} For the delete method, Elasticsearch documentation notes that: "Note, most times, 
+#' \strong{NOTE:} For the delete method, Elasticsearch documentation notes that: "Note, most times, 
 #' it make more sense to reindex the data into a fresh index compared to delete large chunks of it."
-#' @examples  \donttes{
+#' @examples \donttest{
 #' # Used to check if a type/types exists in an index/indices
 #' es_type_exists(index = "plos", type = "article")
 #' es_type_exists(index = "plos", type = "articles")
