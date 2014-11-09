@@ -1,5 +1,10 @@
 #' Elasticsearch indices APIs
 #'
+#' @references
+#' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices.html}
+#' @author Scott Chamberlain <myrmecocystus@@gmail.com>
+#' @name index
+#' 
 #' @param index (character) A character vector of index names
 #' @param features (character) A character vector of features. One or more of settings, mappings, 
 #' warmers or aliases
@@ -20,10 +25,20 @@
 #' (supports wildcards)
 #' @param groups (character) A character vector of search groups for search statistics.
 #' @param level (character) Return stats aggregated on "cluster", "indices" (default) or "shards"
-#' @param active_only (logical) Display only those recoveries that are currently on-going 
-#' (default: FALSE)
-#' @param detailed (logical) Whether to display detailed information about shard recovery 
-#' (default: FALSE)
+#' @param active_only (logical) Display only those recoveries that are currently on-going. 
+#' Default: FALSE
+#' @param detailed (logical) Whether to display detailed information about shard recovery. 
+#' Default: FALSE
+#' @param max_num_segments (character) The number of segments the index should be merged into. 
+#' Default: "dynamic"
+#' @param only_expunge_deletes (logical) Specify whether the operation should only expunge 
+#' deleted documents
+#' @param flush (logical) Specify whether the index should be flushed after performing the 
+#' operation. Default: TRUE
+#' @param wait_for_merge (logical) Specify whether the request should block until the merge 
+#' process is finished. Default: TRUE
+#' @param wait_for_completion (logical) Should the request wait for the upgrade to complete. 
+#' Default: FALSE
 #' 
 #' @examples \donttest{
 #' # get information on an index
@@ -76,12 +91,16 @@
 #' es_index_recovery(c('plos','gbif'))
 #' es_index_recovery("plos", detailed = TRUE)
 #' es_index_recovery("plos", active_only = TRUE)
-#' }
 #' 
-#' @references
-#' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices.html}
-#' @author Scott Chamberlain <myrmecocystus@@gmail.com>
-#' @name index
+#' # Optimize an index, or many indices
+#' es_index_optimize('plos')
+#' es_index_optimize(c('plos','gbif'))
+#' 
+#' # Upgrade one or more indices to the latest format. The upgrade process converts any 
+#' # segments written with previous formats.
+#' es_index_upgrade('plos')
+#' es_index_upgrade(c('plos','gbif'))
+#' }
 NULL
 
 #' @export
@@ -179,6 +198,27 @@ es_index_recovery <- function(index = NULL, detailed = FALSE, active_only = FALS
   es_GET_wrap1(index, "_recovery", args, callopts)
 }
 
+#' @export
+#' @rdname index
+es_index_optimize <- function(index = NULL, max_num_segments = NULL, only_expunge_deletes = FALSE, 
+  flush = TRUE, wait_for_merge = TRUE, callopts=list())
+{
+  args <- ec(list(max_num_segments = max_num_segments, 
+                  only_expunge_deletes = as_log(only_expunge_deletes), 
+                  flush = as_log(flush), 
+                  wait_for_merge = as_log(wait_for_merge)
+  ))
+  es_POST_(index, "_optimize", args, callopts)
+}
+
+#' @export
+#' @rdname index
+es_index_upgrade <- function(index = NULL, wait_for_completion = FALSE, callopts=list())
+{
+  args <- ec(list(wait_for_completion = as_log(wait_for_completion)))
+  es_POST_(index, "_upgrade", args, callopts)
+}
+
 close_open <- function(index, which, callopts){
   conn <- es_connect()
   url <- sprintf("%s:%s/%s/%s", conn$base, conn$port, index, which)
@@ -191,6 +231,14 @@ es_GET_wrap1 <- function(index, which, args=list(), callopts){
   conn <- es_connect()
   url <- if(is.null(index)) file.path(e_url(conn), which) else file.path(e_url(conn), cl(index), which)
   es_GET_(url, args, callopts)
+}
+
+es_POST_ <- function(index, which, args=list(), callopts){
+  conn <- es_connect()
+  url <- if(is.null(index)) file.path(e_url(conn), which) else file.path(e_url(conn), cl(index), which)
+  tt <- POST(url, query=args, callopts)
+  if(tt$status_code > 202) stop(content(tt)$error)
+  jsonlite::fromJSON(content(tt, "text"), FALSE)
 }
 
 e_url <- function(x) paste0(x$base, ":", x$port)

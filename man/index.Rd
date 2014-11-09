@@ -6,10 +6,12 @@
 \alias{es_index_exists}
 \alias{es_index_get}
 \alias{es_index_open}
+\alias{es_index_optimize}
 \alias{es_index_recovery}
 \alias{es_index_segments}
 \alias{es_index_stats}
 \alias{es_index_status}
+\alias{es_index_upgrade}
 \alias{index}
 \title{Elasticsearch indices APIs}
 \usage{
@@ -36,6 +38,13 @@ es_index_status(index = NULL, callopts = list())
 es_index_segments(index = NULL, callopts = list())
 
 es_index_recovery(index = NULL, detailed = FALSE, active_only = FALSE,
+  callopts = list())
+
+es_index_optimize(index = NULL, max_num_segments = NULL,
+  only_expunge_deletes = FALSE, flush = TRUE, wait_for_merge = TRUE,
+  callopts = list())
+
+es_index_upgrade(index = NULL, wait_for_completion = FALSE,
   callopts = list())
 }
 \arguments{
@@ -73,11 +82,26 @@ warmers or aliases}
 
 \item{level}{(character) Return stats aggregated on "cluster", "indices" (default) or "shards"}
 
-\item{detailed}{(logical) Whether to display detailed information about shard recovery
-(default: FALSE)}
+\item{detailed}{(logical) Whether to display detailed information about shard recovery.
+Default: FALSE}
 
-\item{active_only}{(logical) Display only those recoveries that are currently on-going
-(default: FALSE)}
+\item{active_only}{(logical) Display only those recoveries that are currently on-going.
+Default: FALSE}
+
+\item{max_num_segments}{(character) The number of segments the index should be merged into.
+Default: "dynamic"}
+
+\item{only_expunge_deletes}{(logical) Specify whether the operation should only expunge
+deleted documents}
+
+\item{flush}{(logical) Specify whether the index should be flushed after performing the
+operation. Default: TRUE}
+
+\item{wait_for_merge}{(logical) Specify whether the request should block until the merge
+process is finished. Default: TRUE}
+
+\item{wait_for_completion}{(logical) Should the request wait for the upgrade to complete.
+Default: FALSE}
 }
 \description{
 Elasticsearch indices APIs
@@ -134,6 +158,15 @@ es_index_recovery('plos')
 es_index_recovery(c('plos','gbif'))
 es_index_recovery("plos", detailed = TRUE)
 es_index_recovery("plos", active_only = TRUE)
+
+# Optimize an index, or many indices
+es_index_optimize('plos')
+es_index_optimize(c('plos','gbif'))
+
+# Upgrade one or more indices to the latest format. The upgrade process converts any
+# segments written with previous formats.
+es_index_upgrade('plos')
+es_index_upgrade(c('plos','gbif'))
 }
 }
 \author{
