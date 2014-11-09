@@ -74,7 +74,7 @@
 
 es_search_body <- function(index=NULL, type=NULL, raw=FALSE, callopts=list(), query=list(), ...)
 {
-  elastic_POST(path = "_search",
+  es_POST(path = "_search",
               index = index,
               type = type,
               clazz = 'elastic_search',

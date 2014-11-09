@@ -9,6 +9,6 @@
 
 es_ping <- function(raw=FALSE, callopts=list())
 {
-  tmp <- elastic_GET("", NULL, NULL, NULL, NULL, NULL, FALSE, callopts)
+  tmp <- es_GET("", NULL, NULL, NULL, NULL, NULL, FALSE, callopts)
   if(raw) tmp else jsonlite::fromJSON(tmp, FALSE)
 }

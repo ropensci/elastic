@@ -1,5 +1,5 @@
 # GET wrapper
-elastic_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL, 
+es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL, 
                         clazz=NULL, raw, callopts, ...) 
 {
   #   conn <- es_connect()
@@ -44,7 +44,7 @@ index_GET <- function(path, index, features, raw, callopts, ...)
   jsonlite::fromJSON(content(tt, as = "text"), FALSE)
 }
 
-elastic_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, query, ...) 
+es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, query, ...) 
 {
   conn <- es_get_auth()
   url <- paste(conn$base, ":", conn$port, sep="")
@@ -81,7 +81,7 @@ es_PUT <- function(url, body = list(), ...)
   jsonlite::fromJSON(content(tt, "text"), FALSE)
 }
 
-es_GET <- function(url, query = list(), ...) 
+es_map_GET <- function(url, query = list(), ...) 
 {
   tt <- GET(url, query=query, ...)
   if(tt$status_code > 202) stop(content(tt)$error)

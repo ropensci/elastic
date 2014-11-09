@@ -47,7 +47,7 @@ es_get <- function(index=NULL, type=NULL, id=NULL, source=FALSE,
     stop_for_status(out)
     if(verbose) message(URLdecode(out$url))
     tt <- content(out, as="text")
-    class(tt) <- "elastic_get"
+    class(tt) <- "es_GET"
     if(raw){ tt } else { es_parse(tt) }
   }
 }

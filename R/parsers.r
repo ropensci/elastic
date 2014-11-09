@@ -13,14 +13,14 @@ es_parse <- function(input, parsetype, verbose){
   UseMethod("es_parse")
 }
 
-#' @method es_parse elastic_get
+#' @method es_parse es_GET
 #' @export
 #' @rdname es_parse
 #' @keywords internal
-es_parse.elastic_get <- function(input, parsetype='list', verbose=FALSE)
+es_parse.es_GET <- function(input, parsetype='list', verbose=FALSE)
 {
   # tt <- NULL
-  parse_help(input, "elastic_get", parsetype)
+  parse_help(input, "es_GET", parsetype)
   return( tt )
 }
 

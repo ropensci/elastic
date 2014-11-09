@@ -61,5 +61,5 @@ es_cluster <- function(what='health', index=NULL, raw=FALSE, callopts=list(), ve
          reroute = '_cluster/reroute',
          settings = '_cluster/settings',
          pending_tasks = '_cluster/pending_tasks')
-  elastic_GET(what2, index, NULL, NULL, NULL, sprintf('elastic_cluster_%s', what), raw, callopts, ...)
+  es_GET(what2, index, NULL, NULL, NULL, sprintf('elastic_cluster_%s', what), raw, callopts, ...)
 }

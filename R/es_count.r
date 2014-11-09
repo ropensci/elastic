@@ -23,6 +23,6 @@
 
 es_count <- function(index=NULL, type=NULL, callopts=list(), verbose=TRUE, ...)
 {
-  out <- elastic_GET(path = '_count', index, type, NULL, NULL, NULL, FALSE, callopts, ...)
+  out <- es_GET(path = '_count', index, type, NULL, NULL, NULL, FALSE, callopts, ...)
   jsonlite::fromJSON(out, FALSE)$count
 }

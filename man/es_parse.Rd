@@ -7,19 +7,19 @@
 \alias{es_parse.elastic_cluster_settings}
 \alias{es_parse.elastic_cluster_state}
 \alias{es_parse.elastic_cluster_stats}
-\alias{es_parse.elastic_get}
 \alias{es_parse.elastic_mget}
 \alias{es_parse.elastic_nodes_info}
 \alias{es_parse.elastic_nodes_stats}
 \alias{es_parse.elastic_search}
 \alias{es_parse.elastic_stats}
 \alias{es_parse.elastic_status}
+\alias{es_parse.es_GET}
 \alias{es_parse.index_delete}
 \title{Parse raw data from es_get, es_mget, or es_search.}
 \usage{
 es_parse(input, parsetype, verbose)
 
-\method{es_parse}{elastic_get}(input, parsetype = "list", verbose = FALSE)
+\method{es_parse}{es_GET}(input, parsetype = "list", verbose = FALSE)
 
 \method{es_parse}{index_delete}(input, parsetype = "list", verbose = FALSE)
 

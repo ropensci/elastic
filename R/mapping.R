@@ -99,7 +99,7 @@ es_mapping_get <- function(index = NULL, type = NULL, ...){
       url <- file.path(paste0(conn$base, ":", conn$port), index, "_mapping", cl(type))
     }
   }
-  es_GET(url, ...)
+  es_map_GET(url, ...)
 }
 
 #' @export
@@ -120,7 +120,7 @@ es_field_mapping_get <- function(index = NULL, type = NULL, field, include_defau
       url <- file.path(paste0(conn$base, ":", conn$port), index, "_mapping", cl(type), "field", cl(field))
     }
   }
-  es_GET(url, query=list(include_defaults=as_log(include_defaults)), ...)
+  es_map_GET(url, query=list(include_defaults=as_log(include_defaults)), ...)
 }
 
 #' @export
