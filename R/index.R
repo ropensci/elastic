@@ -4,15 +4,16 @@
 #' @param features (character) A character vector of features. One or more of settings, mappings, 
 #' warmers or aliases
 #' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
-#' @param callopts Curl args passed on to httr::POST.
+#' @param callopts Curl args passed on to \code{\link[httr]{POST}}, \code{\link[httr]{GET}}, 
+#' \code{\link[httr]{PUT}}, \code{\link[httr]{HEAD}}, or \code{\link[httr]{DELETE}}
 #' @param verbose If TRUE (default) the url call used printed to console.
 #' @param ... Further args passed on to elastic search HTTP API as parameters.
 #' @param type (character) Document type
 #' @param id Document id
 #' @param fields (character) Fields to add.
-#' @param metric (character) A character vector of metrics to display. Possible values: “_all”, “completion”, 
-#' “docs”, “fielddata”, “filter_cache”, “flush”, “get”, “id_cache”, “indexing”, “merge”, 
-#' “percolate”, “refresh”, “search”, “segments”, “store”, “warmer”.
+#' @param metric (character) A character vector of metrics to display. Possible values: "_all", 
+#' "completion", "docs", "fielddata", "filter_cache", "flush", "get", "id_cache", "indexing", 
+#' "merge", "percolate", "refresh", "search", "segments", "store", "warmer".
 #' @param completion_fields (character) A character vector of fields for completion metric 
 #' (supports wildcards)
 #' @param fielddata_fields (character) A character vector of fields for fielddata metric

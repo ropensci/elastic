@@ -46,7 +46,8 @@ warmers or aliases}
 
 \item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
 
-\item{callopts}{Curl args passed on to httr::POST.}
+\item{callopts}{Curl args passed on to \code{\link[httr]{POST}}, \code{\link[httr]{GET}},
+\code{\link[httr]{PUT}}, \code{\link[httr]{HEAD}}, or \code{\link[httr]{DELETE}}}
 
 \item{verbose}{If TRUE (default) the url call used printed to console.}
 
@@ -58,9 +59,9 @@ warmers or aliases}
 
 \item{fields}{(character) Fields to add.}
 
-\item{metric}{(character) A character vector of metrics to display. Possible values: “_all”, “completion”,
-“docs”, “fielddata”, “filter_cache”, “flush”, “get”, “id_cache”, “indexing”, “merge”,
-“percolate”, “refresh”, “search”, “segments”, “store”, “warmer”.}
+\item{metric}{(character) A character vector of metrics to display. Possible values: "_all",
+"completion", "docs", "fielddata", "filter_cache", "flush", "get", "id_cache", "indexing",
+"merge", "percolate", "refresh", "search", "segments", "store", "warmer".}
 
 \item{completion_fields}{(character) A character vector of fields for completion metric
 (supports wildcards)}
