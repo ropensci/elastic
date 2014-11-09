@@ -36,15 +36,16 @@ es_type_exists(index, type, ...)
 Mapping management
 }
 \details{
+Find documentation for each function at:
 \itemize{
- \item es_mapping_create - http://bit.ly/1xbWqFo
- \item es_type_exists - http://bit.ly/10HkZvH
- \item es_mapping_delete - http://bit.ly/10Mmvgi
- \item es_mapping_get - http://bit.ly/1AN2oiw
- \item es_field_mapping_get - http://bit.ly/1wHKgCA
+ \item es_mapping_create - \url{http://bit.ly/1xbWqFo}
+ \item es_type_exists - \url{http://bit.ly/10HkZvH}
+ \item es_mapping_delete - \url{http://bit.ly/10Mmvgi}
+ \item es_mapping_get - \url{http://bit.ly/1AN2oiw}
+ \item es_field_mapping_get - \url{http://bit.ly/1wHKgCA }
 }
 
-\strong{NOTE:} For the delete method, Elasticsearch documentation notes that: "Note, most times,
+\strong{NOTE:} For the delete method, Elasticsearch documentation notes that: "... most times,
 it make more sense to reindex the data into a fresh index compared to delete large chunks of it."
 }
 \examples{
