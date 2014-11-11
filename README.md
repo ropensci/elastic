@@ -8,7 +8,6 @@ elastic
 
 **A general purpose R interface to [Elasticsearch](http://elasticsearch.org)**
 
-
 ## Elasticsearch info
 
 + [Elasticsearch home page](http://elasticsearch.org)
@@ -106,6 +105,10 @@ gbifdat <- system.file("examples", "gbif_data.json", package = "elastic")
 es_bulk(gbifdat)
 ```
 
+#### More data sets
+
+There are more datasets formatted for bulk loading in the `ropensci/elastic_data` GitHub repository. Find it at [https://github.com/ropensci/elastic_data](https://github.com/ropensci/elastic_data)
+
 ### Initialization
 
 The function `es_connect` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `es_connect` are written to your options for the current session, and are used by `elastic` functions.
@@ -120,7 +123,7 @@ es_connect()
 #> api key:   NULL 
 #> elasticsearch details:   
 #>       status:                  200 
-#>       name:                    Melody Guthrie 
+#>       name:                    En Sabah Nur 
 #>       Elasticsearch version:   1.4.0 
 #>       ES version timestamp:    2014-11-05T14:26:12Z 
 #>       lucene version:          4.10.2
@@ -150,7 +153,7 @@ es_search(index="plos", size=1)
 #> 
 #> $hits
 #> $hits$total
-#> [1] 1003
+#> [1] 1203
 #> 
 #> $hits$max_score
 #> [1] 1
@@ -181,7 +184,7 @@ es_search(index="plos", size=1)
 ```r
 es_search(index="plos", type="article", sort="title", q="antibody", size=1)
 #> $took
-#> [1] 1
+#> [1] 2
 #> 
 #> $timed_out
 #> [1] FALSE
@@ -350,256 +353,28 @@ Different indeces, types, and ids
 
 
 ```r
-es_mget(index_type_id=list(c("plos","article",1), c("gbif","record",1)))
-#> $docs
-#> $docs[[1]]
-#> $docs[[1]]$`_index`
+es_mget(index_type_id=list(c("plos","article",1), c("gbif","record",1)))$docs[[1]]
+#> $`_index`
 #> [1] "plos"
 #> 
-#> $docs[[1]]$`_type`
+#> $`_type`
 #> [1] "article"
 #> 
-#> $docs[[1]]$`_id`
+#> $`_id`
 #> [1] "1"
 #> 
-#> $docs[[1]]$`_version`
+#> $`_version`
 #> [1] 2
 #> 
-#> $docs[[1]]$found
+#> $found
 #> [1] TRUE
 #> 
-#> $docs[[1]]$`_source`
-#> $docs[[1]]$`_source`$id
+#> $`_source`
+#> $`_source`$id
 #> [1] "10.1371/journal.pone.0098602"
 #> 
-#> $docs[[1]]$`_source`$title
+#> $`_source`$title
 #> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
-#> 
-#> 
-#> 
-#> $docs[[2]]
-#> $docs[[2]]$`_index`
-#> [1] "gbif"
-#> 
-#> $docs[[2]]$`_type`
-#> [1] "record"
-#> 
-#> $docs[[2]]$`_id`
-#> [1] "1"
-#> 
-#> $docs[[2]]$`_version`
-#> [1] 1
-#> 
-#> $docs[[2]]$found
-#> [1] TRUE
-#> 
-#> $docs[[2]]$`_source`
-#> $docs[[2]]$`_source`$key
-#> [1] 925277117
-#> 
-#> $docs[[2]]$`_source`$datasetKey
-#> [1] "83e20573-f7dd-4852-9159-21566e1e691e"
-#> 
-#> $docs[[2]]$`_source`$publishingOrgKey
-#> [1] "1cd669d0-80ea-11de-a9d0-f1765f95f18b"
-#> 
-#> $docs[[2]]$`_source`$publishingCountry
-#> [1] "BE"
-#> 
-#> $docs[[2]]$`_source`$protocol
-#> [1] "DWC_ARCHIVE"
-#> 
-#> $docs[[2]]$`_source`$lastCrawled
-#> [1] "2014-07-17T19:23:36.333+0000"
-#> 
-#> $docs[[2]]$`_source`$lastParsed
-#> [1] "2014-07-17T16:26:53.364+0000"
-#> 
-#> $docs[[2]]$`_source`$extensions
-#> [1] "null"
-#> 
-#> $docs[[2]]$`_source`$basisOfRecord
-#> [1] "MACHINE_OBSERVATION"
-#> 
-#> $docs[[2]]$`_source`$sex
-#> [1] "FEMALE"
-#> 
-#> $docs[[2]]$`_source`$lifeStage
-#> [1] "ADULT"
-#> 
-#> $docs[[2]]$`_source`$taxonKey
-#> [1] 2481139
-#> 
-#> $docs[[2]]$`_source`$kingdomKey
-#> [1] 1
-#> 
-#> $docs[[2]]$`_source`$phylumKey
-#> [1] 44
-#> 
-#> $docs[[2]]$`_source`$classKey
-#> [1] 212
-#> 
-#> $docs[[2]]$`_source`$orderKey
-#> [1] 7192402
-#> 
-#> $docs[[2]]$`_source`$familyKey
-#> [1] 9316
-#> 
-#> $docs[[2]]$`_source`$genusKey
-#> [1] 2481126
-#> 
-#> $docs[[2]]$`_source`$speciesKey
-#> [1] 2481139
-#> 
-#> $docs[[2]]$`_source`$scientificName
-#> [1] "Larus argentatus Pontoppidan, 1763"
-#> 
-#> $docs[[2]]$`_source`$kingdom
-#> [1] "Animalia"
-#> 
-#> $docs[[2]]$`_source`$phylum
-#> [1] "Chordata"
-#> 
-#> $docs[[2]]$`_source`$order
-#> [1] "Charadriiformes"
-#> 
-#> $docs[[2]]$`_source`$family
-#> [1] "Laridae"
-#> 
-#> $docs[[2]]$`_source`$genus
-#> [1] "Larus"
-#> 
-#> $docs[[2]]$`_source`$species
-#> [1] "Larus argentatus"
-#> 
-#> $docs[[2]]$`_source`$genericName
-#> [1] "Larus"
-#> 
-#> $docs[[2]]$`_source`$specificEpithet
-#> [1] "argentatus"
-#> 
-#> $docs[[2]]$`_source`$taxonRank
-#> [1] "SPECIES"
-#> 
-#> $docs[[2]]$`_source`$decimalLongitude
-#> [1] 2.9258
-#> 
-#> $docs[[2]]$`_source`$decimalLatitude
-#> [1] 51.1527
-#> 
-#> $docs[[2]]$`_source`$elevation
-#> [1] 0
-#> 
-#> $docs[[2]]$`_source`$year
-#> [1] 2014
-#> 
-#> $docs[[2]]$`_source`$month
-#> [1] 1
-#> 
-#> $docs[[2]]$`_source`$day
-#> [1] 13
-#> 
-#> $docs[[2]]$`_source`$eventDate
-#> [1] "2014-01-13T14:28:19.000+0000"
-#> 
-#> $docs[[2]]$`_source`$issues
-#> [1] "COORDINATE_ROUNDED,COUNTRY_DERIVED_FROM_COORDINATES,MODIFIED_DATE_UNLIKELY"
-#> 
-#> $docs[[2]]$`_source`$modified
-#> [1] "2014-07-17T09:47:54.000+0000"
-#> 
-#> $docs[[2]]$`_source`$lastInterpreted
-#> [1] "2014-07-17T16:44:59.331+0000"
-#> 
-#> $docs[[2]]$`_source`$identifiers
-#> [1] "null"
-#> 
-#> $docs[[2]]$`_source`$facts
-#> [1] "null"
-#> 
-#> $docs[[2]]$`_source`$relations
-#> [1] "null"
-#> 
-#> $docs[[2]]$`_source`$geodeticDatum
-#> [1] "WGS84"
-#> 
-#> $docs[[2]]$`_source`$class
-#> [1] "Aves"
-#> 
-#> $docs[[2]]$`_source`$countryCode
-#> [1] "BE"
-#> 
-#> $docs[[2]]$`_source`$country
-#> [1] "Belgium"
-#> 
-#> $docs[[2]]$`_source`$informationWithheld
-#> [1] "see metadata"
-#> 
-#> $docs[[2]]$`_source`$georeferencedDate
-#> [1] "2014-01-13T15:28:19Z"
-#> 
-#> $docs[[2]]$`_source`$georeferenceVerificationStatus
-#> [1] "unverified"
-#> 
-#> $docs[[2]]$`_source`$nomenclaturalCode
-#> [1] "ICZN"
-#> 
-#> $docs[[2]]$`_source`$individualID
-#> [1] "H903183"
-#> 
-#> $docs[[2]]$`_source`$rights
-#> [1] "http://creativecommons.org/publicdomain/zero/1.0/"
-#> 
-#> $docs[[2]]$`_source`$rightsHolder
-#> [1] "INBO"
-#> 
-#> $docs[[2]]$`_source`$ownerInstitutionCode
-#> [1] "INBO"
-#> 
-#> $docs[[2]]$`_source`$type
-#> [1] "Event"
-#> 
-#> $docs[[2]]$`_source`$georeferenceProtocol
-#> [1] "doi:10.1080/13658810412331280211"
-#> 
-#> $docs[[2]]$`_source`$occurrenceID
-#> [1] "125254"
-#> 
-#> $docs[[2]]$`_source`$georeferenceSources
-#> [1] "GPS"
-#> 
-#> $docs[[2]]$`_source`$vernacularName
-#> [1] "Herring Gull"
-#> 
-#> $docs[[2]]$`_source`$gbifID
-#> [1] "925277117"
-#> 
-#> $docs[[2]]$`_source`$samplingEffort
-#> [1] "secondsSinceLastOccurrence=895"
-#> 
-#> $docs[[2]]$`_source`$samplingProtocol
-#> [1] "doi:10.1007/s10336-012-0908-1"
-#> 
-#> $docs[[2]]$`_source`$institutionCode
-#> [1] "INBO"
-#> 
-#> $docs[[2]]$`_source`$datasetID
-#> [1] "http://dataset.inbo.be/bird-tracking-gull-occurrences"
-#> 
-#> $docs[[2]]$`_source`$dynamicProperties
-#> [1] "device_info_serial=783"
-#> 
-#> $docs[[2]]$`_source`$datasetName
-#> [1] "Bird tracking - GPS tracking of Lesser Black-backed Gull and Herring Gull breeding at the Belgian coast"
-#> 
-#> $docs[[2]]$`_source`$minimumDistanceAboveSurfaceInMeters
-#> [1] "11"
-#> 
-#> $docs[[2]]$`_source`$language
-#> [1] "en"
-#> 
-#> $docs[[2]]$`_source`$identifier
-#> [1] "125254"
 ```
 
 ### Parsing
@@ -620,55 +395,28 @@ Then parse
 
 
 ```r
-es_parse(out)
-#> $docs
-#> $docs[[1]]
-#> $docs[[1]]$`_index`
+es_parse(out)$docs[[1]]
+#> $`_index`
 #> [1] "plos"
 #> 
-#> $docs[[1]]$`_type`
+#> $`_type`
 #> [1] "article"
 #> 
-#> $docs[[1]]$`_id`
+#> $`_id`
 #> [1] "1"
 #> 
-#> $docs[[1]]$`_version`
+#> $`_version`
 #> [1] 2
 #> 
-#> $docs[[1]]$found
+#> $found
 #> [1] TRUE
 #> 
-#> $docs[[1]]$`_source`
-#> $docs[[1]]$`_source`$id
+#> $`_source`
+#> $`_source`$id
 #> [1] "10.1371/journal.pone.0098602"
 #> 
-#> $docs[[1]]$`_source`$title
+#> $`_source`$title
 #> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
-#> 
-#> 
-#> 
-#> $docs[[2]]
-#> $docs[[2]]$`_index`
-#> [1] "plos"
-#> 
-#> $docs[[2]]$`_type`
-#> [1] "article"
-#> 
-#> $docs[[2]]$`_id`
-#> [1] "2"
-#> 
-#> $docs[[2]]$`_version`
-#> [1] 2
-#> 
-#> $docs[[2]]$found
-#> [1] TRUE
-#> 
-#> $docs[[2]]$`_source`
-#> $docs[[2]]$`_source`$id
-#> [1] "10.1371/journal.pone.0107757"
-#> 
-#> $docs[[2]]$`_source`$title
-#> [1] "Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition"
 ```
 
 ## CouchDB integration

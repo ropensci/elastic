@@ -106,6 +106,10 @@ gbifdat <- system.file("examples", "gbif_data.json", package = "elastic")
 es_bulk(gbifdat)
 ```
 
+#### More data sets
+
+There are more datasets formatted for bulk loading in the `ropensci/elastic_data` GitHub repository. Find it at [https://github.com/ropensci/elastic_data](https://github.com/ropensci/elastic_data)
+
 ### Initialization
 
 The function `es_connect` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `es_connect` are written to your options for the current session, and are used by `elastic` functions.
@@ -151,7 +155,7 @@ es_mget(index="plos", type="article", id=1:2)
 Different indeces, types, and ids
 
 ```{r}
-es_mget(index_type_id=list(c("plos","article",1), c("gbif","record",1)))
+es_mget(index_type_id=list(c("plos","article",1), c("gbif","record",1)))$docs[[1]]
 ```
 
 ### Parsing
@@ -167,7 +171,7 @@ For example:
 Then parse
 
 ```{r}
-es_parse(out)
+es_parse(out)$docs[[1]]
 ```
 
 ## CouchDB integration
