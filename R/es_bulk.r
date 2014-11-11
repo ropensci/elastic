@@ -53,8 +53,8 @@ proc_doc <- function(x){
   gsub("\\[|\\]", "", as.character(b))
 }
 
-# make_bulk_gbif(900, "inst/examples/gbif_data.json")
-make_bulk_gbif <- function(n = 600, filename = "~/gbif_data.json"){  
+# make_bulk_gbif(900, filename="inst/examples/gbif_data.json")
+make_bulk_gbif <- function(n = 600, index='gbif', type='record', filename = "~/gbif_data.json"){  
   unlink(filename)
   res <- lapply(seq(1, n, 300), getgbif)
   res <- do.call(c, res)
@@ -63,7 +63,7 @@ make_bulk_gbif <- function(n = 600, filename = "~/gbif_data.json"){
     lapply(x, function(y) if(length(y) > 1) paste0(y, collapse = ",") else y)
   })
   for(i in seq_along(res)){
-    dat <- list(index = list(`_index` = "gbif", `_type` = "record", `_id` = i-1))
+    dat <- list(index = list(`_index` = index, `_type` = type, `_id` = i-1))
     cat(proc_doc(dat), sep = "\n", file = filename, append = TRUE)
     cat(proc_doc(res[[i]]), sep = "\n", file = filename, append = TRUE)
   }  
