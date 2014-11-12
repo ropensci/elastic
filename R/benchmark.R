@@ -10,7 +10,7 @@
 #' # pass in as an R list
 #' args <- list(name = "b1", 
 #'    competitors = list(name = "c1", requests = list(query = list(match = "a*"))))
-#' es_benchmark(index="shakespeare", query=aggs)
+#' benchmark(index="shakespeare", query=aggs)
 #' 
 #' # or pass in as json query with newlines, easy to read
 #' aggs <- '{
@@ -24,7 +24,7 @@
 #'   } ]
 #' } ]
 #' }'
-#' es_benchmark(query=aggs)
+#' benchmark(query=aggs)
 #' 
 #' # or pass in collapsed json string
 #' aggs <- '{"aggs":{"stats":{"terms":{"field":"text_entry"}}}}'
@@ -49,7 +49,7 @@
 #' }}}}}}'
 #' }
 
-es_benchmark <- function(raw=FALSE, callopts=list(), query=list(), ...)
+benchmark <- function(raw=FALSE, callopts=list(), query=list(), ...)
 {
   bench_POST(query = query, raw = raw, callopts = callopts, ...)
 }
