@@ -16,13 +16,13 @@
 #' @export
 #' @examples \dontrun{
 #' # the default is set to localhost and port 9200
-#' es_connect()
+#' connect()
 #'
 #' # or set to a different base url
-#' es_connect('http://162.243.152.56')
+#' connect('http://162.243.152.56')
 #' }
 
-es_connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL, es_pwd = NULL,
+connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL, es_pwd = NULL,
                        es_key = NULL, force = FALSE, ...)
 {
   auth <- es_get_auth(es_base=es_base, es_port=es_port, force = force)
@@ -50,14 +50,14 @@ es_connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL,
 
 #' Get info on your Elasticsearch cluster
 #'
-#' Calls \link{es_connect} internally
+#' Calls \code{\link{connect}} internally
 #'
 #' @export
 #' @examples \dontrun{
-#' es_connection()
+#' connection()
 #' }
 
-es_connection <- function(){
+connection <- function(){
   auth <- list(base=getOption("es_base"), port=getOption("es_port"))
   if(is.null(auth$port)){
     baseurl <- auth$base
