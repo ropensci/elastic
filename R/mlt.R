@@ -42,31 +42,31 @@
 #' be added later.
 #' 
 #' @examples  \donttest{
-#' es_mlt(index = "plos", type = "article", id = 5)$hits$total
-#' es_mlt(index = "plos", type = "article", id = 5, min_doc_freq=12)$hits$total
-#' es_mlt(index = "plos", type = "article", id = 800)$hits$total
+#' mlt(index = "plos", type = "article", id = 5)$hits$total
+#' mlt(index = "plos", type = "article", id = 5, min_doc_freq=12)$hits$total
+#' mlt(index = "plos", type = "article", id = 800)$hits$total
 #' 
 #' # Return different number of results
-#' es_mlt(index = "plos", type = "article", id = 800, search_size=1)$hits$hits
-#' es_mlt(index = "plos", type = "article", id = 800, search_size=2)$hits$hits
+#' mlt(index = "plos", type = "article", id = 800, search_size=1)$hits$hits
+#' mlt(index = "plos", type = "article", id = 800, search_size=2)$hits$hits
 #' 
 #' # Exclude stop words
-#' es_mlt(index = "plos", type = "article", id = 800)$hits$total
-#' es_mlt(index = "plos", type = "article", id = 800, stop_words="the,and")$hits$total
+#' mlt(index = "plos", type = "article", id = 800)$hits$total
+#' mlt(index = "plos", type = "article", id = 800, stop_words="the,and")$hits$total
 #' 
 #' # Specify percent of terms that have to match
-#' es_mlt(index = "plos", type = "article", id = 800, percent_terms_to_match=0.1)$hits$total
-#' es_mlt(index = "plos", type = "article", id = 800, percent_terms_to_match=0.7)$hits$total
+#' mlt(index = "plos", type = "article", id = 800, percent_terms_to_match=0.1)$hits$total
+#' mlt(index = "plos", type = "article", id = 800, percent_terms_to_match=0.7)$hits$total
 #' 
 #' # Maximum query terms to be included in the generated query
-#' es_mlt(index = "plos", type = "article", id = 800, max_query_terms=1)$hits$total
-#' es_mlt(index = "plos", type = "article", id = 800, max_query_terms=2)$hits$total
-#' es_mlt(index = "plos", type = "article", id = 800, max_query_terms=3)$hits$total
+#' mlt(index = "plos", type = "article", id = 800, max_query_terms=1)$hits$total
+#' mlt(index = "plos", type = "article", id = 800, max_query_terms=2)$hits$total
+#' mlt(index = "plos", type = "article", id = 800, max_query_terms=3)$hits$total
 #' 
 #' # Maximum query terms to be included in the generated query
-#' es_mlt(index = "plos", type = "article", id = 800, mlt_fields="title", boost_terms=1)$hits$total
+#' mlt(index = "plos", type = "article", id = 800, mlt_fields="title", boost_terms=1)$hits$total
 #' }
-es_mlt <- function(index, type, id, doc_type=NULL, body=NULL, 
+mlt <- function(index, type, id, doc_type=NULL, body=NULL, 
   boost_terms=NULL, include=NULL, max_doc_freq=NULL, max_query_terms=NULL, max_word_length=NULL, 
   min_doc_freq=NULL, min_term_freq=NULL, min_word_length=NULL, mlt_fields=NULL, 
   percent_terms_to_match=NULL, routing=NULL, search_from=NULL, search_indices=NULL, 
