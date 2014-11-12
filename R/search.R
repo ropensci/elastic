@@ -1,7 +1,6 @@
 #' Search functions.
 #' 
 #' @name search
-#' 
 #' @details  
 #' Elasticsearch search APIs include the following functions:
 #' \itemize{
