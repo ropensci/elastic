@@ -1,9 +1,6 @@
 #' Elasticsearch cluster endpoints
 #'
-#' @export
-#'
-#' @param what Which cluster endpiont to use, one of health, state, stats, reroute, settings, or
-#' pending_tasks.
+#' @name cluster
 #' @param index Index
 #' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
 #' @param callopts Curl args passed on to httr::POST.
@@ -38,28 +35,52 @@
 #' }
 #'
 #' @examples \dontrun{
-#' es_cluster(what='health')
-#' es_cluster('state')
-#' es_cluster('settings')
-#' es_cluster('stats')
-#' es_cluster('pending_tasks')
+#' cluster_settings()
+#' cluster_health()
+#' cluster_state()
+#' cluster_stats()
+#' cluster_pending_tasks()
 #'
 #' # raw json data
-#' es_cluster('health', raw=TRUE)
+#' cluster_health(raw = TRUE)
 #' }
 #'
 #' @examples \donttest{
-#' es_cluster(what='reroute')
+#' cluster_reroute()
 #' }
 
-es_cluster <- function(what='health', index=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
-{
-  what2 <- switch(what,
-         health = '_cluster/health',
-         state = '_cluster/state',
-         stats = '_cluster/stats',
-         reroute = '_cluster/reroute',
-         settings = '_cluster/settings',
-         pending_tasks = '_cluster/pending_tasks')
-  es_GET(what2, index, NULL, NULL, NULL, sprintf('elastic_cluster_%s', what), raw, callopts, ...)
+#' @export
+#' @rdname cluster
+cluster_settings <- function(index=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...){
+  es_GET('_cluster/settings', index, NULL, NULL, NULL, 'elastic_cluster_settings', raw, callopts, ...)
+}
+
+#' @export
+#' @rdname cluster
+cluster_health <- function(index=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...){
+  es_GET('_cluster/health', index, NULL, NULL, NULL, 'elastic_cluster_health', raw, callopts, ...)
+}
+
+#' @export
+#' @rdname cluster
+cluster_state <- function(index=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...){
+  es_GET('_cluster/state', index, NULL, NULL, NULL, 'elastic_cluster_state', raw, callopts, ...)
+}
+
+#' @export
+#' @rdname cluster
+cluster_stats <- function(index=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...){
+  es_GET('_cluster/stats', index, NULL, NULL, NULL, 'elastic_cluster_stats', raw, callopts, ...)
+}
+
+#' @export
+#' @rdname cluster
+cluster_reroute <- function(index=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...){
+  es_GET('_cluster/reroute', index, NULL, NULL, NULL, 'elastic_cluster_reroute', raw, callopts, ...)
+}
+
+#' @export
+#' @rdname cluster
+cluster_pending_tasks <- function(index=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...){
+  es_GET('_cluster/pending_tasks', index, NULL, NULL, NULL, 'elastic_cluster_pending_tasks', raw, callopts, ...)
 }
