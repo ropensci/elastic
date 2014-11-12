@@ -102,13 +102,13 @@ cat_fielddata <- function(verbose=FALSE, index=NULL, fields=NULL) cat_helper('fi
 cat_helper <- function(what='', v=FALSE, i=NULL, f=NULL)
 {
   conn <- es_get_auth()
-  if(!is.null(fields)) fields <- paste(fields, collapse=",")
+  if(!is.null(f)) f <- paste(f, collapse=",")
   url <- sprintf("%s:%s/_cat/%s", conn$base, conn$port, what)
-  if(!is.null(index)) url <- paste0(url, '/', index)  
-  args <- ec(list(v = if(verbose) '' else NULL, fields=fields))
+  if(!is.null(i)) url <- paste0(url, '/', i)  
+  args <- ec(list(v = if(v) '' else NULL, fields=f))
   out <- GET(url, query=args)
   stop_for_status(out)
-  if(verbose) message(URLdecode(out$url))
+  if(v) message(URLdecode(out$url))
   dat <- content(out, as = "text")
   if(identical(dat, "")) message("Nothing to print") else base::cat(dat)
 }
