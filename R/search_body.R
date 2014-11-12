@@ -11,7 +11,7 @@
 #' @examples \dontrun{ 
 #' # pass in as an R list
 #' aggs <- list(aggs = list(stats = list(terms = list(field = "text_entry"))))
-#' es_search_body(index="shakespeare", query=aggs)
+#' search_body(index="shakespeare", query=aggs)
 #' 
 #' # or pass in as json query with newlines, easy to read
 #' aggs <- '{
@@ -23,20 +23,20 @@
 #'         }
 #'     }
 #' }'
-#' es_search_body(index="shakespeare", query=aggs)
+#' search_body(index="shakespeare", query=aggs)
 #' 
 #' 
 #' # or pass in collapsed json string
 #' aggs <- '{"aggs":{"stats":{"terms":{"field":"text_entry"}}}}'
-#' es_search_body(index="shakespeare", query=aggs)
+#' search_body(index="shakespeare", query=aggs)
 #' 
 #' # match query
 #' match <- '{"query": {"match" : {"text_entry" : "Two Gentlemen"}}}'
-#' es_search_body(index="shakespeare", query=match)
+#' search_body(index="shakespeare", query=match)
 #' 
 #' # multi-match (multiple fields that is) query
 #' mmatch <- '{"query": {"multi_match" : {"query" : "henry", "fields": ["text_entry","play_name"]}}}'
-#' es_search_body(index="shakespeare", query=mmatch)
+#' search_body(index="shakespeare", query=mmatch)
 #' 
 #' # bool query
 #' mmatch <- '{
@@ -47,7 +47,7 @@
 #'          "speech_number" : {
 #'            "from" : 1, "to": 5 
 #' }}}}}}'
-#' es_search_body(index="shakespeare", query=mmatch)
+#' search_body(index="shakespeare", query=mmatch)
 #' 
 #' # Boosting query
 #' boost <- '{
@@ -67,12 +67,12 @@
 #'     }
 #'  }
 #' }'
-#' es_search_body(index="shakespeare", query=mmatch)
+#' search_body(index="shakespeare", query=mmatch)
 #' 
 #' # 
 #' }
 
-es_search_body <- function(index=NULL, type=NULL, raw=FALSE, callopts=list(), query=list(), ...)
+search_body <- function(index=NULL, type=NULL, raw=FALSE, callopts=list(), query=list(), ...)
 {
   es_POST(path = "_search",
               index = index,
