@@ -14,9 +14,8 @@ page, and all functions prefixed with `index_()`. Thematic manual files are: `in
 you know there is already a widely used function in base R, see `base::cat()`.
 * We changed `cat` functions to separate functions for each command, instead of passing 
 the command in as an argument. For example, `cat('aliases')` becomes `cat_aliases()`.
-* The `es_` prefix remains only for `search()` and `search_body()`, as we want to avoid 
-conflict with `base::search()`, and because `search_body()` will be wrapped into `search()`
-soon. 
+* The `es_` prefix remains only for `es_search()`, as we have to avoid conflict with 
+`base::search()`. 
 * There is still more reworking to do, but mostly will be additional parameters for existing
 functions.
 
