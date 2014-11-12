@@ -17,8 +17,12 @@ es_auth(es_base = NULL, es_port = NULL, es_user = NULL, es_pwd = NULL,
 
 \item{es_key}{(character) API key}
 
-\item{force}{(logical) Force update
-
+\item{force}{(logical) Force update}
+}
+\description{
+Only base url and port and used right now. Will add use or username, password, key, etc. later.
+}
+\details{
 \itemize{
  \item You can enter your details using the client_id and api_key parameters directly.
  \item You can execute the function without any inputs. The function then first looks in your
@@ -30,9 +34,7 @@ es_auth(es_base = NULL, es_port = NULL, es_user = NULL, es_pwd = NULL,
  \code{options(es_base = '<clientid>')}, \code{options(es_port = '<port>')},
  \code{options(es_user = '<port>')}, \code{options(es_pwd = '<port>')}, and
  \code{options(es_key = '<port>')}
-}}
 }
-\description{
-Only base url and port and used right now. Will add use or username, password, key, etc. later.
 }
+\keyword{internal}
 

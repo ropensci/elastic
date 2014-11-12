@@ -94,9 +94,9 @@ print.es_conn <- function(x, ...){
 
 
 #' Set authentication details
-#'
+#' 
 #' Only base url and port and used right now. Will add use or username, password, key, etc. later.
-#'
+#' @keywords internal
 #' @param es_base (character) Base url
 #' @param es_port (character) Port
 #' @param es_user (character) User name
@@ -104,6 +104,7 @@ print.es_conn <- function(x, ...){
 #' @param es_key (character) API key
 #' @param force (logical) Force update
 #'
+#' @details 
 #' \itemize{
 #'  \item You can enter your details using the client_id and api_key parameters directly.
 #'  \item You can execute the function without any inputs. The function then first looks in your

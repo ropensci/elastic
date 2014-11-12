@@ -5,4 +5,4 @@ as_log <- function(x){
   if(x) 'true' else 'false'
 }
 
-cl <- function(x) paste0(x, collapse = ",")
+cl <- function(x) if(is.null(x)) NULL else paste0(x, collapse = ",")
