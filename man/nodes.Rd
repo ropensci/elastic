@@ -3,21 +3,16 @@
 \alias{nodes}
 \alias{nodes_hot_threads}
 \alias{nodes_info}
-\alias{nodes_shutdown}
 \alias{nodes_stats}
 \title{Elasticsearch nodes endpoints.}
 \usage{
-nodes_stats(node = NULL, metric = NULL, raw = FALSE, callopts = list(),
+nodes_stats(node = NULL, metric = NULL, raw = FALSE, fields = NULL,
   verbose = TRUE, ...)
 
-nodes_info(node = NULL, metric = NULL, raw = FALSE, callopts = list(),
-  verbose = TRUE, ...)
+nodes_info(node = NULL, metric = NULL, raw = FALSE, verbose = TRUE, ...)
 
-nodes_hot_threads(node = NULL, metric = NULL, raw = FALSE,
-  callopts = list(), verbose = TRUE, ...)
-
-nodes_shutdown(node = NULL, metric = NULL, raw = FALSE,
-  callopts = list(), verbose = TRUE, ...)
+nodes_hot_threads(node = NULL, metric = NULL, threads = 3,
+  interval = "500ms", type = NULL, raw = FALSE, verbose = TRUE, ...)
 }
 \arguments{
 \item{node}{The node}
@@ -26,11 +21,19 @@ nodes_shutdown(node = NULL, metric = NULL, raw = FALSE,
 
 \item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
 
-\item{callopts}{Curl args passed on to httr::POST.}
+\item{fields}{You can get information about field data memory usage on node level or on
+index level}
 
-\item{verbose}{If TRUE (default) the url call used printed to console.}
+\item{verbose}{If TRUE (default) the url call used printed to console}
 
-\item{...}{Further args passed on to elastic search HTTP API as parameters.}
+\item{...}{Curl args passed on to \code{\link[httr]{GET}}}
+
+\item{threads}{(character) Number of hot threads to provide. Default: 3}
+
+\item{interval}{(character) The interval to do the second sampling of threads. Default: 500ms}
+
+\item{type}{(character) The type to sample, defaults to cpu, but supports wait and block to
+see hot threads that are in wait or block state.}
 }
 \description{
 Elasticsearch nodes endpoints.
@@ -58,7 +61,7 @@ select zero or more of:
 }
 }
 \examples{
-\dontrun{
+\donttest{
 (out <- nodes_stats())
 nodes_stats(node = names(out$nodes))
 nodes_stats(metric='get')
@@ -66,6 +69,10 @@ nodes_stats(metric='jvm')
 nodes_stats(metric=c('os','process'))
 nodes_info()
 nodes_info(metric='process')
+
+# these may not work
+nodes_shutdown()
+nodes_hot_threads()
 }
 }
 
