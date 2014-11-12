@@ -1,10 +1,10 @@
-#' More like this API request.
+#' More like this request.
 #'
 #' @export
 #'
 #' @param index The name of the index
-#' @param type xxx
-#' @param like_text xxx
+#' @param type A document type
+#' @param like_text Like text...
 #' @param doc_type The type of the document (use _all to fetch the first document matching the ID 
 #' across all types)
 #' @param id The document ID
@@ -35,7 +35,7 @@
 #' @param search_types A comma-separated list of types to perform the query against (default: the 
 #' same type as the document)
 #' @param stop_words A list of stop words to be ignored
-#' @param callopts curl options passed on to \code{\link[httr]{GET}}
+#' @param ... curl options passed on to \code{\link[httr]{GET}}
 #' 
 #' @details Currently uses HTTP GET request, so parameters are passed in the URL. Another option 
 #' is the more like this query, which passes the query in the body of a POST request - may
@@ -71,7 +71,7 @@ es_mlt <- function(index, type, id, doc_type=NULL, body=NULL,
   min_doc_freq=NULL, min_term_freq=NULL, min_word_length=NULL, mlt_fields=NULL, 
   percent_terms_to_match=NULL, routing=NULL, search_from=NULL, search_indices=NULL, 
   search_query_hint=NULL, search_scroll=NULL, search_size=NULL, search_source=NULL, 
-  search_type=NULL, search_types=NULL, stop_words=NULL, like_text=NULL, callopts=list())
+  search_type=NULL, search_types=NULL, stop_words=NULL, like_text=NULL, ...)
 {
   conn <- es_connect()
   url <- sprintf("%s:%s/%s/%s/%s/%s", conn$base, conn$port, index, type, id, "_mlt")
@@ -83,8 +83,5 @@ es_mlt <- function(index, type, id, doc_type=NULL, body=NULL,
     search_query_hint=search_query_hint, search_scroll=search_scroll, search_size=search_size, 
     search_source=search_source, search_type=search_type, search_types=search_types, stop_words=stop_words,
     like_text=like_text))
-  res <- GET(url, query=args, callopts)
-  stop_for_status(res)
-  tt <- content(res, "text")
-  jsonlite::fromJSON(tt, FALSE)
+  es_GET_(url, args, ...)
 }
