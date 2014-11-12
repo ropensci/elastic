@@ -10,20 +10,20 @@
 #' @details 
 #' Find documentation for each function at:
 #' \itemize{
-#'  \item es_mapping_create - \url{http://bit.ly/1xbWqFo}
-#'  \item es_type_exists - \url{http://bit.ly/10HkZvH}
-#'  \item es_mapping_delete - \url{http://bit.ly/10Mmvgi}
-#'  \item es_mapping_get - \url{http://bit.ly/1AN2oiw}
-#'  \item es_field_mapping_get - \url{http://bit.ly/1wHKgCA }
+#'  \item mapping_create - \url{http://bit.ly/1xbWqFo}
+#'  \item type_exists - \url{http://bit.ly/10HkZvH}
+#'  \item mapping_delete - \url{http://bit.ly/10Mmvgi}
+#'  \item mapping_get - \url{http://bit.ly/1AN2oiw}
+#'  \item field_mapping_get - \url{http://bit.ly/1wHKgCA }
 #' }
 #' 
 #' \strong{NOTE:} For the delete method, Elasticsearch documentation notes that: "... most times, 
 #' it make more sense to reindex the data into a fresh index compared to delete large chunks of it."
 #' @examples \donttest{
 #' # Used to check if a type/types exists in an index/indices
-#' es_type_exists(index = "plos", type = "article")
-#' es_type_exists(index = "plos", type = "articles")
-#' es_type_exists(index = "shakespeare", type = "line")
+#' type_exists(index = "plos", type = "article")
+#' type_exists(index = "plos", type = "articles")
+#' type_exists(index = "shakespeare", type = "line")
 #' 
 #' # The put mapping API allows to register specific mapping definition for a specific type.
 #' ## a good mapping body
@@ -31,7 +31,7 @@
 #'  journal = list(type="string"),
 #'  year = list(type="long")
 #' )))
-#' es_mapping_create(index = "plos", type = "citation", body=body)
+#' mapping_create(index = "plos", type = "citation", body=body)
 #' 
 #' ### or as json
 #' body <- '{
@@ -40,38 +40,38 @@
 #'       "journal": { "type": "string" },
 #'       "year": { "type": "long" }
 #' }}}'
-#' es_mapping_delete("plos", "citation")
-#' es_mapping_create(index = "plos", type = "citation", body=body)
-#' es_mapping_get("plos", "citation")
+#' mapping_delete("plos", "citation")
+#' mapping_create(index = "plos", type = "citation", body=body)
+#' mapping_get("plos", "citation")
 #' 
 #' ## A bad mapping body
 #' body <- list(things = list(properties = list(
 #'   journal = list("string")
 #' )))
-#' es_mapping_create(index = "plos", type = "things", body=body)
+#' mapping_create(index = "plos", type = "things", body=body)
 #' 
 #' # Delete a mapping
-#' es_mapping_delete("plos", "citation")
+#' mapping_delete("plos", "citation")
 #' 
 #' # Get mappings
-#' es_mapping_get('_all')
-#' es_mapping_get(index = "plos")
-#' es_mapping_get(index = c("shakespeare","plos"))
-#' es_mapping_get(index = "shakespeare", type = "act")
-#' es_mapping_get(index = "shakespeare", type = c("act","line"))
+#' mapping_get('_all')
+#' mapping_get(index = "plos")
+#' mapping_get(index = c("shakespeare","plos"))
+#' mapping_get(index = "shakespeare", type = "act")
+#' mapping_get(index = "shakespeare", type = c("act","line"))
 #' 
 #' # Get field mappings
-#' es_field_mapping_get(index = "_all", type=c('article','line'), field = "text")
-#' es_field_mapping_get(index = "plos", type = "article", field = "title")
-#' es_field_mapping_get(index = "plos", type = "article", field = "*")
-#' es_field_mapping_get(index = "plos", type = "article", field = "title", include_defaults = TRUE)
-#' es_field_mapping_get(type = c("article","record"), field = c("title","class"))
-#' es_field_mapping_get(type = "a*", field = "t*")
+#' field_mapping_get(index = "_all", type=c('article','line'), field = "text")
+#' field_mapping_get(index = "plos", type = "article", field = "title")
+#' field_mapping_get(index = "plos", type = "article", field = "*")
+#' field_mapping_get(index = "plos", type = "article", field = "title", include_defaults = TRUE)
+#' field_mapping_get(type = c("article","record"), field = c("title","class"))
+#' field_mapping_get(type = "a*", field = "t*")
 #' }
 
 #' @export
 #' @rdname mapping
-es_mapping_create <- function(index, type, body, ...){
+mapping_create <- function(index, type, body, ...){
   conn <- es_connect()
   url <- file.path(paste0(conn$base, ":", conn$port), index, "_mapping", type)
   es_PUT(url, body, ...)
@@ -79,14 +79,14 @@ es_mapping_create <- function(index, type, body, ...){
 
 #' @export
 #' @rdname mapping
-es_mapping_delete <- function(index, type, ...){
+mapping_delete <- function(index, type, ...){
   conn <- es_connect()
   es_DELETE(file.path(paste0(conn$base, ":", conn$port), index, "_mapping", type), ...)
 }
 
 #' @export
 #' @rdname mapping
-es_mapping_get <- function(index = NULL, type = NULL, ...){
+mapping_get <- function(index = NULL, type = NULL, ...){
   conn <- es_connect()
   if(any(index == "_all")){
     url <- file.path(paste0(conn$base, ":", conn$port), "_mapping")
@@ -105,7 +105,7 @@ es_mapping_get <- function(index = NULL, type = NULL, ...){
 
 #' @export
 #' @rdname mapping
-es_field_mapping_get <- function(index = NULL, type = NULL, field, include_defaults=FALSE, ...){
+field_mapping_get <- function(index = NULL, type = NULL, field, include_defaults=FALSE, ...){
   stopifnot(!is.null(field))
   conn <- es_connect()
   if(any(index == "_all")){
@@ -126,7 +126,7 @@ es_field_mapping_get <- function(index = NULL, type = NULL, field, include_defau
 
 #' @export
 #' @rdname mapping
-es_type_exists <- function(index, type, ...){
+type_exists <- function(index, type, ...){
   conn <- es_connect()
   res <- HEAD(file.path(paste0(conn$base, ":", conn$port), index, type), ...)
   if(res$status_code == 200) TRUE else FALSE
