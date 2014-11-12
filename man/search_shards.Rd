@@ -19,7 +19,7 @@ request on. By default, the operation is randomized between the shard replicas. 
 \code{\link{preference}} for a list of all acceptable values.}
 
 \item{local}{(logical) Whether to read the cluster state locally in order to determine
-where shards are allocated instead of using the Master node’s cluster state.}
+where shards are allocated instead of using the Master node's cluster state.}
 
 \item{...}{Curl args passed on to \code{\link[httr]{GET}}}
 }
