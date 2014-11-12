@@ -1,9 +1,6 @@
 #' Elasticsearch nodes endpoints.
 #'
-#' @import httr
-#' @export
-#'
-#' @param what One of stats, info, hot_threads, or shutdown
+#' @name nodes
 #' @param node The node
 #' @param metric A metric to get
 #' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
@@ -11,8 +8,7 @@
 #' @param verbose If TRUE (default) the url call used printed to console.
 #' @param ... Further args passed on to elastic search HTTP API as parameters.
 #'
-#' @details There are a lot of terms you can use for Elasticsearch. See here
-#'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
+#' @details \url{http://bit.ly/11gezop}
 #' 
 #' By default, all stats are returned. You can limit this by combining any of indices, os, process,
 #' jvm, network, transport, http, fs, breaker and thread_pool. With the metric parameter you can 
@@ -34,26 +30,40 @@
 #' }
 #'
 #' @examples \dontrun{
-#' es_nodes('stats')
-#' es_nodes('stats', node='0KQ7ut7dTKqnzJJeDVCUug')
-#' es_nodes('stats', metric='get')
-#' es_nodes('stats', metric='jvm')
-#' es_nodes('stats', metric=c('os','process'))
-#' es_nodes('info')
-#' es_nodes('info', metric='process')
+#' (out <- nodes_stats())
+#' nodes_stats(node = names(out$nodes))
+#' nodes_stats(metric='get')
+#' nodes_stats(metric='jvm')
+#' nodes_stats(metric=c('os','process'))
+#' nodes_info()
+#' nodes_info(metric='process')
 #' }
 #' 
 #' @examples \donttest{
-#' es_nodes('shutdown')
-#' es_nodes('hot_threads')
+#' nodes_shutdown()
+#' nodes_hot_threads()
 #' }
 
-es_nodes <- function(what='stats', node=NULL, metric=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
-{
-  what2 <- switch(what,
-                  stats = '_nodes/stats',
-                  info = '_nodes/info',
-                  hot_threads = '_nodes/hot_threads',
-                  shutdown = '_nodes/shutdown')
-  es_GET(what2, NULL, NULL, NULL, node, sprintf('elastic_nodes_%s', what), raw, callopts, ...)
+#' @export
+#' @rdname nodes
+nodes_stats <- function(node=NULL, metric=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...){
+  es_GET('_nodes/stats', NULL, NULL, NULL, node, 'elastic_nodes_stats', raw, callopts, ...)
+}
+
+#' @export
+#' @rdname nodes
+nodes_info <- function(node=NULL, metric=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...){
+  es_GET('_nodes/info', NULL, NULL, NULL, node, 'elastic_nodes_info', raw, callopts, ...)
+}
+
+#' @export
+#' @rdname nodes
+nodes_hot_threads <- function(node=NULL, metric=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...){
+  es_GET('_nodes/hot_threads', NULL, NULL, NULL, node, 'elastic_nodes_hot_threads', raw, callopts, ...)
+}
+
+#' @export
+#' @rdname nodes
+nodes_shutdown <- function(node=NULL, metric=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...){
+  es_GET('_nodes/shutdown', NULL, NULL, NULL, node, 'elastic_nodes_shutdown', raw, callopts, ...)
 }
