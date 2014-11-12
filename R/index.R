@@ -42,70 +42,70 @@
 #' 
 #' @examples \donttest{
 #' # get information on an index
-#' es_index_get(index='shakespeare')
-#' es_index_get(index='shakespeare', features=c('settings','mappings'))
-#' es_index_get(index='shakespeare', features='aliases')
-#' es_index_get(index='shakespeare', features='warmers')
+#' index_get(index='shakespeare')
+#' index_get(index='shakespeare', features=c('settings','mappings'))
+#' index_get(index='shakespeare', features='aliases')
+#' index_get(index='shakespeare', features='warmers')
 #' 
 #' # check for index existence
-#' es_index_exists(index='shakespeare')
-#' es_index_exists(index='plos')
+#' index_exists(index='shakespeare')
+#' index_exists(index='plos')
 #' 
 #' # delete an index
-#' es_index_delete(index='plos')
+#' index_delete(index='plos')
 #' 
 #' # create an index
-#' es_index_create(index='twitter', type='tweet', id=10)
-#' es_index_create(index='things', type='tweet', id=10)
+#' index_create(index='twitter', type='tweet', id=10)
+#' index_create(index='things', type='tweet', id=10)
 #' 
 #' # close an index
-#' es_index_close('plos')
+#' index_close('plos')
 #' 
 #' # open an index
-#' es_index_open('plos')
+#' index_open('plos')
 #' 
 #' # Get status of an index
-#' es_index_status('plos')
-#' es_index_status(c('plos','gbif'))
+#' index_status('plos')
+#' index_status(c('plos','gbif'))
 #' 
 #' # Get stats on an index
-#' es_index_stats('plos')
-#' es_index_stats(c('plos','gbif'))
-#' es_index_stats(c('plos','gbif'), metric='refresh')
-#' es_index_stats('shakespeare', metric='completion')
-#' es_index_stats('shakespeare', metric='completion', completion_fields = "completion")
-#' es_index_stats('shakespeare', metric='fielddata')
-#' es_index_stats('shakespeare', metric='fielddata', fielddata_fields = "evictions")
-#' es_index_stats('plos', level="indices")
-#' es_index_stats('plos', level="cluster")
-#' es_index_stats('plos', level="shards")
+#' index_stats('plos')
+#' index_stats(c('plos','gbif'))
+#' index_stats(c('plos','gbif'), metric='refresh')
+#' index_stats('shakespeare', metric='completion')
+#' index_stats('shakespeare', metric='completion', completion_fields = "completion")
+#' index_stats('shakespeare', metric='fielddata')
+#' index_stats('shakespeare', metric='fielddata', fielddata_fields = "evictions")
+#' index_stats('plos', level="indices")
+#' index_stats('plos', level="cluster")
+#' index_stats('plos', level="shards")
 #' 
 #' # Get segments information that a Lucene index (shard level) is built with
-#' es_index_segments()
-#' es_index_segments('plos')
-#' es_index_segments(c('plos','gbif'))
+#' index_segments()
+#' index_segments('plos')
+#' index_segments(c('plos','gbif'))
 #' 
 #' # Get recovery information that provides insight into on-going index shard recoveries
-#' es_index_recovery()
-#' es_index_recovery('plos')
-#' es_index_recovery(c('plos','gbif'))
-#' es_index_recovery("plos", detailed = TRUE)
-#' es_index_recovery("plos", active_only = TRUE)
+#' index_recovery()
+#' index_recovery('plos')
+#' index_recovery(c('plos','gbif'))
+#' index_recovery("plos", detailed = TRUE)
+#' index_recovery("plos", active_only = TRUE)
 #' 
 #' # Optimize an index, or many indices
-#' es_index_optimize('plos')
-#' es_index_optimize(c('plos','gbif'))
+#' index_optimize('plos')
+#' index_optimize(c('plos','gbif'))
 #' 
 #' # Upgrade one or more indices to the latest format. The upgrade process converts any 
 #' # segments written with previous formats.
-#' es_index_upgrade('plos')
-#' es_index_upgrade(c('plos','gbif'))
+#' index_upgrade('plos')
+#' index_upgrade(c('plos','gbif'))
 #' }
 NULL
 
 #' @export
 #' @rdname index
-es_index_get <- function(index=NULL, features=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
+index_get <- function(index=NULL, features=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
   conn <- es_connect()
   url <- paste0(conn$base, ":", conn$port)
@@ -114,7 +114,7 @@ es_index_get <- function(index=NULL, features=NULL, raw=FALSE, callopts=list(), 
 
 #' @export
 #' @rdname index
-es_index_exists <- function(index, callopts=list())
+index_exists <- function(index, callopts=list())
 {
   conn <- es_connect()
   url <- paste0(conn$base, ":", conn$port, "/", index)
@@ -124,7 +124,7 @@ es_index_exists <- function(index, callopts=list())
 
 #' @export
 #' @rdname index
-es_index_delete <- function(index, raw=FALSE, callopts=list(), verbose=TRUE)
+index_delete <- function(index, raw=FALSE, callopts=list(), verbose=TRUE)
 {
   conn <- es_connect()
   url <- paste0(conn$base, ":", conn$port, "/", index)
@@ -137,7 +137,7 @@ es_index_delete <- function(index, raw=FALSE, callopts=list(), verbose=TRUE)
 
 #' @export
 #' @rdname index
-es_index_create <- function(index=NULL, type=NULL, id=NULL, fields=NULL, raw=FALSE, 
+index_create <- function(index=NULL, type=NULL, id=NULL, fields=NULL, raw=FALSE, 
   callopts=list(), verbose=TRUE, ...)
 {
   conn <- es_connect()
@@ -158,21 +158,21 @@ es_index_create <- function(index=NULL, type=NULL, id=NULL, fields=NULL, raw=FAL
 
 #' @export
 #' @rdname index
-es_index_close <- function(index, callopts=list())
+index_close <- function(index, callopts=list())
 {
   close_open(index, "_close", callopts)
 }
 
 #' @export
 #' @rdname index
-es_index_open <- function(index, callopts=list())
+index_open <- function(index, callopts=list())
 {
   close_open(index, "_open", callopts)
 }
 
 #' @export
 #' @rdname index
-es_index_stats <- function(index=NULL, metric=NULL, completion_fields=NULL, fielddata_fields=NULL,
+index_stats <- function(index=NULL, metric=NULL, completion_fields=NULL, fielddata_fields=NULL,
   fields=NULL, groups=NULL, level='indices', callopts=list())
 {
   conn <- es_connect()
@@ -185,22 +185,22 @@ es_index_stats <- function(index=NULL, metric=NULL, completion_fields=NULL, fiel
 
 #' @export
 #' @rdname index
-es_index_status <- function(index = NULL, callopts=list()) es_GET_wrap1(index, "_status", callopts = callopts)
+index_status <- function(index = NULL, callopts=list()) es_GET_wrap1(index, "_status", callopts = callopts)
 
 #' @export
 #' @rdname index
-es_index_segments <- function(index = NULL, callopts=list()) es_GET_wrap1(index, "_segments", callopts = callopts)
+index_segments <- function(index = NULL, callopts=list()) es_GET_wrap1(index, "_segments", callopts = callopts)
 
 #' @export
 #' @rdname index
-es_index_recovery <- function(index = NULL, detailed = FALSE, active_only = FALSE, callopts=list()){
+index_recovery <- function(index = NULL, detailed = FALSE, active_only = FALSE, callopts=list()){
   args <- ec(list(detailed = as_log(detailed), active_only = as_log(active_only)))
   es_GET_wrap1(index, "_recovery", args, callopts)
 }
 
 #' @export
 #' @rdname index
-es_index_optimize <- function(index = NULL, max_num_segments = NULL, only_expunge_deletes = FALSE, 
+index_optimize <- function(index = NULL, max_num_segments = NULL, only_expunge_deletes = FALSE, 
   flush = TRUE, wait_for_merge = TRUE, callopts=list())
 {
   args <- ec(list(max_num_segments = max_num_segments, 
@@ -213,7 +213,7 @@ es_index_optimize <- function(index = NULL, max_num_segments = NULL, only_expung
 
 #' @export
 #' @rdname index
-es_index_upgrade <- function(index = NULL, wait_for_completion = FALSE, callopts=list())
+index_upgrade <- function(index = NULL, wait_for_completion = FALSE, callopts=list())
 {
   args <- ec(list(wait_for_completion = as_log(wait_for_completion)))
   es_POST_(index, "_upgrade", args, callopts)
