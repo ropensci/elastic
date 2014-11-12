@@ -9,18 +9,18 @@
 #' @param callopts Curl args passed on to \code{\link[httr]{POST}}
 #' @examples \donttest{
 #' # Retrieve a specified alias
-#' es_alias_get(index="plos")
-#' es_alias_get(alias="*")
-#' es_aliases_get()
+#' alias_get(index="plos")
+#' alias_get(alias="*")
+#' aliases_get()
 #'
 #' # Check for alias existence
-#' es_alias_exists(index = "plos")
+#' alias_exists(index = "plos")
 #'
 #' # Create/update an alias
-#' es_alias_create(index = "plos", alias = "tables")
+#' alias_create(index = "plos", alias = "tables")
 #'
 #' # Delete an alias
-#' es_alias_delete(index = "plos", alias = "tables")
+#' alias_delete(index = "plos", alias = "tables")
 #' }
 #' @references
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-aliases.html}
@@ -30,21 +30,21 @@ NULL
 
 #' @export
 #' @rdname alias
-es_alias_get <- function(index=NULL, alias=NULL, ignore_unavailable=FALSE, callopts=list())
+alias_get <- function(index=NULL, alias=NULL, ignore_unavailable=FALSE, callopts=list())
 {
   alias_GET(index, alias, ignore_unavailable, callopts)
 }
 
 #' @export
 #' @rdname alias
-es_aliases_get <- function(index=NULL, alias=NULL, ignore_unavailable=FALSE, callopts=list())
+aliases_get <- function(index=NULL, alias=NULL, ignore_unavailable=FALSE, callopts=list())
 {
   alias_GET(index, alias, ignore_unavailable, callopts)
 }
 
 #' @export
 #' @rdname alias
-es_alias_exists <- function(index=NULL, alias=NULL, callopts=list())
+alias_exists <- function(index=NULL, alias=NULL, callopts=list())
 {
   res <- alias_HEAD(index, alias, callopts)
   if(res$status_code == 200) TRUE else FALSE
@@ -52,7 +52,7 @@ es_alias_exists <- function(index=NULL, alias=NULL, callopts=list())
 
 #' @export
 #' @rdname alias
-es_alias_create <- function(index=NULL, alias, routing=NULL, filter=NULL, callopts=list())
+alias_create <- function(index=NULL, alias, routing=NULL, filter=NULL, callopts=list())
 {
   out <- PUT(alias_url(index, alias), callopts)
   stop_for_status(out)
@@ -61,7 +61,7 @@ es_alias_create <- function(index=NULL, alias, routing=NULL, filter=NULL, callop
 
 #' @export
 #' @rdname alias
-es_alias_delete <- function(index=NULL, alias, callopts=list())
+alias_delete <- function(index=NULL, alias, callopts=list())
 {
   out <- DELETE(alias_url(index, alias), callopts)
   stop_for_status(out)
