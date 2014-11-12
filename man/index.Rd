@@ -6,6 +6,7 @@
 \alias{index_create}
 \alias{index_delete}
 \alias{index_exists}
+\alias{index_flush}
 \alias{index_get}
 \alias{index_open}
 \alias{index_optimize}
@@ -51,6 +52,9 @@ index_upgrade(index = NULL, wait_for_completion = FALSE,
 index_analyze(text = NULL, field = NULL, index = NULL, analyzer = NULL,
   tokenizer = NULL, filters = NULL, char_filters = NULL,
   callopts = list())
+
+index_flush(index = NULL, force = FALSE, full = FALSE,
+  wait_if_ongoing = FALSE, callopts = list())
 }
 \arguments{
 \item{index}{(character) A character vector of index names}
@@ -146,10 +150,17 @@ parameter (default: all)}
 Elasticsearch indices APIs
 }
 \details{
-\bold{analyze}:
+\bold{index_analyze}:
 \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-analyze.html}
 This method can accept a string of text in the body, but this function passes it as a
 parameter in a GET request to simplify.
+
+\bold{index_flush}:
+\url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-flush.html}
+From the ES website: The flush process of an index basically frees memory from the index by
+flushing data to the index storage and clearing the internal transaction log. By default,
+Elasticsearch uses memory heuristics in order to automatically trigger flush operations as
+required in order to clear memory.
 }
 \examples{
 \donttest{
@@ -223,6 +234,15 @@ index_analyze(text = 'this is a test', tokenizer='keyword', filters='lowercase',
 index_analyze(text = 'this is a test', index = 'plos')
 index_analyze(text = 'this is a test', index = 'shakespeare')
 index_analyze(text = 'this is a test', index = 'shakespeare', callopts=verbose())
+
+# Explicitly flush one or more indices.
+index_flush()
+index_flush(index = "plos")
+index_flush(index = "shakespeare")
+index_flush(index = c("plos","shakespeare"))
+index_flush(wait_if_ongoing = TRUE)
+library('httr')
+index_flush(callopts=verbose())
 }
 }
 \author{

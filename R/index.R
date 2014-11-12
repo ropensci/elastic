@@ -64,11 +64,17 @@
 #' @param id_cache (logical) Clear ID caches for parent/child
 #' 
 #' @details 
-#' 
-#' \bold{analyze}:
+#' \bold{index_analyze}:
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-analyze.html}
 #' This method can accept a string of text in the body, but this function passes it as a
 #' parameter in a GET request to simplify.
+#' 
+#' \bold{index_flush}:
+#' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-flush.html} 
+#' From the ES website: The flush process of an index basically frees memory from the index by 
+#' flushing data to the index storage and clearing the internal transaction log. By default, 
+#' Elasticsearch uses memory heuristics in order to automatically trigger flush operations as 
+#' required in order to clear memory.
 #' 
 #' @examples \donttest{
 #' # get information on an index
@@ -141,6 +147,15 @@
 #' index_analyze(text = 'this is a test', index = 'plos')
 #' index_analyze(text = 'this is a test', index = 'shakespeare')
 #' index_analyze(text = 'this is a test', index = 'shakespeare', callopts=verbose())
+#' 
+#' # Explicitly flush one or more indices.
+#' index_flush()
+#' index_flush(index = "plos")
+#' index_flush(index = "shakespeare")
+#' index_flush(index = c("plos","shakespeare"))
+#' index_flush(wait_if_ongoing = TRUE)
+#' library('httr')
+#' index_flush(callopts=verbose())
 #' }
 NULL
 
@@ -273,6 +288,19 @@ index_analyze <- function(text=NULL, field=NULL, index=NULL, analyzer=NULL, toke
   args <- ec(list(text=text, analyzer=analyzer, tokenizer=tokenizer, filters=filters,
                   char_filters=char_filters, field=field))
   analyze_GET(url, args, callopts)$tokens
+}
+
+#' @export
+#' @rdname index
+index_flush <- function(index=NULL, force=FALSE, full=FALSE, wait_if_ongoing=FALSE, callopts=list())
+{
+  conn <- es_connect()
+  if(!is.null(index)) 
+    url <- sprintf("%s:%s/%s/_flush", conn$base, conn$port, cl(index)) 
+  else 
+    url <- sprintf("%s:%s/_flush", conn$base, conn$port)
+  args <- ec(list(force=as_log(force), full=as_log(full), wait_if_ongoing=as_log(wait_if_ongoing)))
+  cc_POST(url, args, callopts)
 }
 
 close_open <- function(index, which, callopts){
