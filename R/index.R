@@ -40,6 +40,36 @@
 #' @param wait_for_completion (logical) Should the request wait for the upgrade to complete. 
 #' Default: FALSE
 #' 
+#' @param text The text on which the analysis should be performed (when request body is not used)
+#' @param field Use the analyzer configured for this field (instead of passing the analyzer name)
+#' @param analyzer The name of the analyzer to use
+#' @param tokenizer The name of the tokenizer to use for the analysis
+#' @param filters A character vector of filters to use for the analysis
+#' @param char_filters A character vector of character filters to use for the analysis
+#' 
+#' @param force (logical) Whether a flush should be forced even if it is not necessarily needed 
+#' ie. if no changes will be committed to the index.
+#' @param full (logical) If set to TRUE a new index writer is created and settings that have been 
+#' changed related to the index writer will be refreshed.
+#' @param wait_if_ongoing If TRUE, the flush operation will block until the flush can be executed 
+#' if another flush operation is already executing. The default is false and will cause an 
+#' exception to be thrown on the shard level if another flush operation is already running. 
+#' [1.4.0.Beta1]
+#' 
+#' @param filter (logical) Clear filter caches
+#' @param filter_keys (character) A vector of keys to clear when using the \code{filter_cache} 
+#' parameter (default: all)
+#' @param fielddata (logical) Clear field data
+#' @param query_cache (logical) Clear query caches
+#' @param id_cache (logical) Clear ID caches for parent/child
+#' 
+#' @details 
+#' 
+#' \bold{analyze}:
+#' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-analyze.html}
+#' This method can accept a string of text in the body, but this function passes it as a
+#' parameter in a GET request to simplify.
+#' 
 #' @examples \donttest{
 #' # get information on an index
 #' index_get(index='shakespeare')
@@ -100,6 +130,17 @@
 #' # segments written with previous formats.
 #' index_upgrade('plos')
 #' index_upgrade(c('plos','gbif'))
+#' 
+#' # Performs the analysis process on a text and return the tokens breakdown of the text.
+#' index_analyze(text = 'this is a test', analyzer='standard')
+#' index_analyze(text = 'this is a test', analyzer='whitespace')
+#' index_analyze(text = 'this is a test', analyzer='stop')
+#' index_analyze(text = 'this is a test', tokenizer='keyword', filters='lowercase')
+#' index_analyze(text = 'this is a test', tokenizer='keyword', filters='lowercase',
+#'    char_filters='html_strip')
+#' index_analyze(text = 'this is a test', index = 'plos')
+#' index_analyze(text = 'this is a test', index = 'shakespeare')
+#' index_analyze(text = 'this is a test', index = 'shakespeare', callopts=verbose())
 #' }
 NULL
 
@@ -219,6 +260,21 @@ index_upgrade <- function(index = NULL, wait_for_completion = FALSE, callopts=li
   es_POST_(index, "_upgrade", args, callopts)
 }
 
+#' @export
+#' @rdname index
+index_analyze <- function(text=NULL, field=NULL, index=NULL, analyzer=NULL, tokenizer=NULL,
+                          filters=NULL, char_filters=NULL, callopts=list())
+{
+  conn <- es_connect()
+  if(!is.null(index))
+    url <- sprintf("%s:%s/%s/_analyze", conn$base, conn$port, cl(index))
+  else
+    url <- sprintf("%s:%s/_analyze", conn$base, conn$port)
+  args <- ec(list(text=text, analyzer=analyzer, tokenizer=tokenizer, filters=filters,
+                  char_filters=char_filters, field=field))
+  analyze_GET(url, args, callopts)$tokens
+}
+
 close_open <- function(index, which, callopts){
   conn <- es_connect()
   url <- sprintf("%s:%s/%s/%s", conn$base, conn$port, index, which)
@@ -242,3 +298,10 @@ es_POST_ <- function(index, which, args=list(), callopts){
 }
 
 e_url <- function(x) paste0(x$base, ":", x$port)
+
+analyze_GET <- function(url, args, callopts){
+  out <- GET(url, query=args, callopts)
+  stop_for_status(out)
+  tt <- content(out, as = "text")
+  jsonlite::fromJSON(tt)
+}
