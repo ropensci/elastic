@@ -1,9 +1,11 @@
 #' Run benchmark tests
-#'
+#' 
+#' @keywords internal
 #' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
 #' @param callopts Curl args passed on to httr::POST.
 #' @param query Query, either a list or json.
 #' @param ... Further args passed on to elastic search HTTP API as parameters. Not used right now.
+#' @references \url{}
 #' @examples \donttest{ 
 #' # pass in as an R list
 #' args <- list(name = "b1", 
