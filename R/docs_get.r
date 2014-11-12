@@ -10,19 +10,19 @@
 #'    the documentation.
 #' @export
 #' @examples \dontrun{
-#' es_get(index='twitter', type='tweet', id=1)
-#' es_get(index='mran', type='metadata', id='taxize')
-#' es_get(index='mran', type='metadata', id='taxize', source=TRUE)
+#' docs_get(index='twitter', type='tweet', id=1)
+#' docs_get(index='mran', type='metadata', id='taxize')
+#' docs_get(index='mran', type='metadata', id='taxize', source=TRUE)
 #'
 #' # Get certain fields
-#' es_get(index='twitter', type='tweet', id=1, fields='user')
+#' docs_get(index='twitter', type='tweet', id=1, fields='user')
 #'
 #' # Just test for existence of the document
-#' es_get(index='twitter', type='tweet', id=1, exists=TRUE)
-#' es_get(index='mran', type='metadata', id='taxize', exists=TRUE)
+#' docs_get(index='twitter', type='tweet', id=1, exists=TRUE)
+#' docs_get(index='mran', type='metadata', id='taxize', exists=TRUE)
 #' }
 
-es_get <- function(index=NULL, type=NULL, id=NULL, source=FALSE,
+docs_get <- function(index=NULL, type=NULL, id=NULL, source=FALSE,
   fields=NULL, exists=FALSE, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
   conn <- es_get_auth()

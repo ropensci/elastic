@@ -8,13 +8,13 @@
 #'    \url{http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/bulk.html}.
 #' @examples \donttest{
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-#' es_bulk(file=plosdat)
-#' es_aliases()
-#' es_index_delete(index='plos')
-#' es_aliases()
+#' docs_bulk(file=plosdat)
+#' aliases_get()
+#' index_delete(index='plos')
+#' aliases_get()
 #' }
 
-es_bulk <- function(filename, raw=FALSE, callopts=list())
+docs_bulk <- function(filename, raw=FALSE, callopts=list())
 {
   conn <- es_get_auth()
   url <- paste0(conn$base, ":", conn$port, '/_bulk')

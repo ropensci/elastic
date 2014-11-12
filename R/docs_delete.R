@@ -14,11 +14,11 @@
 #' @references  
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs-delete.html}
 #' @examples \donttest{
-#' es_delete(index='plos', type='article', id=35)
-#' es_get(index='plos', type='article', id=35) # and the document is gone
+#' docs_delete(index='plos', type='article', id=35)
+#' docs_get(index='plos', type='article', id=35) # and the document is gone
 #' }
 
-es_delete <- function(index, type, id, refresh=NULL, routing=NULL, timeout=NULL, version=NULL, 
+docs_delete <- function(index, type, id, refresh=NULL, routing=NULL, timeout=NULL, version=NULL, 
   version_type=NULL, callopts=list(), ...)
 {
   conn <- es_connect()

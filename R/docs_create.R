@@ -24,11 +24,11 @@
 #' @references  
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs-index_.html}
 #' @examples \donttest{
-#' es_create(index='plos', type='article', id=1002, body=list(id="12345", title="New title"))
-#' es_get(index='plos', type='article', id=1002) # and the document is there now
+#' docs_create(index='plos', type='article', id=1002, body=list(id="12345", title="New title"))
+#' docs_get(index='plos', type='article', id=1002) # and the document is there now
 #' }
 
-es_create <- function(index, type, id, body, version=NULL, version_type=NULL, op_type=NULL, 
+docs_create <- function(index, type, id, body, version=NULL, version_type=NULL, op_type=NULL, 
   routing=NULL, parent=NULL, timestamp=NULL, ttl=NULL, refresh=NULL, timeout=NULL, 
   callopts=list(), ...)
 {

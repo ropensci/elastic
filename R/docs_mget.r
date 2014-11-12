@@ -12,28 +12,28 @@
 #' @export
 #' @examples \dontrun{
 #' # Same index and type
-#' es_mget(index="shakespeare", type="line", id=c(9,10))
-#' tmp <- es_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), raw=TRUE)
+#' docs_mget(index="shakespeare", type="line", id=c(9,10))
+#' tmp <- docs_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), raw=TRUE)
 #' es_parse(tmp)
-#' es_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), fields='description')
-#' es_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), source=TRUE)
+#' docs_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), fields='description')
+#' docs_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), source=TRUE)
 #'
 #' library("httr")
-#' es_mget(index="twitter", type="tweet", id=1:2, callopts=verbose())
+#' docs_mget(index="twitter", type="tweet", id=1:2, callopts=verbose())
 #'
 #' # Same index, but different types
-#' es_mget(index="shakespeare", type_id=list(c("scene",1), c("line",20)))
-#' es_mget(index="twitter", type_id=list(c("tweet",1), c("mention",2)))
-#' es_mget(index="twitter", type_id=list(c("tweet",1), c("mention",2)), fields='user')
-#' es_mget(index="twitter", type_id=list(c("tweet",1), c("mention",2)), fields=c('user','message'))
+#' docs_mget(index="shakespeare", type_id=list(c("scene",1), c("line",20)))
+#' docs_mget(index="twitter", type_id=list(c("tweet",1), c("mention",2)))
+#' docs_mget(index="twitter", type_id=list(c("tweet",1), c("mention",2)), fields='user')
+#' docs_mget(index="twitter", type_id=list(c("tweet",1), c("mention",2)), fields=c('user','message'))
 #'
 #' # Different indeces and different types
 #' # pass in separately
-#' es_mget(index_type_id=list(c("shakespeare","line",1), c("appdotnet","share",1)))
-#' es_mget(index_type_id=list(c("twitter","mention",1), c("appdotnet","share",1)))
+#' docs_mget(index_type_id=list(c("shakespeare","line",1), c("appdotnet","share",1)))
+#' docs_mget(index_type_id=list(c("twitter","mention",1), c("appdotnet","share",1)))
 #' }
 
-es_mget <- function(index=NULL, type=NULL, id=NULL, type_id=NULL, index_type_id=NULL,
+docs_mget <- function(index=NULL, type=NULL, id=NULL, type_id=NULL, index_type_id=NULL,
   source=NULL, fields=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
   conn <- es_get_auth()
