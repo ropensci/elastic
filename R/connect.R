@@ -1,4 +1,6 @@
 #' Set connection details to an Elasticsearch engine.
+#' 
+#' @name connect
 #'
 #' @param es_base The base url, defaults to localhost (http://127.0.0.1)
 #' @param es_port port to connect to, defaults to 5984
@@ -13,15 +15,22 @@
 #' with no username or password.
 #'
 #' Pass on the returned 'es_conn' object to other functions in this package.
-#' @export
+#' 
+#' \code{\link{connection}} calls \code{\link{connect}} internally
+#' 
 #' @examples \dontrun{
 #' # the default is set to localhost and port 9200
 #' connect()
 #'
 #' # or set to a different base url
 #' connect('http://162.243.152.56')
+#' 
+#' # See connection details
+#' connection()
 #' }
 
+#' @export
+#' @rdname connect
 connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL, es_pwd = NULL,
                        es_key = NULL, force = FALSE, ...)
 {
@@ -48,15 +57,8 @@ connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL, es
   return( ll )
 }
 
-#' Get info on your Elasticsearch cluster
-#'
-#' Calls \code{\link{connect}} internally
-#'
 #' @export
-#' @examples \dontrun{
-#' connection()
-#' }
-
+#' @rdname connect
 connection <- function(){
   auth <- list(base=getOption("es_base"), port=getOption("es_port"))
   if(is.null(auth$port)){
