@@ -1,14 +1,12 @@
 #' Ping an Elasticsearch server.
 #'
 #' @export
-#' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
-#' @param callopts Curl args passed on to httr::POST.
-#' @examples \dontrun{
-#' es_ping()
+#' @param ... Curl args passed on to \code{\link[httr]{GET}}
+#' @examples \donttest{
+#' ping()
 #' }
-
-es_ping <- function(raw=FALSE, callopts=list())
+ping <- function(...)
 {
-  tmp <- es_GET("", NULL, NULL, NULL, NULL, NULL, FALSE, callopts)
-  if(raw) tmp else jsonlite::fromJSON(tmp, FALSE)
+  conn <- es_connect()
+  es_GET_(paste(conn$base, ":", conn$port, sep=""), ...)
 }
