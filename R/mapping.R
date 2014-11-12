@@ -72,7 +72,7 @@
 #' @export
 #' @rdname mapping
 mapping_create <- function(index, type, body, ...){
-  conn <- es_connect()
+  conn <- connect()
   url <- file.path(paste0(conn$base, ":", conn$port), index, "_mapping", type)
   es_PUT(url, body, ...)
 }
@@ -80,14 +80,14 @@ mapping_create <- function(index, type, body, ...){
 #' @export
 #' @rdname mapping
 mapping_delete <- function(index, type, ...){
-  conn <- es_connect()
+  conn <- connect()
   es_DELETE(file.path(paste0(conn$base, ":", conn$port), index, "_mapping", type), ...)
 }
 
 #' @export
 #' @rdname mapping
 mapping_get <- function(index = NULL, type = NULL, ...){
-  conn <- es_connect()
+  conn <- connect()
   if(any(index == "_all")){
     url <- file.path(paste0(conn$base, ":", conn$port), "_mapping")
   } else {
@@ -107,7 +107,7 @@ mapping_get <- function(index = NULL, type = NULL, ...){
 #' @rdname mapping
 field_mapping_get <- function(index = NULL, type = NULL, field, include_defaults=FALSE, ...){
   stopifnot(!is.null(field))
-  conn <- es_connect()
+  conn <- connect()
   if(any(index == "_all")){
     stopifnot(!is.null(type))
     url <- file.path(paste0(conn$base, ":", conn$port), "_all/_mapping", cl(type), "field", cl(field))
@@ -127,7 +127,7 @@ field_mapping_get <- function(index = NULL, type = NULL, field, include_defaults
 #' @export
 #' @rdname mapping
 type_exists <- function(index, type, ...){
-  conn <- es_connect()
+  conn <- connect()
   res <- HEAD(file.path(paste0(conn$base, ":", conn$port), index, type), ...)
   if(res$status_code == 200) TRUE else FALSE
 }

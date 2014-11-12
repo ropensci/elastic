@@ -172,7 +172,7 @@ NULL
 #' @rdname index
 index_get <- function(index=NULL, features=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
-  conn <- es_connect()
+  conn <- connect()
   url <- paste0(conn$base, ":", conn$port)
   index_GET(url, index, features, raw, callopts)
 }
@@ -181,7 +181,7 @@ index_get <- function(index=NULL, features=NULL, raw=FALSE, callopts=list(), ver
 #' @rdname index
 index_exists <- function(index, callopts=list())
 {
-  conn <- es_connect()
+  conn <- connect()
   url <- paste0(conn$base, ":", conn$port, "/", index)
   res <- HEAD(url, callopts)
   if(res$status_code == 200) TRUE else FALSE
@@ -191,7 +191,7 @@ index_exists <- function(index, callopts=list())
 #' @rdname index
 index_delete <- function(index, raw=FALSE, callopts=list(), verbose=TRUE)
 {
-  conn <- es_connect()
+  conn <- connect()
   url <- paste0(conn$base, ":", conn$port, "/", index)
   out <- DELETE(url, callopts)
   stop_for_status(out)
@@ -205,7 +205,7 @@ index_delete <- function(index, raw=FALSE, callopts=list(), verbose=TRUE)
 index_create <- function(index=NULL, type=NULL, id=NULL, fields=NULL, raw=FALSE, 
   callopts=list(), verbose=TRUE, ...)
 {
-  conn <- es_connect()
+  conn <- connect()
   
   if(length(id) > 1){ # pass in request in body
     body <- toJSON(list(ids = as.character(id)))
@@ -240,7 +240,7 @@ index_open <- function(index, callopts=list())
 index_stats <- function(index=NULL, metric=NULL, completion_fields=NULL, fielddata_fields=NULL,
   fields=NULL, groups=NULL, level='indices', callopts=list())
 {
-  conn <- es_connect()
+  conn <- connect()
   url <- if(is.null(index)) file.path(e_url(conn), "_stats") else file.path(e_url(conn), cl(index), "_stats")
   url <- if(!is.null(metric)) file.path(url, cl(metric)) else url
   args <- ec(list(completion_fields=completion_fields, fielddata_fields=fielddata_fields,
@@ -289,7 +289,7 @@ index_upgrade <- function(index = NULL, wait_for_completion = FALSE, callopts=li
 index_analyze <- function(text=NULL, field=NULL, index=NULL, analyzer=NULL, tokenizer=NULL,
                           filters=NULL, char_filters=NULL, callopts=list())
 {
-  conn <- es_connect()
+  conn <- connect()
   if(!is.null(index))
     url <- sprintf("%s:%s/%s/_analyze", conn$base, conn$port, cl(index))
   else
@@ -303,7 +303,7 @@ index_analyze <- function(text=NULL, field=NULL, index=NULL, analyzer=NULL, toke
 #' @rdname index
 index_flush <- function(index=NULL, force=FALSE, full=FALSE, wait_if_ongoing=FALSE, callopts=list())
 {
-  conn <- es_connect()
+  conn <- connect()
   if(!is.null(index)) 
     url <- sprintf("%s:%s/%s/_flush", conn$base, conn$port, cl(index)) 
   else 
@@ -317,7 +317,7 @@ index_flush <- function(index=NULL, force=FALSE, full=FALSE, wait_if_ongoing=FAL
 index_clear_cache <- function(index=NULL, filter=FALSE, filter_keys=NULL, fielddata=FALSE, 
                               query_cache=FALSE, id_cache=FALSE, callopts=list())
 {
-  conn <- es_connect()
+  conn <- connect()
   if(!is.null(index)) 
     url <- sprintf("%s:%s/%s/_cache/clear", conn$base, conn$port, cl(index)) 
   else 
@@ -328,7 +328,7 @@ index_clear_cache <- function(index=NULL, filter=FALSE, filter_keys=NULL, fieldd
 }
 
 close_open <- function(index, which, callopts){
-  conn <- es_connect()
+  conn <- connect()
   url <- sprintf("%s:%s/%s/%s", conn$base, conn$port, index, which)
   out <- POST(url, callopts)
   stop_for_status(out)
@@ -336,13 +336,13 @@ close_open <- function(index, which, callopts){
 }
 
 es_GET_wrap1 <- function(index, which, args=list(), callopts){
-  conn <- es_connect()
+  conn <- connect()
   url <- if(is.null(index)) file.path(e_url(conn), which) else file.path(e_url(conn), cl(index), which)
   es_GET_(url, args, callopts)
 }
 
 es_POST_ <- function(index, which, args=list(), callopts){
-  conn <- es_connect()
+  conn <- connect()
   url <- if(is.null(index)) file.path(e_url(conn), which) else file.path(e_url(conn), cl(index), which)
   tt <- POST(url, query=args, callopts)
   if(tt$status_code > 202) stop(content(tt)$error)

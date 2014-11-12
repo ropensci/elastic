@@ -16,7 +16,7 @@
 \alias{index_stats}
 \alias{index_status}
 \alias{index_upgrade}
-\title{Elasticsearch indices APIs}
+\title{Index API operations}
 \usage{
 index_get(index = NULL, features = NULL, raw = FALSE, callopts = list(),
   verbose = TRUE, ...)
@@ -152,7 +152,7 @@ parameter (default: all)}
 \item{id_cache}{(logical) Clear ID caches for parent/child}
 }
 \description{
-Elasticsearch indices APIs
+Index API operations
 }
 \details{
 \bold{index_analyze}:

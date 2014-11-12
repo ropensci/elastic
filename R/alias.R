@@ -90,7 +90,7 @@ alias_HEAD <- function(index, alias, callopts)
 
 alias_url <- function(index, alias) 
 {
-  conn <- es_connect()
+  conn <- connect()
   if(!is.null(index)){
     if(!is.null(alias))
       sprintf("%s:%s/%s/_alias/%s", conn$base, conn$port, cl(index), alias)

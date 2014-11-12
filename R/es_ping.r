@@ -7,6 +7,6 @@
 #' }
 ping <- function(...)
 {
-  conn <- es_connect()
+  conn <- connect()
   es_GET_(paste(conn$base, ":", conn$port, sep=""), ...)
 }
