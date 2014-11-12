@@ -2,6 +2,7 @@
 \name{index}
 \alias{index}
 \alias{index_analyze}
+\alias{index_clear_cache}
 \alias{index_close}
 \alias{index_create}
 \alias{index_delete}
@@ -55,6 +56,10 @@ index_analyze(text = NULL, field = NULL, index = NULL, analyzer = NULL,
 
 index_flush(index = NULL, force = FALSE, full = FALSE,
   wait_if_ongoing = FALSE, callopts = list())
+
+index_clear_cache(index = NULL, filter = FALSE, filter_keys = NULL,
+  fielddata = FALSE, query_cache = FALSE, id_cache = FALSE,
+  callopts = list())
 }
 \arguments{
 \item{index}{(character) A character vector of index names}
@@ -243,6 +248,15 @@ index_flush(index = c("plos","shakespeare"))
 index_flush(wait_if_ongoing = TRUE)
 library('httr')
 index_flush(callopts=verbose())
+
+# Clear either all caches or specific cached associated with one ore more indices.
+index_clear_cache()
+index_clear_cache(index = "plos")
+index_clear_cache(index = "shakespeare")
+index_clear_cache(index = c("plos","shakespeare"))
+index_clear_cache(filter = TRUE)
+library('httr')
+index_clear_cache(callopts=verbose())
 }
 }
 \author{

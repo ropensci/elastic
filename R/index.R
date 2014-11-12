@@ -1,4 +1,4 @@
-#' Elasticsearch indices APIs
+#' Index API operations
 #'
 #' @references
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices.html}
@@ -156,6 +156,15 @@
 #' index_flush(wait_if_ongoing = TRUE)
 #' library('httr')
 #' index_flush(callopts=verbose())
+#' 
+#' # Clear either all caches or specific cached associated with one ore more indices.
+#' index_clear_cache()
+#' index_clear_cache(index = "plos")
+#' index_clear_cache(index = "shakespeare")
+#' index_clear_cache(index = c("plos","shakespeare"))
+#' index_clear_cache(filter = TRUE)
+#' library('httr')
+#' index_clear_cache(callopts=verbose())
 #' }
 NULL
 
@@ -303,6 +312,21 @@ index_flush <- function(index=NULL, force=FALSE, full=FALSE, wait_if_ongoing=FAL
   cc_POST(url, args, callopts)
 }
 
+#' @export
+#' @rdname index
+index_clear_cache <- function(index=NULL, filter=FALSE, filter_keys=NULL, fielddata=FALSE, 
+                              query_cache=FALSE, id_cache=FALSE, callopts=list())
+{
+  conn <- es_connect()
+  if(!is.null(index)) 
+    url <- sprintf("%s:%s/%s/_cache/clear", conn$base, conn$port, cl(index)) 
+  else 
+    url <- sprintf("%s:%s/_cache/clear", conn$base, conn$port)
+  args <- ec(list(filter=as_log(filter), filter_keys=filter_keys, fielddata=as_log(fielddata), 
+                  query_cache=as_log(query_cache), id_cache=as_log(id_cache)))
+  cc_POST(url, args, callopts)
+}
+
 close_open <- function(index, which, callopts){
   conn <- es_connect()
   url <- sprintf("%s:%s/%s/%s", conn$base, conn$port, index, which)
@@ -332,4 +356,14 @@ analyze_GET <- function(url, args, callopts){
   stop_for_status(out)
   tt <- content(out, as = "text")
   jsonlite::fromJSON(tt)
+}
+
+cc_POST <- function(url, args, callopts, ...){
+  tt <- POST(url, body=args, callopts, encode = "json")
+  if(tt$status_code > 202){
+    if(tt$status_code > 202) stop(tt$headers$statusmessage)
+    if(content(tt)$status == "ERROR") stop(content(tt)$error_message)
+  }
+  res <- content(tt, as = "text")
+  jsonlite::fromJSON(res, FALSE)
 }
