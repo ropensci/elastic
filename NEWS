@@ -1,0 +1,28 @@
+elastic 0.2.0
+===============
+
+IMPROVEMENTS
+
+* Remoworked package API. Almost all functions have new names. Sorry for this major change
+but it needed to be done. This brings `elastic` more in line with the official Elasticsearch
+Python client [elasticsearch](http://elasticsearch-py.readthedocs.org/en/master/).
+* Similar functions are grouped together in the same manual file now to make finder related
+functions easier. For example, all functions that work with indices are on the `index` manual
+page, and all functions prefixed with `index_()`. Thematic manual files are: `index`, `cat`,
+`cluster`, `alias`, `cdbriver`, `connect`, `documents`, `mapping`, and `nodes`.
+* Note that the function `es_cat()` was changed to `cat_()` - we avoided `cat()` because as 
+you know there is already a widely used function in base R, see `base::cat()`.
+* We changed `cat` functions to separate functions for each command, instead of passing 
+the command in as an argument. For example, `cat('aliases')` becomes `cat_aliases()`.
+* The `es_` prefix remains only for `search()` and `search_body()`, as we want to avoid 
+conflict with `base::search()`, and because `search_body()` will be wrapped into `search()`
+soon. 
+* There is still more reworking to do, but mostly will be additional parameters for existing
+functions.
+
+elastic 0.1.0
+===============
+
+NEW FEATURES
+
+* First version.
