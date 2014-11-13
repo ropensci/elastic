@@ -18,7 +18,7 @@ docs_get(index = NULL, type = NULL, id = NULL, source = FALSE,
 
 \item{fields}{Fields to return from the response object.}
 
-\item{exists}{XXX}
+\item{exists}{(logical) Only return a logical as to whether the document exists or not.}
 
 \item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
 
@@ -31,23 +31,21 @@ docs_get(index = NULL, type = NULL, id = NULL, source = FALSE,
 \description{
 Get documents via the get API.
 }
-\details{
-There are a lot of terms you can use for Elasticsearch. See here
-   \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs-get.html} for
-   the documentation.
-}
 \examples{
 \dontrun{
-docs_get(index='twitter', type='tweet', id=1)
-docs_get(index='mran', type='metadata', id='taxize')
-docs_get(index='mran', type='metadata', id='taxize', source=TRUE)
+docs_get(index='shakespeare', type='line', id=10)
+docs_get(index='shakespeare', type='line', id=3)
+docs_get(index='shakespeare', type='line', id=3, source=TRUE)
 
 # Get certain fields
-docs_get(index='twitter', type='tweet', id=1, fields='user')
+docs_get(index='shakespeare', type='line', id=10, fields='play_name')
 
 # Just test for existence of the document
-docs_get(index='twitter', type='tweet', id=1, exists=TRUE)
-docs_get(index='mran', type='metadata', id='taxize', exists=TRUE)
+docs_get(index='plos', type='article', id=1, exists=TRUE)
+docs_get(index='plos', type='article', id=123456, exists=TRUE)
 }
+}
+\references{
+\url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs-get.html}
 }
 
