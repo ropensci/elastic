@@ -8,6 +8,8 @@ elastic
 
 **A general purpose R interface to [Elasticsearch](http://elasticsearch.org)**
 
+__2014-11-12 UPDATE__: I've completely reworked the package API so that it makes more sense, is more cohesive and aligns more closely with the Elasticsearch Python client. See [NEWS](NEWS).
+
 ## Elasticsearch info
 
 + [Elasticsearch home page](http://elasticsearch.org)
@@ -18,7 +20,6 @@ elastic
 * This client is being developed under `v1.4` of Elasticsearch.
 * It is early days for `elastic`, so help us by submitting bug reports and feature requests on the issue tracker.
 * BEWARE: the API for this pkg is still changing...
-* To avoid potential conflicts with other R packges, this package adds `es_` as a prefix to every function.
 
 ## Quick start
 
@@ -111,11 +112,11 @@ There are more datasets formatted for bulk loading in the `ropensci/elastic_data
 
 ### Initialization
 
-The function `es_connect` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `es_connect` are written to your options for the current session, and are used by `elastic` functions.
+The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
 
 
 ```r
-es_connect()
+connect()
 #> uri:       http://127.0.0.1 
 #> port:      9200 
 #> username:  NULL 
@@ -123,7 +124,7 @@ es_connect()
 #> api key:   NULL 
 #> elasticsearch details:   
 #>       status:                  200 
-#>       name:                    En Sabah Nur 
+#>       name:                    Mad Thinker 
 #>       Elasticsearch version:   1.4.0 
 #>       ES version timestamp:    2014-11-05T14:26:12Z 
 #>       lucene version:          4.10.2
@@ -153,7 +154,7 @@ es_search(index="plos", size=1)
 #> 
 #> $hits
 #> $hits$total
-#> [1] 1203
+#> [1] 1202
 #> 
 #> $hits$max_score
 #> [1] 1
@@ -184,7 +185,7 @@ es_search(index="plos", size=1)
 ```r
 es_search(index="plos", type="article", sort="title", q="antibody", size=1)
 #> $took
-#> [1] 2
+#> [1] 4
 #> 
 #> $timed_out
 #> [1] FALSE
@@ -240,7 +241,7 @@ Get document with id=1
 
 
 ```r
-es_get(index='plos', type='article', id=1)
+docs_get(index='plos', type='article', id=1)
 #> $`_index`
 #> [1] "plos"
 #> 
@@ -269,7 +270,7 @@ Get certain fields
 
 
 ```r
-es_get(index='plos', type='article', id=1, fields='id')
+docs_get(index='plos', type='article', id=1, fields='id')
 #> $`_index`
 #> [1] "plos"
 #> 
@@ -298,7 +299,7 @@ Same index and type, different document ids
 
 
 ```r
-es_mget(index="plos", type="article", id=1:2)
+docs_mget(index="plos", type="article", id=1:2)
 #> $docs
 #> $docs[[1]]
 #> $docs[[1]]$`_index`
@@ -353,7 +354,7 @@ Different indeces, types, and ids
 
 
 ```r
-es_mget(index_type_id=list(c("plos","article",1), c("gbif","record",1)))$docs[[1]]
+docs_mget(index_type_id=list(c("plos","article",1), c("gbif","record",1)))$docs[[1]]
 #> $`_index`
 #> [1] "plos"
 #> 
@@ -385,7 +386,7 @@ For example:
 
 
 ```r
-(out <- es_mget(index="plos", type="article", id=1:2, raw=TRUE))
+(out <- docs_mget(index="plos", type="article", id=1:2, raw=TRUE))
 #> [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"1\",\"_version\":2,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098602\",\"title\":\"Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar\"}},{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"2\",\"_version\":2,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0107757\",\"title\":\"Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition\"}}]}"
 #> attr(,"class")
 #> [1] "elastic_mget"
@@ -395,31 +396,19 @@ Then parse
 
 
 ```r
-es_parse(out)$docs[[1]]
-#> $`_index`
-#> [1] "plos"
-#> 
-#> $`_type`
-#> [1] "article"
-#> 
-#> $`_id`
-#> [1] "1"
-#> 
-#> $`_version`
-#> [1] 2
-#> 
-#> $found
-#> [1] TRUE
-#> 
-#> $`_source`
-#> $`_source`$id
-#> [1] "10.1371/journal.pone.0098602"
-#> 
-#> $`_source`$title
-#> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
+jsonlite::fromJSON(out)
+#> $docs
+#>   _index   _type _id _version found                   _source.id
+#> 1   plos article   1        2  TRUE 10.1371/journal.pone.0098602
+#> 2   plos article   2        2  TRUE 10.1371/journal.pone.0107757
+#>                                                                                                                                                _source.title
+#> 1 Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar
+#> 2                                     Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition
 ```
 
 ## CouchDB integration
+
+This def. needs more attention. See functions `cdbriver_auth()` and `cdbriver_index()`.
 
 ### __Optionally__ install CouchDB River plugin for Elasticsearch
 
