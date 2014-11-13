@@ -14,7 +14,7 @@ Elasticsearch search APIs include the following functions:
  \item \code{\link{mlt}} - More like this queries
  \item \code{\link{count}} - Get counts for various searches
  \item \code{\link{explain}} - Computes a score explanation for a query and a specific
- document. This can give useful feedback whether a document matches or didn’t match
+ document. This can give useful feedback whether a document matches or didn't match
  a specific query.
 }
 
