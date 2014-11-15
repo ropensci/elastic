@@ -1,5 +1,8 @@
 #' @references 
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search.html}
+#' @details This function name has the "S" capitalized to avoid conflict with the function
+#' \code{base::search}. I hate mixing cases, as I think it confuses users, but in this case
+#' it seems neccessary. 
 #' @examples \donttest{
 #' # URI string queries
 #' search(index="shakespeare")

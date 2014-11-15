@@ -8,7 +8,7 @@ Search functions.
 \details{
 Elasticsearch search APIs include the following functions:
 \itemize{
- \item \code{\link{search}} - Search using the URI search API or pass in query
+ \item \code{\link{Search}} - Search using the URI search API or pass in query
  specification in the body of the request.
  \item \code{\link{search_shards}} - Search shards.
  \item \code{\link{mlt}} - More like this queries.

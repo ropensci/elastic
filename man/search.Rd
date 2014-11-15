@@ -75,6 +75,11 @@ See Search Type for more details on the different types of search that can be pe
 \description{
 Full text search of Elasticsearch - URI requests
 }
+\details{
+This function name has the "S" capitalized to avoid conflict with the function
+\code{base::search}. I hate mixing cases, as I think it confuses users, but in this case
+it seems neccessary.
+}
 \examples{
 \donttest{
 # URI string queries
