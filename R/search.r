@@ -2,7 +2,8 @@
 #'
 #' @import httr
 #' @export
-#'
+#' 
+#' @template search_egs
 #' @param index Index name
 #' @param type Document type
 #' @param q The query string (maps to the query_string query, see Query String Query for more 
@@ -37,12 +38,12 @@
 #' See Search Type for more details on the different types of search that can be performed.
 #' @param lowercase_expanded_terms Should terms be automatically lowercased or not. Default: TRUE.
 #' @param analyze_wildcard Should wildcard and prefix queries be analyzed or not. Default: FALSE.
+#' @param version (logical) Print the document version with each document.
 #' @param body Query, either a list or json.
 #' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
 #' @param ... Curl args passed on to \code{\link[httr]{GET}}
-#' @template search_egs
 
-search <- function(index=NULL, type=NULL, df=NULL, analyzer=NULL, default_operator=NULL, 
+search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, default_operator=NULL, 
   explain=NULL, source=NULL, fields=NULL, sort=NULL, track_scores=NULL, timeout=NULL, 
   terminate_after=NULL, from=NULL, size=NULL, search_type=NULL, lowercase_expanded_terms=NULL, 
   analyze_wildcard=NULL, version=FALSE, body=list(), raw=FALSE, ...)
