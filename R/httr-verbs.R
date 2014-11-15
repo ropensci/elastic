@@ -1,6 +1,6 @@
 # GET wrapper
 es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL, 
-                        clazz=NULL, raw, callopts, ...) 
+                        clazz=NULL, raw, callopts=list(), ...) 
 {
   #   conn <- connect()
   conn <- es_get_auth()
