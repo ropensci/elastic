@@ -15,4 +15,5 @@ Imports:
     jsonlite
 Suggests:
     testthat,
-    roxygen2
+    roxygen2,
+    testthat
