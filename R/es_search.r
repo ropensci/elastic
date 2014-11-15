@@ -37,69 +37,26 @@
 #' See Search Type for more details on the different types of search that can be performed.
 #' @param lowercase_expanded_terms Should terms be automatically lowercased or not. Default: TRUE.
 #' @param analyze_wildcard Should wildcard and prefix queries be analyzed or not. Default: FALSE.
+#' @param body Query, either a list or json.
 #' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
 #' @param ... Curl args passed on to \code{\link[httr]{GET}}
 #' 
 #' @details See \code{\link{search_body}} for doing requests in the body of the call.
-#' 
-#' @examples \donttest{
-#' es_search(index="shakespeare")
-#' es_search(index="shakespeare", type="act")
-#' es_search(index="shakespeare", type="scene")
-#' es_search(index="shakespeare", type="line")
-#' 
-#' # Return certain fields
-#' es_search(index="shakespeare", fields=c('play_name','speaker'))
-#' 
-#' # sorting
-#' es_search(index="shakespeare", type="act", sort="text_entry")
-#' es_search(index="shakespeare", type="act", sort="speaker:desc", fields='speaker')
-#' es_search(index="shakespeare", type="act", 
-#'  sort=c("speaker:desc","play_name:asc"), fields=c('speaker','play_name'))
-#' 
-#' # paging
-#' es_search(index="shakespeare", size=1, fields='text_entry')$hits$hits
-#' es_search(index="shakespeare", size=1, from=1, fields='text_entry')$hits$hits
-#' 
-#' # queries
-#' es_search(index="shakespeare", type="act", q="what")
-#' res <- es_search(index="shakespeare", type="act", q="speech_number>='2'")
-#' res$hits$total
-#'
-#' # more complex queries
-#' es_search(index="shakespeare", q="what")
-#' res <- es_search(index="shakespeare", q="speech_number>='2013-10-01'")
-#' es_search(index="shakespeare", q="createdTime>='2013-10-01'")
-#' es_search(index="shakespeare", size=1)
-#' es_search(index="shakespeare", size=1, explain=TRUE)
-#' 
-#' # terminate query after x documents found
-#' ## setting to 1 gives back one document for each shard
-#' es_search(index="shakespeare", terminate_after=1)
-#' ## or set to other number
-#' es_search(index="shakespeare", terminate_after=2)
-#'
-#' # Get raw data
-#' es_search(index="shakespeare", type="scene", raw=TRUE)
-#'
-#' # Curl debugging
-#' library('httr')
-#' out <- es_search(index="shakespeare", type="line", config=verbose())
-#' }
+#' @template search_egs
 
 es_search <- function(index=NULL, type=NULL, df=NULL, analyzer=NULL, default_operator=NULL, 
   explain=NULL, source=NULL, fields=NULL, sort=NULL, track_scores=NULL, timeout=NULL, 
   terminate_after=NULL, from=NULL, size=NULL, search_type=NULL, lowercase_expanded_terms=NULL, 
-  analyze_wildcard=NULL, raw=FALSE, ...)
+  analyze_wildcard=NULL, version=FALSE, body=list(), raw=FALSE, ...)
 {
-  search_GET("_search", index, type, args=ec(list(df=df, analyzer=analyzer, 
+  search_POST("_search", index, type, args=ec(list(df=df, analyzer=analyzer, 
          default_operator=default_operator, explain=explain, `_source`=source, fields=cl(fields), 
          sort=cl(sort), track_scores=track_scores, timeout=timeout, terminate_after=terminate_after, 
          from=from, size=size, search_type=search_type, lowercase_expanded_terms=lowercase_expanded_terms, 
-         analyze_wildcard=analyze_wildcard)), raw, ...)
+         analyze_wildcard=analyze_wildcard, version=version)), body, raw, ...)
 }
 
-search_GET <- function(path, index=NULL, type=NULL, args, raw, ...) 
+search_POST <- function(path, index=NULL, type=NULL, args, body, raw, ...) 
 {
   conn <- es_get_auth()
   url <- paste(conn$base, ":", conn$port, sep="")
@@ -107,7 +64,8 @@ search_GET <- function(path, index=NULL, type=NULL, args, raw, ...)
     if(is.null(type) && !is.null(index)){ url <- paste(url, index, path, sep="/") } else {
       url <- paste(url, index, type, path, sep="/")    
     }
-  tt <- GET(url, query=args, ...)
+  body <- check_inputs(body)
+  tt <- POST(url, query=args, body=body, ...)
   if(tt$status_code > 202) stop(content(tt)$error)
   res <- content(tt, as = "text")
   if(raw) res else jsonlite::fromJSON(res, FALSE)

@@ -87,4 +87,5 @@ search_body(index="shakespeare", query=mmatch)
 #
 }
 }
+\keyword{internal}
 

@@ -1,7 +1,7 @@
 #' Full text search of Elasticsearch - body requests.
 #'
 #' @import httr
-#' @export
+#' @keywords internal
 #' @param index Index name
 #' @param type Document type
 #' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.

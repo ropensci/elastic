@@ -89,14 +89,16 @@ es_GET_ <- function(url, query = list(), ...)
 }
 
 check_inputs <- function(x){
-  if(is.character(x)){
-    # replace newlines
-    x <- gsub("\n|\r", "", x)
-    # validate
-    tmp <- jsonlite::validate(x)
-    if(!tmp) stop(attr(tmp, "err"))
-    x
-  } else {
-    jsonlite::toJSON(x, auto_unbox = TRUE)
+  if(length(x) == 0) { NULL } else {
+    if(is.character(x)){
+      # replace newlines
+      x <- gsub("\n|\r", "", x)
+      # validate
+      tmp <- jsonlite::validate(x)
+      if(!tmp) stop(attr(tmp, "err"))
+      x
+    } else {
+      jsonlite::toJSON(x, auto_unbox = TRUE)
+    }
   }
 }

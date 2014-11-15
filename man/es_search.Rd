@@ -7,8 +7,8 @@ es_search(index = NULL, type = NULL, df = NULL, analyzer = NULL,
   default_operator = NULL, explain = NULL, source = NULL, fields = NULL,
   sort = NULL, track_scores = NULL, timeout = NULL,
   terminate_after = NULL, from = NULL, size = NULL, search_type = NULL,
-  lowercase_expanded_terms = NULL, analyze_wildcard = NULL, raw = FALSE,
-  ...)
+  lowercase_expanded_terms = NULL, analyze_wildcard = NULL,
+  version = FALSE, body = list(), raw = FALSE, ...)
 }
 \arguments{
 \item{index}{Index}
@@ -60,6 +60,8 @@ See Search Type for more details on the different types of search that can be pe
 
 \item{analyze_wildcard}{Should wildcard and prefix queries be analyzed or not. Default: FALSE.}
 
+\item{body}{Query, either a list or json.}
+
 \item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
 
 \item{...}{Curl args passed on to \code{\link[httr]{GET}}}
@@ -75,6 +77,7 @@ See \code{\link{search_body}} for doing requests in the body of the call.
 }
 \examples{
 \donttest{
+# URI string queries
 es_search(index="shakespeare")
 es_search(index="shakespeare", type="act")
 es_search(index="shakespeare", type="scene")
@@ -111,12 +114,77 @@ es_search(index="shakespeare", terminate_after=1)
 ## or set to other number
 es_search(index="shakespeare", terminate_after=2)
 
+# Get version number for each document
+es_search(index="shakespeare", version=TRUE, size=2)
+
 # Get raw data
 es_search(index="shakespeare", type="scene", raw=TRUE)
 
 # Curl debugging
 library('httr')
 out <- es_search(index="shakespeare", type="line", config=verbose())
+
+
+
+# Query DSL searches
+# pass in as an R list
+aggs <- list(aggs = list(stats = list(terms = list(field = "text_entry"))))
+es_search(index="shakespeare", body=aggs)
+
+# or pass in as json query with newlines, easy to read
+aggs <- '{
+    "aggs": {
+        "stats" : {
+            "terms" : {
+                "field" : "text_entry"
+            }
+        }
+    }
+}'
+es_search(index="shakespeare", body=aggs)
+
+# or pass in collapsed json string
+aggs <- '{"aggs":{"stats":{"terms":{"field":"text_entry"}}}}'
+es_search(index="shakespeare", body=aggs)
+
+# match query
+match <- '{"query": {"match" : {"text_entry" : "Two Gentlemen"}}}'
+es_search(index="shakespeare", body=match)
+
+# multi-match (multiple fields that is) query
+mmatch <- '{"query": {"multi_match" : {"query" : "henry", "fields": ["text_entry","play_name"]}}}'
+es_search(index="shakespeare", body=mmatch)
+
+# bool query
+mmatch <- '{
+ "query": {
+   "bool" : {
+     "must_not" : {
+       "range" : {
+         "speech_number" : {
+           "from" : 1, "to": 5
+}}}}}}'
+es_search(index="shakespeare", body=mmatch)
+
+# Boosting query
+boost <- '{
+ "query" : {
+  "boosting" : {
+      "positive" : {
+          "term" : {
+              "play_name" : "henry"
+          }
+      },
+      "negative" : {
+          "term" : {
+              "text_entry" : "thou"
+          }
+      },
+      "negative_boost" : 0.2
+    }
+ }
+}'
+es_search(index="shakespeare", body=mmatch)
 }
 }
 
