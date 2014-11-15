@@ -121,12 +121,16 @@ connect()
 
 ### Search
 
-```{r}
-es_search(index="plos", size=1)
-```
+Search the `plos` index and only return 1 result
 
 ```{r}
-es_search(index="plos", type="article", sort="title", q="antibody", size=1)
+Search(index="plos", size=1)$hits$hits
+```
+
+Search the `plos` index, and the `article` document type, sort by title, and query for _antibody_, limit to 1 result
+
+```{r}
+Search(index="plos", type="article", sort="title", q="antibody", size=1)$hits$hits
 ```
 
 ### Get documents
@@ -161,7 +165,7 @@ docs_mget(index_type_id=list(c("plos","article",1), c("gbif","record",1)))$docs[
 
 ### Parsing
 
-`es_parse` is a general purpose parser function with extension methods `es_parse.es_search`, `es_parse.es_get`, and `es_parse.es_mget`, for parsing `es_search`, `es_get`, and `es_mget` function output, respectively. `es_parse` is used internally within those three functions (`es_search`, `es_get`, `es_mget`) to do parsing. You can optionally get back raw `json` from `es_search`, `es_get`, and `es_mget` setting parameter `raw=TRUE`, and then parsing after with `es_parse`.
+`es_parse` is a general purpose parser function with extension methods `es_parse.Search`, `es_parse.es_get`, and `es_parse.es_mget`, for parsing `Search`, `es_get`, and `es_mget` function output, respectively. `es_parse` is used internally within those three functions (`Search`, `es_get`, `es_mget`) to do parsing. You can optionally get back raw `json` from `Search`, `es_get`, and `es_mget` setting parameter `raw=TRUE`, and then parsing after with `es_parse`.
 
 For example:
 

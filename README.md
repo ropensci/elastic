@@ -124,7 +124,7 @@ connect()
 #> api key:   NULL 
 #> elasticsearch details:   
 #>       status:                  200 
-#>       name:                    Mad Thinker 
+#>       name:                    Martha Johansson 
 #>       Elasticsearch version:   1.4.0 
 #>       ES version timestamp:    2014-11-05T14:26:12Z 
 #>       lucene version:          4.10.2
@@ -132,107 +132,67 @@ connect()
 
 ### Search
 
+Search the `plos` index and only return 1 result
+
 
 ```r
-es_search(index="plos", size=1)
-#> $took
-#> [1] 2
-#> 
-#> $timed_out
-#> [1] FALSE
-#> 
-#> $`_shards`
-#> $`_shards`$total
-#> [1] 5
-#> 
-#> $`_shards`$successful
-#> [1] 5
-#> 
-#> $`_shards`$failed
-#> [1] 0
-#> 
-#> 
-#> $hits
-#> $hits$total
-#> [1] 1202
-#> 
-#> $hits$max_score
-#> [1] 1
-#> 
-#> $hits$hits
-#> $hits$hits[[1]]
-#> $hits$hits[[1]]$`_index`
+Search(index="plos", size=1)$hits$hits
+#> [[1]]
+#> [[1]]$`_index`
 #> [1] "plos"
 #> 
-#> $hits$hits[[1]]$`_type`
+#> [[1]]$`_type`
 #> [1] "article"
 #> 
-#> $hits$hits[[1]]$`_id`
+#> [[1]]$`_id`
 #> [1] "4"
 #> 
-#> $hits$hits[[1]]$`_score`
+#> [[1]]$`_version`
+#> [1] 2
+#> 
+#> [[1]]$`_score`
 #> [1] 1
 #> 
-#> $hits$hits[[1]]$`_source`
-#> $hits$hits[[1]]$`_source`$id
+#> [[1]]$`_source`
+#> [[1]]$`_source`$id
 #> [1] "10.1371/journal.pone.0107758"
 #> 
-#> $hits$hits[[1]]$`_source`$title
+#> [[1]]$`_source`$title
 #> [1] "Lactobacilli Inactivate Chlamydia trachomatis through Lactic Acid but Not H2O2"
 ```
 
+Search the `plos` index, and the `article` document type, sort by title, and query for _antibody_, limit to 1 result
+
 
 ```r
-es_search(index="plos", type="article", sort="title", q="antibody", size=1)
-#> $took
-#> [1] 4
-#> 
-#> $timed_out
-#> [1] FALSE
-#> 
-#> $`_shards`
-#> $`_shards`$total
-#> [1] 5
-#> 
-#> $`_shards`$successful
-#> [1] 5
-#> 
-#> $`_shards`$failed
-#> [1] 0
-#> 
-#> 
-#> $hits
-#> $hits$total
-#> [1] 5
-#> 
-#> $hits$max_score
-#> NULL
-#> 
-#> $hits$hits
-#> $hits$hits[[1]]
-#> $hits$hits[[1]]$`_index`
+Search(index="plos", type="article", sort="title", q="antibody", size=1)$hits$hits
+#> [[1]]
+#> [[1]]$`_index`
 #> [1] "plos"
 #> 
-#> $hits$hits[[1]]$`_type`
+#> [[1]]$`_type`
 #> [1] "article"
 #> 
-#> $hits$hits[[1]]$`_id`
-#> [1] "568"
+#> [[1]]$`_id`
+#> [1] "345"
 #> 
-#> $hits$hits[[1]]$`_score`
+#> [[1]]$`_version`
+#> [1] 2
+#> 
+#> [[1]]$`_score`
 #> NULL
 #> 
-#> $hits$hits[[1]]$`_source`
-#> $hits$hits[[1]]$`_source`$id
-#> [1] "10.1371/journal.pone.0085002"
+#> [[1]]$`_source`
+#> [[1]]$`_source`$id
+#> [1] "10.1371/journal.pone.0080404"
 #> 
-#> $hits$hits[[1]]$`_source`$title
-#> [1] "Evaluation of 131I-Anti-Angiotensin II Type 1 Receptor Monoclonal Antibody as a Reporter for Hepatocellular Carcinoma"
+#> [[1]]$`_source`$title
+#> [1] "Thermal Stress Induced Aggregation of Aquaporin 0 (AQP0) and Protection by α-Crystallin via Its Chaperone Function"
 #> 
 #> 
-#> $hits$hits[[1]]$sort
-#> $hits$hits[[1]]$sort[[1]]
-#> [1] "1"
+#> [[1]]$sort
+#> [[1]]$sort[[1]]
+#> [1] "0"
 ```
 
 ### Get documents
@@ -380,7 +340,7 @@ docs_mget(index_type_id=list(c("plos","article",1), c("gbif","record",1)))$docs[
 
 ### Parsing
 
-`es_parse` is a general purpose parser function with extension methods `es_parse.es_search`, `es_parse.es_get`, and `es_parse.es_mget`, for parsing `es_search`, `es_get`, and `es_mget` function output, respectively. `es_parse` is used internally within those three functions (`es_search`, `es_get`, `es_mget`) to do parsing. You can optionally get back raw `json` from `es_search`, `es_get`, and `es_mget` setting parameter `raw=TRUE`, and then parsing after with `es_parse`.
+`es_parse` is a general purpose parser function with extension methods `es_parse.Search`, `es_parse.es_get`, and `es_parse.es_mget`, for parsing `Search`, `es_get`, and `es_mget` function output, respectively. `es_parse` is used internally within those three functions (`Search`, `es_get`, `es_mget`) to do parsing. You can optionally get back raw `json` from `Search`, `es_get`, and `es_mget` setting parameter `raw=TRUE`, and then parsing after with `es_parse`.
 
 For example:
 
