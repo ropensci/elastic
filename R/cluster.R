@@ -34,7 +34,7 @@
 #'   \item types A comma-separated list of document types for the indexing index metric
 #' }
 #'
-#' @examples \dontrun{
+#' @examples \donttest{
 #' cluster_settings()
 #' cluster_health()
 #' cluster_state()

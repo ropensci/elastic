@@ -18,7 +18,7 @@
 #' 
 #' \code{\link{connection}} calls \code{\link{connect}} internally
 #' 
-#' @examples \dontrun{
+#' @examples \donttest{
 #' # the default is set to localhost and port 9200
 #' connect()
 #'

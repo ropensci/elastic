@@ -10,7 +10,7 @@
 #' @details There are a lot of terms you can use for Elasticsearch. See here
 #'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
 #' @export
-#' @examples \dontrun{
+#' @examples \donttest{
 #' # Same index and type
 #' docs_mget(index="shakespeare", type="line", id=c(9,10))
 #' tmp <- docs_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), raw=TRUE)

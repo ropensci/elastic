@@ -38,7 +38,7 @@ Pass on the returned 'es_conn' object to other functions in this package.
 \code{\link{connection}} calls \code{\link{connect}} internally
 }
 \examples{
-\dontrun{
+\donttest{
 # the default is set to localhost and port 9200
 connect()
 

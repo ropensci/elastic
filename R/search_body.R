@@ -8,7 +8,7 @@
 #' @param callopts Curl args passed on to httr::POST.
 #' @param query Query, either a list or json.
 #' @param ... Further args passed on to elastic search HTTP API as parameters. Not used right now.
-#' @examples \dontrun{ 
+#' @examples \donttest{ 
 #' # pass in as an R list
 #' aggs <- list(aggs = list(stats = list(terms = list(field = "text_entry"))))
 #' search_body(index="shakespeare", query=aggs)

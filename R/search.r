@@ -43,7 +43,7 @@
 #' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
 #' @param ... Curl args passed on to \code{\link[httr]{GET}}
 
-search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, default_operator=NULL, 
+Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, default_operator=NULL, 
   explain=NULL, source=NULL, fields=NULL, sort=NULL, track_scores=NULL, timeout=NULL, 
   terminate_after=NULL, from=NULL, size=NULL, search_type=NULL, lowercase_expanded_terms=NULL, 
   analyze_wildcard=NULL, version=FALSE, body=list(), raw=FALSE, ...)
