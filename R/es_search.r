@@ -3,7 +3,7 @@
 #' @import httr
 #' @export
 #'
-#' @param index Index
+#' @param index Index name
 #' @param type Document type
 #' @param q The query string (maps to the query_string query, see Query String Query for more 
 #' details).
@@ -40,11 +40,9 @@
 #' @param body Query, either a list or json.
 #' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
 #' @param ... Curl args passed on to \code{\link[httr]{GET}}
-#' 
-#' @details See \code{\link{search_body}} for doing requests in the body of the call.
 #' @template search_egs
 
-es_search <- function(index=NULL, type=NULL, df=NULL, analyzer=NULL, default_operator=NULL, 
+search <- function(index=NULL, type=NULL, df=NULL, analyzer=NULL, default_operator=NULL, 
   explain=NULL, source=NULL, fields=NULL, sort=NULL, track_scores=NULL, timeout=NULL, 
   terminate_after=NULL, from=NULL, size=NULL, search_type=NULL, lowercase_expanded_terms=NULL, 
   analyze_wildcard=NULL, version=FALSE, body=list(), raw=FALSE, ...)
