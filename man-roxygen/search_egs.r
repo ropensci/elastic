@@ -10,50 +10,50 @@
 #' search(index="shakespeare", type="scene")
 #' search(index="shakespeare", type="line")
 #' 
-#' # Return certain fields
+#' ## Return certain fields
 #' search(index="shakespeare", fields=c('play_name','speaker'))
 #' 
-#' # sorting
+#' ## sorting
 #' search(index="shakespeare", type="act", sort="text_entry")
 #' search(index="shakespeare", type="act", sort="speaker:desc", fields='speaker')
 #' search(index="shakespeare", type="act", 
 #'  sort=c("speaker:desc","play_name:asc"), fields=c('speaker','play_name'))
 #' 
-#' # paging
+#' ## paging
 #' search(index="shakespeare", size=1, fields='text_entry')$hits$hits
 #' search(index="shakespeare", size=1, from=1, fields='text_entry')$hits$hits
 #' 
-#' # queries
+#' ## queries
 #' search(index="shakespeare", type="act", q="what")
 #' res <- search(index="shakespeare", type="act", q="speech_number>='2'")
 #' res$hits$total
 #'
-#' # more complex queries
+#' ## more complex queries
 #' search(index="shakespeare", q="what")
 #' res <- search(index="shakespeare", q="speech_number>='2013-10-01'")
 #' search(index="shakespeare", q="createdTime>='2013-10-01'")
 #' search(index="shakespeare", size=1)
 #' search(index="shakespeare", size=1, explain=TRUE)
 #' 
-#' # terminate query after x documents found
+#' ## terminate query after x documents found
 #' ## setting to 1 gives back one document for each shard
 #' search(index="shakespeare", terminate_after=1)
 #' ## or set to other number
 #' search(index="shakespeare", terminate_after=2)
 #' 
-#' # Get version number for each document
+#' ## Get version number for each document
 #' search(index="shakespeare", version=TRUE, size=2)
 #'
-#' # Get raw data
+#' ## Get raw data
 #' search(index="shakespeare", type="scene", raw=TRUE)
 #'
-#' # Curl debugging
+#' ## Curl debugging
 #' library('httr')
 #' out <- search(index="shakespeare", type="line", config=verbose())
 #' 
 #' 
 #' 
-#' # Query DSL searches
+#' # Query DSL searches - queries sent in the body of the request
 #' # pass in as an R list
 #' aggs <- list(aggs = list(stats = list(terms = list(field = "text_entry"))))
 #' search(index="shakespeare", body=aggs)
