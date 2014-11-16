@@ -54,7 +54,8 @@ proc_doc <- function(x){
 }
 
 # make_bulk_gbif(900, filename="inst/examples/gbif_data.json")
-make_bulk_gbif <- function(n = 600, index='gbif', type='record', filename = "~/gbif_data.json"){  
+# make_bulk_gbif(600, "gbifgeo", filename="inst/examples/gbif_geo.json", add_coordinates = TRUE)
+make_bulk_gbif <- function(n = 600, index='gbif', type='record', filename = "~/gbif_data.json", add_coordinates=FALSE){  
   unlink(filename)
   res <- lapply(seq(1, n, 300), getgbif)
   res <- do.call(c, res)
@@ -62,6 +63,7 @@ make_bulk_gbif <- function(n = 600, index='gbif', type='record', filename = "~/g
     x[sapply(x, length)==0] <- "null"
     lapply(x, function(y) if(length(y) > 1) paste0(y, collapse = ",") else y)
   })
+  if(add_coordinates) res <- lapply(res, function(x) c(x, coordinates = sprintf("[%s,%s]", x$decimalLongitude, x$decimalLatitude)))
   for(i in seq_along(res)){
     dat <- list(index = list(`_index` = index, `_type` = type, `_id` = i-1))
     cat(proc_doc(dat), sep = "\n", file = filename, append = TRUE)
