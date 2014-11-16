@@ -25,8 +25,8 @@ index_exists(index, callopts = list())
 
 index_delete(index, raw = FALSE, callopts = list(), verbose = TRUE)
 
-index_create(index = NULL, type = NULL, id = NULL, fields = NULL,
-  raw = FALSE, callopts = list(), verbose = TRUE, ...)
+index_create(index = NULL, body = NULL, raw = FALSE, verbose = TRUE,
+  ...)
 
 index_close(index, callopts = list())
 
@@ -76,11 +76,7 @@ warmers or aliases}
 
 \item{...}{Further args passed on to elastic search HTTP API as parameters.}
 
-\item{type}{(character) Document type}
-
-\item{id}{Document id}
-
-\item{fields}{(character) Fields to add.}
+\item{body}{Query, either a list or json.}
 
 \item{metric}{(character) A character vector of metrics to display. Possible values: "_all",
 "completion", "docs", "fielddata", "filter_cache", "flush", "get", "id_cache", "indexing",
@@ -91,6 +87,8 @@ warmers or aliases}
 
 \item{fielddata_fields}{(character) A character vector of fields for fielddata metric
 (supports wildcards)}
+
+\item{fields}{(character) Fields to add.}
 
 \item{groups}{(character) A character vector of search groups for search statistics.}
 
@@ -183,8 +181,33 @@ index_exists(index='plos')
 index_delete(index='plos')
 
 # create an index
-index_create(index='twitter', type='tweet', id=10)
-index_create(index='things', type='tweet', id=10)
+index_create(index='twitter')
+index_create(index='things')
+
+## with a body
+body <- '{
+ "settings" : {
+  "index" : {
+    "number_of_shards" : 3,
+    "number_of_replicas" : 2
+   }
+ }
+}'
+index_create(index='alsothat', body=body)
+
+## with mappings
+body <- '{
+ "mappings": {
+   "record": {
+     "properties": {
+       "location" : {"type" : "geo_point"}
+      }
+   }
+ }
+}'
+index_create(index='gbifnewgeo', body=body)
+gbifgeo <- system.file("examples", "gbif_geosmall.json", package = "elastic")
+docs_bulk(gbifgeo)
 
 # close an index
 index_close('plos')

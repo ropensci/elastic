@@ -13,8 +13,6 @@
 #' \code{\link[httr]{PUT}}, \code{\link[httr]{HEAD}}, or \code{\link[httr]{DELETE}}
 #' @param verbose If TRUE (default) the url call used printed to console.
 #' @param ... Further args passed on to elastic search HTTP API as parameters.
-#' @param type (character) Document type
-#' @param id Document id
 #' @param fields (character) Fields to add.
 #' @param metric (character) A character vector of metrics to display. Possible values: "_all", 
 #' "completion", "docs", "fielddata", "filter_cache", "flush", "get", "id_cache", "indexing", 
@@ -63,6 +61,8 @@
 #' @param query_cache (logical) Clear query caches
 #' @param id_cache (logical) Clear ID caches for parent/child
 #' 
+#' @param body Query, either a list or json.
+#' 
 #' @details 
 #' \bold{index_analyze}:
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-analyze.html}
@@ -91,8 +91,33 @@
 #' index_delete(index='plos')
 #' 
 #' # create an index
-#' index_create(index='twitter', type='tweet', id=10)
-#' index_create(index='things', type='tweet', id=10)
+#' index_create(index='twitter')
+#' index_create(index='things')
+#' 
+#' ## with a body
+#' body <- '{
+#'  "settings" : {
+#'   "index" : {
+#'     "number_of_shards" : 3,
+#'     "number_of_replicas" : 2
+#'    }
+#'  }
+#' }'
+#' index_create(index='alsothat', body=body)
+#' 
+#' ## with mappings
+#' body <- '{
+#'  "mappings": {
+#'    "record": { 
+#'      "properties": { 
+#'        "location" : {"type" : "geo_point"}  
+#'       } 
+#'    } 
+#'  }
+#' }'
+#' index_create(index='gbifnewgeo', body=body)
+#' gbifgeo <- system.file("examples", "gbif_geosmall.json", package = "elastic")
+#' docs_bulk(gbifgeo)
 #' 
 #' # close an index
 #' index_close('plos')
@@ -202,23 +227,14 @@ index_delete <- function(index, raw=FALSE, callopts=list(), verbose=TRUE)
 
 #' @export
 #' @rdname index
-index_create <- function(index=NULL, type=NULL, id=NULL, fields=NULL, raw=FALSE, 
-  callopts=list(), verbose=TRUE, ...)
+index_create <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...)
 {
   conn <- connect()
-  
-  if(length(id) > 1){ # pass in request in body
-    body <- toJSON(list(ids = as.character(id)))
-  }
-  
-  if(!is.null(fields)) fields <- paste(fields, collapse=",")
-  url <- paste(conn$url, ":", conn$port, sep="")
-  
-  out <- PUT(url, query=list(), callopts)
+  out <- PUT(sprintf("%s:%s/%s", conn$base, conn$port, index), body=body, ...)
   stop_for_status(out)
   if(verbose) message(URLdecode(out$url))
-  tt <- structure(content(out, as="text"), class="elastic_create")
-  if(raw){ tt } else { es_parse(tt) }
+  tt <- content(out, as="text")
+  if(raw) tt else jsonlite::fromJSON(tt, FALSE)
 }
 
 #' @export
