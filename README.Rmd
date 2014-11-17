@@ -114,11 +114,6 @@ gbifgeo <- system.file("examples", "gbif_geo.json", package = "elastic")
 docs_bulk(gbifgeo)
 ```
 
-```{r eval=FALSE}
-gbifgeo <- system.file("examples", "gbif_geosmall.json", package = "elastic")
-docs_bulk(gbifgeo)
-```
-
 #### More data sets
 
 There are more datasets formatted for bulk loading in the `ropensci/elastic_data` GitHub repository. Find it at [https://github.com/ropensci/elastic_data](https://github.com/ropensci/elastic_data)

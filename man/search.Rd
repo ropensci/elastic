@@ -206,6 +206,7 @@ out$hits$total
 sapply(out$hits$hits, function(x) x$fields$eventDate) ## sweet!!!
 
 # geoshape query
+## not working yets
 geo <- list(query = list(geo_shape = list(location = list(shape = list(type = "envelope",
    coordinates = "[[2,10],[10,20]]")))))
 geo <- '{
@@ -221,6 +222,46 @@ geo <- '{
  }
 }'
 Search(index="gbifnewgeo", body=geo)
+
+# range query
+## with numeric
+body <- list(query=list(range=list(decimalLongitude=list(gte=1, lte=3))))
+Search('gbif', body=body)$hits$total
+
+body <- list(query=list(range=list(decimalLongitude=list(gte=2.9, lte=10))))
+Search('gbif', body=body)$hits$total
+
+## with dates
+body <- list(query=list(range=list(eventDate=list(gte="2012-01-01", lte="now"))))
+Search('gbif', body=body)$hits$total
+
+body <- list(query=list(range=list(eventDate=list(gte="2014-01-01", lte="now"))))
+Search('gbif', body=body)$hits$total
+
+# more like this query (more_like_this can be shortened to mlt)
+body <- '{
+ "query": {
+   "more_like_this": {
+     "fields": ["abstract","title"],
+     "like_text": "and then",
+     "min_term_freq": 1,
+     "max_query_terms": 12
+   }
+ }
+}'
+Search('plos', body=body)$hits$total
+
+body <- '{
+ "query": {
+   "more_like_this": {
+     "fields": ["abstract","title"],
+     "like_text": "cell",
+     "min_term_freq": 1,
+     "max_query_terms": 12
+   }
+ }
+}'
+Search('plos', body=body)$hits$total
 }
 }
 \references{
