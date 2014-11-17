@@ -65,7 +65,20 @@ search_POST <- function(path, index=NULL, type=NULL, args, body, raw, ...)
     }
   body <- check_inputs(body)
   tt <- POST(url, query=args, body=body, ...)
-  if(tt$status_code > 202) stop(content(tt)$error)
+  if(tt$status_code > 202) stop(error_parser(content(tt)$error, 1))
   res <- content(tt, as = "text")
   if(raw) res else jsonlite::fromJSON(res, FALSE)
 }
+
+error_parser <- function(y, shard_no=1){
+  if(grepl("SearchParseException", y)){
+    first <- strloc2match(y, 1, ";")
+    shards <- strsplit(substring(y, regexpr(";", y)+17, nchar(y)), "\\}\\{")[[1]]
+    shards <- gsub("\\s}]$|\\s$", "", shards)
+    paste(first, paste0("1st shard:  ", shards[1:shard_no]), sep = "\n")
+  } else { y }
+#   structure(list(first=first, shards=shards[1:shard_no]), class="eserror")
+}
+
+strmatch <- function(x, y) regmatches(x, regexpr(y, x))
+strloc2match <- function(x, first, y) substring(x, first, regexpr(y, x)-1)

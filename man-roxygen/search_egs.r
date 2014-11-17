@@ -202,3 +202,15 @@
 #' out$hits$total
 #' sapply(out$hits$hits, function(x) x$highlight$title[[1]])
 #' }
+
+
+#' body <- '{
+#'  "querys": {
+#'    "more_like_this": {
+#'      "fields": ["abstract","title"],
+#'      "like_text": "cell",
+#'      "min_term_freq": 1,
+#'      "max_query_terms": 12
+#'    }
+#'  }
+#' }'
