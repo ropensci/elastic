@@ -262,6 +262,23 @@ body <- '{
  }
 }'
 Search('plos', body=body)$hits$total
+
+# Highlighting
+body <- '{
+ "query": {
+   "query_string": {
+     "query" : "cell"
+   }
+ },
+ "highlight": {
+   "fields": {
+     "title": {"number_of_fragments": 2}
+   }
+ }
+}'
+out <- Search('plos', 'article', body=body)
+out$hits$total
+sapply(out$hits$hits, function(x) x$highlight$title[[1]])
 }
 }
 \references{
