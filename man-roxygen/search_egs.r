@@ -107,6 +107,29 @@
 #' }'
 #' Search(index="gbif", body=aggs, size=0)
 #' 
+#' ### Ordering the buckets by their doc_count - ascending:
+#' aggs <- '{
+#'     "aggs": {
+#'         "latbuckets" : {
+#'            "histogram" : {
+#'                "field" : "decimalLatitude",
+#'                "interval" : 5,
+#'                "min_doc_count" : 0,
+#'                "extended_bounds" : {
+#'                    "min" : -90,
+#'                    "max" : 90
+#'                },
+#'                "order" : { 
+#'                    "_count" : "desc" 
+#'                }
+#'            }
+#'         }
+#'     }
+#' }'
+#' out <- Search(index="gbif", body=aggs, size=0)
+#' library("dplyr")
+#' rbind_all(lapply(out$aggregations$latbuckets$buckets, data.frame))
+#' 
 #' # match query
 #' match <- '{"query": {"match" : {"text_entry" : "Two Gentlemen"}}}'
 #' Search(index="shakespeare", body=match)
