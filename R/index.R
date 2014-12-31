@@ -190,6 +190,13 @@
 #' index_clear_cache(filter = TRUE)
 #' library('httr')
 #' index_clear_cache(callopts=verbose())
+#' 
+#' # Index settings
+#' index_settings()
+#' index_settings("_all")
+#' index_settings('gbif')
+#' index_settings(c('gbif','plos'))
+#' index_settings('*s')
 #' }
 NULL
 
@@ -262,6 +269,15 @@ index_stats <- function(index=NULL, metric=NULL, completion_fields=NULL, fieldda
   args <- ec(list(completion_fields=completion_fields, fielddata_fields=fielddata_fields,
                   fields=fields, groups=groups, level=level))
   es_GET_(url, args, callopts)
+}
+
+#' @export
+#' @rdname index
+index_settings <- function(index="_all", callopts=list())
+{
+  conn <- connect()
+  url <- if(is.null(index) || index == "_all") file.path(e_url(conn), "_settings") else file.path(e_url(conn), cl(index), "_settings")
+  es_GET_(url, callopts)
 }
 
 #' @export

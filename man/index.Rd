@@ -14,6 +14,7 @@
 \alias{index_optimize}
 \alias{index_recovery}
 \alias{index_segments}
+\alias{index_settings}
 \alias{index_stats}
 \alias{index_status}
 \alias{index_upgrade}
@@ -36,6 +37,8 @@ index_open(index, callopts = list())
 index_stats(index = NULL, metric = NULL, completion_fields = NULL,
   fielddata_fields = NULL, fields = NULL, groups = NULL,
   level = "indices", callopts = list())
+
+index_settings(index = "_all", callopts = list())
 
 index_status(index = NULL, callopts = list())
 
@@ -281,6 +284,13 @@ index_clear_cache(index = c("plos","shakespeare"))
 index_clear_cache(filter = TRUE)
 library('httr')
 index_clear_cache(callopts=verbose())
+
+# Index settings
+index_settings()
+index_settings("_all")
+index_settings('gbif')
+index_settings(c('gbif','plos'))
+index_settings('*s')
 }
 }
 \author{
