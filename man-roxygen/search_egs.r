@@ -130,6 +130,21 @@
 #' library("dplyr")
 #' rbind_all(lapply(out$aggregations$latbuckets$buckets, data.frame))
 #' 
+#' ### By default, the buckets are returned as an ordered array. It is also possible to 
+#' ### request the response as a hash instead keyed by the buckets keys:
+#' aggs <- '{
+#'     "aggs": {
+#'         "latbuckets" : {
+#'            "histogram" : {
+#'                "field" : "decimalLatitude",
+#'                "interval" : 10,
+#'                "keyed" : true
+#'            }
+#'         }
+#'     }
+#' }'
+#' Search(index="gbif", body=aggs, size=0)
+#' 
 #' # match query
 #' match <- '{"query": {"match" : {"text_entry" : "Two Gentlemen"}}}'
 #' Search(index="shakespeare", body=match)
