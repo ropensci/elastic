@@ -54,11 +54,12 @@
 #' 
 #' 
 #' # Query DSL searches - queries sent in the body of the request
-#' # pass in as an R list
+#' ## Pass in as an R list
+#' 
 #' aggs <- list(aggs = list(stats = list(terms = list(field = "text_entry"))))
 #' Search(index="shakespeare", body=aggs)
 #' 
-#' # or pass in as json query with newlines, easy to read
+#' ## or pass in as json query with newlines, easy to read
 #' aggs <- '{
 #'     "aggs": {
 #'         "stats" : {
@@ -70,9 +71,41 @@
 #' }'
 #' Search(index="shakespeare", body=aggs)
 #' 
-#' # or pass in collapsed json string
+#' ## or pass in collapsed json string
 #' aggs <- '{"aggs":{"stats":{"terms":{"field":"text_entry"}}}}'
 #' Search(index="shakespeare", body=aggs)
+#' 
+#' ## Aggregations
+#' ### Histograms
+#' aggs <- '{
+#'     "aggs": {
+#'         "latbuckets" : {
+#'            "histogram" : {
+#'                "field" : "decimalLatitude",
+#'                "interval" : 5
+#'            }
+#'         }
+#'     }
+#' }'
+#' Search(index="gbif", body=aggs, size=0)
+#' 
+#' ### Histograms w/ more options
+#' aggs <- '{
+#'     "aggs": {
+#'         "latbuckets" : {
+#'            "histogram" : {
+#'                "field" : "decimalLatitude",
+#'                "interval" : 5,
+#'                "min_doc_count" : 0,
+#'                "extended_bounds" : {
+#'                    "min" : -90,
+#'                    "max" : 90
+#'                }
+#'            }
+#'         }
+#'     }
+#' }'
+#' Search(index="gbif", body=aggs, size=0)
 #' 
 #' # match query
 #' match <- '{"query": {"match" : {"text_entry" : "Two Gentlemen"}}}'
@@ -202,8 +235,7 @@
 #' out$hits$total
 #' sapply(out$hits$hits, function(x) x$highlight$title[[1]])
 #' }
-
-
+#' 
 #' body <- '{
 #'  "querys": {
 #'    "more_like_this": {
