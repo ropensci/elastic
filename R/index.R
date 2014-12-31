@@ -173,6 +173,29 @@
 #' index_analyze(text = 'this is a test', index = 'shakespeare')
 #' index_analyze(text = 'this is a test', index = 'shakespeare', callopts=verbose())
 #' 
+#' ## NGram tokenizer
+#' body <- '{
+#'         "settings" : {
+#'              "analysis" : {
+#'                  "analyzer" : {
+#'                      "my_ngram_analyzer" : {
+#'                          "tokenizer" : "my_ngram_tokenizer"
+#'                      }
+#'                  },
+#'                  "tokenizer" : {
+#'                      "my_ngram_tokenizer" : {
+#'                          "type" : "nGram",
+#'                          "min_gram" : "2",
+#'                          "max_gram" : "3",
+#'                          "token_chars": [ "letter", "digit" ]
+#'                      }
+#'                  }
+#'              }
+#'       }
+#' }'
+#' tokenizer_set(index = "shakespeare", body=body)
+#' index_analyze(text = "art thouh", index = "shakespeare", analyzer='my_ngram_analyzer')
+#' 
 #' # Explicitly flush one or more indices.
 #' index_flush()
 #' index_flush(index = "plos")
@@ -202,30 +225,30 @@ NULL
 
 #' @export
 #' @rdname index
-index_get <- function(index=NULL, features=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
+index_get <- function(index=NULL, features=NULL, raw=FALSE, verbose=TRUE, ...)
 {
   conn <- connect()
   url <- paste0(conn$base, ":", conn$port)
-  index_GET(url, index, features, raw, callopts)
+  index_GET(url, index, features, raw, ...)
 }
 
 #' @export
 #' @rdname index
-index_exists <- function(index, callopts=list())
+index_exists <- function(index, ...)
 {
   conn <- connect()
   url <- paste0(conn$base, ":", conn$port, "/", index)
-  res <- HEAD(url, callopts)
+  res <- HEAD(url, ...)
   if(res$status_code == 200) TRUE else FALSE
 }
 
 #' @export
 #' @rdname index
-index_delete <- function(index, raw=FALSE, callopts=list(), verbose=TRUE)
+index_delete <- function(index, raw=FALSE, verbose=TRUE, ...)
 {
   conn <- connect()
   url <- paste0(conn$base, ":", conn$port, "/", index)
-  out <- DELETE(url, callopts)
+  out <- DELETE(url, ...)
   stop_for_status(out)
   if(verbose) message(URLdecode(out$url))
   tt <- structure(content(out, as="text"), class="index_delete")
@@ -246,14 +269,14 @@ index_create <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...)
 
 #' @export
 #' @rdname index
-index_close <- function(index, callopts=list())
+index_close <- function(index, ...)
 {
   close_open(index, "_close", callopts)
 }
 
 #' @export
 #' @rdname index
-index_open <- function(index, callopts=list())
+index_open <- function(index, ...)
 {
   close_open(index, "_open", callopts)
 }
@@ -261,7 +284,7 @@ index_open <- function(index, callopts=list())
 #' @export
 #' @rdname index
 index_stats <- function(index=NULL, metric=NULL, completion_fields=NULL, fielddata_fields=NULL,
-  fields=NULL, groups=NULL, level='indices', callopts=list())
+  fields=NULL, groups=NULL, level='indices', ...)
 {
   conn <- connect()
   url <- if(is.null(index)) file.path(e_url(conn), "_stats") else file.path(e_url(conn), cl(index), "_stats")
@@ -273,53 +296,53 @@ index_stats <- function(index=NULL, metric=NULL, completion_fields=NULL, fieldda
 
 #' @export
 #' @rdname index
-index_settings <- function(index="_all", callopts=list())
+index_settings <- function(index="_all", ...)
 {
   conn <- connect()
   url <- if(is.null(index) || index == "_all") file.path(e_url(conn), "_settings") else file.path(e_url(conn), cl(index), "_settings")
-  es_GET_(url, callopts)
+  es_GET_(url, ...)
 }
 
 #' @export
 #' @rdname index
-index_status <- function(index = NULL, callopts=list()) es_GET_wrap1(index, "_status", callopts = callopts)
+index_status <- function(index = NULL, ...) es_GET_wrap1(index, "_status", ...)
 
 #' @export
 #' @rdname index
-index_segments <- function(index = NULL, callopts=list()) es_GET_wrap1(index, "_segments", callopts = callopts)
+index_segments <- function(index = NULL, ...) es_GET_wrap1(index, "_segments", ...)
 
 #' @export
 #' @rdname index
-index_recovery <- function(index = NULL, detailed = FALSE, active_only = FALSE, callopts=list()){
+index_recovery <- function(index = NULL, detailed = FALSE, active_only = FALSE, ...){
   args <- ec(list(detailed = as_log(detailed), active_only = as_log(active_only)))
-  es_GET_wrap1(index, "_recovery", args, callopts)
+  es_GET_wrap1(index, "_recovery", args, ...)
 }
 
 #' @export
 #' @rdname index
 index_optimize <- function(index = NULL, max_num_segments = NULL, only_expunge_deletes = FALSE, 
-  flush = TRUE, wait_for_merge = TRUE, callopts=list())
+  flush = TRUE, wait_for_merge = TRUE, ...)
 {
   args <- ec(list(max_num_segments = max_num_segments, 
                   only_expunge_deletes = as_log(only_expunge_deletes), 
                   flush = as_log(flush), 
                   wait_for_merge = as_log(wait_for_merge)
   ))
-  es_POST_(index, "_optimize", args, callopts)
+  es_POST_(index, "_optimize", args, ...)
 }
 
 #' @export
 #' @rdname index
-index_upgrade <- function(index = NULL, wait_for_completion = FALSE, callopts=list())
+index_upgrade <- function(index = NULL, wait_for_completion = FALSE, ...)
 {
   args <- ec(list(wait_for_completion = as_log(wait_for_completion)))
-  es_POST_(index, "_upgrade", args, callopts)
+  es_POST_(index, "_upgrade", args, ...)
 }
 
 #' @export
 #' @rdname index
 index_analyze <- function(text=NULL, field=NULL, index=NULL, analyzer=NULL, tokenizer=NULL,
-                          filters=NULL, char_filters=NULL, callopts=list())
+                          filters=NULL, char_filters=NULL, body=list(), ...)
 {
   conn <- connect()
   if(!is.null(index))
@@ -328,12 +351,12 @@ index_analyze <- function(text=NULL, field=NULL, index=NULL, analyzer=NULL, toke
     url <- sprintf("%s:%s/_analyze", conn$base, conn$port)
   args <- ec(list(text=text, analyzer=analyzer, tokenizer=tokenizer, filters=filters,
                   char_filters=char_filters, field=field))
-  analyze_GET(url, args, callopts)$tokens
+  analyze_POST(url, args, body, ...)$tokens
 }
 
 #' @export
 #' @rdname index
-index_flush <- function(index=NULL, force=FALSE, full=FALSE, wait_if_ongoing=FALSE, callopts=list())
+index_flush <- function(index=NULL, force=FALSE, full=FALSE, wait_if_ongoing=FALSE, ...)
 {
   conn <- connect()
   if(!is.null(index)) 
@@ -341,13 +364,13 @@ index_flush <- function(index=NULL, force=FALSE, full=FALSE, wait_if_ongoing=FAL
   else 
     url <- sprintf("%s:%s/_flush", conn$base, conn$port)
   args <- ec(list(force=as_log(force), full=as_log(full), wait_if_ongoing=as_log(wait_if_ongoing)))
-  cc_POST(url, args, callopts)
+  cc_POST(url, args, ...)
 }
 
 #' @export
 #' @rdname index
 index_clear_cache <- function(index=NULL, filter=FALSE, filter_keys=NULL, fielddata=FALSE, 
-                              query_cache=FALSE, id_cache=FALSE, callopts=list())
+                              query_cache=FALSE, id_cache=FALSE, ...)
 {
   conn <- connect()
   if(!is.null(index)) 
@@ -356,7 +379,7 @@ index_clear_cache <- function(index=NULL, filter=FALSE, filter_keys=NULL, fieldd
     url <- sprintf("%s:%s/_cache/clear", conn$base, conn$port)
   args <- ec(list(filter=as_log(filter), filter_keys=filter_keys, fielddata=as_log(fielddata), 
                   query_cache=as_log(query_cache), id_cache=as_log(id_cache)))
-  cc_POST(url, args, callopts)
+  cc_POST(url, args, ...)
 }
 
 close_open <- function(index, which, callopts){
@@ -383,8 +406,16 @@ es_POST_ <- function(index, which, args=list(), callopts){
 
 e_url <- function(x) paste0(x$base, ":", x$port)
 
-analyze_GET <- function(url, args, callopts){
-  out <- GET(url, query=args, callopts)
+analyze_GET <- function(url, args, ...){
+  out <- GET(url, query=args, ...)
+  stop_for_status(out)
+  tt <- content(out, as = "text")
+  jsonlite::fromJSON(tt)
+}
+
+analyze_POST <- function(url, args, body, ...){
+  body <- check_inputs(body)
+  out <- POST(url, query=args, body=body, ...)
   stop_for_status(out)
   tt <- content(out, as = "text")
   jsonlite::fromJSON(tt)

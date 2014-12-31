@@ -20,50 +20,46 @@
 \alias{index_upgrade}
 \title{Index API operations}
 \usage{
-index_get(index = NULL, features = NULL, raw = FALSE, callopts = list(),
-  verbose = TRUE, ...)
+index_get(index = NULL, features = NULL, raw = FALSE, verbose = TRUE,
+  ...)
 
-index_exists(index, callopts = list())
+index_exists(index, ...)
 
-index_delete(index, raw = FALSE, callopts = list(), verbose = TRUE)
+index_delete(index, raw = FALSE, verbose = TRUE, ...)
 
 index_create(index = NULL, body = NULL, raw = FALSE, verbose = TRUE,
   ...)
 
-index_close(index, callopts = list())
+index_close(index, ...)
 
-index_open(index, callopts = list())
+index_open(index, ...)
 
 index_stats(index = NULL, metric = NULL, completion_fields = NULL,
   fielddata_fields = NULL, fields = NULL, groups = NULL,
-  level = "indices", callopts = list())
+  level = "indices", ...)
 
-index_settings(index = "_all", callopts = list())
+index_settings(index = "_all", ...)
 
-index_status(index = NULL, callopts = list())
+index_status(index = NULL, ...)
 
-index_segments(index = NULL, callopts = list())
+index_segments(index = NULL, ...)
 
-index_recovery(index = NULL, detailed = FALSE, active_only = FALSE,
-  callopts = list())
+index_recovery(index = NULL, detailed = FALSE, active_only = FALSE, ...)
 
 index_optimize(index = NULL, max_num_segments = NULL,
-  only_expunge_deletes = FALSE, flush = TRUE, wait_for_merge = TRUE,
-  callopts = list())
+  only_expunge_deletes = FALSE, flush = TRUE, wait_for_merge = TRUE, ...)
 
-index_upgrade(index = NULL, wait_for_completion = FALSE,
-  callopts = list())
+index_upgrade(index = NULL, wait_for_completion = FALSE, ...)
 
 index_analyze(text = NULL, field = NULL, index = NULL, analyzer = NULL,
-  tokenizer = NULL, filters = NULL, char_filters = NULL,
-  callopts = list())
+  tokenizer = NULL, filters = NULL, char_filters = NULL, body = list(),
+  ...)
 
 index_flush(index = NULL, force = FALSE, full = FALSE,
-  wait_if_ongoing = FALSE, callopts = list())
+  wait_if_ongoing = FALSE, ...)
 
 index_clear_cache(index = NULL, filter = FALSE, filter_keys = NULL,
-  fielddata = FALSE, query_cache = FALSE, id_cache = FALSE,
-  callopts = list())
+  fielddata = FALSE, query_cache = FALSE, id_cache = FALSE, ...)
 }
 \arguments{
 \item{index}{(character) A character vector of index names}
@@ -72,9 +68,6 @@ index_clear_cache(index = NULL, filter = FALSE, filter_keys = NULL,
 warmers or aliases}
 
 \item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
-
-\item{callopts}{Curl args passed on to \code{\link[httr]{POST}}, \code{\link[httr]{GET}},
-\code{\link[httr]{PUT}}, \code{\link[httr]{HEAD}}, or \code{\link[httr]{DELETE}}}
 
 \item{verbose}{If TRUE (default) the url call used printed to console.}
 
@@ -152,6 +145,9 @@ parameter (default: all)}
 \item{query_cache}{(logical) Clear query caches}
 
 \item{id_cache}{(logical) Clear ID caches for parent/child}
+
+\item{callopts}{Curl args passed on to \code{\link[httr]{POST}}, \code{\link[httr]{GET}},
+\code{\link[httr]{PUT}}, \code{\link[httr]{HEAD}}, or \code{\link[httr]{DELETE}}}
 }
 \description{
 Index API operations
@@ -266,6 +262,29 @@ index_analyze(text = 'this is a test', tokenizer='keyword', filters='lowercase',
 index_analyze(text = 'this is a test', index = 'plos')
 index_analyze(text = 'this is a test', index = 'shakespeare')
 index_analyze(text = 'this is a test', index = 'shakespeare', callopts=verbose())
+
+## NGram tokenizer
+body <- '{
+        "settings" : {
+             "analysis" : {
+                 "analyzer" : {
+                     "my_ngram_analyzer" : {
+                         "tokenizer" : "my_ngram_tokenizer"
+                     }
+                 },
+                 "tokenizer" : {
+                     "my_ngram_tokenizer" : {
+                         "type" : "nGram",
+                         "min_gram" : "2",
+                         "max_gram" : "3",
+                         "token_chars": [ "letter", "digit" ]
+                     }
+                 }
+             }
+      }
+}'
+tokenizer_set(index = "shakespeare", body=body)
+index_analyze(text = "art thouh", index = "shakespeare", analyzer='my_ngram_analyzer')
 
 # Explicitly flush one or more indices.
 index_flush()
