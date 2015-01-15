@@ -1,4 +1,4 @@
-#' Full text search of Elasticsearch - URI requests
+#' Full text search of Elasticsearch 
 #'
 #' @import httr
 #' @export
@@ -52,7 +52,7 @@ Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, defaul
          default_operator=default_operator, explain=explain, `_source`=source, fields=cl(fields), 
          sort=cl(sort), track_scores=track_scores, timeout=timeout, terminate_after=terminate_after, 
          from=from, size=size, search_type=search_type, lowercase_expanded_terms=lowercase_expanded_terms, 
-         analyze_wildcard=analyze_wildcard, version=version)), body, raw, ...)
+         analyze_wildcard=analyze_wildcard, version=version, q=q)), body, raw, ...)
 }
 
 search_POST <- function(path, index=NULL, type=NULL, args, body, raw, ...) 

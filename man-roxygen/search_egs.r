@@ -24,14 +24,12 @@
 #' Search(index="shakespeare", size=1, from=1, fields='text_entry')$hits$hits
 #'
 #' ## queries
-#' Search(index="shakespeare", type="act", q="what")
-#' res <- Search(index="shakespeare", type="act", q="speech_number>='2'")
-#' res$hits$total
+#' Search(index="shakespeare", type="act", q="york")
+#' Search(index="shakespeare", type="act", q="speaker:KING HENRY IV")$hits$total
+#' Search(index="shakespeare", type="act", q="speaker:VERNON")$hits$total
 #'
 #' ## more complex queries
-#' Search(index="shakespeare", q="what")
-#' res <- Search(index="shakespeare", q="speech_number>='2013-10-01'")
-#' Search(index="shakespeare", q="createdTime>='2013-10-01'")
+#' Search(index="shakespeare", q="line_id:[10 TO 20]")$hits$total
 #' Search(index="shakespeare", size=1)
 #' Search(index="shakespeare", size=1, explain=TRUE)
 #'
