@@ -30,7 +30,7 @@ es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL,
   } else { res }
 }
 
-index_GET <- function(path, index, features, raw, callopts, ...) 
+index_GET <- function(path, index, features, raw, ...) 
 {
   conn <- es_get_auth()
   url <- paste0(conn$base, ":", conn$port, "/", paste0(index, collapse = ","))

@@ -71,7 +71,8 @@ warmers or aliases}
 
 \item{verbose}{If TRUE (default) the url call used printed to console.}
 
-\item{...}{Further args passed on to elastic search HTTP API as parameters.}
+\item{...}{Curl args passed on to \code{\link[httr]{POST}}, \code{\link[httr]{GET}},
+\code{\link[httr]{PUT}}, \code{\link[httr]{HEAD}}, or \code{\link[httr]{DELETE}}}
 
 \item{body}{Query, either a list or json.}
 
@@ -145,9 +146,6 @@ parameter (default: all)}
 \item{query_cache}{(logical) Clear query caches}
 
 \item{id_cache}{(logical) Clear ID caches for parent/child}
-
-\item{callopts}{Curl args passed on to \code{\link[httr]{POST}}, \code{\link[httr]{GET}},
-\code{\link[httr]{PUT}}, \code{\link[httr]{HEAD}}, or \code{\link[httr]{DELETE}}}
 }
 \description{
 Index API operations
@@ -261,7 +259,7 @@ index_analyze(text = 'this is a test', tokenizer='keyword', filters='lowercase',
    char_filters='html_strip')
 index_analyze(text = 'this is a test', index = 'plos')
 index_analyze(text = 'this is a test', index = 'shakespeare')
-index_analyze(text = 'this is a test', index = 'shakespeare', callopts=verbose())
+index_analyze(text = 'this is a test', index = 'shakespeare', config=verbose())
 
 ## NGram tokenizer
 body <- '{
@@ -293,7 +291,7 @@ index_flush(index = "shakespeare")
 index_flush(index = c("plos","shakespeare"))
 index_flush(wait_if_ongoing = TRUE)
 library('httr')
-index_flush(callopts=verbose())
+index_flush(config=verbose())
 
 # Clear either all caches or specific cached associated with one ore more indices.
 index_clear_cache()
@@ -302,7 +300,7 @@ index_clear_cache(index = "shakespeare")
 index_clear_cache(index = c("plos","shakespeare"))
 index_clear_cache(filter = TRUE)
 library('httr')
-index_clear_cache(callopts=verbose())
+index_clear_cache(config=verbose())
 
 # Index settings
 index_settings()
