@@ -291,7 +291,7 @@ index_stats <- function(index=NULL, metric=NULL, completion_fields=NULL, fieldda
   url <- if(!is.null(metric)) file.path(url, cl(metric)) else url
   args <- ec(list(completion_fields=completion_fields, fielddata_fields=fielddata_fields,
                   fields=fields, groups=groups, level=level))
-  es_GET_(url, args, callopts)
+  es_GET_(url, args, ...)
 }
 
 #' @export

@@ -352,6 +352,19 @@ out <- Search('plos', 'article', body=body)
 out$hits$total
 sapply(out$hits$hits, function(x) x$highlight$title[[1]])
 }
+
+### Common terms query
+body <- '{
+ "query" : {
+   "common": {
+      "body": {
+           "query": "this is",
+           "cutoff_frequency": 0.01
+       }
+     }
+  }
+}'
+Search('shakespeare', 'line', body=body)
 }
 \references{
 \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search.html}
