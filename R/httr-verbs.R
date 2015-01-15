@@ -36,7 +36,7 @@ index_GET <- function(path, index, features, raw, ...)
   url <- paste0(conn$base, ":", conn$port, "/", paste0(index, collapse = ","))
   if(!is.null(features)) features <- paste0(paste0("_", features), collapse = ",")
   if(!is.null(features)) url <- paste0(url, "/", features)
-  tt <- GET(url, callopts)
+  tt <- GET(url, ...)
   if(tt$status_code > 202){
     if(tt$status_code > 202) stop(tt$headers$statusmessage)
     if(content(tt)$status == "ERROR") stop(content(tt)$error_message)
