@@ -270,7 +270,6 @@
 #' out <- Search('plos', 'article', body=body)
 #' out$hits$total
 #' sapply(out$hits$hits, function(x) x$highlight$title[[1]])
-#' }
 #'
 #' ### Common terms query
 #' body <- '{
@@ -284,3 +283,4 @@
 #'   }
 #' }'
 #' Search('shakespeare', 'line', body=body)
+#' }
