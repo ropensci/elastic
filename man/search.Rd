@@ -10,7 +10,7 @@ Search(index = NULL, type = NULL, q = NULL, df = NULL,
   timeout = NULL, terminate_after = NULL, from = NULL, size = NULL,
   search_type = NULL, lowercase_expanded_terms = NULL,
   analyze_wildcard = NULL, version = FALSE, body = list(), raw = FALSE,
-  ...)
+  scroll = NULL, ...)
 }
 \arguments{
 \item{index}{Index name}
@@ -71,7 +71,10 @@ See Search Type for more details on the different types of search that can be pe
 
 \item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
 
-\item{...}{Curl args passed on to \code{\link[httr]{GET}}}
+\item{scroll}{(character) Specify how long a consistent view of the index should be maintained
+for scrolled search, e.g., "30s", "1m". See \code{\link{units-time}}.}
+
+\item{...}{Curl args passed on to \code{\link[httr]{POST}}}
 }
 \description{
 Full text search of Elasticsearch
@@ -362,9 +365,28 @@ body <- '{
   }
 }'
 Search('shakespeare', 'line', body=body)
+
+## Scrolling search - instead of paging
+Search('shakespeare', q="a*")$hits$total
+res <- Search(index = 'shakespeare', q="a*", scroll="1m")
+res <- Search(index = 'shakespeare', q="a*", scroll="1m", search_type = "scan")
+scroll(scroll_id = res$`_scroll_id`)
+
+res <- Search(index = 'shakespeare', q="a*", scroll="5m", search_type = "scan")
+out <- list()
+hits <- 1
+while(hits != 0){
+  res <- scroll(scroll_id = res$`_scroll_id`)
+  hits <- length(res$hits$hits)
+  if(hits > 0)
+    out <- c(out, res$hits$hits)
+}
 }
 }
 \references{
 \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search.html}
+}
+\seealso{
+\code{\link{scroll}}
 }
 

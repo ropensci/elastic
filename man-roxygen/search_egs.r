@@ -283,4 +283,22 @@
 #'   }
 #' }'
 #' Search('shakespeare', 'line', body=body)
+#' 
+#' ## Scrolling search - instead of paging
+#' Search('shakespeare', q="a*")$hits$total
+#' res <- Search(index = 'shakespeare', q="a*", scroll="1m")
+#' res <- Search(index = 'shakespeare', q="a*", scroll="1m", search_type = "scan")
+#' scroll(scroll_id = res$`_scroll_id`)
+#' 
+#' res <- Search(index = 'shakespeare', q="a*", scroll="5m", search_type = "scan")
+#' out <- list()
+#' hits <- 1
+#' while(hits != 0){
+#'   res <- scroll(scroll_id = res$`_scroll_id`)
+#'   hits <- length(res$hits$hits)
+#'   if(hits > 0)
+#'     out <- c(out, res$hits$hits)
 #' }
+#' }
+
+

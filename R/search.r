@@ -41,18 +41,21 @@
 #' @param version (logical) Print the document version with each document.
 #' @param body Query, either a list or json.
 #' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
-#' @param ... Curl args passed on to \code{\link[httr]{GET}}
+#' @param scroll (character) Specify how long a consistent view of the index should be maintained 
+#' for scrolled search, e.g., "30s", "1m". See \code{\link{units-time}}.
+#' @param ... Curl args passed on to \code{\link[httr]{POST}}
+#' @seealso \code{\link{scroll}}
 
 Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, default_operator=NULL, 
   explain=NULL, source=NULL, fields=NULL, sort=NULL, track_scores=NULL, timeout=NULL, 
   terminate_after=NULL, from=NULL, size=NULL, search_type=NULL, lowercase_expanded_terms=NULL, 
-  analyze_wildcard=NULL, version=FALSE, body=list(), raw=FALSE, ...)
+  analyze_wildcard=NULL, version=FALSE, body=list(), raw=FALSE, scroll=NULL, ...)
 {
   search_POST("_search", index, type, args=ec(list(df=df, analyzer=analyzer, 
          default_operator=default_operator, explain=explain, `_source`=source, fields=cl(fields), 
          sort=cl(sort), track_scores=track_scores, timeout=timeout, terminate_after=terminate_after, 
          from=from, size=size, search_type=search_type, lowercase_expanded_terms=lowercase_expanded_terms, 
-         analyze_wildcard=analyze_wildcard, version=version, q=q)), body, raw, ...)
+         analyze_wildcard=analyze_wildcard, version=version, q=q, scroll=scroll)), body, raw, ...)
 }
 
 search_POST <- function(path, index=NULL, type=NULL, args, body, raw, ...) 
