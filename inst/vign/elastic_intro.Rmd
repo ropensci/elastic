@@ -1,0 +1,194 @@
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{elastic introduction}
+-->
+
+```{r, eval=TRUE, echo=FALSE}
+knitr::opts_chunk$set(
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+elastic introduction
+======
+
+`elastic` is an R client for [Elasticsearch](http://www.elasticsearch.org/). This vignette is an introduction to the package, while other vignettes dive into the details of various topics.
+
+## Installation
+
+You can install from CRAN (once the package is up there)
+
+```{r eval=FALSE}
+install.packages("elastic")
+```
+
+Or the development version from GitHub
+
+```{r eval=FALSE}
+install.packages("devtools")
+devtools::install_github("ropensci/elastic")
+```
+
+Then load the package
+
+```{r}
+library("elastic")
+```
+
+## Elasticsearch info
+
++ [Elasticsearch home page](http://elasticsearch.org)
++ [API docs](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/index.html)
+
+## Install Elasticsearch
+
+* [Elasticsearch installation help](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/_installation.html)
+
+__Unix (linux/osx)__
+
+Replace `1.4.1` with the version you are working with.
+
++ Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.1.tar.gz`
++ Uncompress it: `tar -xvf elasticsearch-1.4.1.tar.gz`
++ Move it: `sudo mv /path/to/elasticsearch-1.4.1 /usr/local`
++ Navigate to /usr/local: `cd /usr/local`
++ Add shortcut: `sudo ln -s elasticsearch-1.4.1 elasticsearch`
+
+On OSX, you can install via Homebrew: `brew install elasticsearch`
+
+__Windows__
+
+Windows users can follow the above, but unzip the zip file instead of uncompressing the tar file.
+
+## Start Elasticsearch
+
+* Navigate to elasticsearch: `cd /usr/local/elasticsearch`
+* Start elasticsearch: `bin/elasticsearch`
+
+I create a little bash shortcut called `es` that does both of the above commands in one step (`cd /usr/local/elasticsearch && bin/elasticsearch`).
+
+__Note:__ Windows users should run the `elasticsearch.bat` file
+
+## Get some data
+
+Elasticsearch has a bulk load API to load data in fast. The format is pretty weird though. It's sort of JSON, but would pass no JSON linter. I include a few data sets in `elastic` so it's easy to get up and running, and so when you run examples in this package they'll actually run the same way (hopefully).
+
+I have prepared a non-exported function useful for preparing the weird format that Elasticsearch wants for bulk data loads (see below). See `elastic:::make_bulk_plos` and `elastic:::make_bulk_gbif`.
+
+### Shakespeare data
+
+Elasticsearch provides some data on Shakespeare plays. I've provided a subset of this data in this package. Get the path for the file specific to your machine:
+
+```{r}
+shakespeare <- system.file("examples", "shakespeare_data.json", package = "elastic")
+```
+
+Then load the data into Elasticsearch:
+
+```{r eval=FALSE}
+docs_bulk(shakespeare)
+```
+
+If you need some big data to play with, the shakespeare dataset is a good one to start with. You can get the whole thing and pop it into Elasticsearch (beware, may take up to 10 minutes or so.):
+
+```sh
+curl -XGET http://www.elasticsearch.org/guide/en/kibana/current/snippets/shakespeare.json > shakespeare.json
+curl -XPUT localhost:9200/_bulk --data-binary @shakespeare.json
+```
+
+### Public Library of Science (PLOS) data
+
+A dataset inluded in the `elastic` package is metadata for PLOS scholarly articles. Get the file path, then load:
+
+```{r eval=FALSE}
+plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+docs_bulk(plosdat)
+```
+
+### Global Biodiversity Information Facility (GBIF) data
+
+A dataset inluded in the `elastic` package is data for GBIF species occurrence records. Get the file path, then load:
+
+```{r eval=FALSE}
+gbifdat <- system.file("examples", "gbif_data.json", package = "elastic")
+docs_bulk(gbifdat)
+```
+
+GBIF geo data with a coordinates element to allow `geo_shape` queries
+
+```{r eval=FALSE}
+gbifgeo <- system.file("examples", "gbif_geo.json", package = "elastic")
+docs_bulk(gbifgeo)
+```
+
+### More data sets
+
+There are more datasets formatted for bulk loading in the `ropensci/elastic_data` GitHub repository. Find it at [https://github.com/ropensci/elastic_data](https://github.com/ropensci/elastic_data)
+
+## Initialization
+
+The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
+
+```{r}
+connect()
+```
+
+## Search
+
+Search the `plos` index and only return 1 result
+
+```{r}
+Search(index="plos", size=1)$hits$hits
+```
+
+Search the `plos` index, and the `article` document type, sort by title, and query for _antibody_, limit to 1 result
+
+```{r}
+Search(index="plos", type="article", sort="title", q="antibody", size=1)$hits$hits
+```
+
+## Get documents
+
+Get document with `id=1`
+
+```{r}
+docs_get(index='plos', type='article', id=1)
+```
+
+Get certain fields
+
+```{r}
+docs_get(index='plos', type='article', id=1, fields='id')
+```
+
+## Get multiple documents at once
+
+Same index and type, different document ids
+
+```{r}
+docs_mget(index="plos", type="article", id=1:2)
+```
+
+Different indeces, types, and ids
+
+```{r}
+docs_mget(index_type_id=list(c("plos","article",1), c("gbif","record",1)))$docs[[1]]
+```
+
+## Raw JSON data
+
+You can optionally get back raw `json` from `Search()`, `docs_get()`, and `docs_mget()` setting parameter `raw=TRUE`.
+
+For example:
+
+```{r}
+(out <- docs_mget(index="plos", type="article", id=1:2, raw=TRUE))
+```
+
+Then parse
+
+```{r}
+jsonlite::fromJSON(out)
+```
