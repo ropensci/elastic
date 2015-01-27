@@ -7,7 +7,7 @@
 benchmark(raw = FALSE, callopts = list(), query = list(), ...)
 }
 \arguments{
-\item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
+\item{raw}{(logical) If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
 
 \item{callopts}{Curl args passed on to httr::POST.}
 
@@ -16,14 +16,14 @@ benchmark(raw = FALSE, callopts = list(), query = list(), ...)
 \item{...}{Further args passed on to elastic search HTTP API as parameters. Not used right now.}
 }
 \description{
-Run benchmark tests
+THIS FUNCTION DOESN'T WORK YET.
 }
 \examples{
-\donttest{
+\dontrun{
 # pass in as an R list
 args <- list(name = "b1",
    competitors = list(name = "c1", requests = list(query = list(match = "a*"))))
-benchmark(index="shakespeare", query=aggs)
+benchmark(index="shakespeare", query=args)
 
 # or pass in as json query with newlines, easy to read
 aggs <- '{

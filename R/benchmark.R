@@ -1,17 +1,19 @@
 #' Run benchmark tests
 #' 
+#' THIS FUNCTION DOESN'T WORK YET.
+#' 
 #' @keywords internal
-#' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
+#' @param raw (logical) If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
 #' @param callopts Curl args passed on to httr::POST.
 #' @param query Query, either a list or json.
 #' @param ... Further args passed on to elastic search HTTP API as parameters. Not used right now.
 #' @references 
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/master/search-benchmark.html}
-#' @examples \donttest{ 
+#' @examples \dontrun{ 
 #' # pass in as an R list
 #' args <- list(name = "b1", 
 #'    competitors = list(name = "c1", requests = list(query = list(match = "a*"))))
-#' benchmark(index="shakespeare", query=aggs)
+#' benchmark(index="shakespeare", query=args)
 #' 
 #' # or pass in as json query with newlines, easy to read
 #' aggs <- '{
@@ -50,9 +52,9 @@
 #' }}}}}}'
 #' }
 
-benchmark <- function(raw=FALSE, callopts=list(), query=list(), ...)
-{
-  bench_POST(query = query, raw = raw, callopts = callopts, ...)
+benchmark <- function(raw=FALSE, callopts=list(), query=list(), ...){
+  message("This function doesn't work yet")
+  # bench_POST(query = query, raw = raw, callopts = callopts, ...)
 }
 
 bench_POST <- function(query, raw, callopts, ...){
