@@ -10,10 +10,12 @@ Authors@R: person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "myrmecocystus@gmail.com")
 URL: https://github.com/sckott/elastic
 BugReports: https://github.com/sckott/elastic/issues
+VignetteBuilder: knitr
 Imports:
     httr,
     jsonlite
 Suggests:
     testthat,
     roxygen2,
-    dplyr
+    dplyr,
+    knitr
