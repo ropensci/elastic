@@ -3,7 +3,7 @@ Title: General Purpose R Interface to Elasticsearch.
 Description: Easy R connector to Elasticsearch, a NoSQL database built on the
     JVM. This library interacts with the Elasticsearch HTTP API, and includes
     tools for interacting with CouchDB iva the River plugin to Elasticsearch.
-Version: 0.2.1.99
+Version: 0.2.7.99
 Date: 2015-01-26
 License: MIT + file LICENSE
 Authors@R: person("Scott", "Chamberlain", role = c("aut", "cre"),
