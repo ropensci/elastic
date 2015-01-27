@@ -24,13 +24,50 @@
 #' Search(index="shakespeare", size=1, from=1, fields='text_entry')$hits$hits
 #'
 #' ## queries
+#' ### Search in all fields
 #' Search(index="shakespeare", type="act", q="york")
+#' 
+#' ### Searchin specific fields
 #' Search(index="shakespeare", type="act", q="speaker:KING HENRY IV")$hits$total
-#' Search(index="shakespeare", type="act", q="speaker:VERNON")$hits$total
-#'
-#' ## more complex queries
+#' 
+#' ### Exact phrase search by wrapping in quotes
+#' Search(index="shakespeare", type="act", q='speaker:"KING HENRY IV"')$hits$total
+#' 
+#' ### can specify operators between multiple words parenthetically
+#' Search(index="shakespeare", type="act", q="speaker:(HENRY OR ARCHBISHOP)")$hits$total
+#' 
+#' ### where the field line_number has no value (or is missing)
+#' Search(index="shakespeare", q="_missing_:line_number")$hits$total
+#' 
+#' ### where the field line_number has any non-null value
+#' Search(index="shakespeare", q="_exists_:line_number")$hits$total
+#' 
+#' ### wildcards, either * or ?
+#' Search(index="shakespeare", q="*ay")$hits$total
+#' Search(index="shakespeare", q="m?y")$hits$total
+#' 
+#' ### regular expressions, wrapped in forward slashes
+#' Search(index="shakespeare", q="text_entry:/[a-z]/")$hits$total
+#' 
+#' ### fuzziness
+#' Search(index="shakespeare", q="text_entry:ma~")$hits$total
+#' Search(index="shakespeare", q="text_entry:the~2")$hits$total
+#' Search(index="shakespeare", q="text_entry:the~1")$hits$total
+#' 
+#' ### Proximity searches
+#' Search(index="shakespeare", q='text_entry:"as hath"~5')$hits$total
+#' Search(index="shakespeare", q='text_entry:"as hath"~10')$hits$total
+#' 
+#' ### Ranges, here where line_id value is between 10 and 20
 #' Search(index="shakespeare", q="line_id:[10 TO 20]")$hits$total
+#' 
+#' ### Grouping
+#' Search(index="shakespeare", q="(hath OR as) AND the")$hits$total
+#' 
+#' # Limit number of hits returned with the size parameter
 #' Search(index="shakespeare", size=1)
+#' 
+#' # Give explanation of search in result
 #' Search(index="shakespeare", size=1, explain=TRUE)
 #'
 #' ## terminate query after x documents found

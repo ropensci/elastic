@@ -7,7 +7,7 @@
 #' @param index Index name
 #' @param type Document type
 #' @param q The query string (maps to the query_string query, see Query String Query for more 
-#' details).
+#' details). See \url{http://bit.ly/esquerystring} for documentation and examples.
 #' @param df The default field to use when no field prefix is defined within the query.
 #' @param analyzer The analyzer name to be used when analyzing the query string.
 #' @param default_operator The default operator to be used, can be AND or OR. Default: OR.

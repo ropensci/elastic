@@ -162,6 +162,10 @@ From the ES website: The flush process of an index basically frees memory from t
 flushing data to the index storage and clearing the internal transaction log. By default,
 Elasticsearch uses memory heuristics in order to automatically trigger flush operations as
 required in order to clear memory.
+
+\bold{index_status}: The API endpoint for this function was deprecated in
+Elasticsearch \code{v1.2.0}, and will likely be removed soon. Use \code{\link{index_recovery}}
+instead.
 }
 \examples{
 \donttest{
