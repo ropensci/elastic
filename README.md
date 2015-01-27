@@ -76,7 +76,7 @@ Then load the data into Elasticsearch:
 
 
 ```r
-es_bulk(shakespeare)
+docs_bulk(shakespeare)
 ```
 
 If you need some big data to play with, the shakespeare dataset is a good one to start with. You can get the whole thing and pop it into Elasticsearch (beware, may take up to 10 minutes or so.):
@@ -93,7 +93,7 @@ A dataset inluded in the `elastic` package is metadata for PLOS scholarly articl
 
 ```r
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-es_bulk(plosdat)
+docs_bulk(plosdat)
 ```
 
 #### Global Biodiversity Information Facility (GBIF) data
@@ -103,7 +103,15 @@ A dataset inluded in the `elastic` package is data for GBIF species occurrence r
 
 ```r
 gbifdat <- system.file("examples", "gbif_data.json", package = "elastic")
-es_bulk(gbifdat)
+docs_bulk(gbifdat)
+```
+
+GBIF geo data with a coordinates element to allow `geo_shape` queries
+
+
+```r
+gbifgeo <- system.file("examples", "gbif_geo.json", package = "elastic")
+docs_bulk(gbifgeo)
 ```
 
 #### More data sets
@@ -117,17 +125,9 @@ The function `connect()` is used before doing anything else to set the connectio
 
 ```r
 connect()
-#> uri:       http://127.0.0.1 
-#> port:      9200 
-#> username:  NULL 
-#> password:  NULL 
-#> api key:   NULL 
-#> elasticsearch details:   
-#>       status:                  200 
-#>       name:                    Martha Johansson 
-#>       Elasticsearch version:   1.4.0 
-#>       ES version timestamp:    2014-11-05T14:26:12Z 
-#>       lucene version:          4.10.2
+#> Error: 
+#>   Failed to connect to http://127.0.0.1:9200
+#>   Remember to start Elasticsearch before connecting
 ```
 
 ### Search
@@ -137,28 +137,7 @@ Search the `plos` index and only return 1 result
 
 ```r
 Search(index="plos", size=1)$hits$hits
-#> [[1]]
-#> [[1]]$`_index`
-#> [1] "plos"
-#> 
-#> [[1]]$`_type`
-#> [1] "article"
-#> 
-#> [[1]]$`_id`
-#> [1] "4"
-#> 
-#> [[1]]$`_version`
-#> [1] 2
-#> 
-#> [[1]]$`_score`
-#> [1] 1
-#> 
-#> [[1]]$`_source`
-#> [[1]]$`_source`$id
-#> [1] "10.1371/journal.pone.0107758"
-#> 
-#> [[1]]$`_source`$title
-#> [1] "Lactobacilli Inactivate Chlamydia trachomatis through Lactic Acid but Not H2O2"
+#> Error in function (type, msg, asError = TRUE) : Failed to connect to 127.0.0.1 port 9200: Connection refused
 ```
 
 Search the `plos` index, and the `article` document type, sort by title, and query for _antibody_, limit to 1 result
@@ -166,33 +145,7 @@ Search the `plos` index, and the `article` document type, sort by title, and que
 
 ```r
 Search(index="plos", type="article", sort="title", q="antibody", size=1)$hits$hits
-#> [[1]]
-#> [[1]]$`_index`
-#> [1] "plos"
-#> 
-#> [[1]]$`_type`
-#> [1] "article"
-#> 
-#> [[1]]$`_id`
-#> [1] "345"
-#> 
-#> [[1]]$`_version`
-#> [1] 2
-#> 
-#> [[1]]$`_score`
-#> NULL
-#> 
-#> [[1]]$`_source`
-#> [[1]]$`_source`$id
-#> [1] "10.1371/journal.pone.0080404"
-#> 
-#> [[1]]$`_source`$title
-#> [1] "Thermal Stress Induced Aggregation of Aquaporin 0 (AQP0) and Protection by α-Crystallin via Its Chaperone Function"
-#> 
-#> 
-#> [[1]]$sort
-#> [[1]]$sort[[1]]
-#> [1] "0"
+#> Error in function (type, msg, asError = TRUE) : Failed to connect to 127.0.0.1 port 9200: Connection refused
 ```
 
 ### Get documents
@@ -202,27 +155,7 @@ Get document with id=1
 
 ```r
 docs_get(index='plos', type='article', id=1)
-#> $`_index`
-#> [1] "plos"
-#> 
-#> $`_type`
-#> [1] "article"
-#> 
-#> $`_id`
-#> [1] "1"
-#> 
-#> $`_version`
-#> [1] 2
-#> 
-#> $found
-#> [1] TRUE
-#> 
-#> $`_source`
-#> $`_source`$id
-#> [1] "10.1371/journal.pone.0098602"
-#> 
-#> $`_source`$title
-#> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
+#> Error in function (type, msg, asError = TRUE) : Failed to connect to 127.0.0.1 port 9200: Connection refused
 ```
 
 
@@ -231,25 +164,7 @@ Get certain fields
 
 ```r
 docs_get(index='plos', type='article', id=1, fields='id')
-#> $`_index`
-#> [1] "plos"
-#> 
-#> $`_type`
-#> [1] "article"
-#> 
-#> $`_id`
-#> [1] "1"
-#> 
-#> $`_version`
-#> [1] 2
-#> 
-#> $found
-#> [1] TRUE
-#> 
-#> $fields
-#> $fields$id
-#> $fields$id[[1]]
-#> [1] "10.1371/journal.pone.0098602"
+#> Error in function (type, msg, asError = TRUE) : Failed to connect to 127.0.0.1 port 9200: Connection refused
 ```
 
 
@@ -260,54 +175,7 @@ Same index and type, different document ids
 
 ```r
 docs_mget(index="plos", type="article", id=1:2)
-#> $docs
-#> $docs[[1]]
-#> $docs[[1]]$`_index`
-#> [1] "plos"
-#> 
-#> $docs[[1]]$`_type`
-#> [1] "article"
-#> 
-#> $docs[[1]]$`_id`
-#> [1] "1"
-#> 
-#> $docs[[1]]$`_version`
-#> [1] 2
-#> 
-#> $docs[[1]]$found
-#> [1] TRUE
-#> 
-#> $docs[[1]]$`_source`
-#> $docs[[1]]$`_source`$id
-#> [1] "10.1371/journal.pone.0098602"
-#> 
-#> $docs[[1]]$`_source`$title
-#> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
-#> 
-#> 
-#> 
-#> $docs[[2]]
-#> $docs[[2]]$`_index`
-#> [1] "plos"
-#> 
-#> $docs[[2]]$`_type`
-#> [1] "article"
-#> 
-#> $docs[[2]]$`_id`
-#> [1] "2"
-#> 
-#> $docs[[2]]$`_version`
-#> [1] 2
-#> 
-#> $docs[[2]]$found
-#> [1] TRUE
-#> 
-#> $docs[[2]]$`_source`
-#> $docs[[2]]$`_source`$id
-#> [1] "10.1371/journal.pone.0107757"
-#> 
-#> $docs[[2]]$`_source`$title
-#> [1] "Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition"
+#> Error in function (type, msg, asError = TRUE) : Failed to connect to 127.0.0.1 port 9200: Connection refused
 ```
 
 Different indeces, types, and ids
@@ -315,27 +183,7 @@ Different indeces, types, and ids
 
 ```r
 docs_mget(index_type_id=list(c("plos","article",1), c("gbif","record",1)))$docs[[1]]
-#> $`_index`
-#> [1] "plos"
-#> 
-#> $`_type`
-#> [1] "article"
-#> 
-#> $`_id`
-#> [1] "1"
-#> 
-#> $`_version`
-#> [1] 2
-#> 
-#> $found
-#> [1] TRUE
-#> 
-#> $`_source`
-#> $`_source`$id
-#> [1] "10.1371/journal.pone.0098602"
-#> 
-#> $`_source`$title
-#> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
+#> Error in function (type, msg, asError = TRUE) : Failed to connect to 127.0.0.1 port 9200: Connection refused
 ```
 
 ### Parsing
@@ -347,9 +195,7 @@ For example:
 
 ```r
 (out <- docs_mget(index="plos", type="article", id=1:2, raw=TRUE))
-#> [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"1\",\"_version\":2,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098602\",\"title\":\"Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar\"}},{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"2\",\"_version\":2,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0107757\",\"title\":\"Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition\"}}]}"
-#> attr(,"class")
-#> [1] "elastic_mget"
+#> Error in function (type, msg, asError = TRUE) : Failed to connect to 127.0.0.1 port 9200: Connection refused
 ```
 
 Then parse
@@ -357,13 +203,7 @@ Then parse
 
 ```r
 jsonlite::fromJSON(out)
-#> $docs
-#>   _index   _type _id _version found                   _source.id
-#> 1   plos article   1        2  TRUE 10.1371/journal.pone.0098602
-#> 2   plos article   2        2  TRUE 10.1371/journal.pone.0107757
-#>                                                                                                                                                _source.title
-#> 1 Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar
-#> 2                                     Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition
+#> Error in jsonlite::fromJSON(out): object 'out' not found
 ```
 
 ## CouchDB integration
@@ -433,4 +273,4 @@ curl -XGET "http://localhost:9200/sofadb/_search?q=road&pretty=true"
 * License: MIT
 * Get citation information for `elastic` in R doing `citation(package = 'elastic')`
 
-[![](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
+[![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
