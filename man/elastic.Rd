@@ -38,14 +38,16 @@ Install Elasticsearch (on OSX)
 
 \bold{Initialization:}
 
-The function `es_connect` is used before doing anything else to set the connection details to
-your remote or local elasticsearch store. The details created by `es_connect` are written
+The function \code{\link{connect}} is used before doing anything else to set the connection details to
+your remote or local elasticsearch store. The details created by \code{\link{connect}} are written
 to your options for the current session, and are used by `elastic` functions.
 
-\code{connect()}
+\code{\link{connect}}
 
 \bold{Search:}
 
-\code{es_search(index="twitter")}
+The main way to search Elasticsearch is via the \code{\link{Search}} function. E.g.:
+
+\code{Search(index="twitter")}
 }
 
