@@ -9,18 +9,15 @@
 \alias{aliases_get}
 \title{Elasticsearch alias APIs}
 \usage{
-alias_get(index = NULL, alias = NULL, ignore_unavailable = FALSE,
-  callopts = list())
+alias_get(index = NULL, alias = NULL, ignore_unavailable = FALSE, ...)
 
-aliases_get(index = NULL, alias = NULL, ignore_unavailable = FALSE,
-  callopts = list())
+aliases_get(index = NULL, alias = NULL, ignore_unavailable = FALSE, ...)
 
-alias_exists(index = NULL, alias = NULL, callopts = list())
+alias_exists(index = NULL, alias = NULL, ...)
 
-alias_create(index = NULL, alias, routing = NULL, filter = NULL,
-  callopts = list())
+alias_create(index = NULL, alias, routing = NULL, filter = NULL, ...)
 
-alias_delete(index = NULL, alias, callopts = list())
+alias_delete(index = NULL, alias, ...)
 }
 \arguments{
 \item{index}{An index name}
@@ -30,7 +27,7 @@ alias_delete(index = NULL, alias, callopts = list())
 \item{ignore_unavailable}{(logical) What to do if an specified index name doesn't exist. If set
 to TRUE then those indices are ignored.}
 
-\item{callopts}{Curl args passed on to \code{\link[httr]{POST}}}
+\item{...}{Curl args passed on to \code{\link[httr]{POST}}}
 
 \item{routing}{Ignored for now}
 
@@ -57,6 +54,10 @@ alias_exists(alias = "adsfasdf")
 # Delete an alias
 alias_delete(index = "plos", alias = "tables")
 alias_exists(alias = "tables")
+
+# Curl options
+library("httr")
+aliases_get(config=verbose())
 }
 }
 \author{

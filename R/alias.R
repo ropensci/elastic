@@ -6,7 +6,7 @@
 #' to TRUE then those indices are ignored.
 #' @param routing Ignored for now
 #' @param filter Ignored for now
-#' @param callopts Curl args passed on to \code{\link[httr]{POST}}
+#' @param ... Curl args passed on to \code{\link[httr]{POST}}
 #' @examples \donttest{
 #' # Retrieve a specified alias
 #' alias_get(index="plos")
@@ -24,6 +24,10 @@
 #' # Delete an alias
 #' alias_delete(index = "plos", alias = "tables")
 #' alias_exists(alias = "tables")
+#' 
+#' # Curl options
+#' library("httr")
+#' aliases_get(config=verbose())
 #' }
 #' @references
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-aliases.html}
@@ -33,52 +37,52 @@ NULL
 
 #' @export
 #' @rdname alias
-alias_get <- function(index=NULL, alias=NULL, ignore_unavailable=FALSE, callopts=list())
+alias_get <- function(index=NULL, alias=NULL, ignore_unavailable=FALSE, ...)
 {
-  alias_GET(index, alias, ignore_unavailable, callopts)
+  alias_GET(index, alias, ignore_unavailable, ...)
 }
 
 #' @export
 #' @rdname alias
-aliases_get <- function(index=NULL, alias=NULL, ignore_unavailable=FALSE, callopts=list())
+aliases_get <- function(index=NULL, alias=NULL, ignore_unavailable=FALSE, ...)
 {
-  alias_GET(index, alias, ignore_unavailable, callopts)
+  alias_GET(index, alias, ignore_unavailable, ...)
 }
 
 #' @export
 #' @rdname alias
-alias_exists <- function(index=NULL, alias=NULL, callopts=list())
+alias_exists <- function(index=NULL, alias=NULL, ...)
 {
-  res <- alias_HEAD(index, alias, callopts)
+  res <- alias_HEAD(index, alias, ...)
   if(res$status_code == 200) TRUE else FALSE
 }
 
 #' @export
 #' @rdname alias
-alias_create <- function(index=NULL, alias, routing=NULL, filter=NULL, callopts=list())
+alias_create <- function(index=NULL, alias, routing=NULL, filter=NULL, ...)
 {
-  out <- PUT(alias_url(index, alias), callopts)
+  out <- PUT(alias_url(index, alias), ...)
   stop_for_status(out)
   jsonlite::fromJSON(content(out, "text"), FALSE)
 }
 
 #' @export
 #' @rdname alias
-alias_delete <- function(index=NULL, alias, callopts=list())
+alias_delete <- function(index=NULL, alias, ...)
 {
-  out <- DELETE(alias_url(index, alias), callopts)
+  out <- DELETE(alias_url(index, alias), ...)
   stop_for_status(out)
   jsonlite::fromJSON(content(out, "text"), FALSE)
 }
 
-alias_GET <- function(index, alias, ignore, callopts, ...) 
+alias_GET <- function(index, alias, ignore, ...) 
 {
-  tt <- GET(alias_url(index, alias), query=ec(list(ignore_unavailable=as_log(ignore))), callopts)
+  tt <- GET(alias_url(index, alias), query=ec(list(ignore_unavailable=as_log(ignore))), ...)
   if(tt$status_code > 202) geterror(tt)
   jsonlite::fromJSON(content(tt, as = "text"), FALSE)
 }
 
-alias_HEAD <- function(index, alias, callopts) HEAD(alias_url(index, alias), callopts)
+alias_HEAD <- function(index, alias, ...) HEAD(alias_url(index, alias), ...)
 
 alias_url <- function(index, alias) 
 {
