@@ -15,6 +15,10 @@
 #' count(index='shakespeare')
 #' count(index=c('plos','shakespeare'), q="a*")
 #' count(index=c('plos','shakespeare'), q="z*")
+#' 
+#' # Curl options
+#' library("httr")
+#' count(callopts=verbose())
 #' }
 
 count <- function(index=NULL, type=NULL, callopts=list(), verbose=TRUE, ...){

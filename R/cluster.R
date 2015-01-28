@@ -44,10 +44,6 @@
 #' # raw json data
 #' cluster_health(raw = TRUE)
 #' }
-#'
-#' @examples \donttest{
-#' cluster_reroute()
-#' }
 
 #' @export
 #' @rdname cluster

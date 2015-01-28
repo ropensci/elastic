@@ -426,10 +426,7 @@ analyze_POST <- function(url, args, body, ...){
 
 cc_POST <- function(url, args, ...){
   tt <- POST(url, body=args, encode = "json", ...)
-  if(tt$status_code > 202){
-    if(tt$status_code > 202) stop(tt$headers$statusmessage)
-    if(content(tt)$status == "ERROR") stop(content(tt)$error_message)
-  }
+  if(tt$status_code > 202) geterror(tt)
   res <- content(tt, as = "text")
   jsonlite::fromJSON(res, FALSE)
 }

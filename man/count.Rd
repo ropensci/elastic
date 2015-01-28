@@ -32,6 +32,10 @@ count(index='plos', type='article')
 count(index='shakespeare')
 count(index=c('plos','shakespeare'), q="a*")
 count(index=c('plos','shakespeare'), q="z*")
+
+# Curl options
+library("httr")
+count(callopts=verbose())
 }
 }
 

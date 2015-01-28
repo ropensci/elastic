@@ -19,10 +19,7 @@ es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL,
   
   args <- ec(list(...))
   tt <- GET(url, query=args, callopts)
-  if(tt$status_code > 202){
-    if(tt$status_code > 202) stop(tt$headers$statusmessage)
-    if(content(tt)$status == "ERROR") stop(content(tt)$error_message)
-  }
+  if(tt$status_code > 202) geterror(tt)
   res <- content(tt, as = "text")
   if(!is.null(clazz)){ 
     class(res) <- clazz
@@ -37,10 +34,7 @@ index_GET <- function(path, index, features, raw, ...)
   if(!is.null(features)) features <- paste0(paste0("_", features), collapse = ",")
   if(!is.null(features)) url <- paste0(url, "/", features)
   tt <- GET(url, ...)
-  if(tt$status_code > 202){
-    if(tt$status_code > 202) stop(tt$headers$statusmessage)
-    if(content(tt)$status == "ERROR") stop(content(tt)$error_message)
-  }
+  if(tt$status_code > 202) geterror(tt)
   jsonlite::fromJSON(content(tt, as = "text"), FALSE)
 }
 
@@ -55,10 +49,7 @@ es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, quer
   
   args <- check_inputs(query)
   tt <- POST(url, body=args, callopts, encode = "json")
-  if(tt$status_code > 202){
-    if(tt$status_code > 202) stop(tt$headers$statusmessage)
-    if(content(tt)$status == "ERROR") stop(content(tt)$error_message)
-  }
+  if(tt$status_code > 202) geterror(tt)
   res <- content(tt, as = "text")
   if(!is.null(clazz)){ 
     class(res) <- clazz

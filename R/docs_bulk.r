@@ -3,22 +3,27 @@
 #' @export
 #' @param filename Path to a file to load in the bulk API
 #' @param raw (logical) Get raw JSON back or not.
-#' @param callopts Pass on options to POST call.
+#' @param ... Pass on curl options to the \code{\link[httr]{POST}} call.
 #' @details More on the Bulk API:
 #'    \url{http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/bulk.html}.
 #' @examples \donttest{
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-#' docs_bulk(filename=plosdat)
+#' docs_bulk(plosdat)
 #' aliases_get()
 #' index_delete(index='plos')
 #' aliases_get()
+#' 
+#' # Curl options
+#' library("httr")
+#' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+#' docs_bulk(plosdat, config=verbose())
 #' }
 
-docs_bulk <- function(filename, raw=FALSE, callopts=list())
+docs_bulk <- function(filename, raw=FALSE, ...)
 {
   conn <- es_get_auth()
   url <- paste0(conn$base, ":", conn$port, '/_bulk')
-  tt <- POST(url, body=upload_file(filename), callopts, encode = "json")
+  tt <- POST(url, body=upload_file(filename), ..., encode = "json")
   if(tt$status_code > 202){
     if(tt$status_code > 202) stop(content(tt)$error)
     if(content(tt)$status == "ERROR" | content(tt)$status == 500) stop(content(tt)$error_message)
