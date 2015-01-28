@@ -11,7 +11,7 @@ tokenizer_set(index, body, ...)
 
 \item{body}{Query, either a list or json.}
 
-\item{...}{Further args passed on to elastic search \code{\link[httr]{GET}}}
+\item{...}{Curl options passed on to \code{\link[httr]{PUT}}}
 }
 \description{
 Tokenizer operations
@@ -39,7 +39,8 @@ body <- '{
              }
       }
 }'
-tokenizer_set(index = "shakespeare", body=body)
+tokenizer_set(index = "test1", body=body)
+index_analyze(text = "hello world", index = "test1", analyzer='my_ngram_analyzer')
 }
 }
 \author{

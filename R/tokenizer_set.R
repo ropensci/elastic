@@ -4,7 +4,7 @@
 #' 
 #' @param index (character) A character vector of index names
 #' @param body Query, either a list or json.
-#' @param ... Further args passed on to elastic search \code{\link[httr]{GET}}
+#' @param ... Curl options passed on to \code{\link[httr]{PUT}}
 #' 
 #' @author Scott Chamberlain <myrmecocystus@@gmail.com>
 #' @examples \dontrun{
@@ -29,7 +29,8 @@
 #'              }
 #'       }
 #' }'
-#' tokenizer_set(index = "shakespeare", body=body)
+#' tokenizer_set(index = "test1", body=body)
+#' index_analyze(text = "hello world", index = "test1", analyzer='my_ngram_analyzer')
 #' }
 
 tokenizer_set <- function(index, body, ...)
@@ -43,7 +44,7 @@ tokenizer_set <- function(index, body, ...)
 tokenizer_PUT <- function(url, body, ...){
   body <- check_inputs(body)
   out <- PUT(url, body=body, encode = "json", ...)
-  stop_for_status(out)
+  if(out$status_code > 202) geterror(out)
   tt <- content(out, as = "text")
   jsonlite::fromJSON(tt)
 }
