@@ -1,3 +1,16 @@
+elastic 0.3.0
+===============
+
+NEW FEATURES
+
+* asdf
+
+IMPROVEMENTS
+
+* Made CouchDB river plugin functions not exported for now, may bring back later. 
+* asdf
+* asdf
+
 elastic 0.2.0
 ===============
 

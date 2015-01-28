@@ -341,7 +341,7 @@ docs_mget(index_type_id=list(c("plos","article",1), c("gbif","record",1)))$docs[
 
 ### Parsing
 
-`es_parse` is a general purpose parser function with extension methods `es_parse.Search`, `es_parse.es_get`, and `es_parse.es_mget`, for parsing `Search`, `es_get`, and `es_mget` function output, respectively. `es_parse` is used internally within those three functions (`Search`, `es_get`, `es_mget`) to do parsing. You can optionally get back raw `json` from `Search`, `es_get`, and `es_mget` setting parameter `raw=TRUE`, and then parsing after with `es_parse`.
+You can optionally get back raw `json` from `Search()`, `docs_get()`, and `docs_mget()` setting parameter `raw=TRUE`.
 
 For example:
 
