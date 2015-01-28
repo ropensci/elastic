@@ -3,49 +3,53 @@
 #' @import httr
 #'
 #' @template all
-#' @template get
+#' @param ids More than one document id, see examples.
 #' @param type_id List of vectors of length 2, each with an element for type and id.
 #' @param index_type_id List of vectors of length 3, each with an element for index,
 #' type, and id.
+#' @param source (logical) If \code{TRUE}, return source.
+#' @param fields Fields to return from the response object.
+#' 
 #' @details There are a lot of terms you can use for Elasticsearch. See here
 #'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
 #' @export
 #' @examples \donttest{
 #' # Same index and type
-#' docs_mget(index="shakespeare", type="line", id=c(9,10))
-#' tmp <- docs_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), raw=TRUE)
+#' docs_mget(index="shakespeare", type="line", ids=c(9,10))
+#' tmp <- docs_mget(index="mran", type="metadata", ids=c('plyr','ggplot2'), raw=TRUE)
 #' es_parse(tmp)
-#' docs_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), fields='description')
-#' docs_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), source=TRUE)
+#' docs_mget(index="mran", type="metadata", ids=c('plyr','ggplot2'), fields='description')
+#' docs_mget(index="mran", type="metadata", ids=c('plyr','ggplot2'), source=TRUE)
 #'
 #' library("httr")
-#' docs_mget(index="twitter", type="tweet", id=1:2, callopts=verbose())
+#' docs_mget(index="twitter", type="tweet", ids=1:2, callopts=verbose())
 #'
 #' # Same index, but different types
 #' docs_mget(index="shakespeare", type_id=list(c("scene",1), c("line",20)))
-#' docs_mget(index="twitter", type_id=list(c("tweet",1), c("mention",2)))
-#' docs_mget(index="twitter", type_id=list(c("tweet",1), c("mention",2)), fields='user')
-#' docs_mget(index="twitter", type_id=list(c("tweet",1), c("mention",2)), fields=c('user','message'))
+#' docs_mget(index="shakespeare", type_id=list(c("scene",1), c("line",20)), fields='play_name')
 #'
 #' # Different indeces and different types
 #' # pass in separately
-#' docs_mget(index_type_id=list(c("shakespeare","line",1), c("appdotnet","share",1)))
-#' docs_mget(index_type_id=list(c("twitter","mention",1), c("appdotnet","share",1)))
+#' docs_mget(index_type_id=list(c("shakespeare","line",1), c("plos","article",1)))
 #' }
 
-docs_mget <- function(index=NULL, type=NULL, id=NULL, type_id=NULL, index_type_id=NULL,
+docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL, index_type_id=NULL,
   source=NULL, fields=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
   conn <- es_get_auth()
+  
+  if(!is.null(ids)){
+    if(length(ids) < 2) stop("If ids parameter is used, more than 1 id must be passed", call. = FALSE)
+  }
 
   base <- paste(conn$base, ":", conn$port, sep="")
   fields <- if(is.null(fields)) { fields} else { paste(fields, collapse=",") }
   args <- ec(list(...))
 
   # One index, one type, one to many ids
-  if(length(index)==1 && length(unique(type))==1 && length(id) > 1){
+  if(length(index)==1 && length(unique(type))==1 && length(ids) > 1){
 
-    body <- jsonlite::toJSON(list("ids" = id))
+    body <- jsonlite::toJSON(list("ids" = ids))
     url <- paste(base, index, type, '_mget', sep="/")
     out <- POST(url, body = body, encode = 'json', callopts, query = args)
 
@@ -58,7 +62,7 @@ docs_mget <- function(index=NULL, type=NULL, id=NULL, type_id=NULL, index_type_i
     docs <- lapply(type_id, function(x){
       list(`_type` = x[[1]], `_id` = x[[2]])
     })
-    docs <- lapply(docs, function(y) c(y, "_source" = source, "_fields" = fields))
+    docs <- lapply(docs, function(y) modifyList(y, list(`_source` = source, fields = fields)))
     tt <- jsonlite::toJSON(list("docs" = docs))
     url <- paste(base, index, '_mget', sep="/")
     out <- POST(url, body = tt, encode = 'json', callopts, query = args)
@@ -70,7 +74,7 @@ docs_mget <- function(index=NULL, type=NULL, id=NULL, type_id=NULL, index_type_i
     # check for 3 elements in each element
     stopifnot(all(sapply(index_type_id, function(x) length(x) == 3)))
     docs <- lapply(index_type_id, function(x){
-      list(`_index` = x[[1]], `_type` = x[[2]], `_id` = x[[3]])
+      modifyList(list(`_index` = x[[1]], `_type` = x[[2]], `_id` = x[[3]]), list(fields = fields))
     })
     tt <- jsonlite::toJSON(list("docs" = docs))
     url <- paste(base, '_mget', sep="/")

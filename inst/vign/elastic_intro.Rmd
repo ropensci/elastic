@@ -71,6 +71,16 @@ I create a little bash shortcut called `es` that does both of the above commands
 
 __Note:__ Windows users should run the `elasticsearch.bat` file
 
+## Initialize connection
+
+The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
+
+```{r}
+connect()
+```
+
+On package load, your base url and port are set to `http://127.0.0.1` and `9200`, respectively. You can of course override these settings per session or for all sessions. 
+
 ## Get some data
 
 Elasticsearch has a bulk load API to load data in fast. The format is pretty weird though. It's sort of JSON, but would pass no JSON linter. I include a few data sets in `elastic` so it's easy to get up and running, and so when you run examples in this package they'll actually run the same way (hopefully).
@@ -127,14 +137,6 @@ docs_bulk(gbifgeo)
 
 There are more datasets formatted for bulk loading in the `ropensci/elastic_data` GitHub repository. Find it at [https://github.com/ropensci/elastic_data](https://github.com/ropensci/elastic_data)
 
-## Initialization
-
-The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
-
-```{r}
-connect()
-```
-
 ## Search
 
 Search the `plos` index and only return 1 result
@@ -168,7 +170,7 @@ docs_get(index='plos', type='article', id=1, fields='id')
 Same index and type, different document ids
 
 ```{r}
-docs_mget(index="plos", type="article", id=1:2)
+docs_mget(index="plos", type="article", id=3:4)
 ```
 
 Different indeces, types, and ids
@@ -184,7 +186,7 @@ You can optionally get back raw `json` from `Search()`, `docs_get()`, and `docs_
 For example:
 
 ```{r}
-(out <- docs_mget(index="plos", type="article", id=1:2, raw=TRUE))
+(out <- docs_mget(index="plos", type="article", id=5:6, raw=TRUE))
 ```
 
 Then parse

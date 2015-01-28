@@ -13,6 +13,7 @@
 #'
 #' # Get certain fields
 #' docs_get(index='shakespeare', type='line', id=10, fields='play_name')
+#' docs_get(index='shakespeare', type='line', id=10, fields=c('play_name','speaker'))
 #'
 #' # Just test for existence of the document
 #' docs_get(index='plos', type='article', id=1, exists=TRUE)
@@ -29,10 +30,6 @@ docs_get <- function(index=NULL, type=NULL, id=NULL, source=FALSE,
   args <- ec(list(fields = cl(fields), ...))
   url <- sprintf("%s/%s/%s/%s", url, index, type, id)
   if(source) url <- paste(url, '_source', sep="/")
-
-#   if(length(id) > 1){ # pass in request in body
-#     body <- toJSON(list(ids = as.character(id)))
-#   } else{ url <- sprintf("%s/%s/%s/%s", url, index, type, id) }
 
   if(exists){
     out <- HEAD(url, query=args, callopts)

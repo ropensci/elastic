@@ -68,6 +68,31 @@ I create a little bash shortcut called `es` that does both of the above commands
 
 __Note:__ Windows users should run the `elasticsearch.bat` file
 
+## Initialize connection
+
+The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
+
+
+```r
+connect()
+```
+
+```
+#> uri:       http://127.0.0.1 
+#> port:      9200 
+#> username:  NULL 
+#> password:  NULL 
+#> api key:   NULL 
+#> elasticsearch details:   
+#>       status:                  200 
+#>       name:                    Taj Nital 
+#>       Elasticsearch version:   1.4.2 
+#>       ES version timestamp:    2014-12-16T14:11:12Z 
+#>       lucene version:          4.10.2
+```
+
+On package load, your base url and port are set to `http://127.0.0.1` and `9200`, respectively. You can of course override these settings per session or for all sessions. 
+
 ## Get some data
 
 Elasticsearch has a bulk load API to load data in fast. The format is pretty weird though. It's sort of JSON, but would pass no JSON linter. I include a few data sets in `elastic` so it's easy to get up and running, and so when you run examples in this package they'll actually run the same way (hopefully).
@@ -129,29 +154,6 @@ docs_bulk(gbifgeo)
 
 There are more datasets formatted for bulk loading in the `ropensci/elastic_data` GitHub repository. Find it at [https://github.com/ropensci/elastic_data](https://github.com/ropensci/elastic_data)
 
-## Initialization
-
-The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
-
-
-```r
-connect()
-```
-
-```
-#> uri:       http://127.0.0.1 
-#> port:      9200 
-#> username:  NULL 
-#> password:  NULL 
-#> api key:   NULL 
-#> elasticsearch details:   
-#>       status:                  200 
-#>       name:                    Solitaire 
-#>       Elasticsearch version:   1.4.0 
-#>       ES version timestamp:    2014-11-05T14:26:12Z 
-#>       lucene version:          4.10.2
-```
-
 ## Search
 
 Search the `plos` index and only return 1 result
@@ -173,7 +175,7 @@ Search(index="plos", size=1)$hits$hits
 #> [1] "4"
 #> 
 #> [[1]]$`_version`
-#> [1] 2
+#> [1] 1
 #> 
 #> [[1]]$`_score`
 #> [1] 1
@@ -205,7 +207,7 @@ Search(index="plos", type="article", sort="title", q="antibody", size=1)$hits$hi
 #> [1] "568"
 #> 
 #> [[1]]$`_version`
-#> [1] 2
+#> [1] 1
 #> 
 #> [[1]]$`_score`
 #> NULL
@@ -243,7 +245,7 @@ docs_get(index='plos', type='article', id=1)
 #> [1] "1"
 #> 
 #> $`_version`
-#> [1] 2
+#> [1] 1
 #> 
 #> $found
 #> [1] TRUE
@@ -274,7 +276,7 @@ docs_get(index='plos', type='article', id=1, fields='id')
 #> [1] "1"
 #> 
 #> $`_version`
-#> [1] 2
+#> [1] 1
 #> 
 #> $found
 #> [1] TRUE
@@ -291,7 +293,7 @@ Same index and type, different document ids
 
 
 ```r
-docs_mget(index="plos", type="article", id=1:2)
+docs_mget(index="plos", type="article", id=3:4)
 ```
 
 ```
@@ -304,20 +306,20 @@ docs_mget(index="plos", type="article", id=1:2)
 #> [1] "article"
 #> 
 #> $docs[[1]]$`_id`
-#> [1] "1"
+#> [1] "3"
 #> 
 #> $docs[[1]]$`_version`
-#> [1] 2
+#> [1] 1
 #> 
 #> $docs[[1]]$found
 #> [1] TRUE
 #> 
 #> $docs[[1]]$`_source`
 #> $docs[[1]]$`_source`$id
-#> [1] "10.1371/journal.pone.0098602"
+#> [1] "10.1371/journal.pone.0107756"
 #> 
 #> $docs[[1]]$`_source`$title
-#> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
+#> [1] "The Effect of S-Adenosylmethionine on Cognitive Performance in Mice: An Animal Model Meta-Analysis"
 #> 
 #> 
 #> 
@@ -329,20 +331,20 @@ docs_mget(index="plos", type="article", id=1:2)
 #> [1] "article"
 #> 
 #> $docs[[2]]$`_id`
-#> [1] "2"
+#> [1] "4"
 #> 
 #> $docs[[2]]$`_version`
-#> [1] 2
+#> [1] 1
 #> 
 #> $docs[[2]]$found
 #> [1] TRUE
 #> 
 #> $docs[[2]]$`_source`
 #> $docs[[2]]$`_source`$id
-#> [1] "10.1371/journal.pone.0107757"
+#> [1] "10.1371/journal.pone.0107758"
 #> 
 #> $docs[[2]]$`_source`$title
-#> [1] "Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition"
+#> [1] "Lactobacilli Inactivate Chlamydia trachomatis through Lactic Acid but Not H2O2"
 ```
 
 Different indeces, types, and ids
@@ -363,7 +365,7 @@ docs_mget(index_type_id=list(c("plos","article",1), c("gbif","record",1)))$docs[
 #> [1] "1"
 #> 
 #> $`_version`
-#> [1] 2
+#> [1] 1
 #> 
 #> $found
 #> [1] TRUE
@@ -384,11 +386,11 @@ For example:
 
 
 ```r
-(out <- docs_mget(index="plos", type="article", id=1:2, raw=TRUE))
+(out <- docs_mget(index="plos", type="article", id=5:6, raw=TRUE))
 ```
 
 ```
-#> [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"1\",\"_version\":2,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098602\",\"title\":\"Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar\"}},{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"2\",\"_version\":2,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0107757\",\"title\":\"Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition\"}}]}"
+#> [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"5\",\"_version\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0085123\",\"title\":\"MiR-21 Is under Control of STAT5 but Is Dispensable for Mammary Development and Lactation\"}},{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"6\",\"_version\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098600\",\"title\":\"Correction: Designing Mixed Species Tree Plantations for the Tropics: Balancing Ecological Attributes of Species with Landholder Preferences in the Philippines\"}}]}"
 #> attr(,"class")
 #> [1] "elastic_mget"
 ```
@@ -403,9 +405,9 @@ jsonlite::fromJSON(out)
 ```
 #> $docs
 #>   _index   _type _id _version found                   _source.id
-#> 1   plos article   1        2  TRUE 10.1371/journal.pone.0098602
-#> 2   plos article   2        2  TRUE 10.1371/journal.pone.0107757
-#>                                                                                                                                                _source.title
-#> 1 Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar
-#> 2                                     Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition
+#> 1   plos article   5        1  TRUE 10.1371/journal.pone.0085123
+#> 2   plos article   6        1  TRUE 10.1371/journal.pone.0098600
+#>                                                                                                                                                     _source.title
+#> 1                                                                       MiR-21 Is under Control of STAT5 but Is Dispensable for Mammary Development and Lactation
+#> 2 Correction: Designing Mixed Species Tree Plantations for the Tropics: Balancing Ecological Attributes of Species with Landholder Preferences in the Philippines
 ```

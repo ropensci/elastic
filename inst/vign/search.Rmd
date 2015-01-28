@@ -260,7 +260,7 @@ out$hits$total
 ```
 
 ```{r}
-sapply(out$hits$hits, function(x) x$highlight$title[[1]])
+sapply(out$hits$hits, function(x) x$highlight$title[[1]])[8:10]
 ```
 
 ### Scrolling search - instead of paging

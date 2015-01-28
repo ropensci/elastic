@@ -4,7 +4,7 @@
 \alias{docs_mget}
 \title{Get multiple documents via the multiple get API.}
 \usage{
-docs_mget(index = NULL, type = NULL, id = NULL, type_id = NULL,
+docs_mget(index = NULL, type = NULL, ids = NULL, type_id = NULL,
   index_type_id = NULL, source = NULL, fields = NULL, raw = FALSE,
   callopts = list(), verbose = TRUE, ...)
 }
@@ -13,14 +13,14 @@ docs_mget(index = NULL, type = NULL, id = NULL, type_id = NULL,
 
 \item{type}{Document type}
 
-\item{id}{Document id}
+\item{ids}{More than one document id, see examples.}
 
 \item{type_id}{List of vectors of length 2, each with an element for type and id.}
 
 \item{index_type_id}{List of vectors of length 3, each with an element for index,
 type, and id.}
 
-\item{source}{XXX}
+\item{source}{(logical) If \code{TRUE}, return source.}
 
 \item{fields}{Fields to return from the response object.}
 
@@ -42,25 +42,22 @@ There are a lot of terms you can use for Elasticsearch. See here
 \examples{
 \donttest{
 # Same index and type
-docs_mget(index="shakespeare", type="line", id=c(9,10))
-tmp <- docs_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), raw=TRUE)
+docs_mget(index="shakespeare", type="line", ids=c(9,10))
+tmp <- docs_mget(index="mran", type="metadata", ids=c('plyr','ggplot2'), raw=TRUE)
 es_parse(tmp)
-docs_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), fields='description')
-docs_mget(index="mran", type="metadata", id=c('plyr','ggplot2'), source=TRUE)
+docs_mget(index="mran", type="metadata", ids=c('plyr','ggplot2'), fields='description')
+docs_mget(index="mran", type="metadata", ids=c('plyr','ggplot2'), source=TRUE)
 
 library("httr")
-docs_mget(index="twitter", type="tweet", id=1:2, callopts=verbose())
+docs_mget(index="twitter", type="tweet", ids=1:2, callopts=verbose())
 
 # Same index, but different types
 docs_mget(index="shakespeare", type_id=list(c("scene",1), c("line",20)))
-docs_mget(index="twitter", type_id=list(c("tweet",1), c("mention",2)))
-docs_mget(index="twitter", type_id=list(c("tweet",1), c("mention",2)), fields='user')
-docs_mget(index="twitter", type_id=list(c("tweet",1), c("mention",2)), fields=c('user','message'))
+docs_mget(index="shakespeare", type_id=list(c("scene",1), c("line",20)), fields='play_name')
 
 # Different indeces and different types
 # pass in separately
-docs_mget(index_type_id=list(c("shakespeare","line",1), c("appdotnet","share",1)))
-docs_mget(index_type_id=list(c("twitter","mention",1), c("appdotnet","share",1)))
+docs_mget(index_type_id=list(c("shakespeare","line",1), c("plos","article",1)))
 }
 }
 

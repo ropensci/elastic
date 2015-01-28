@@ -13,9 +13,9 @@ docs_get(index = NULL, type = NULL, id = NULL, source = FALSE,
 
 \item{type}{Document type}
 
-\item{id}{Document id}
+\item{id}{Document id.}
 
-\item{source}{XXX}
+\item{source}{(logical) If \code{TRUE}, return source.}
 
 \item{fields}{Fields to return from the response object.}
 
@@ -40,6 +40,7 @@ docs_get(index='shakespeare', type='line', id=3, source=TRUE)
 
 # Get certain fields
 docs_get(index='shakespeare', type='line', id=10, fields='play_name')
+docs_get(index='shakespeare', type='line', id=10, fields=c('play_name','speaker'))
 
 # Just test for existence of the document
 docs_get(index='plos', type='article', id=1, exists=TRUE)

@@ -391,7 +391,7 @@ Search(index="shakespeare", type="scene", raw=TRUE)
 ```
 
 ```
-#> [1] "{\"took\":1,\"timed_out\":false,\"_shards\":{\"total\":5,\"successful\":5,\"failed\":0},\"hits\":{\"total\":34,\"max_score\":1.0,\"hits\":[{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"112\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":113,\"play_name\":\"Henry IV\",\"speech_number\":10,\"line_number\":\"\",\"speaker\":\"WESTMORELAND\",\"text_entry\":\"SCENE II. London. An apartment of the Princes.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"989\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":990,\"play_name\":\"Henry IV\",\"speech_number\":22,\"line_number\":\"\",\"speaker\":\"LADY PERCY\",\"text_entry\":\"SCENE IV. The Boars-Head Tavern, Eastcheap.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2462\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":2463,\"play_name\":\"Henry IV\",\"speech_number\":21,\"line_number\":\"\",\"speaker\":\"FALSTAFF\",\"text_entry\":\"SCENE III. The rebel camp near Shrewsbury.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2784\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":2785,\"play_name\":\"Henry IV\",\"speech_number\":18,\"line_number\":\"\",\"speaker\":\"FALSTAFF\",\"text_entry\":\"SCENE II. The rebel camp.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"3206\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":3207,\"play_name\":\"Henry VI Part 1\",\"speech_number\":8,\"line_number\":\"\",\"speaker\":\"KING HENRY IV\",\"text_entry\":\"SCENE I. Westminster Abbey.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4437\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":4438,\"play_name\":\"Henry VI Part 1\",\"speech_number\":18,\"line_number\":\"\",\"speaker\":\"PLANTAGENET\",\"text_entry\":\"SCENE I. London. The Parliament-house.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4975\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":4976,\"play_name\":\"Henry VI Part 1\",\"speech_number\":11,\"line_number\":\"\",\"speaker\":\"VERNON\",\"text_entry\":\"SCENE I. Paris. A hall of state.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"745\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":746,\"play_name\":\"Henry IV\",\"speech_number\":32,\"line_number\":\"\",\"speaker\":\"GADSHILL\",\"text_entry\":\"SCENE II. The highway, near Gadshill.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2228\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":2229,\"play_name\":\"Henry IV\",\"speech_number\":81,\"line_number\":\"\",\"speaker\":\"FALSTAFF\",\"text_entry\":\"SCENE I. The rebel camp near Shrewsbury.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2588\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":2589,\"play_name\":\"Henry IV\",\"speech_number\":28,\"line_number\":\"\",\"speaker\":\"SIR WALTER BLUNT\",\"text_entry\":\"SCENE IV. York. The ARCHBISHOPS palace.\"}}]}}"
+#> [1] "{\"took\":2,\"timed_out\":false,\"_shards\":{\"total\":5,\"successful\":5,\"failed\":0},\"hits\":{\"total\":34,\"max_score\":1.0,\"hits\":[{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"112\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":113,\"play_name\":\"Henry IV\",\"speech_number\":10,\"line_number\":\"\",\"speaker\":\"WESTMORELAND\",\"text_entry\":\"SCENE II. London. An apartment of the Princes.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"989\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":990,\"play_name\":\"Henry IV\",\"speech_number\":22,\"line_number\":\"\",\"speaker\":\"LADY PERCY\",\"text_entry\":\"SCENE IV. The Boars-Head Tavern, Eastcheap.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2462\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":2463,\"play_name\":\"Henry IV\",\"speech_number\":21,\"line_number\":\"\",\"speaker\":\"FALSTAFF\",\"text_entry\":\"SCENE III. The rebel camp near Shrewsbury.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2784\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":2785,\"play_name\":\"Henry IV\",\"speech_number\":18,\"line_number\":\"\",\"speaker\":\"FALSTAFF\",\"text_entry\":\"SCENE II. The rebel camp.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"3206\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":3207,\"play_name\":\"Henry VI Part 1\",\"speech_number\":8,\"line_number\":\"\",\"speaker\":\"KING HENRY IV\",\"text_entry\":\"SCENE I. Westminster Abbey.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4437\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":4438,\"play_name\":\"Henry VI Part 1\",\"speech_number\":18,\"line_number\":\"\",\"speaker\":\"PLANTAGENET\",\"text_entry\":\"SCENE I. London. The Parliament-house.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4975\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":4976,\"play_name\":\"Henry VI Part 1\",\"speech_number\":11,\"line_number\":\"\",\"speaker\":\"VERNON\",\"text_entry\":\"SCENE I. Paris. A hall of state.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"745\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":746,\"play_name\":\"Henry IV\",\"speech_number\":32,\"line_number\":\"\",\"speaker\":\"GADSHILL\",\"text_entry\":\"SCENE II. The highway, near Gadshill.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2228\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":2229,\"play_name\":\"Henry IV\",\"speech_number\":81,\"line_number\":\"\",\"speaker\":\"FALSTAFF\",\"text_entry\":\"SCENE I. The rebel camp near Shrewsbury.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2588\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":2589,\"play_name\":\"Henry IV\",\"speech_number\":28,\"line_number\":\"\",\"speaker\":\"SIR WALTER BLUNT\",\"text_entry\":\"SCENE IV. York. The ARCHBISHOPS palace.\"}}]}}"
 ```
 
 ### Curl debugging
@@ -697,7 +697,7 @@ Search('plos', body=body)$hits$total
 ```
 
 ```
-#> [1] 482
+#> [1] 488
 ```
 
 
@@ -716,7 +716,7 @@ Search('plos', body=body)$hits$total
 ```
 
 ```
-#> [1] 56
+#> [1] 58
 ```
 
 
@@ -741,25 +741,18 @@ out$hits$total
 ```
 
 ```
-#> [1] 57
+#> [1] 58
 ```
 
 
 ```r
-sapply(out$hits$hits, function(x) x$highlight$title[[1]])
+sapply(out$hits$hits, function(x) x$highlight$title[[1]])[8:10]
 ```
 
 ```
-#>  [1] "Downregulation of rRNA Transcription Triggers <em>Cell</em> Differentiation"                                                                                        
-#>  [2] "Adult-Like Anti-Mycobacterial T <em>Cell</em> and In Vivo Dendritic <em>Cell</em> Responses Following Neonatal Immunization with Ag85B-ESAT-6 in the IC31® Adjuvant"
-#>  [3] "Bioenergetic Analysis of Ovarian Cancer <em>Cell</em> Lines: Profiling of Histological Subtypes and Identification of a Mitochondria-Defective <em>Cell</em> Line"  
-#>  [4] "Pancreatic Cancer <em>Cell</em> Glycosylation Regulates <em>Cell</em> Adhesion and Invasion through the Modulation of α2β1 Integrin and E-Cadherin Function"        
-#>  [5] "RAGE Regulates Immune <em>Cell</em> Infiltration and Angiogenesis in Choroidal Neovascularization"                                                                  
-#>  [6] "ROCK Is Involved in Vasculogenic Mimicry Formation in Hepatocellular Carcinoma <em>Cell</em> Line"                                                                  
-#>  [7] "MicroRNA-31 Is Overexpressed in Cutaneous Squamous <em>Cell</em> Carcinoma and Regulates <em>Cell</em> Motility and Colony Formation Ability of Tumor Cells"        
-#>  [8] "c-FLIP Protects Eosinophils from TNF-α-Mediated <em>Cell</em> Death In Vivo"                                                                                        
-#>  [9] "DUSP1 Is a Novel Target for Enhancing Pancreatic Cancer <em>Cell</em> Sensitivity to Gemcitabine"                                                                   
-#> [10] "Carbon Ion Radiation Inhibits Glioma and Endothelial <em>Cell</em> Migration Induced by Secreted VEGF"
+#> [1] "DUSP1 Is a Novel Target for Enhancing Pancreatic Cancer <em>Cell</em> Sensitivity to Gemcitabine"                       
+#> [2] "Carbon Ion Radiation Inhibits Glioma and Endothelial <em>Cell</em> Migration Induced by Secreted VEGF"                  
+#> [3] "Dynamic Visualization of Dendritic <em>Cell</em>-Antigen Interactions in the Skin Following Transcutaneous Immunization"
 ```
 
 ### Scrolling search - instead of paging
