@@ -40,8 +40,9 @@ connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL, es
 #     base <- paste(auth$base, auth$port, sep = ":")
   if(is.null(auth$port)){
     baseurl <- auth$base
-  } else
-  {  baseurl <- paste(auth$base, auth$port, sep = ":") }
+  } else {
+    baseurl <- paste(auth$base, auth$port, sep = ":") 
+  }
   res <- tryCatch(GET(baseurl, ...), error=function(e) e)
   if("error" %in% class(res)){
     stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting", baseurl), call. = FALSE)

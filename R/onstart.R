@@ -1,3 +1,4 @@
 .onLoad <- function(libname, pkgname ) {
-  connect()
+  options(es_base = "http://127.0.0.1")
+  options(es_port = 9200)
 }
