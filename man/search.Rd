@@ -454,7 +454,8 @@ body <- '{
  }
 }'
 index_create(index='gbifgeopoint', body=body)
-docs_bulk("inst/examples/gbif_geopoint.json")
+path <- system.file("examples", "gbif_geopoint", package = "elastic")
+docs_bulk(path)
 
 ### Points within a bounding box
 body <- '{
