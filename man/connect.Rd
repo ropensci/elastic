@@ -34,9 +34,9 @@ Set connection details to an Elasticsearch engine.
 The default configuration is set up for localhost access on port 9200,
 with no username or password.
 
-Pass on the returned 'es_conn' object to other functions in this package.
-
 \code{\link{connection}} calls \code{\link{connect}} internally
+
+On package load, \code{\link{connect}} is run to set the default base url and port.
 }
 \examples{
 \donttest{

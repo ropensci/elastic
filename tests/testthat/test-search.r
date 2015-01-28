@@ -1,6 +1,4 @@
 context("search")
-
-library('elastic')
   
 test_that("basic search works", {
   a <- Search(index="shakespeare")

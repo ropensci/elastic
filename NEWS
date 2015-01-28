@@ -11,6 +11,9 @@ NEW FEATURES
 `?units=distance`
 * New help file added to list and explain the various search functions. See `?searchapis`
 * New function `tokenizer_set()` to set tokenizers
+* `connect()` run on package load to set default base url of `localhost` and port of `9200` - 
+you can override this by running that fxn yourself, or storing `es_base`, `es_port`, etc. 
+in your `.Rprofile` file.
 
 IMPROVEMENTS
 
