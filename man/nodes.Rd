@@ -60,6 +60,9 @@ select zero or more of:
  \item transport Transport statistics about sent and received bytes in cluster communication
  \item breaker Statistics about the field data circuit breaker
 }
+
+\code{\link{nodes_hot_threads}} returns plain text, so \code{\link{cat}} is used to print
+to the console.
 }
 \examples{
 \donttest{
@@ -70,9 +73,8 @@ nodes_stats(metric='jvm')
 nodes_stats(metric=c('os','process'))
 nodes_info()
 nodes_info(metric='process')
-
-# these may not work
-nodes_shutdown()
+nodes_info(metric='jvm')
+nodes_info(metric='http')
 nodes_hot_threads()
 }
 }

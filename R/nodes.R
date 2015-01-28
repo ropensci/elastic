@@ -33,6 +33,9 @@
 #'  \item transport Transport statistics about sent and received bytes in cluster communication
 #'  \item breaker Statistics about the field data circuit breaker
 #' }
+#' 
+#' \code{\link{nodes_hot_threads}} returns plain text, so \code{\link{cat}} is used to print 
+#' to the console. 
 #'
 #' @examples \donttest{
 #' (out <- nodes_stats())
@@ -42,9 +45,8 @@
 #' nodes_stats(metric=c('os','process'))
 #' nodes_info()
 #' nodes_info(metric='process')
-#' 
-#' # these may not work
-#' nodes_shutdown()
+#' nodes_info(metric='jvm')
+#' nodes_info(metric='http')
 #' nodes_hot_threads()
 #' }
 
@@ -57,7 +59,7 @@ nodes_stats <- function(node=NULL, metric=NULL, raw=FALSE, fields=NULL, verbose=
 #' @export
 #' @rdname nodes
 nodes_info <- function(node=NULL, metric=NULL, raw=FALSE, verbose=TRUE, ...){
-  node_GET('info', metric, node, raw, list(), ...)
+  node_GET('', metric, node, raw, list(), ...)
 }
 
 #' @export
@@ -66,11 +68,9 @@ nodes_hot_threads <- function(node=NULL, metric=NULL, threads=3, interval='500ms
   raw=FALSE, verbose=TRUE, ...)
 {
   args <- list(threads=threads, interval=interval, type=type)
-  node_GET('hot_threads', metric, node, raw, args, ...)
+  cat(node_GET('hot_threads', metric, node, raw=TRUE, args, ...))
 }
 
-# @export
-# @rdname nodes
 # nodes_shutdown <- function(node=NULL, metric=NULL, raw=FALSE, verbose=TRUE, ...){
 #   node_GET('shutdown', metric, node, 'elastic_nodes_shutdown', raw, callopts, list(), ...)
 # }
