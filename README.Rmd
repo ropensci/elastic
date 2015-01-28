@@ -15,18 +15,11 @@ knitr::opts_chunk$set(
 
 **A general purpose R interface to [Elasticsearch](http://elasticsearch.org)**
 
-__2014-11-12 UPDATE__: I've completely reworked the package API so that it makes more sense, is more cohesive and aligns more closely with the Elasticsearch Python client. See [NEWS](NEWS).
-
 ## Elasticsearch info
 
-+ [Elasticsearch home page](http://elasticsearch.org)
-+ [API docs](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/index.html)
-
-## Notes
-
+* [Elasticsearch home page](http://elasticsearch.org)
+* [API docs](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/index.html)
 * This client is being developed under `v1.4` of Elasticsearch.
-* It is early days for `elastic`, so help us by submitting bug reports and feature requests on the issue tracker.
-* BEWARE: the API for this pkg is still changing...
 
 ## Quick start
 
@@ -66,7 +59,7 @@ I create a little bash shortcut called `es` that does both of the above commands
 
 Elasticsearch has a bulk load API to load data in fast. The format is pretty weird though. It's sort of JSON, but would pass no JSON linter. I include a few data sets in `elastic` so it's easy to get up and running, and so when you run examples in this package they'll actually run the same way (hopefully).
 
-I have prepare a non-exported function useful for preparing the weird format that Elasticsearch wants for bulk data loads, that is somewhat specific to PLOS data (See below), but you could modify for your purposes. See `make_bulk_plos()` and `make_bulk_gbif()` [here](https://github.com/ropensci/elastic/blob/master/R/es_bulk.r). 
+I have prepare a non-exported function useful for preparing the weird format that Elasticsearch wants for bulk data loads, that is somewhat specific to PLOS data (See below), but you could modify for your purposes. See `make_bulk_plos()` and `make_bulk_gbif()` [here](https://github.com/ropensci/elastic/blob/master/R/docs_bulk.r). 
 
 #### Shakespeare data
 
@@ -184,67 +177,6 @@ Then parse
 
 ```{r}
 jsonlite::fromJSON(out)
-```
-
-## CouchDB integration
-
-This def. needs more attention. See functions `cdbriver_auth()` and `cdbriver_index()`.
-
-### __Optionally__ install CouchDB River plugin for Elasticsearch
-
-+ Navigate to elastisearch dir: `cd elasticsearch`
-+ Install it: `bin/plugin -install elasticsearch/elasticsearch-river-couchdb/2.0.0.RC1`
-
-### Start Elasticsearch
-
-+ Navigate to elasticsearch: `cd /usr/local/elasticsearch`
-+ Start elasticsearch: `bin/elasticsearch -f`
-
-### Make call to elasticsearch to start indexing (and always index) your database
-
-Edit details and paste into terminal and execute
-
-curl -XPUT 'localhost:9200/_river/rplos_db/_meta' -d '{
-"type" : "couchdb",
-"couchdb" : {
-"host" : "localhost",
-"port" : 5984,
-"db" : "rplos_db",
-"filter" : null
-}
-}'
-
-### Searching
-
-#### At the cli...
-
-```sh
-curl -XGET "http://localhost:9200/sofadb/_search?q=road&pretty=true"
-
-{
-"took" : 3,
-"timed_out" : false,
-"_shards" : {
-"total" : 5,
-"successful" : 5,
-"failed" : 0
-},
-"hits" : {
-"total" : 2,
-"max_score" : 0.614891,
-"hits" : [ {
-"_index" : "sofadb",
-"_type" : "sofadb",
-"_id" : "a1812100bd1dba00c2ed1cd507000277",
-"_score" : 0.614891, "_source" : {"_rev":"1-5406480672da172726810767e7d0ead3","_id":"a1812100bd1dba00c2ed1cd507000277","name":"sofa","icecream":"rocky road"}
-}, {
-"_index" : "sofadb",
-"_type" : "sofadb",
-"_id" : "a1812100bd1dba00c2ed1cd507000b92",
-"_score" : 0.13424811, "_source" : {"_rev":"1-5406480672da172726810767e7d0ead3","_id":"a1812100bd1dba00c2ed1cd507000b92","name":"sofa","icecream":"rocky road"}
-} ]
-}
-}
 ```
 
 ## Meta

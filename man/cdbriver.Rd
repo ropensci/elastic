@@ -36,8 +36,8 @@ cdbriver_auth(user="foo", pwd="bar")
 # Start or stop indexing a CouchDB database using Elasticsearch.
 devtools::install_github("sckott/sofa")
 library('sofa')
-sofa_createdb(dbname='mydb')
-cdbriver_index(dbname='mydb')
+db_create(dbname = 'stuff')
+cdbriver_index(dbname='stuff')
 cdbriver_index(dbname='mydb', what='stop')
 }
 }
@@ -46,4 +46,5 @@ See docs for the Elasticsearch River plugin
 \url{https://github.com/elasticsearch/elasticsearch-river-couchdb/blob/master/README.md}
 that lets you easily index CouchDB databases.
 }
+\keyword{internal}
 

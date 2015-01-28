@@ -1,6 +1,7 @@
 #' Interact with CouchDB via Elasticsearch river plugin.
 #' 
 #' @name cdbriver
+#' @keywords internal
 #' @param user Username
 #' @param pwd Password
 #' @param dbname Database name. (character)
@@ -17,13 +18,12 @@
 #' # Start or stop indexing a CouchDB database using Elasticsearch.
 #' devtools::install_github("sckott/sofa")
 #' library('sofa')
-#' sofa_createdb(dbname='mydb')
-#' cdbriver_index(dbname='mydb')
+#' db_create(dbname = 'stuff')
+#' cdbriver_index(dbname='stuff')
 #' cdbriver_index(dbname='mydb', what='stop')
 #' }
 NULL
 
-#' @export
 #' @rdname cdbriver
 cdbriver_auth <- function(user=NULL, pwd=NULL, dbname, endpoint="http://localhost", port=9200)
 {
@@ -34,9 +34,6 @@ cdbriver_auth <- function(user=NULL, pwd=NULL, dbname, endpoint="http://localhos
   content(tt)[1] 
 }
 
-# Not really sure what to do with this function - may remove it
-
-#' @export
 #' @rdname cdbriver
 cdbriver_index <- function(dbname, endpoint="http://localhost", port=9200, what='start')
 {
