@@ -23,7 +23,7 @@ More on the Bulk API:
 \examples{
 \donttest{
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-docs_bulk(file=plosdat)
+docs_bulk(filename=plosdat)
 aliases_get()
 index_delete(index='plos')
 aliases_get()

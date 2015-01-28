@@ -8,7 +8,7 @@
 #'    \url{http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/bulk.html}.
 #' @examples \donttest{
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-#' docs_bulk(file=plosdat)
+#' docs_bulk(filename=plosdat)
 #' aliases_get()
 #' index_delete(index='plos')
 #' aliases_get()
@@ -20,8 +20,8 @@ docs_bulk <- function(filename, raw=FALSE, callopts=list())
   url <- paste0(conn$base, ":", conn$port, '/_bulk')
   tt <- POST(url, body=upload_file(filename), callopts, encode = "json")
   if(tt$status_code > 202){
-    if(tt$status_code > 202) stop(tt$headers$statusmessage)
-    if(content(tt)$status == "ERROR") stop(content(tt)$error_message)
+    if(tt$status_code > 202) stop(content(tt)$error)
+    if(content(tt)$status == "ERROR" | content(tt)$status == 500) stop(content(tt)$error_message)
   }
   res <- content(tt, as = "text")
   res <- structure(res, class="bulk_make")

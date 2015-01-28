@@ -26,47 +26,47 @@
 #' ## queries
 #' ### Search in all fields
 #' Search(index="shakespeare", type="act", q="york")
-#' 
+#'
 #' ### Searchin specific fields
 #' Search(index="shakespeare", type="act", q="speaker:KING HENRY IV")$hits$total
-#' 
+#'
 #' ### Exact phrase search by wrapping in quotes
 #' Search(index="shakespeare", type="act", q='speaker:"KING HENRY IV"')$hits$total
-#' 
+#'
 #' ### can specify operators between multiple words parenthetically
 #' Search(index="shakespeare", type="act", q="speaker:(HENRY OR ARCHBISHOP)")$hits$total
-#' 
+#'
 #' ### where the field line_number has no value (or is missing)
 #' Search(index="shakespeare", q="_missing_:line_number")$hits$total
-#' 
+#'
 #' ### where the field line_number has any non-null value
 #' Search(index="shakespeare", q="_exists_:line_number")$hits$total
-#' 
+#'
 #' ### wildcards, either * or ?
 #' Search(index="shakespeare", q="*ay")$hits$total
 #' Search(index="shakespeare", q="m?y")$hits$total
-#' 
+#'
 #' ### regular expressions, wrapped in forward slashes
 #' Search(index="shakespeare", q="text_entry:/[a-z]/")$hits$total
-#' 
+#'
 #' ### fuzziness
 #' Search(index="shakespeare", q="text_entry:ma~")$hits$total
 #' Search(index="shakespeare", q="text_entry:the~2")$hits$total
 #' Search(index="shakespeare", q="text_entry:the~1")$hits$total
-#' 
+#'
 #' ### Proximity searches
 #' Search(index="shakespeare", q='text_entry:"as hath"~5')$hits$total
 #' Search(index="shakespeare", q='text_entry:"as hath"~10')$hits$total
-#' 
+#'
 #' ### Ranges, here where line_id value is between 10 and 20
 #' Search(index="shakespeare", q="line_id:[10 TO 20]")$hits$total
-#' 
+#'
 #' ### Grouping
 #' Search(index="shakespeare", q="(hath OR as) AND the")$hits$total
-#' 
+#'
 #' # Limit number of hits returned with the size parameter
 #' Search(index="shakespeare", size=1)
-#' 
+#'
 #' # Give explanation of search in result
 #' Search(index="shakespeare", size=1, explain=TRUE)
 #'
@@ -320,13 +320,13 @@
 #'   }
 #' }'
 #' Search('shakespeare', 'line', body=body)
-#' 
+#'
 #' ## Scrolling search - instead of paging
 #' Search('shakespeare', q="a*")$hits$total
 #' res <- Search(index = 'shakespeare', q="a*", scroll="1m")
 #' res <- Search(index = 'shakespeare', q="a*", scroll="1m", search_type = "scan")
 #' scroll(scroll_id = res$`_scroll_id`)
-#' 
+#'
 #' res <- Search(index = 'shakespeare', q="a*", scroll="5m", search_type = "scan")
 #' out <- list()
 #' hits <- 1
@@ -336,6 +336,195 @@
 #'   if(hits > 0)
 #'     out <- c(out, res$hits$hits)
 #' }
+#'
+#'
+#'
+#' # Using filters
+#' ## A bool filter
+#' body <- '{
+#'  "query":{
+#'    "filtered":{
+#'      "filter":{
+#'         "bool": {
+#'            "must_not" : {
+#'                "range" : {
+#'                    "year" : { "from" : 2011, "to" : 2012 }
+#'                }
+#'            }
+#'          }
+#'      }
+#'    }
+#'  }
+#' }'
+#' Search('gbif', body = body)$hits$total
+#'
+#' ## Geo filters - fun!
+#' ### Note that filers have many geospatial filter options, but queries have fewer, and 
+#' ### require a geo_shape mapping
+#' 
+#' body <- '{
+#'  "mappings": {
+#'    "record": {
+#'      "properties": {
+#'          "location" : {"type" : "geo_point"}
+#'       }
+#'    }
+#'  }
+#' }'
+#' index_create(index='gbifgeopoint', body=body)
+#' path <- system.file("examples", "gbif_geopoint", package = "elastic")
+#' docs_bulk(path)
+#' 
+#' ### Points within a bounding box
+#' body <- '{
+#'  "query":{
+#'    "filtered":{
+#'      "filter":{
+#'         "geo_bounding_box" : {
+#'           "location" : {
+#'             "top_left" : {
+#'               "lat" : 60,
+#'               "lon" : 14
+#'             },
+#'             "bottom_right" : {
+#'               "lat" : 40,
+#'               "lon" : 1
+#'             }
+#'           }
+#'        }
+#'      }
+#'    }
+#'  }
+#' }'
+#' out <- Search('gbifgeopoint', body = body)
+#' out$hits$total
+#' do.call(rbind, lapply(out$hits$hits, function(x) x$`_source`$location))
+#' 
+#' ### Points within distance of a point
+#' body <- '{
+#'  "query":{
+#'    "filtered":{
+#'      "filter":{
+#'         "geo_distance" : {
+#'         "distance" : "200km" ,
+#'            "location" : {
+#'               "lon" : 4,
+#'               "lat" : 50
+#'             }
+#'          }
+#'        }
+#'      }
+#'    }
+#' }'
+#' out <- Search('gbifgeopoint', body = body)
+#' out$hits$total
+#' do.call(rbind, lapply(out$hits$hits, function(x) x$`_source`$location))
+#'
+#' ### Points within distance range of a point
+#' body <- '{
+#'  "query":{
+#'    "filtered":{
+#'      "filter":{
+#'         "geo_distance_range" : {
+#'           "from" : "200km",
+#'           "to" : "400km",
+#'           "location" : {
+#'               "lon" : 4,
+#'               "lat" : 50
+#'            }
+#'          }
+#'        }
+#'      }
+#'    }
+#' }'
+#' out <- Search('gbifgeopoint', body = body)
+#' out$hits$total
+#' do.call(rbind, lapply(out$hits$hits, function(x) x$`_source`$location))
+#' 
+#' ### Points within a polygon
+#' body <- '{
+#'  "query":{
+#'    "filtered":{
+#'      "filter":{
+#'         "geo_polygon" : {
+#'           "location" : {
+#'              "points" : [
+#'                [80.0, -20.0], [-80.0, -20.0], [-80.0, 60.0], [40.0, 60.0], [80.0, -20.0]
+#'              ]
+#'            }
+#'          }
+#'        }
+#'      }
+#'    }
+#' }'
+#' out <- Search('gbifgeopoint', body = body)
+#' out$hits$total
+#' do.call(rbind, lapply(out$hits$hits, function(x) x$`_source`$location))
+#' 
+#' ### Geoshape filters using queries instead of filters
+#' #### Get data with geojson type location data loaded first
+#' body <- '{
+#'  "mappings": {
+#'    "record": {
+#'      "properties": {
+#'          "location" : {"type" : "geo_shape"}
+#'       }
+#'    }
+#'  }
+#' }'
+#' index_create(index='geoshape', body=body)
+#' path <- system.file("examples", "gbif_geoshape.json", package = "elastic")
+#' docs_bulk(path)
+#' 
+#' #### Get data with a square envelope, w/ point defining upper left and the other 
+#' #### defining the lower right
+#' body <- '{
+#'  "query":{
+#'    "geo_shape" : {
+#'      "location" : {
+#'          "shape" : {
+#'            "type": "envelope",
+#'             "coordinates": [[-30, 50],[30, 0]]
+#'          }
+#'        }
+#'      }
+#'    }
+#' }'
+#' out <- Search('geoshape', body = body)
+#' out$hits$total
+#' 
+#' #### Get data with a circle, w/ point defining center, and radius
+#' body <- '{
+#'  "query":{
+#'    "geo_shape" : {
+#'      "location" : {
+#'          "shape" : {
+#'            "type": "circle",
+#'            "coordinates": [-10, 45],
+#'            "radius": "2000km"
+#'          }
+#'        }
+#'      }
+#'    }
+#' }'
+#' out <- Search('geoshape', body = body)
+#' out$hits$total
+#' 
+#' #### Use a polygon, w/ point defining center, and radius
+#' body <- '{
+#'  "query":{
+#'    "geo_shape" : {
+#'      "location" : {
+#'          "shape" : {
+#'            "type": "polygon",
+#'            "coordinates":  [
+#'               [ [80.0, -20.0], [-80.0, -20.0], [-80.0, 60.0], [40.0, 60.0], [80.0, -20.0] ]
+#'            ]
+#'          }
+#'        }
+#'      }
+#'    }
+#' }'
+#' out <- Search('geoshape', body = body)
+#' out$hits$total
 #' }
-
-

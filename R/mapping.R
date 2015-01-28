@@ -67,6 +67,17 @@
 #' field_mapping_get(index = "plos", type = "article", field = "title", include_defaults = TRUE)
 #' field_mapping_get(type = c("article","record"), field = c("title","class"))
 #' field_mapping_get(type = "a*", field = "t*")
+#' 
+#' # Create geospatial mapping
+#' docs_bulk("inst/examples/gbif_geopoint.json")
+#' body <- '{
+#'  "pin" : {
+#'    "properties" : {
+#'      "location" : { "type" : "geo_point" }
+#'    }
+#'  }
+#' }'
+#' mapping_create("gbifgeopoint", "record", body=body)
 #' }
 
 #' @export

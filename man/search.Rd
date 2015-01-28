@@ -418,6 +418,196 @@ while(hits != 0){
   if(hits > 0)
     out <- c(out, res$hits$hits)
 }
+
+
+
+# Using filters
+## A bool filter
+body <- '{
+ "query":{
+   "filtered":{
+     "filter":{
+        "bool": {
+           "must_not" : {
+               "range" : {
+                   "year" : { "from" : 2011, "to" : 2012 }
+               }
+           }
+         }
+     }
+   }
+ }
+}'
+Search('gbif', body = body)$hits$total
+
+## Geo filters - fun!
+### Note that filers have many geospatial filter options, but queries have fewer, and
+### require a geo_shape mapping
+
+body <- '{
+ "mappings": {
+   "record": {
+     "properties": {
+         "location" : {"type" : "geo_point"}
+      }
+   }
+ }
+}'
+index_create(index='gbifgeopoint', body=body)
+docs_bulk("inst/examples/gbif_geopoint.json")
+
+### Points within a bounding box
+body <- '{
+ "query":{
+   "filtered":{
+     "filter":{
+        "geo_bounding_box" : {
+          "location" : {
+            "top_left" : {
+              "lat" : 60,
+              "lon" : 14
+            },
+            "bottom_right" : {
+              "lat" : 40,
+              "lon" : 1
+            }
+          }
+       }
+     }
+   }
+ }
+}'
+out <- Search('gbifgeopoint', body = body)
+out$hits$total
+do.call(rbind, lapply(out$hits$hits, function(x) x$`_source`$location))
+
+### Points within distance of a point
+body <- '{
+ "query":{
+   "filtered":{
+     "filter":{
+        "geo_distance" : {
+        "distance" : "200km" ,
+           "location" : {
+              "lon" : 4,
+              "lat" : 50
+            }
+         }
+       }
+     }
+   }
+}'
+out <- Search('gbifgeopoint', body = body)
+out$hits$total
+do.call(rbind, lapply(out$hits$hits, function(x) x$`_source`$location))
+
+### Points within distance range of a point
+body <- '{
+ "query":{
+   "filtered":{
+     "filter":{
+        "geo_distance_range" : {
+          "from" : "200km",
+          "to" : "400km",
+          "location" : {
+              "lon" : 4,
+              "lat" : 50
+           }
+         }
+       }
+     }
+   }
+}'
+out <- Search('gbifgeopoint', body = body)
+out$hits$total
+do.call(rbind, lapply(out$hits$hits, function(x) x$`_source`$location))
+
+### Points within a polygon
+body <- '{
+ "query":{
+   "filtered":{
+     "filter":{
+        "geo_polygon" : {
+          "location" : {
+             "points" : [
+               [80.0, -20.0], [-80.0, -20.0], [-80.0, 60.0], [40.0, 60.0], [80.0, -20.0]
+             ]
+           }
+         }
+       }
+     }
+   }
+}'
+out <- Search('gbifgeopoint', body = body)
+out$hits$total
+do.call(rbind, lapply(out$hits$hits, function(x) x$`_source`$location))
+
+### Geoshape filters using queries instead of filters
+#### Get data with geojson type location data loaded first
+body <- '{
+ "mappings": {
+   "record": {
+     "properties": {
+         "location" : {"type" : "geo_shape"}
+      }
+   }
+ }
+}'
+index_create(index='geoshape', body=body)
+path <- system.file("examples", "gbif_geoshape.json", package = "elastic")
+docs_bulk(path)
+
+#### Get data with a square envelope, w/ point defining upper left and the other
+#### defining the lower right
+body <- '{
+ "query":{
+   "geo_shape" : {
+     "location" : {
+         "shape" : {
+           "type": "envelope",
+            "coordinates": [[-30, 50],[30, 0]]
+         }
+       }
+     }
+   }
+}'
+out <- Search('geoshape', body = body)
+out$hits$total
+
+#### Get data with a circle, w/ point defining center, and radius
+body <- '{
+ "query":{
+   "geo_shape" : {
+     "location" : {
+         "shape" : {
+           "type": "circle",
+           "coordinates": [-10, 45],
+           "radius": "2000km"
+         }
+       }
+     }
+   }
+}'
+out <- Search('geoshape', body = body)
+out$hits$total
+
+#### Use a polygon, w/ point defining center, and radius
+body <- '{
+ "query":{
+   "geo_shape" : {
+     "location" : {
+         "shape" : {
+           "type": "polygon",
+           "coordinates":  [
+              [ [80.0, -20.0], [-80.0, -20.0], [-80.0, 60.0], [40.0, 60.0], [80.0, -20.0] ]
+           ]
+         }
+       }
+     }
+   }
+}'
+out <- Search('geoshape', body = body)
+out$hits$total
 }
 }
 \references{
