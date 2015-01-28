@@ -93,3 +93,11 @@ check_inputs <- function(x){
     }
   }
 }
+
+geterror <- function(z){
+  if( is.null(z$headers$statusmessage) ){
+    stop(content(z)$error, call. = FALSE)
+  } else {
+    z$headers$statusmessage
+  }
+}

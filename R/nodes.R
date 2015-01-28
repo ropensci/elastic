@@ -77,7 +77,7 @@ nodes_hot_threads <- function(node=NULL, metric=NULL, threads=3, interval='500ms
 
 node_GET <- function(path, metric, node, raw, args, ...) 
 {
-  conn <- es_get_auth()
+  conn <- connect()
   url <- file.path(paste0(conn$base, ":", conn$port), '_nodes')
   if(!is.null(node)){
     url <- paste(url, paste(node, collapse = ","), path, sep = "/")
@@ -87,10 +87,7 @@ node_GET <- function(path, metric, node, raw, args, ...)
   }
   
   tt <- GET(url, query = ec(args), ...)
-  if(tt$status_code > 202){
-    if(tt$status_code > 202) stop(tt$headers$statusmessage)
-    if(content(tt)$status == "ERROR") stop(content(tt)$error_message)
-  }
+  if(tt$status_code > 202) geterror(tt)
   res <- content(tt, "text")
   if(raw) res else jsonlite::fromJSON(res, FALSE)
 }

@@ -6,7 +6,7 @@
 #' @param body (list) Either a list or json, representing the query.
 #' @param field (character) One or more field names
 #' @param include_defaults (logical) Whether to return default values
-#' @param ... Options passed on to \code{\link[httr]{HEAD}}
+#' @param ... Curl options passed on to \code{\link[httr]{HEAD}} or other http verbs
 #' @details 
 #' Find documentation for each function at:
 #' \itemize{

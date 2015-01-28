@@ -35,10 +35,10 @@
 #' @param search_types A comma-separated list of types to perform the query against (default: the 
 #' same type as the document)
 #' @param stop_words A list of stop words to be ignored
-#' @param ... curl options passed on to \code{\link[httr]{GET}}
+#' @param ... Curl options passed on to \code{\link[httr]{GET}}
 #' 
 #' @details Currently uses HTTP GET request, so parameters are passed in the URL. Another option 
-#' is the more like this query, which passes the query in the body of a POST request - may
+#' is the "more like this query", which passes the query in the body of a POST request - may
 #' be added later.
 #' 
 #' @examples  \donttest{

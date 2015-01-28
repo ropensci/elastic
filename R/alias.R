@@ -99,11 +99,3 @@ alias_url <- function(index, alias)
       sprintf("%s:%s/_alias", conn$base, conn$port)
   }
 }
-
-geterror <- function(z){
-  if( is.null(z$headers$statusmessage) ){
-    stop(content(z)$error, call. = FALSE)
-  } else {
-    z$headers$statusmessage
-  }
-}

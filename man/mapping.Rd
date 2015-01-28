@@ -27,7 +27,7 @@ type_exists(index, type, ...)
 
 \item{body}{(list) Either a list or json, representing the query.}
 
-\item{...}{Options passed on to \code{\link[httr]{HEAD}}}
+\item{...}{Curl options passed on to \code{\link[httr]{HEAD}} or other http verbs}
 
 \item{field}{(character) One or more field names}
 
