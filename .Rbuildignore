@@ -10,3 +10,4 @@ tests/test-all.R
 plos_data.json
 README.Rmd
 test-all.R
+cran-comments.md
