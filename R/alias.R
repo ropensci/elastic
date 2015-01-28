@@ -10,17 +10,20 @@
 #' @examples \donttest{
 #' # Retrieve a specified alias
 #' alias_get(index="plos")
-#' alias_get(alias="*")
+#' alias_get(alias="tables")
 #' aliases_get()
-#'
-#' # Check for alias existence
-#' alias_exists(index = "plos")
 #'
 #' # Create/update an alias
 #' alias_create(index = "plos", alias = "tables")
+#' 
+#' # Check for alias existence
+#' alias_exists(index = "plos")
+#' alias_exists(alias = "tables")
+#' alias_exists(alias = "adsfasdf")
 #'
 #' # Delete an alias
 #' alias_delete(index = "plos", alias = "tables")
+#' alias_exists(alias = "tables")
 #' }
 #' @references
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-aliases.html}
@@ -71,22 +74,11 @@ alias_delete <- function(index=NULL, alias, callopts=list())
 alias_GET <- function(index, alias, ignore, callopts, ...) 
 {
   tt <- GET(alias_url(index, alias), query=ec(list(ignore_unavailable=as_log(ignore))), callopts)
-  if(tt$status_code > 202){
-    if(tt$status_code > 202) stop(tt$headers$statusmessage)
-    if(content(tt)$status == "ERROR") stop(content(tt)$error_message)
-  }
+  if(tt$status_code > 202) geterror(tt)
   jsonlite::fromJSON(content(tt, as = "text"), FALSE)
 }
 
-alias_HEAD <- function(index, alias, callopts) 
-{
-  tt <- HEAD(alias_url(index, alias), callopts)
-  if(tt$status_code > 202){
-    if(tt$status_code > 202) stop(tt$headers$statusmessage)
-    if(content(tt)$status == "ERROR") stop(content(tt)$error_message)
-  }
-  tt
-}
+alias_HEAD <- function(index, alias, callopts) HEAD(alias_url(index, alias), callopts)
 
 alias_url <- function(index, alias) 
 {
@@ -98,8 +90,16 @@ alias_url <- function(index, alias)
       sprintf("%s:%s/%s/_alias", conn$base, conn$port, cl(index)) 
   } else {
     if(!is.null(alias))
-      sprintf("%s:%s/_alias/%s", conn$base, conn$port, cl(index), alias)
+      sprintf("%s:%s/_alias/%s", conn$base, conn$port, alias)
     else
       sprintf("%s:%s/_alias", conn$base, conn$port)
+  }
+}
+
+geterror <- function(z){
+  if( is.null(z$headers$statusmessage) ){
+    stop(content(z)$error, call. = FALSE)
+  } else {
+    z$headers$statusmessage
   }
 }

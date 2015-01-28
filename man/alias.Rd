@@ -43,17 +43,20 @@ Elasticsearch alias APIs
 \donttest{
 # Retrieve a specified alias
 alias_get(index="plos")
-alias_get(alias="*")
+alias_get(alias="tables")
 aliases_get()
-
-# Check for alias existence
-alias_exists(index = "plos")
 
 # Create/update an alias
 alias_create(index = "plos", alias = "tables")
 
+# Check for alias existence
+alias_exists(index = "plos")
+alias_exists(alias = "tables")
+alias_exists(alias = "adsfasdf")
+
 # Delete an alias
 alias_delete(index = "plos", alias = "tables")
+alias_exists(alias = "tables")
 }
 }
 \author{
