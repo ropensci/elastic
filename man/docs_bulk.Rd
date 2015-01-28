@@ -21,7 +21,7 @@ More on the Bulk API:
    \url{http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/bulk.html}.
 }
 \examples{
-\donttest{
+\dontrun{
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 docs_bulk(plosdat)
 aliases_get()

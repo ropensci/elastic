@@ -11,19 +11,19 @@
 #' @param version_type (character) Specific version type. One of internal or external
 #' @param callopts Curl args passed on to \code{\link[httr]{DELETE}}
 #' @param ... Further args to query DSL
-#' @references  
+#' @references
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs-delete.html}
-#' @examples \donttest{
+#' @examples \dontrun{
 #' docs_delete(index='plos', type='article', id=35)
 #' docs_get(index='plos', type='article', id=35) # and the document is gone
 #' }
 
-docs_delete <- function(index, type, id, refresh=NULL, routing=NULL, timeout=NULL, version=NULL, 
+docs_delete <- function(index, type, id, refresh=NULL, routing=NULL, timeout=NULL, version=NULL,
   version_type=NULL, callopts=list(), ...)
 {
   conn <- connect()
   url <- sprintf("%s:%s/%s/%s/%s", conn$base, conn$port, index, type, id)
-  args <- ec(list(refresh=refresh, routing=routing, timeout=timeout, 
+  args <- ec(list(refresh=refresh, routing=routing, timeout=timeout,
                   version=version, version_type=version_type, ...))
   out <- DELETE(url, query=args, callopts)
   stop_for_status(out)

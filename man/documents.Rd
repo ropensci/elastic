@@ -17,7 +17,7 @@ There are five functions to work directly with documents.
 }
 }
 \examples{
-\donttest{
+\dontrun{
 # Get a document
 docs_get(index='plos', type='article', id=1)
 

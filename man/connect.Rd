@@ -39,7 +39,7 @@ with no username or password.
 On package load, \code{\link{connect}} is run to set the default base url and port.
 }
 \examples{
-\donttest{
+\dontrun{
 # the default is set to localhost and port 9200
 connect()
 

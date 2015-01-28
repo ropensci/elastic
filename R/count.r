@@ -6,16 +6,16 @@
 #' @param callopts Curl args passed on to httr::GET.
 #' @param verbose If TRUE (default) the url call used printed to console.
 #' @param ... Further args passed on to elastic search HTTP API as parameters.
-#' @details See docs for the count API here 
+#' @details See docs for the count API here
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-count.html}
-#' @examples \donttest{
+#' @examples \dontrun{
 #' count()
 #' count(index='plos')
 #' count(index='plos', type='article')
 #' count(index='shakespeare')
 #' count(index=c('plos','shakespeare'), q="a*")
 #' count(index=c('plos','shakespeare'), q="z*")
-#' 
+#'
 #' # Curl options
 #' library("httr")
 #' count(callopts=verbose())

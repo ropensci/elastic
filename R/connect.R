@@ -1,5 +1,5 @@
 #' Set connection details to an Elasticsearch engine.
-#' 
+#'
 #' @name connect
 #'
 #' @param es_base The base url, defaults to localhost (http://127.0.0.1)
@@ -15,16 +15,16 @@
 #' with no username or password.
 #'
 #' \code{\link{connection}} calls \code{\link{connect}} internally
-#' 
+#'
 #' On package load, \code{\link{connect}} is run to set the default base url and port.
-#' 
-#' @examples \donttest{
+#'
+#' @examples \dontrun{
 #' # the default is set to localhost and port 9200
 #' connect()
 #'
 #' # or set to a different base url
 #' connect('http://162.243.152.56')
-#' 
+#'
 #' # See connection details
 #' connection()
 #' }
@@ -41,7 +41,7 @@ connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL, es
   if(is.null(auth$port)){
     baseurl <- auth$base
   } else {
-    baseurl <- paste(auth$base, auth$port, sep = ":") 
+    baseurl <- paste(auth$base, auth$port, sep = ":")
   }
   res <- tryCatch(GET(baseurl, ...), error=function(e) e)
   if("error" %in% class(res)){
@@ -97,7 +97,7 @@ print.es_conn <- function(x, ...){
 
 
 #' Set authentication details
-#' 
+#'
 #' Only base url and port and used right now. Will add use or username, password, key, etc. later.
 #' @keywords internal
 #' @param es_base (character) Base url
@@ -107,7 +107,7 @@ print.es_conn <- function(x, ...){
 #' @param es_key (character) API key
 #' @param force (logical) Force update
 #'
-#' @details 
+#' @details
 #' \itemize{
 #'  \item You can enter your details using the client_id and api_key parameters directly.
 #'  \item You can execute the function without any inputs. The function then first looks in your

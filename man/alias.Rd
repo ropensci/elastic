@@ -37,7 +37,7 @@ to TRUE then those indices are ignored.}
 Elasticsearch alias APIs
 }
 \examples{
-\donttest{
+\dontrun{
 # Retrieve a specified alias
 alias_get(index="plos")
 alias_get(alias="tables")

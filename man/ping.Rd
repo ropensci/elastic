@@ -13,7 +13,7 @@ ping(...)
 Ping an Elasticsearch server.
 }
 \examples{
-\donttest{
+\dontrun{
 ping()
 }
 }

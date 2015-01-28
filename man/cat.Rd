@@ -69,7 +69,7 @@ Note how \code{\link{cat_}} has an underscore at the end to avoid conflict with 
 \code{\link{cat}} in base R.
 }
 \examples{
-\donttest{
+\dontrun{
 # list Elasticsearch cat endpoints
 cat_()
 

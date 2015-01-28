@@ -9,11 +9,11 @@
 #' type, and id.
 #' @param source (logical) If \code{TRUE}, return source.
 #' @param fields Fields to return from the response object.
-#' 
+#'
 #' @details There are a lot of terms you can use for Elasticsearch. See here
 #'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
 #' @export
-#' @examples \donttest{
+#' @examples \dontrun{
 #' # Same index and type
 #' docs_mget(index="shakespeare", type="line", ids=c(9,10))
 #' tmp <- docs_mget(index="mran", type="metadata", ids=c('plyr','ggplot2'), raw=TRUE)
@@ -37,7 +37,7 @@ docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL, index_type_
   source=NULL, fields=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
   conn <- es_get_auth()
-  
+
   if(!is.null(ids)){
     if(length(ids) < 2) stop("If ids parameter is used, more than 1 id must be passed", call. = FALSE)
   }

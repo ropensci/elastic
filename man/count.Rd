@@ -25,7 +25,7 @@ See docs for the count API here
 \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-count.html}
 }
 \examples{
-\donttest{
+\dontrun{
 count()
 count(index='plos')
 count(index='plos', type='article')

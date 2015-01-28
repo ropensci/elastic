@@ -2,12 +2,12 @@
 #'
 #' @param index An index name
 #' @param alias An alias name
-#' @param ignore_unavailable (logical) What to do if an specified index name doesn't exist. If set 
+#' @param ignore_unavailable (logical) What to do if an specified index name doesn't exist. If set
 #' to TRUE then those indices are ignored.
 #' @param routing Ignored for now
 #' @param filter Ignored for now
 #' @param ... Curl args passed on to \code{\link[httr]{POST}}
-#' @examples \donttest{
+#' @examples \dontrun{
 #' # Retrieve a specified alias
 #' alias_get(index="plos")
 #' alias_get(alias="tables")
@@ -15,7 +15,7 @@
 #'
 #' # Create/update an alias
 #' alias_create(index = "plos", alias = "tables")
-#' 
+#'
 #' # Check for alias existence
 #' alias_exists(index = "plos")
 #' alias_exists(alias = "tables")
@@ -24,7 +24,7 @@
 #' # Delete an alias
 #' alias_delete(index = "plos", alias = "tables")
 #' alias_exists(alias = "tables")
-#' 
+#'
 #' # Curl options
 #' library("httr")
 #' aliases_get(config=verbose())
@@ -75,7 +75,7 @@ alias_delete <- function(index=NULL, alias, ...)
   jsonlite::fromJSON(content(out, "text"), FALSE)
 }
 
-alias_GET <- function(index, alias, ignore, ...) 
+alias_GET <- function(index, alias, ignore, ...)
 {
   tt <- GET(alias_url(index, alias), query=ec(list(ignore_unavailable=as_log(ignore))), ...)
   if(tt$status_code > 202) geterror(tt)
@@ -84,14 +84,14 @@ alias_GET <- function(index, alias, ignore, ...)
 
 alias_HEAD <- function(index, alias, ...) HEAD(alias_url(index, alias), ...)
 
-alias_url <- function(index, alias) 
+alias_url <- function(index, alias)
 {
   conn <- connect()
   if(!is.null(index)){
     if(!is.null(alias))
       sprintf("%s:%s/%s/_alias/%s", conn$base, conn$port, cl(index), alias)
     else
-      sprintf("%s:%s/%s/_alias", conn$base, conn$port, cl(index)) 
+      sprintf("%s:%s/%s/_alias", conn$base, conn$port, cl(index))
   } else {
     if(!is.null(alias))
       sprintf("%s:%s/_alias/%s", conn$base, conn$port, alias)

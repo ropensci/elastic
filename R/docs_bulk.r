@@ -6,13 +6,13 @@
 #' @param ... Pass on curl options to the \code{\link[httr]{POST}} call.
 #' @details More on the Bulk API:
 #'    \url{http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/bulk.html}.
-#' @examples \donttest{
+#' @examples \dontrun{
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 #' docs_bulk(plosdat)
 #' aliases_get()
 #' index_delete(index='plos')
 #' aliases_get()
-#' 
+#'
 #' # Curl options
 #' library("httr")
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
@@ -60,7 +60,7 @@ proc_doc <- function(x){
 
 # make_bulk_gbif(900, filename="inst/examples/gbif_data.json")
 # make_bulk_gbif(600, "gbifgeo", filename="inst/examples/gbif_geo.json", add_coordinates = TRUE)
-make_bulk_gbif <- function(n = 600, index='gbif', type='record', filename = "~/gbif_data.json", add_coordinates=FALSE){  
+make_bulk_gbif <- function(n = 600, index='gbif', type='record', filename = "~/gbif_data.json", add_coordinates=FALSE){
   unlink(filename)
   res <- lapply(seq(1, n, 300), getgbif)
   res <- do.call(c, res)
@@ -73,7 +73,7 @@ make_bulk_gbif <- function(n = 600, index='gbif', type='record', filename = "~/g
     dat <- list(index = list(`_index` = index, `_type` = type, `_id` = i-1))
     cat(proc_doc(dat), sep = "\n", file = filename, append = TRUE)
     cat(proc_doc(res[[i]]), sep = "\n", file = filename, append = TRUE)
-  }  
+  }
   message(sprintf("File written to %s", filename))
 }
 

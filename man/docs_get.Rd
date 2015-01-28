@@ -33,7 +33,7 @@ docs_get(index = NULL, type = NULL, id = NULL, source = FALSE,
 Get documents via the get API.
 }
 \examples{
-\donttest{
+\dontrun{
 docs_get(index='shakespeare', type='line', id=10)
 docs_get(index='shakespeare', type='line', id=3)
 docs_get(index='shakespeare', type='line', id=3, source=TRUE)

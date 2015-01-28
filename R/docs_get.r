@@ -4,9 +4,9 @@
 #' @template all
 #' @template get
 #' @param exists (logical) Only return a logical as to whether the document exists or not.
-#' @references 
+#' @references
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs-get.html}
-#' @examples \donttest{
+#' @examples \dontrun{
 #' docs_get(index='shakespeare', type='line', id=10)
 #' docs_get(index='shakespeare', type='line', id=3)
 #' docs_get(index='shakespeare', type='line', id=3, source=TRUE)

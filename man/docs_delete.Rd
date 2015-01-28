@@ -33,7 +33,7 @@ docs_delete(index, type, id, refresh = NULL, routing = NULL,
 Delete a document.
 }
 \examples{
-\donttest{
+\dontrun{
 docs_delete(index='plos', type='article', id=35)
 docs_get(index='plos', type='article', id=35) # and the document is gone
 }

@@ -24,7 +24,7 @@ search_body(index = NULL, type = NULL, raw = FALSE, callopts = list(),
 Full text search of Elasticsearch - body requests.
 }
 \examples{
-\donttest{
+\dontrun{
 # pass in as an R list
 aggs <- list(aggs = list(stats = list(terms = list(field = "text_entry"))))
 search_body(index="shakespeare", query=aggs)

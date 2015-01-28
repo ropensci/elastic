@@ -168,7 +168,7 @@ Elasticsearch \code{v1.2.0}, and will likely be removed soon. Use \code{\link{in
 instead.
 }
 \examples{
-\donttest{
+\dontrun{
 # get information on an index
 index_get(index='shakespeare')
 index_get(index='shakespeare', features=c('settings','mappings'))

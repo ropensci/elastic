@@ -65,7 +65,7 @@ select zero or more of:
 to the console.
 }
 \examples{
-\donttest{
+\dontrun{
 (out <- nodes_stats())
 nodes_stats(node = names(out$nodes))
 nodes_stats(metric='get')

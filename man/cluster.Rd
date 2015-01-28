@@ -70,7 +70,7 @@ or 'shards', default: 'indices')
 }
 }
 \examples{
-\donttest{
+\dontrun{
 cluster_settings()
 cluster_health()
 cluster_state()

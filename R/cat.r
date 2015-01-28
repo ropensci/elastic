@@ -8,11 +8,11 @@
 #'
 #' @details See \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/cat.html}
 #' for the cat API documentation.
-#' 
-#' Note how \code{\link{cat_}} has an underscore at the end to avoid conflict with the function 
+#'
+#' Note how \code{\link{cat_}} has an underscore at the end to avoid conflict with the function
 #' \code{\link{cat}} in base R.
 #'
-#' @examples \donttest{
+#' @examples \dontrun{
 #' # list Elasticsearch cat endpoints
 #' cat_()
 #'
@@ -39,10 +39,10 @@
 #' cat_shards()
 #' cat_fielddata()
 #' cat_fielddata(fields='body')
-#' 
+#'
 #' # Curl options
 #' library("httr")
-#' cat_count(config=verbose()) 
+#' cat_count(config=verbose())
 #' }
 
 #' @export

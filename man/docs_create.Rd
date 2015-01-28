@@ -48,7 +48,7 @@ positive and can be a number (in milliseconds) or any valid time value (e.g, 864
 Create a document in an index.
 }
 \examples{
-\donttest{
+\dontrun{
 docs_create(index='plos', type='article', id=1002, body=list(id="12345", title="New title"))
 docs_get(index='plos', type='article', id=1002) # and the document is there now
 }

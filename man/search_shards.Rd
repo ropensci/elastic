@@ -28,7 +28,7 @@ where shards are allocated instead of using the Master node's cluster state.}
 Search shards.
 }
 \examples{
-\donttest{
+\dontrun{
 search_shards(index = "plos")
 search_shards(index = c("plos","gbif"))
 search_shards(index = "plos", preference='_primary')

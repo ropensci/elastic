@@ -66,7 +66,7 @@ request.}
 Explain a search query.
 }
 \examples{
-\donttest{
+\dontrun{
 explain(index = "plos", type = "article", id = 10, q = "abstract:used")
 
 body <- '{

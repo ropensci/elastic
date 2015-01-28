@@ -50,7 +50,7 @@ Find documentation for each function at:
 it make more sense to reindex the data into a fresh index compared to delete large chunks of it."
 }
 \examples{
-\donttest{
+\dontrun{
 # Used to check if a type/types exists in an index/indices
 type_exists(index = "plos", type = "article")
 type_exists(index = "plos", type = "articles")

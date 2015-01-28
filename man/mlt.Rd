@@ -84,7 +84,7 @@ is the "more like this query", which passes the query in the body of a POST requ
 be added later.
 }
 \examples{
-\donttest{
+\dontrun{
 mlt(index = "plos", type = "article", id = 5)$hits$total
 mlt(index = "plos", type = "article", id = 5, min_doc_freq=12)$hits$total
 mlt(index = "plos", type = "article", id = 800)$hits$total
