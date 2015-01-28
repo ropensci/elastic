@@ -36,5 +36,4 @@
 
 scroll <- function(scroll_id, scroll="1m", raw=FALSE, ...){
   search_POST(path = "_search/scroll", args=list(scroll=scroll, scroll_id=scroll_id), body=NULL, raw=raw, ...)
-  # search_POST(path = "_search/scroll", args=list(scroll=scroll), body=list(scroll_id), raw=raw, ...)
 }
