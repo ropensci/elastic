@@ -1,15 +1,26 @@
 elastic 0.3.0
 ===============
 
+First version to go to CRAN.
+
 NEW FEATURES
 
-* asdf
+* Added a function `scroll()` and a `scroll` parameter to the `Search()` function (#36)
+* Added the function `explain()` to easily get at explanation of search results.
+* Added a help file added to help explain timem and distance units. See `?units-time` and 
+`?units=distance`
+* New help file added to list and explain the various search functions. See `?searchapis`
+* New function `tokenizer_set()` to set tokenizers
 
 IMPROVEMENTS
 
 * Made CouchDB river plugin functions not exported for now, may bring back later. 
-* asdf
-* asdf
+* Added vignettes for an intro and for search details and examples (#2)
+* `es_search()` changed to `Search()`.
+* More datasets included in the package for bulk data load (#16)
+* All examples wrapped in `\dontrun` instead of `\donttest` so they don't fail on CRAN checks.
+* `es_search_body()` removed - body based queries using the query DSL moved to the `Search()` 
+function, passed into the `body` parameter.
 
 elastic 0.2.0
 ===============
@@ -18,7 +29,7 @@ IMPROVEMENTS
 
 * Remoworked package API. Almost all functions have new names. Sorry for this major change
 but it needed to be done. This brings `elastic` more in line with the official Elasticsearch
-Python client [elasticsearch](http://elasticsearch-py.readthedocs.org/en/master/).
+Python client (http://elasticsearch-py.readthedocs.org/en/master/).
 * Similar functions are grouped together in the same manual file now to make finder related
 functions easier. For example, all functions that work with indices are on the `index` manual
 page, and all functions prefixed with `index_()`. Thematic manual files are: `index`, `cat`,
@@ -29,8 +40,7 @@ you know there is already a widely used function in base R, see `base::cat()`.
 the command in as an argument. For example, `cat('aliases')` becomes `cat_aliases()`.
 * The `es_` prefix remains only for `es_search()`, as we have to avoid conflict with 
 `base::search()`. 
-* There is still more reworking to do, but mostly will be additional parameters for existing
-functions.
+* Removed `assertthat` package import, using `stopifnot()` instead (#14)
 
 elastic 0.1.0
 ===============
