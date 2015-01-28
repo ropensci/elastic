@@ -19,35 +19,35 @@
 \alias{cat_thread_pool}
 \title{Use the cat Elasticsearch api.}
 \usage{
-cat_(verbose = FALSE, index = NULL, fields = NULL)
+cat_(verbose = FALSE, index = NULL, fields = NULL, ...)
 
-cat_aliases(verbose = FALSE, index = NULL, fields = NULL)
+cat_aliases(verbose = FALSE, index = NULL, fields = NULL, ...)
 
-cat_allocation(verbose = FALSE, index = NULL, fields = NULL)
+cat_allocation(verbose = FALSE, index = NULL, fields = NULL, ...)
 
-cat_count(verbose = FALSE, index = NULL, fields = NULL)
+cat_count(verbose = FALSE, index = NULL, fields = NULL, ...)
 
-cat_segments(verbose = FALSE, index = NULL, fields = NULL)
+cat_segments(verbose = FALSE, index = NULL, fields = NULL, ...)
 
-cat_health(verbose = FALSE, index = NULL, fields = NULL)
+cat_health(verbose = FALSE, index = NULL, fields = NULL, ...)
 
-cat_indices(verbose = FALSE, index = NULL, fields = NULL)
+cat_indices(verbose = FALSE, index = NULL, fields = NULL, ...)
 
-cat_master(verbose = FALSE, index = NULL, fields = NULL)
+cat_master(verbose = FALSE, index = NULL, fields = NULL, ...)
 
-cat_nodes(verbose = FALSE, index = NULL, fields = NULL)
+cat_nodes(verbose = FALSE, index = NULL, fields = NULL, ...)
 
-cat_pending_tasks(verbose = FALSE, index = NULL, fields = NULL)
+cat_pending_tasks(verbose = FALSE, index = NULL, fields = NULL, ...)
 
-cat_plugins(verbose = FALSE, index = NULL, fields = NULL)
+cat_plugins(verbose = FALSE, index = NULL, fields = NULL, ...)
 
-cat_recovery(verbose = FALSE, index = NULL, fields = NULL)
+cat_recovery(verbose = FALSE, index = NULL, fields = NULL, ...)
 
-cat_thread_pool(verbose = FALSE, index = NULL, fields = NULL)
+cat_thread_pool(verbose = FALSE, index = NULL, fields = NULL, ...)
 
-cat_shards(verbose = FALSE, index = NULL, fields = NULL)
+cat_shards(verbose = FALSE, index = NULL, fields = NULL, ...)
 
-cat_fielddata(verbose = FALSE, index = NULL, fields = NULL)
+cat_fielddata(verbose = FALSE, index = NULL, fields = NULL, ...)
 }
 \arguments{
 \item{verbose}{If TRUE (default) the url call used printed to console.}
@@ -55,6 +55,8 @@ cat_fielddata(verbose = FALSE, index = NULL, fields = NULL)
 \item{index}{Index name}
 
 \item{fields}{Fields to return, only used with \code{fielddata}}
+
+\item{...}{Curl args passed on to \code{\link[httr]{POST}}}
 }
 \description{
 Use the cat Elasticsearch api.
@@ -62,6 +64,9 @@ Use the cat Elasticsearch api.
 \details{
 See \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/cat.html}
 for the cat API documentation.
+
+Note how \code{\link{cat_}} has an underscore at the end to avoid conflict with the function
+\code{\link{cat}} in base R.
 }
 \examples{
 \donttest{
@@ -91,6 +96,10 @@ cat_thread_pool(verbose=TRUE)
 cat_shards()
 cat_fielddata()
 cat_fielddata(fields='body')
+
+# Curl options
+library("httr")
+cat_count(config=verbose())
 }
 }
 
