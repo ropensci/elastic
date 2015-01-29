@@ -9,5 +9,4 @@ tests/test-all.R
 ^appveyor\.yml$
 plos_data.json
 README.Rmd
-test-all.R
 cran-comments.md
