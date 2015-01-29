@@ -3,7 +3,7 @@
 #' @details This function name has the "S" capitalized to avoid conflict with the function
 #' \code{base::search}. I hate mixing cases, as I think it confuses users, but in this case
 #' it seems neccessary.
-#' @examples \donttest{
+#' @examples \dontrun{
 #' # URI string queries
 #' Search(index="shakespeare")
 #' Search(index="shakespeare", type="act")
@@ -358,9 +358,9 @@
 #' Search('gbif', body = body)$hits$total
 #'
 #' ## Geo filters - fun!
-#' ### Note that filers have many geospatial filter options, but queries have fewer, and 
+#' ### Note that filers have many geospatial filter options, but queries have fewer, and
 #' ### require a geo_shape mapping
-#' 
+#'
 #' body <- '{
 #'  "mappings": {
 #'    "record": {
@@ -373,7 +373,7 @@
 #' index_create(index='gbifgeopoint', body=body)
 #' path <- system.file("examples", "gbif_geopoint", package = "elastic")
 #' docs_bulk(path)
-#' 
+#'
 #' ### Points within a bounding box
 #' body <- '{
 #'  "query":{
@@ -398,7 +398,7 @@
 #' out <- Search('gbifgeopoint', body = body)
 #' out$hits$total
 #' do.call(rbind, lapply(out$hits$hits, function(x) x$`_source`$location))
-#' 
+#'
 #' ### Points within distance of a point
 #' body <- '{
 #'  "query":{
@@ -439,7 +439,7 @@
 #' out <- Search('gbifgeopoint', body = body)
 #' out$hits$total
 #' do.call(rbind, lapply(out$hits$hits, function(x) x$`_source`$location))
-#' 
+#'
 #' ### Points within a polygon
 #' body <- '{
 #'  "query":{
@@ -459,7 +459,7 @@
 #' out <- Search('gbifgeopoint', body = body)
 #' out$hits$total
 #' do.call(rbind, lapply(out$hits$hits, function(x) x$`_source`$location))
-#' 
+#'
 #' ### Geoshape filters using queries instead of filters
 #' #### Get data with geojson type location data loaded first
 #' body <- '{
@@ -474,8 +474,8 @@
 #' index_create(index='geoshape', body=body)
 #' path <- system.file("examples", "gbif_geoshape.json", package = "elastic")
 #' docs_bulk(path)
-#' 
-#' #### Get data with a square envelope, w/ point defining upper left and the other 
+#'
+#' #### Get data with a square envelope, w/ point defining upper left and the other
 #' #### defining the lower right
 #' body <- '{
 #'  "query":{
@@ -491,7 +491,7 @@
 #' }'
 #' out <- Search('geoshape', body = body)
 #' out$hits$total
-#' 
+#'
 #' #### Get data with a circle, w/ point defining center, and radius
 #' body <- '{
 #'  "query":{
@@ -508,7 +508,7 @@
 #' }'
 #' out <- Search('geoshape', body = body)
 #' out$hits$total
-#' 
+#'
 #' #### Use a polygon, w/ point defining center, and radius
 #' body <- '{
 #'  "query":{

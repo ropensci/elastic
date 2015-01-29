@@ -85,7 +85,7 @@ This function name has the "S" capitalized to avoid conflict with the function
 it seems neccessary.
 }
 \examples{
-\donttest{
+\dontrun{
 # URI string queries
 Search(index="shakespeare")
 Search(index="shakespeare", type="act")
