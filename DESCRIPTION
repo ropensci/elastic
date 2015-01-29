@@ -11,8 +11,8 @@ Date: 2015-01-29
 License: MIT + file LICENSE
 Authors@R: person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "myrmecocystus@gmail.com")
-URL: https://github.com/sckott/elastic
-BugReports: https://github.com/sckott/elastic/issues
+URL: https://github.com/ropensci/elastic
+BugReports: https://github.com/ropensci/elastic/issues
 VignetteBuilder: knitr
 Imports:
     httr,
