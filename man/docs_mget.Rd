@@ -9,9 +9,9 @@ docs_mget(index = NULL, type = NULL, ids = NULL, type_id = NULL,
   callopts = list(), verbose = TRUE, ...)
 }
 \arguments{
-\item{index}{Index}
+\item{index}{Index. Required.}
 
-\item{type}{Document type}
+\item{type}{Document type. Required.}
 
 \item{ids}{More than one document id, see examples.}
 

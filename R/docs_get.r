@@ -1,8 +1,9 @@
 #' Get documents via the get API.
 #'
 #' @export
-#' @template all
-#' @template get
+#' @param index Index. Required.
+#' @param type Document type. Required.
+#' @param id Document id. Required.
 #' @param exists (logical) Only return a logical as to whether the document exists or not.
 #' @references
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs-get.html}
@@ -20,8 +21,8 @@
 #' docs_get(index='plos', type='article', id=123456, exists=TRUE)
 #' }
 
-docs_get <- function(index=NULL, type=NULL, id=NULL, source=FALSE,
-  fields=NULL, exists=FALSE, raw=FALSE, callopts=list(), verbose=TRUE, ...)
+docs_get <- function(index, type, id, source=FALSE, fields=NULL, exists=FALSE, 
+  raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
   conn <- es_get_auth()
   if(!is.null(fields)) fields <- paste(fields, collapse=",")
