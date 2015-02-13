@@ -4,9 +4,17 @@
 #' @param index Index. Required.
 #' @param type Document type. Required.
 #' @param id Document id. Required.
+#' @param source (logical) If \code{TRUE}, return source.
+#' @param fields Fields to return from the response object.
 #' @param exists (logical) Only return a logical as to whether the document exists or not.
+#' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
+#' @param callopts Curl args passed on to httr::POST.
+#' @param verbose If TRUE (default) the url call used printed to console.
+#' @param ... Further args passed on to elastic search HTTP API as parameters.
+#' 
 #' @references
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs-get.html}
+#' 
 #' @examples \dontrun{
 #' docs_get(index='shakespeare', type='line', id=10)
 #' docs_get(index='shakespeare', type='line', id=3)

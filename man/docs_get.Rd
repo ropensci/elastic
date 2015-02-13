@@ -14,7 +14,19 @@ docs_get(index, type, id, source = FALSE, fields = NULL, exists = FALSE,
 
 \item{id}{Document id. Required.}
 
+\item{source}{(logical) If \code{TRUE}, return source.}
+
+\item{fields}{Fields to return from the response object.}
+
 \item{exists}{(logical) Only return a logical as to whether the document exists or not.}
+
+\item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
+
+\item{callopts}{Curl args passed on to httr::POST.}
+
+\item{verbose}{If TRUE (default) the url call used printed to console.}
+
+\item{...}{Further args passed on to elastic search HTTP API as parameters.}
 }
 \description{
 Get documents via the get API.
