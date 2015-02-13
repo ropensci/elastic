@@ -1,3 +1,10 @@
+elastic 0.4.0
+===============
+
+BUG FIXES
+
+* Fixed bug in `scroll()` to allow long `scroll_id`'s by passing scroll ids in the body instead of as query parameter (#44)
+
 elastic 0.3.0
 ===============
 
