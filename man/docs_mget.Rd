@@ -38,6 +38,16 @@ Get multiple documents via the multiple get API.
 \details{
 There are a lot of terms you can use for Elasticsearch. See here
    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
+
+You can pass in one of three combinations of parameters:
+\itemize{
+ \item Pass in something for \code{index}, \code{type}, and \code{id}. This is the simplest,
+ allowing retrieval from the same index, same type, and many ids.
+ \item Pass in only \code{index} and \code{type_id} - this allows you to get multiple
+ documents from the same index, but from different types.
+ \item Pass in only \code{index_type_id} - this is so that you can get multiple documents
+ from different indexes and different types.
+}
 }
 \examples{
 \dontrun{

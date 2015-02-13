@@ -3,8 +3,11 @@ elastic 0.4.0
 
 BUG FIXES
 
-* Fixed bug in `scroll()` to allow long `scroll_id`'s by passing scroll ids in the body instead of as query parameter (#44)
+* In `docs_mget()` added internal checker to make sure user passes in the right combination of 
+`index`, `type`, and `id` parameters, or `index` and `type_id`, or just `index_type_id` (#42)
 * Made `index`, `type`, and `id` parameters required in the function `docs_get()` (#43)
+* Fixed bug in `scroll()` to allow long `scroll_id`'s by passing scroll ids in the body instead 
+of as query parameter (#44)
 
 elastic 0.3.0
 ===============

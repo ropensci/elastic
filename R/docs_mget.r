@@ -12,6 +12,16 @@
 #'
 #' @details There are a lot of terms you can use for Elasticsearch. See here
 #'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
+#'    
+#' You can pass in one of three combinations of parameters:
+#' \itemize{
+#'  \item Pass in something for \code{index}, \code{type}, and \code{id}. This is the simplest, 
+#'  allowing retrieval from the same index, same type, and many ids.
+#'  \item Pass in only \code{index} and \code{type_id} - this allows you to get multiple 
+#'  documents from the same index, but from different types.
+#'  \item Pass in only \code{index_type_id} - this is so that you can get multiple documents
+#'  from different indexes and different types.
+#' }
 #' @export
 #' @examples \dontrun{
 #' # Same index and type
@@ -36,6 +46,7 @@
 docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL, index_type_id=NULL,
   source=NULL, fields=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
+  check_params(index, type, ids, type_id, index_type_id)
   conn <- es_get_auth()
 
   if(!is.null(ids)){
@@ -43,7 +54,11 @@ docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL, index_type_
   }
 
   base <- paste(conn$base, ":", conn$port, sep="")
-  fields <- if(is.null(fields)) { fields} else { paste(fields, collapse=",") }
+  fields <- if(is.null(fields)) { 
+    fields
+  } else { 
+    paste(fields, collapse=",") 
+  }
   args <- ec(list(...))
 
   # One index, one type, one to many ids
@@ -88,4 +103,16 @@ docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL, index_type_
   class(tt) <- "elastic_mget"
 
   if(raw){ tt } else { es_parse(tt) }
+}
+
+check_params <- function(index, type, ids, type_id, index_type_id){
+  if(is.null(type_id) && is.null(index_type_id)){
+    if(any(sapply(list(index, type, ids), is.null)))
+      stop("If type_id and index_type_id are NULL, you must pass in index, type, and ids", call. = FALSE)
+  } else if(!is.null(type_id) || !is.null(index_type_id)) {
+    if(!is.null(type_id)) {
+      if(is.null(index))
+        stop("If you pass in type_id, you must pass in index", call. = FALSE)
+    }
+  }
 }
