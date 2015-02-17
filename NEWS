@@ -8,6 +8,9 @@ BUG FIXES
 * Made `index`, `type`, and `id` parameters required in the function `docs_get()` (#43)
 * Fixed bug in `scroll()` to allow long `scroll_id`'s by passing scroll ids in the body instead 
 of as query parameter (#44)
+* In `Search()` function, in the `error_parser()` error parser function, check to see if 
+`error` element returned in response body from Elasticsearch, and if so, parse error, if not, 
+pass on body (likely empty) (#45)
 
 elastic 0.3.0
 ===============
