@@ -11,6 +11,8 @@ of as query parameter (#44)
 * In `Search()` function, in the `error_parser()` error parser function, check to see if 
 `error` element returned in response body from Elasticsearch, and if so, parse error, if not, 
 pass on body (likely empty) (#45)
+* In `Search()` function, added helper function to check size and from parameter
+values passed in to make sure they are numbers. (#46)
 
 elastic 0.3.0
 ===============

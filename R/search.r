@@ -31,8 +31,10 @@
 #' reaching which the query execution will terminate early. If set, the response will have a 
 #' boolean field terminated_early to indicate whether the query execution has actually 
 #' terminated_early. Defaults to no terminate_after.
-#' @param from The starting from index of the hits to return. Default: 0.
-#' @param size The number of hits to return. Default: 10.
+#' @param from (character) The starting from index of the hits to return. Pass in as a character 
+#' string to avoid problems with large number conversion to scientific notation. Default: 0.
+#' @param size (character) The number of hits to return. Pass in as a character string 
+#' to avoid problems with large number conversion to scientific notation. Default: 10.
 #' @param search_type The type of the search operation to perform. Can be dfs_query_then_fetch, 
 #' dfs_query_and_fetch, query_then_fetch, query_and_fetch, count, scan. Default: query_then_fetch. 
 #' See Search Type for more details on the different types of search that can be performed.
@@ -54,7 +56,8 @@ Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, defaul
   search_POST("_search", index, type, args=ec(list(df=df, analyzer=analyzer, 
          default_operator=default_operator, explain=explain, `_source`=source, fields=cl(fields), 
          sort=cl(sort), track_scores=track_scores, timeout=timeout, terminate_after=terminate_after, 
-         from=from, size=size, search_type=search_type, lowercase_expanded_terms=lowercase_expanded_terms, 
+         from=check_num(from, "from"), size=check_num(size, "size"), 
+         search_type=search_type, lowercase_expanded_terms=lowercase_expanded_terms, 
          analyze_wildcard=analyze_wildcard, version=version, q=q, scroll=scroll)), body, raw, ...)
 }
 
@@ -91,3 +94,18 @@ error_parser <- function(y, shard_no=1){
 
 strmatch <- function(x, y) regmatches(x, regexpr(y, x))
 strloc2match <- function(x, first, y) substring(x, first, regexpr(y, x)-1)
+
+# Make sure limit is a numeric or integer
+check_num <- function(x, name){
+  if(!is.null(x)){
+    tryx <- tryCatch(as.numeric(as.character(x)), warning=function(e) e)
+    if("warning" %in% class(tryx)){
+      stop(sprintf("%s should be a numeric or integer class value", name), call. = FALSE)
+    }
+    if(!is(tryx, "numeric") | is.na(tryx))
+      stop(sprintf("%s should be a numeric or integer class value", name), call. = FALSE)
+    return( format(as.character(x), digits = 22) )
+  } else {
+    NULL
+  }
+}

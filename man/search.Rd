@@ -53,9 +53,11 @@ reaching which the query execution will terminate early. If set, the response wi
 boolean field terminated_early to indicate whether the query execution has actually
 terminated_early. Defaults to no terminate_after.}
 
-\item{from}{The starting from index of the hits to return. Default: 0.}
+\item{from}{(character) The starting from index of the hits to return. Pass in as a character
+string to avoid problems with large number conversion to scientific notation. Default: 0.}
 
-\item{size}{The number of hits to return. Default: 10.}
+\item{size}{(character) The number of hits to return. Pass in as a character string
+to avoid problems with large number conversion to scientific notation. Default: 10.}
 
 \item{search_type}{The type of the search operation to perform. Can be dfs_query_then_fetch,
 dfs_query_and_fetch, query_then_fetch, query_and_fetch, count, scan. Default: query_then_fetch.
