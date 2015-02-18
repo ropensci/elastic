@@ -43,6 +43,10 @@ __on OSX__
 
 You can also install via Homebrew: `brew install elasticsearch`
 
+### Upgrading Elasticsearch
+
+I am not totally clear on best practice here, but from what I understand, when you upgrade to a new version of Elasticsearch, place old `elasticsearch/data` and `elasticsearch/config` directories into the new installation (`elasticsearch/` dir). The new elasticsearch instance with replaced data and config directories should automatically update data to the new version and start working.
+
 ### Start Elasticsearch
 
 * Navigate to elasticsearch: `cd /usr/local/elasticsearch`
@@ -117,7 +121,7 @@ The function `connect()` is used before doing anything else to set the connectio
 
 
 ```r
-connect()
+connect(es_port = 9200)
 #> uri:       http://127.0.0.1 
 #> port:      9200 
 #> username:  NULL 
@@ -125,10 +129,10 @@ connect()
 #> api key:   NULL 
 #> elasticsearch details:   
 #>       status:                  200 
-#>       name:                    Taj Nital 
-#>       Elasticsearch version:   1.4.2 
-#>       ES version timestamp:    2014-12-16T14:11:12Z 
-#>       lucene version:          4.10.2
+#>       name:                    Powerhouse 
+#>       Elasticsearch version:   1.4.3 
+#>       ES version timestamp:    2015-02-11T14:23:15Z 
+#>       lucene version:          4.10.3
 ```
 
 ### Search
@@ -202,7 +206,7 @@ Get document with id=1
 
 
 ```r
-docs_get(index='plos', type='article', id=1)
+docs_get(index='plos', type='article', id=4)
 #> $`_index`
 #> [1] "plos"
 #> 
@@ -210,7 +214,7 @@ docs_get(index='plos', type='article', id=1)
 #> [1] "article"
 #> 
 #> $`_id`
-#> [1] "1"
+#> [1] "4"
 #> 
 #> $`_version`
 #> [1] 1
@@ -220,10 +224,10 @@ docs_get(index='plos', type='article', id=1)
 #> 
 #> $`_source`
 #> $`_source`$id
-#> [1] "10.1371/journal.pone.0098602"
+#> [1] "10.1371/journal.pone.0107758"
 #> 
 #> $`_source`$title
-#> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
+#> [1] "Lactobacilli Inactivate Chlamydia trachomatis through Lactic Acid but Not H2O2"
 ```
 
 
@@ -231,7 +235,7 @@ Get certain fields
 
 
 ```r
-docs_get(index='plos', type='article', id=1, fields='id')
+docs_get(index='plos', type='article', id=4, fields='id')
 #> $`_index`
 #> [1] "plos"
 #> 
@@ -239,7 +243,7 @@ docs_get(index='plos', type='article', id=1, fields='id')
 #> [1] "article"
 #> 
 #> $`_id`
-#> [1] "1"
+#> [1] "4"
 #> 
 #> $`_version`
 #> [1] 1
@@ -250,7 +254,7 @@ docs_get(index='plos', type='article', id=1, fields='id')
 #> $fields
 #> $fields$id
 #> $fields$id[[1]]
-#> [1] "10.1371/journal.pone.0098602"
+#> [1] "10.1371/journal.pone.0107758"
 ```
 
 

@@ -48,6 +48,10 @@ __on OSX__
 
 You can also install via Homebrew: `brew install elasticsearch`
 
+### Upgrading Elasticsearch
+
+I am not totally clear on best practice here, but from what I understand, when you upgrade to a new version of Elasticsearch, place old `elasticsearch/data` and `elasticsearch/config` directories into the new installation (`elasticsearch/` dir). The new elasticsearch instance with replaced data and config directories should automatically update data to the new version and start working.
+
 ### Start Elasticsearch
 
 * Navigate to elasticsearch: `cd /usr/local/elasticsearch`
@@ -116,7 +120,7 @@ There are more datasets formatted for bulk loading in the `ropensci/elastic_data
 The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
 
 ```{r}
-connect()
+connect(es_port = 9200)
 ```
 
 ### Search
@@ -138,14 +142,14 @@ Search(index="plos", type="article", sort="title", q="antibody", size=1)$hits$hi
 Get document with id=1
 
 ```{r}
-docs_get(index='plos', type='article', id=1)
+docs_get(index='plos', type='article', id=4)
 ```
 
 
 Get certain fields
 
 ```{r}
-docs_get(index='plos', type='article', id=1, fields='id')
+docs_get(index='plos', type='article', id=4, fields='id')
 ```
 
 
