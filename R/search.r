@@ -1,6 +1,7 @@
 #' Full text search of Elasticsearch 
 #'
 #' @import httr
+#' @importFrom RCurl curlEscape
 #' @export
 #' 
 #' @template search_egs
@@ -53,12 +54,13 @@ Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, defaul
   terminate_after=NULL, from=NULL, size=NULL, search_type=NULL, lowercase_expanded_terms=NULL, 
   analyze_wildcard=NULL, version=FALSE, body=list(), raw=FALSE, scroll=NULL, ...)
 {
-  search_POST("_search", index, type, args=ec(list(df=df, analyzer=analyzer, 
-         default_operator=default_operator, explain=explain, `_source`=source, fields=cl(fields), 
-         sort=cl(sort), track_scores=track_scores, timeout=timeout, terminate_after=terminate_after, 
-         from=check_num(from, "from"), size=check_num(size, "size"), 
-         search_type=search_type, lowercase_expanded_terms=lowercase_expanded_terms, 
-         analyze_wildcard=analyze_wildcard, version=version, q=q, scroll=scroll)), body, raw, ...)
+  search_POST("_search", RCurl::curlEscape(index), RCurl::curlEscape(type), 
+    args=ec(list(df=df, analyzer=analyzer, default_operator=default_operator, explain=explain, 
+      `_source`=source, fields=cl(fields), sort=cl(sort), track_scores=track_scores, 
+      timeout=timeout, terminate_after=terminate_after, from=check_num(from, "from"), 
+      size=check_num(size, "size"), search_type=search_type, 
+      lowercase_expanded_terms=lowercase_expanded_terms, analyze_wildcard=analyze_wildcard, 
+      version=version, q=q, scroll=scroll)), body, raw, ...)
 }
 
 search_POST <- function(path, index=NULL, type=NULL, args, body, raw, ...) 
