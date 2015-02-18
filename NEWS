@@ -13,6 +13,9 @@ of as query parameter (#44)
 pass on body (likely empty) (#45)
 * In `Search()` function, added helper function to check size and from parameter
 values passed in to make sure they are numbers. (#46)
+* Across all functions where `index` and `type` parameters used, now using `RCurl::curlEscape()`
+to URL escape. Other parameters passed in are go through `httr` CRUD methods, and do URL escaping
+for us. (#49)
 
 elastic 0.3.0
 ===============
