@@ -22,7 +22,7 @@ docs_delete <- function(index, type, id, refresh=NULL, routing=NULL, timeout=NUL
   version_type=NULL, callopts=list(), ...)
 {
   url <- make_url(es_get_auth())
-  url <- sprintf("%s/%s/%s/%s", url, index, type, id)
+  url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), id)
   args <- ec(list(refresh=refresh, routing=routing, timeout=timeout,
                   version=version, version_type=version_type, ...))
   out <- DELETE(url, query=args, callopts)

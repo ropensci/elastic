@@ -26,6 +26,6 @@
 search_shards <- function(index=NULL, raw=FALSE, routing=NULL, preference=NULL, local=NULL, ...)
 {
   url <- make_url(es_get_auth())
-  es_GET_(file.path(url, cl(index), "_search_shards"),
+  es_GET_(file.path(url, esc(cl(index)), "_search_shards"),
           ec(list(routing=routing, preference=preference, local=local)), ...)
 }

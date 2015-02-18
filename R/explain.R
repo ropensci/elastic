@@ -53,7 +53,7 @@ explain <- function(index=NULL, type=NULL, id=NULL, source2=NULL, fields=NULL, r
           analyze_wildcard=as_log(analyze_wildcard), lowercase_expanded_terms=as_log(lowercase_expanded_terms),
           lenient=as_log(lenient), default_operator=default_operator, `_source_exclude`=source_exclude,
           `_source_include`=source_include))
-  explain_POST(index, type, id, args, body, raw, ...)
+  explain_POST(esc(index), esc(type), id, args, body, raw, ...)
 }
 
 explain_POST <- function(index, type, id, args, body, raw, ...){
