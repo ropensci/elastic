@@ -15,3 +15,11 @@ scroll_POST <- function(path, args, body, raw, ...)
   res <- content(tt, as = "text")
   if(raw) res else jsonlite::fromJSON(res, FALSE)
 }
+
+esc <- function(x){
+  if(is.null(x)){
+    NULL
+  } else {
+    RCurl::curlEscape(x)
+  }
+}

@@ -285,8 +285,8 @@ body <- '{
              }
       }
 }'
-tokenizer_set(index = "shakespeare", body=body)
-index_analyze(text = "art thouh", index = "shakespeare", analyzer='my_ngram_analyzer')
+tokenizer_set(index = "shakespeare2", body=body)
+index_analyze(text = "art thouh", index = "shakespeare2", analyzer='my_ngram_analyzer')
 
 # Explicitly flush one or more indices.
 index_flush()

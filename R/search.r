@@ -54,7 +54,7 @@ Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, defaul
   terminate_after=NULL, from=NULL, size=NULL, search_type=NULL, lowercase_expanded_terms=NULL, 
   analyze_wildcard=NULL, version=FALSE, body=list(), raw=FALSE, scroll=NULL, ...)
 {
-  search_POST("_search", RCurl::curlEscape(index), RCurl::curlEscape(type), 
+  search_POST("_search", esc(index), esc(type), 
     args=ec(list(df=df, analyzer=analyzer, default_operator=default_operator, explain=explain, 
       `_source`=source, fields=cl(fields), sort=cl(sort), track_scores=track_scores, 
       timeout=timeout, terminate_after=terminate_after, from=check_num(from, "from"), 

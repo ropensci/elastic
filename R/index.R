@@ -196,8 +196,8 @@
 #'              }
 #'       }
 #' }'
-#' tokenizer_set(index = "shakespeare", body=body)
-#' index_analyze(text = "art thouh", index = "shakespeare", analyzer='my_ngram_analyzer')
+#' tokenizer_set(index = "shakespeare2", body=body)
+#' index_analyze(text = "art thouh", index = "shakespeare2", analyzer='my_ngram_analyzer')
 #'
 #' # Explicitly flush one or more indices.
 #' index_flush()
@@ -238,7 +238,7 @@ index_get <- function(index=NULL, features=NULL, raw=FALSE, verbose=TRUE, ...)
 #' @rdname index
 index_exists <- function(index, ...)
 {
-  url <- make_url(es_get_auth())
+  url <- file.path(make_url(es_get_auth()), esc(index))
   res <- HEAD(url, ...)
   if(res$status_code == 200) TRUE else FALSE
 }
@@ -247,7 +247,7 @@ index_exists <- function(index, ...)
 #' @rdname index
 index_delete <- function(index, raw=FALSE, verbose=TRUE, ...)
 {
-  url <- paste0(url, "/", make_url(es_get_auth()))
+  url <- paste0(make_url(es_get_auth()), "/", esc(index))
   out <- DELETE(url, ...)
   stop_for_status(out)
   if(verbose) message(URLdecode(out$url))
@@ -287,7 +287,7 @@ index_stats <- function(index=NULL, metric=NULL, completion_fields=NULL, fieldda
   fields=NULL, groups=NULL, level='indices', ...)
 {
   url <- make_url(es_get_auth())
-  url <- if(is.null(index)) file.path(url, "_stats") else file.path(url, cl(index), "_stats")
+  url <- if(is.null(index)) file.path(url, "_stats") else file.path(url, esc(cl(index)), "_stats")
   url <- if(!is.null(metric)) file.path(url, cl(metric)) else url
   args <- ec(list(completion_fields=completion_fields, fielddata_fields=fielddata_fields,
                   fields=fields, groups=groups, level=level))
@@ -299,7 +299,7 @@ index_stats <- function(index=NULL, metric=NULL, completion_fields=NULL, fieldda
 index_settings <- function(index="_all", ...)
 {
   url <- make_url(es_get_auth())
-  url <- if(is.null(index) || index == "_all") file.path(url, "_settings") else file.path(url, cl(index), "_settings")
+  url <- if(is.null(index) || index == "_all") file.path(url, "_settings") else file.path(url, esc(cl(index)), "_settings")
   es_GET_(url, ...)
 }
 
@@ -346,7 +346,7 @@ index_analyze <- function(text=NULL, field=NULL, index=NULL, analyzer=NULL, toke
 {
   url <- make_url(es_get_auth())
   if(!is.null(index))
-    url <- sprintf("%s/%s/_analyze", url, cl(index))
+    url <- sprintf("%s/%s/_analyze", url, esc(cl(index)))
   else
     url <- sprintf("%s/_analyze", url)
   args <- ec(list(text=text, analyzer=analyzer, tokenizer=tokenizer, filters=filters,
@@ -360,7 +360,7 @@ index_flush <- function(index=NULL, force=FALSE, full=FALSE, wait_if_ongoing=FAL
 {
   url <- make_url(es_get_auth())
   if(!is.null(index))
-    url <- sprintf("%s/%s/_flush", url, cl(index))
+    url <- sprintf("%s/%s/_flush", url, esc(cl(index)))
   else
     url <- sprintf("%s/_flush", url)
   args <- ec(list(force=as_log(force), full=as_log(full), wait_if_ongoing=as_log(wait_if_ongoing)))
@@ -374,7 +374,7 @@ index_clear_cache <- function(index=NULL, filter=FALSE, filter_keys=NULL, fieldd
 {
   url <- make_url(es_get_auth())
   if(!is.null(index))
-    url <- sprintf("%s/%s/_cache/clear", url, cl(index))
+    url <- sprintf("%s/%s/_cache/clear", url, esc(cl(index)))
   else
     url <- sprintf("%s/_cache/clear", url)
   args <- ec(list(filter=as_log(filter), filter_keys=filter_keys, fielddata=as_log(fielddata),
@@ -384,7 +384,7 @@ index_clear_cache <- function(index=NULL, filter=FALSE, filter_keys=NULL, fieldd
 
 close_open <- function(index, which, ...){
   url <- make_url(es_get_auth())
-  url <- sprintf("%s/%s/%s", url, index, which)
+  url <- sprintf("%s/%s/%s", url, esc(index), which)
   out <- POST(url, ...)
   stop_for_status(out)
   content(out)
@@ -392,13 +392,13 @@ close_open <- function(index, which, ...){
 
 es_GET_wrap1 <- function(index, which, args=list(), ...){
   url <- make_url(es_get_auth())
-  url <- if(is.null(index)) file.path(url, which) else file.path(url, cl(index), which)
+  url <- if(is.null(index)) file.path(url, which) else file.path(url, esc(cl(index)), which)
   es_GET_(url, args, ...)
 }
 
 es_POST_ <- function(index, which, args=list(), ...){
   url <- make_url(es_get_auth())
-  url <- if(is.null(index)) file.path(url, which) else file.path(url, cl(index), which)
+  url <- if(is.null(index)) file.path(url, which) else file.path(url, esc(cl(index)), which)
   tt <- POST(url, query=args, ...)
   if(tt$status_code > 202) stop(content(tt)$error)
   jsonlite::fromJSON(content(tt, "text"), FALSE)

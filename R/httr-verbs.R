@@ -2,6 +2,8 @@
 es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL, 
                         clazz=NULL, raw, callopts=list(), ...){
   url <- make_url(es_get_auth())
+  index <- esc(index)
+  type <- esc(type)
   if(is.null(index) && is.null(type)){ url <- paste(url, path, sep="/") } else
     if(is.null(type) && !is.null(index)){ url <- paste(url, index, path, sep="/") } else {
       url <- paste(url, index, type, path, sep="/")    
@@ -27,7 +29,7 @@ es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL,
 index_GET <- function(path, index, features, raw, ...) 
 {
   url <- make_url(es_get_auth())
-  url <- paste0(url, "/", paste0(index, collapse = ","))
+  url <- paste0(url, "/", paste0(esc(index), collapse = ","))
   if(!is.null(features)) features <- paste0(paste0("_", features), collapse = ",")
   if(!is.null(features)) url <- paste0(url, "/", features)
   tt <- GET(url, ...)
@@ -38,6 +40,8 @@ index_GET <- function(path, index, features, raw, ...)
 es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, query, ...) 
 {
   url <- make_url(es_get_auth())
+  index <- esc(index)
+  type <- esc(type)
   if(is.null(index) && is.null(type)){ url <- paste(url, path, sep="/") } else
     if(is.null(type) && !is.null(index)){ url <- paste(url, index, path, sep="/") } else {
       url <- paste(url, index, type, path, sep="/")    
