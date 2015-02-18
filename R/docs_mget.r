@@ -47,13 +47,12 @@ docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL, index_type_
   source=NULL, fields=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
   check_params(index, type, ids, type_id, index_type_id)
-  conn <- es_get_auth()
+  base <- make_url(es_get_auth())
 
   if(!is.null(ids)){
     if(length(ids) < 2) stop("If ids parameter is used, more than 1 id must be passed", call. = FALSE)
   }
 
-  base <- paste(conn$base, ":", conn$port, sep="")
   fields <- if(is.null(fields)) { 
     fields
   } else { 

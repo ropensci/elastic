@@ -73,8 +73,8 @@ mlt <- function(index, type, id, doc_type=NULL, body=NULL,
   search_query_hint=NULL, search_scroll=NULL, search_size=NULL, search_source=NULL,
   search_type=NULL, search_types=NULL, stop_words=NULL, like_text=NULL, ...)
 {
-  conn <- connect()
-  url <- sprintf("%s:%s/%s/%s/%s/%s", conn$base, conn$port, index, type, id, "_mlt")
+  url <- make_url(es_get_auth())
+  url <- sprintf("%s/%s/%s/%s/%s", url, index, type, id, "_mlt")
   args <- ec(list(doc_type=doc_type, id=id, body=body, boost_terms=boost_terms,
     include=include, max_doc_freq=max_doc_freq, max_query_terms=max_query_terms,
     max_word_length=max_word_length, min_doc_freq=min_doc_freq, min_term_freq=min_term_freq,

@@ -5,8 +5,4 @@
 #' @examples \dontrun{
 #' ping()
 #' }
-ping <- function(...)
-{
-  conn <- connect()
-  es_GET_(paste(conn$base, ":", conn$port, sep=""), ...)
-}
+ping <- function(...) es_GET_(make_url(es_get_auth()), ...)

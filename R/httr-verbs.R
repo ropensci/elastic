@@ -1,10 +1,7 @@
 # GET wrapper
 es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL, 
-                        clazz=NULL, raw, callopts=list(), ...) 
-{
-  #   conn <- connect()
-  conn <- es_get_auth()
-  url <- paste(conn$base, ":", conn$port, sep="")
+                        clazz=NULL, raw, callopts=list(), ...){
+  url <- make_url(es_get_auth())
   if(is.null(index) && is.null(type)){ url <- paste(url, path, sep="/") } else
     if(is.null(type) && !is.null(index)){ url <- paste(url, index, path, sep="/") } else {
       url <- paste(url, index, type, path, sep="/")    
@@ -29,8 +26,8 @@ es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL,
 
 index_GET <- function(path, index, features, raw, ...) 
 {
-  conn <- es_get_auth()
-  url <- paste0(conn$base, ":", conn$port, "/", paste0(index, collapse = ","))
+  url <- make_url(es_get_auth())
+  url <- paste0(url, "/", paste0(index, collapse = ","))
   if(!is.null(features)) features <- paste0(paste0("_", features), collapse = ",")
   if(!is.null(features)) url <- paste0(url, "/", features)
   tt <- GET(url, ...)
@@ -40,8 +37,7 @@ index_GET <- function(path, index, features, raw, ...)
 
 es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, query, ...) 
 {
-  conn <- es_get_auth()
-  url <- paste(conn$base, ":", conn$port, sep="")
+  url <- make_url(es_get_auth())
   if(is.null(index) && is.null(type)){ url <- paste(url, path, sep="/") } else
     if(is.null(type) && !is.null(index)){ url <- paste(url, index, path, sep="/") } else {
       url <- paste(url, index, type, path, sep="/")    

@@ -21,8 +21,8 @@
 docs_delete <- function(index, type, id, refresh=NULL, routing=NULL, timeout=NULL, version=NULL,
   version_type=NULL, callopts=list(), ...)
 {
-  conn <- connect()
-  url <- sprintf("%s:%s/%s/%s/%s", conn$base, conn$port, index, type, id)
+  url <- make_url(es_get_auth())
+  url <- sprintf("%s/%s/%s/%s", url, index, type, id)
   args <- ec(list(refresh=refresh, routing=routing, timeout=timeout,
                   version=version, version_type=version_type, ...))
   out <- DELETE(url, query=args, callopts)

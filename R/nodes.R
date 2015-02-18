@@ -77,8 +77,8 @@ nodes_hot_threads <- function(node=NULL, metric=NULL, threads=3, interval='500ms
 
 node_GET <- function(path, metric, node, raw, args, ...)
 {
-  conn <- connect()
-  url <- file.path(paste0(conn$base, ":", conn$port), '_nodes')
+  url <- make_url(es_get_auth())
+  url <- file.path(url, '_nodes')
   if(!is.null(node)){
     url <- paste(url, paste(node, collapse = ","), path, sep = "/")
   } else { url <- paste(url, path, sep = "/") }

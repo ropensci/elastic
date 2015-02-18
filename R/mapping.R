@@ -83,32 +83,32 @@
 #' @export
 #' @rdname mapping
 mapping_create <- function(index, type, body, ...){
-  conn <- connect()
-  url <- file.path(paste0(conn$base, ":", conn$port), index, "_mapping", type)
+  url <- make_url(es_get_auth())
+  url <- file.path(url, index, "_mapping", type)
   es_PUT(url, body, ...)
 }
 
 #' @export
 #' @rdname mapping
 mapping_delete <- function(index, type, ...){
-  conn <- connect()
-  es_DELETE(file.path(paste0(conn$base, ":", conn$port), index, "_mapping", type), ...)
+  url <- make_url(es_get_auth())
+  es_DELETE(file.path(url, index, "_mapping", type), ...)
 }
 
 #' @export
 #' @rdname mapping
 mapping_get <- function(index = NULL, type = NULL, ...){
-  conn <- connect()
+  url <- make_url(es_get_auth())
   if(any(index == "_all")){
-    url <- file.path(paste0(conn$base, ":", conn$port), "_mapping")
+    url <- file.path(url, "_mapping")
   } else {
     if(is.null(type)){
-      url <- file.path(paste0(conn$base, ":", conn$port), cl(index), "_mapping")
+      url <- file.path(url, cl(index), "_mapping")
     } else if(is.null(index) && !is.null(type)) {
-      url <- file.path(paste0(conn$base, ":", conn$port), "_mapping", cl(type))
+      url <- file.path(url, "_mapping", cl(type))
     } else if(!is.null(index) && !is.null(type)) {
       if(length(index) > 1) stop("You can only pass one index if you also pass a type", call. = FALSE)
-      url <- file.path(paste0(conn$base, ":", conn$port), index, "_mapping", cl(type))
+      url <- file.path(url, index, "_mapping", cl(type))
     }
   }
   es_GET_(url, ...)
@@ -118,18 +118,18 @@ mapping_get <- function(index = NULL, type = NULL, ...){
 #' @rdname mapping
 field_mapping_get <- function(index = NULL, type = NULL, field, include_defaults=FALSE, ...){
   stopifnot(!is.null(field))
-  conn <- connect()
+  url <- make_url(es_get_auth())
   if(any(index == "_all")){
     stopifnot(!is.null(type))
-    url <- file.path(paste0(conn$base, ":", conn$port), "_all/_mapping", cl(type), "field", cl(field))
+    url <- file.path(url, "_all/_mapping", cl(type), "field", cl(field))
   } else {
     if(is.null(type)){
-      url <- file.path(paste0(conn$base, ":", conn$port), cl(index), "_mapping/field", cl(field))
+      url <- file.path(url, cl(index), "_mapping/field", cl(field))
     } else if(is.null(index) && !is.null(type)) {
-      url <- file.path(paste0(conn$base, ":", conn$port), "_all/_mapping", cl(type), "field", cl(field))
+      url <- file.path(url, "_all/_mapping", cl(type), "field", cl(field))
     } else if(!is.null(index) && !is.null(type)) {
       if(length(index) > 1) stop("You can only pass one index if you also pass a type", call. = FALSE)
-      url <- file.path(paste0(conn$base, ":", conn$port), index, "_mapping", cl(type), "field", cl(field))
+      url <- file.path(url, index, "_mapping", cl(type), "field", cl(field))
     }
   }
   es_GET_(url, query=list(include_defaults=as_log(include_defaults)), ...)
@@ -138,7 +138,7 @@ field_mapping_get <- function(index = NULL, type = NULL, field, include_defaults
 #' @export
 #' @rdname mapping
 type_exists <- function(index, type, ...){
-  conn <- connect()
-  res <- HEAD(file.path(paste0(conn$base, ":", conn$port), index, type), ...)
+  url <- make_url(es_get_auth())
+  res <- HEAD(file.path(url, index, type), ...)
   if(res$status_code == 200) TRUE else FALSE
 }

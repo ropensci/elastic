@@ -1,5 +1,7 @@
 context("search")
-  
+
+options(es_port=9200)
+
 test_that("basic search works", {
   a <- Search(index="shakespeare")
   expect_equal(names(a), c('took','timed_out','_shards','hits'))

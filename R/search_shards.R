@@ -25,7 +25,7 @@
 
 search_shards <- function(index=NULL, raw=FALSE, routing=NULL, preference=NULL, local=NULL, ...)
 {
-  conn <- connect()
-  es_GET_(file.path(paste0(conn$base, ":", conn$port), cl(index), "_search_shards"),
+  url <- make_url(es_get_auth())
+  es_GET_(file.path(url, cl(index), "_search_shards"),
           ec(list(routing=routing, preference=preference, local=local)), ...)
 }

@@ -32,10 +32,9 @@
 docs_get <- function(index, type, id, source=FALSE, fields=NULL, exists=FALSE, 
   raw=FALSE, callopts=list(), verbose=TRUE, ...)
 {
-  conn <- es_get_auth()
+  conn <- make_url(es_get_auth())
   if(!is.null(fields)) fields <- paste(fields, collapse=",")
 
-  url <- paste(conn$base, ":", conn$port, sep="")
   args <- ec(list(fields = cl(fields), ...))
   url <- sprintf("%s/%s/%s/%s", url, index, type, id)
   if(source) url <- paste(url, '_source', sep="/")

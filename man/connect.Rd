@@ -5,7 +5,7 @@
 \alias{connection}
 \title{Set connection details to an Elasticsearch engine.}
 \usage{
-connect(es_base = "http://127.0.0.1", es_port = 9200, es_user = NULL,
+connect(es_base = "http://127.0.0.1", es_port = NULL, es_user = NULL,
   es_pwd = NULL, es_key = NULL, force = FALSE, ...)
 
 connection()
@@ -13,7 +13,7 @@ connection()
 \arguments{
 \item{es_base}{The base url, defaults to localhost (http://127.0.0.1)}
 
-\item{es_port}{port to connect to, defaults to 5984}
+\item{es_port}{port to connect to, defaults to 9200 (optional)}
 
 \item{es_user}{User name, if required for the connection. You can specify, but
 ignored for now.}
@@ -21,9 +21,9 @@ ignored for now.}
 \item{es_pwd}{Password, if required for the connection. You can specify, but
 ignored for now.}
 
-\item{es_key}{An API key}
+\item{es_key}{An API key, ignored for now}
 
-\item{force}{Force re-authorization.}
+\item{force}{Force re-load of connection details}
 
 \item{...}{Further args passed on to print for the es_conn class.}
 }

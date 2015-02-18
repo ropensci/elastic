@@ -36,8 +36,8 @@
 tokenizer_set <- function(index, body, ...)
 {
   if(length(index) > 1) stop("Only one index allowed", call. = FALSE)
-  conn <- connect()
-  url <- sprintf("%s:%s/%s", conn$base, conn$port, index)
+  url <- make_url(es_get_auth())
+  url <- sprintf("%s/%s", url, index)
   tokenizer_PUT(url, body, ...)
 }
 

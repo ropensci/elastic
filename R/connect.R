@@ -3,13 +3,13 @@
 #' @name connect
 #'
 #' @param es_base The base url, defaults to localhost (http://127.0.0.1)
-#' @param es_port port to connect to, defaults to 5984
+#' @param es_port port to connect to, defaults to 9200 (optional)
 #' @param es_user User name, if required for the connection. You can specify, but
 #' ignored for now.
 #' @param es_pwd Password, if required for the connection. You can specify, but
 #' ignored for now.
-#' @param es_key An API key
-#' @param force Force re-authorization.
+#' @param es_key An API key, ignored for now
+#' @param force Force re-load of connection details
 #' @param ... Further args passed on to print for the es_conn class.
 #' @details The default configuration is set up for localhost access on port 9200,
 #' with no username or password.
@@ -31,14 +31,11 @@
 
 #' @export
 #' @rdname connect
-connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL, es_pwd = NULL,
+connect <- function(es_base="http://127.0.0.1", es_port=NULL, es_user = NULL, es_pwd = NULL,
                        es_key = NULL, force = FALSE, ...)
 {
-  auth <- es_get_auth(es_base=es_base, es_port=es_port, force = force)
-
-#   if(grepl('localhost|127.0.0.1', auth$base))
-#     base <- paste(auth$base, auth$port, sep = ":")
-  if(is.null(auth$port)){
+  auth <- es_auth(es_base=es_base, es_port=es_port, force = force)
+  if(is.null(auth$port) || nchar(auth$port) == 0){
     baseurl <- auth$base
   } else {
     baseurl <- paste(auth$base, auth$port, sep = ":")
@@ -51,21 +48,19 @@ connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL, es
     stop(sprintf("Error:", res$headers$statusmessage), call. = FALSE)
   tt <- content(res, as = "text")
   out <- jsonlite::fromJSON(tt, FALSE)
-
-  ll <- list(base = auth$base, port = auth$port, user = es_user, pwd = es_pwd, key = es_key, es_deets = out)
-
-  class(ll) <- 'es_conn'
-  return( ll )
+  structure(list(base = auth$base, port = auth$port, user = es_user, 
+                 pwd = es_pwd, key = es_key, es_deets = out), class='es_conn')
 }
 
 #' @export
 #' @rdname connect
 connection <- function(){
   auth <- list(base=getOption("es_base"), port=getOption("es_port"))
-  if(is.null(auth$port)){
+  if(is.null(auth$port) || nchar(auth$port) == 0){
     baseurl <- auth$base
-  } else
-  {  baseurl <- paste(auth$base, auth$port, sep = ":") }
+  } else {  
+    baseurl <- paste(auth$base, auth$port, sep = ":") 
+  }
   res <- tryCatch(GET(baseurl), error=function(e) e)
   if("error" %in% class(res)){
     stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting", baseurl), call. = FALSE)
@@ -121,11 +116,9 @@ print.es_conn <- function(x, ...){
 #'  \code{options(es_key = '<port>')}
 #' }
 
-es_auth <- function(es_base=NULL, es_port=NULL, es_user=NULL, es_pwd=NULL, es_key=NULL, force=FALSE)
-{
-#   list(es_base=es_base, es_port=es_port)
+es_auth <- function(es_base=NULL, es_port=NULL, es_user=NULL, es_pwd=NULL, es_key=NULL, force=FALSE){
   base <- ifnull(es_base, 'es_base')
-  port <- ifnull(es_port, 'es_port')
+  port <- if(is.null(es_port)) "" else es_port
   user <- ifnull(es_user, 'es_user')
   pwd <- ifnull(es_pwd, 'es_pwd')
   key <- ifnull(es_key, 'es_key')
@@ -145,21 +138,6 @@ es_auth <- function(es_base=NULL, es_port=NULL, es_user=NULL, es_pwd=NULL, es_ke
     options(es_base = base)
   } else { base <- base }
 
-  if (identical(port, "") || force){
-    if (!interactive()) {
-      stop("Please set option var es_port to your Elasticsearch port",
-           call. = FALSE)
-    }
-    message("Couldn't find option var es_port. See ?es_auth for more details.")
-    message("Please enter your Elasticsearch port and press enter:")
-    port <- readline(": ")
-    if (identical(port, "")) {
-      stop("Elasticsearch port entry failed", call. = FALSE)
-    }
-    message("Updating es_port option var")
-    options(es_port = port)
-  } else { port <- port }
-
   options(es_base = base)
   options(es_port = port)
   list(base = base, port = port)
@@ -169,15 +147,9 @@ ifnull <- function(x, y){
   if(is.null(x)) getOption(y, default = "") else x
 }
 
-es_get_auth <- function(es_base=NULL, es_port=NULL, force=FALSE){
-  if(is.null(es_base)) es_base <- getOption("es_base")
-  if(is.null(es_port)) es_port <- getOption("es_port")
-
-#   if(is.null(base) | is.null(port))
-  es_auth(es_base=es_base, es_port=es_port, force = force)
-
+es_get_auth <- function(){
   base <- getOption("es_base")
   port <- getOption("es_port")
-
+  if(is.null(base)) stop("Please run connect()", call. = FALSE)
   list(base=base, port=port)
 }

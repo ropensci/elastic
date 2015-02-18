@@ -108,9 +108,9 @@ cat_fielddata <- function(verbose=FALSE, index=NULL, fields=NULL, ...) cat_helpe
 
 cat_helper <- function(what='', v=FALSE, i=NULL, f=NULL, ...)
 {
-  conn <- es_get_auth()
+  conn <- make_url(es_get_auth())
   if(!is.null(f)) f <- paste(f, collapse=",")
-  url <- sprintf("%s:%s/_cat/%s", conn$base, conn$port, what)
+  url <- sprintf("%s/_cat/%s", url, what)
   if(!is.null(i)) url <- paste0(url, '/', i)
   args <- ec(list(v = if(v) '' else NULL, fields=f))
   out <- GET(url, query=args, ...)

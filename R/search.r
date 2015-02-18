@@ -64,7 +64,7 @@ Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, defaul
 search_POST <- function(path, index=NULL, type=NULL, args, body, raw, ...) 
 {
   conn <- es_get_auth()
-  url <- paste(conn$base, ":", conn$port, sep="")
+  url <- make_url(conn)
   if(is.null(index) && is.null(type)){ url <- paste(url, path, sep="/") } else
     if(is.null(type) && !is.null(index)){ url <- paste(url, index, path, sep="/") } else {
       url <- paste(url, index, type, path, sep="/")    
@@ -107,5 +107,13 @@ check_num <- function(x, name){
     return( format(as.character(x), digits = 22) )
   } else {
     NULL
+  }
+}
+
+make_url <- function(x){
+  if(is.null(x$port) || nchar(x$port) == 0){
+    x$base
+  } else {
+    paste(x$base, ":", x$port, sep="")
   }
 }

@@ -57,8 +57,8 @@ explain <- function(index=NULL, type=NULL, id=NULL, source2=NULL, fields=NULL, r
 }
 
 explain_POST <- function(index, type, id, args, body, raw, ...){
-  conn <- connect()
-  url <- if(is.null(id)) file.path(e_url(conn), index, type, "_explain") else file.path(e_url(conn), index, type, id, "_explain")
+  url <- make_url(es_get_auth())
+  url <- if(is.null(id)) file.path(url, index, type, "_explain") else file.path(url, index, type, id, "_explain")
   tt <- if(is.null(body)) POST(url, query=args, ...) else POST(url, query=args, body=body, ...)
   stop_for_status(tt)
   if(raw) content(tt, "text") else jsonlite::fromJSON(content(tt, "text"), FALSE)
