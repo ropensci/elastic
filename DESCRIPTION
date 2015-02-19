@@ -18,7 +18,8 @@ Imports:
     httr,
     RCurl,
     jsonlite,
-    magrittr
+    magrittr,
+    lazyeval
 Suggests:
     testthat,
     roxygen2,
