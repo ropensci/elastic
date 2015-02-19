@@ -1,11 +1,24 @@
 language: c
+
 script: "./travis-tool.sh run_tests"
+
 before_script:
 - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
 - chmod 755 ./travis-tool.sh
 - "./travis-tool.sh bootstrap"
 - "./travis-tool.sh install_deps"
+
+env:
+   global:
+     - R_BUILD_ARGS="--no-manual"
+     - R_CHECK_ARGS="--as-cran --no-manual"
+
+after_failure:
+  - ./travis-tool.sh dump_logs
+
 notifications:
-  hipchat:
-    rooms:
-      secure: R2fWgrfi0C0RO/2768rjNY6jFfwqTO/9SEA8+chynmjWZWcF+zOc1wD5ghpwoGumMVWQBv0yDt3UgRG0HfA7PfWH9KmzjU48JmP2qUDS6/YKPpkVclXxknxuPNc7dJV5RI8mdDkavUp/qR0JX9n7rSF/sTjahppdmmDF0AX8Mho=
+  slack:
+    secure: YOxbPBFVAMbDbNc/6tDn5749/qOfJkM+hfTraG9LGstCZC2C4I7rxb3BRkUHphIbFuQiH8BW/L+BKPXkLBL8Hrz4uMMyD3RtMX1A9fZ9WizkHMT4GLCHE011TITiYIeJvv41R7RBuy6rn3RLpID5KeMTTDphIz1TOZdl1zsxqds=
+  email:
+    on_success: change
+    on_failure: change
