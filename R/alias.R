@@ -86,7 +86,7 @@ alias_HEAD <- function(index, alias, ...) HEAD(alias_url(index, alias), ...)
 
 alias_url <- function(index, alias)
 {
-  conn <- make_url(es_get_auth())
+  url <- make_url(es_get_auth())
   if(!is.null(index)){
     if(!is.null(alias))
       sprintf("%s/%s/_alias/%s", url, cl(index), alias)
