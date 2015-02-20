@@ -375,7 +375,7 @@
 #'  }
 #' }'
 #' index_create(index='gbifgeopoint', body=body)
-#' path <- system.file("examples", "gbif_geopoint", package = "elastic")
+#' path <- system.file("examples", "gbif_geopoint.json", package = "elastic")
 #' docs_bulk(path)
 #'
 #' ### Points within a bounding box
@@ -513,7 +513,7 @@
 #' out <- Search('geoshape', body = body)
 #' out$hits$total
 #'
-#' #### Use a polygon, w/ point defining center, and radius
+#' #### Use a polygon
 #' body <- '{
 #'  "query":{
 #'    "geo_shape" : {

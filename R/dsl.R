@@ -1,6 +1,7 @@
 #' The elastic DSL
 #' 
 #' @import lazyeval
+#' @importFrom jsonlite unbox
 #' @name elasticdsl
 #' 
 #' @param index asdfds
@@ -31,7 +32,7 @@
 #' index("plos")
 #' index("gbif")
 #' 
-#' # Define bool query
+#' # bool query
 #' bool(must_not = list(term=list(speaker="KING HENRY IV")))
 #' index("shakespeare") %>% 
 #'    bool(must = list(term=list(speaker="KING HENRY IV")))
@@ -43,10 +44,28 @@
 #' bool(must = list(term=list(user="kimchy")), 
 #'      must_not = list(term=list(user="kimchy")))
 #'      
-#' # Define range query
+#' # range query
 #' index("shakespeare") %>% range( speech_number <= 5 )
 #' index("shakespeare") %>% range( speech_number <= c(1,5) )
 #' range( speech_number >= c(1,5) )
+#' 
+#' # geographic query
+#' ## point
+#' index("geoshape") %>% 
+#'    geoshape(field = "location", type = "envelope", coordinates = list(c(-30, 50), c(30, 0)))
+#' # circle and radius
+#' index("geoshape") %>% 
+#'    geoshape(field = "location", type = "circle", radius = "2000km", 
+#'             coordinates = c(-10, 45)) %>% 
+#'    n()
+#' index("geoshape") %>% 
+#'    geoshape(field = "location", type = "circle", radius = "5000km", 
+#'             coordinates = c(-10, 45)) %>% 
+#'    n()
+#' # polygon
+#' coords <- list(c(80.0, -20.0), c(-80.0, -20.0), c(-80.0, 60.0), c(40.0, 60.0), c(80.0, -20.0))
+#' index("geoshape") %>% 
+#'    geoshape(field = "location", type = "polygon", coordinates = coords)
 #' }
 NULL
 
@@ -100,6 +119,24 @@ bool_ <- function(.obj=list(), ..., .dots){
   execute(.obj, query)
 }
 
+#' @export
+#' @rdname elasticdsl
+geoshape <- function(.obj=list(), ..., field=NULL){
+  geoshape_(.obj, .dots = lazyeval::lazy_dots(...), field=field)
+}
+
+#' @export
+#' @rdname elasticdsl
+geoshape_ <- function(.obj=list(), ..., .dots, field=NULL){
+  dots <- lazyeval::all_dots(.dots, ...)
+  query <- as.json(structure(dots, class=c("geoshape","lazy_dots")), field=field)
+  execute(.obj, query)
+}
+
+#' @export
+#' @rdname elasticdsl
+n <- function(x) x$hits$total
+
 as.json <- function(x, ...) UseMethod("as.json")
 
 as.json.range <- function(x, ...){
@@ -111,6 +148,30 @@ as.json.bool <- function(x, ...){
   tmp <- setNames(list(lazy_eval(x[[1]]$expr)), names(x))
   x <- list(query = list(bool = tmp))
   jsonlite::toJSON(x, ..., auto_unbox = TRUE)
+}
+
+as.json.geoshape <- function(x, field, ...){
+  out <- list()
+  for(i in seq_along(x)){
+    dat <- if(is.character(x[[i]]$expr)){
+      unbox(x[[i]]$expr)
+    } else {
+      list(eval(x[[i]]$expr))
+    }
+    out[[names(x[i])]] <- dat
+  }
+  tmp <- setNames(list(list(shape = out)), field)
+  alldat <- list(query = list(geo_shape = tmp))
+  json <- jsonlite::toJSON(alldat, ..., auto_unbox = TRUE)
+  gsub_geoshape(out$type[[1]], json)
+}
+
+gsub_geoshape <- function(type, x){
+  switch(type, 
+         envelope = gsub('\\]\\]\\]', "\\]\\]", gsub('\\[\\[\\[', "\\[\\[", x)),
+         circle = gsub('\\]\\]', "\\]", gsub('\\[\\[', "\\[", x)),
+         polygon = x
+  )
 }
 
 get_eq <- function(y) {
@@ -134,8 +195,6 @@ combine <- function(.obj, ..., .dots){
 
 # execute on Search
 execute <- function(.obj, query){
-  # query <- lazyeval::lazy_eval(query)
-  # query <- as.json(query)
   Search_(index=attr(.obj, "index"), body=query)
 }
 

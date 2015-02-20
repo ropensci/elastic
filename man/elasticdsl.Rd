@@ -4,7 +4,10 @@
 \alias{bool}
 \alias{bool_}
 \alias{elasticdsl}
+\alias{geoshape}
+\alias{geoshape_}
 \alias{index}
+\alias{n}
 \alias{print.index}
 \alias{range}
 \alias{range_}
@@ -22,6 +25,12 @@ range_(.obj = list(), ..., .dots)
 bool(.obj = list(), ...)
 
 bool_(.obj = list(), ..., .dots)
+
+geoshape(.obj = list(), ..., field = NULL)
+
+geoshape_(.obj = list(), ..., .dots, field = NULL)
+
+n(x)
 }
 \arguments{
 \item{index}{asdfds}
@@ -63,7 +72,7 @@ index("shakespeare", "act")
 index("plos")
 index("gbif")
 
-# Define bool query
+# bool query
 bool(must_not = list(term=list(speaker="KING HENRY IV")))
 index("shakespeare") \%>\%
    bool(must = list(term=list(speaker="KING HENRY IV")))
@@ -75,10 +84,28 @@ index("shakespeare") \%>\%
 bool(must = list(term=list(user="kimchy")),
      must_not = list(term=list(user="kimchy")))
 
-# Define range query
+# range query
 index("shakespeare") \%>\% range( speech_number <= 5 )
 index("shakespeare") \%>\% range( speech_number <= c(1,5) )
 range( speech_number >= c(1,5) )
+
+# geographic query
+## point
+index("geoshape") \%>\%
+   geoshape(field = "location", type = "envelope", coordinates = list(c(-30, 50), c(30, 0)))
+# circle and radius
+index("geoshape") \%>\%
+   geoshape(field = "location", type = "circle", radius = "2000km",
+            coordinates = c(-10, 45)) \%>\%
+   n()
+index("geoshape") \%>\%
+   geoshape(field = "location", type = "circle", radius = "5000km",
+            coordinates = c(-10, 45)) \%>\%
+   n()
+# polygon
+coords <- list(c(80.0, -20.0), c(-80.0, -20.0), c(-80.0, 60.0), c(40.0, 60.0), c(80.0, -20.0))
+index("geoshape") \%>\%
+   geoshape(field = "location", type = "polygon", coordinates = coords)
 }
 }
 
