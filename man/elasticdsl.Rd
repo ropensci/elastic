@@ -2,19 +2,26 @@
 % Please edit documentation in R/dsl.R
 \name{elasticdsl}
 \alias{bool}
+\alias{bool_}
 \alias{elasticdsl}
 \alias{index}
 \alias{print.index}
 \alias{range}
+\alias{range_}
 \title{The elastic DSL}
 \usage{
 index(index, type = NULL, what = "mappings", ...)
 
 \method{print}{index}(x, ...)
 
-range(.obj = list(), ..., boost = 1, cache = FALSE)
+range(.obj = list(), ..., boost = 1, time_zone = NULL, execution = NULL,
+  cache = FALSE)
+
+range_(.obj = list(), ..., .dots)
 
 bool(.obj = list(), ...)
+
+bool_(.obj = list(), ..., .dots)
 }
 \arguments{
 \item{index}{asdfds}
@@ -51,21 +58,26 @@ what \code{\link{dplyr}} does.
 \dontrun{
 # Get mapping for verifying fields requested in DSL
 index("shakespeare")
+index("shakespeare", "scene")
+index("shakespeare", "act")
 index("plos")
 index("gbif")
 
-# Define bool query for the DSL
+# Define bool query
+bool(must_not = list(term=list(speaker="KING HENRY IV")))
 index("shakespeare") \%>\%
-   bool(must = list(term=list(user="kimchy")))
-bool(must_not = list(term=list(user="kimchy")))
-bool(should = list(list(term=list(tag="sometag")), list(term=list(tag="someothertag"))))
+   bool(must = list(term=list(speaker="KING HENRY IV")))
+index("shakespeare") \%>\%
+   bool(must_not = list(term=list(speaker="KING HENRY IV")))
+index("shakespeare") \%>\%
+   bool(should = list(list(term=list(speech_number=1))))
 
 bool(must = list(term=list(user="kimchy")),
      must_not = list(term=list(user="kimchy")))
 
-# Define range query for the DSL
-range( speech_number == 5, line_id > 3 )
-range( speech_number <= c(1,5) )
+# Define range query
+index("shakespeare") \%>\% range( speech_number <= 5 )
+index("shakespeare") \%>\% range( speech_number <= c(1,5) )
 range( speech_number >= c(1,5) )
 }
 }
