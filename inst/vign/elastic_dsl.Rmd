@@ -1,0 +1,95 @@
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{elastic DSL}
+-->
+
+```{r, eval=TRUE, echo=FALSE}
+knitr::opts_chunk$set(
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+elastic DSL
+======
+
+You can define any query you can do against the Elasticsearch HTTP API with the `Search()` function in this package. However, writing queries like
+
+```{r eval=FALSE}
+'{
+  "aggs": {
+      "stats" : {
+          "terms" : {
+              "field" : "text_entry"
+          }
+      }
+  }
+}'
+```
+
+or as a nested list
+
+```{r eval=FALSE}
+list(aggs = list(stats = list(terms = list(field = "text_entry"))))
+```
+
+Is quite painful. Enter the `elastic` DSL, which is inspired by the Python library [elasticsearch-dsl](https://github.com/elasticsearch/elasticsearch-dsl-py), but steals the general non-standard evaluation workflow from [R's dplyr](https://github.com/hadley/dplyr).
+
+Here's what the workflow looks like:
+
+```{r eval=FALSE}
+index("shakespeare") %>%
+   bool(must_not = list(term=list(speaker="KING HENRY IV"))) %>%
+   range( speech_number == 5, line_id > 3 ) %>%
+   Search()
+```
+
+Or, if you want to modify something about the search you can add on `Search()` like 
+
+```{r eval=FALSE}
+index("shakespeare") %>%
+   bool(must_not = list(term=list(speaker="KING HENRY IV"))) %>%
+   range( speech_number == 5, line_id > 3 ) %>%
+   Search(explain = TRUE)
+```
+
+Load the library
+
+```{r}
+library("elastic")
+```
+
+## Define object to query on
+
+The `index()` function defines the index you want to query. You can optionally define a type within an index. The function has a nice print method too.
+
+```{r}
+index("shakespeare")
+```
+
+```{r}
+index("shakespeare", "scene")
+```
+
+## Generate queries
+
+bool query
+
+```{r}
+bool(must_not = list(term=list(speaker="KING HENRY IV")))
+```
+
+range query
+
+```{r eval=FALSE}
+range( speech_number == 5, line_id > 3 )
+```
+
+## Put it all together
+
+```{r eval=FALSE}
+index("shakespeare") %>%
+  bool(must_not = list(term=list(speaker="KING HENRY IV"))) %>%
+  range( speech_number == 5, line_id > 3 )
+```
