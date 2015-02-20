@@ -3,6 +3,10 @@
 #' @details This function name has the "S" capitalized to avoid conflict with the function
 #' \code{base::search}. I hate mixing cases, as I think it confuses users, but in this case
 #' it seems neccessary.
+#' 
+#' Note that \code{Search_} is for use with the elastic DSL workflow, in which \code{Search_}
+#' accepts is used internally to execute searches, but you can also use it separately if you
+#' want.
 #' @examples \dontrun{
 #' # URI string queries
 #' Search(index="shakespeare")

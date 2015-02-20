@@ -48,7 +48,6 @@
 #' for scrolled search, e.g., "30s", "1m". See \code{\link{units-time}}.
 #' @param ... Curl args passed on to \code{\link[httr]{POST}}
 #' @seealso \code{\link{scroll}}
-
 Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, default_operator=NULL, 
   explain=NULL, source=NULL, fields=NULL, sort=NULL, track_scores=NULL, timeout=NULL, 
   terminate_after=NULL, from=NULL, size=NULL, search_type=NULL, lowercase_expanded_terms=NULL, 
@@ -63,6 +62,10 @@ Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, defaul
       version=version, q=q, scroll=scroll)), body, raw, ...)
 
 }
+
+#' @export
+#' @rdname Search
+Search_ <- function(.obj, ...) Search(...)
 
 search_POST <- function(path, index=NULL, type=NULL, args, body, raw, ...) 
 {
