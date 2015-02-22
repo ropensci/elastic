@@ -3,7 +3,12 @@
 \name{elasticdsl}
 \alias{bool}
 \alias{bool_}
+\alias{boosting}
+\alias{boosting_}
+\alias{common}
+\alias{common_}
 \alias{elasticdsl}
+\alias{filter}
 \alias{geoshape}
 \alias{geoshape_}
 \alias{index}
@@ -31,19 +36,32 @@ geoshape(.obj = list(), ..., field = NULL)
 geoshape_(.obj = list(), ..., .dots, field = NULL)
 
 n(x)
+
+filter()
+
+boosting(.obj = list(), ..., negative_boost = NULL)
+
+boosting_(.obj = list(), ..., .dots, negative_boost = NULL)
+
+common(.obj = list(), field, query = NULL, cutoff_frequency = NULL,
+  low_freq_operator = NULL, minimum_should_match = NULL)
+
+common_(.obj = list(), field, query = NULL, cutoff_frequency = NULL,
+  low_freq_operator = NULL, minimum_should_match = NULL)
 }
 \arguments{
-\item{index}{asdfds}
+\item{index}{Index name}
 
-\item{type}{asdfds}
+\item{type}{Type name, Default: NULL, so all types}
 
-\item{what}{asdfds}
+\item{what}{In \code{\link{index}}, whether to get mappings, aliases, or settings.}
 
-\item{...}{adfadsf}
+\item{...}{Further args passed on}
 
-\item{x}{adfadf}
+\item{x}{Input to various functions}
 
-\item{.obj}{asdfds}
+\item{.obj}{An index object. If nothing passed defaults to all indices, equivalent to
+doing e.g., \code{localhost:9200/_search}}
 }
 \description{
 The elastic DSL
@@ -65,29 +83,27 @@ what \code{\link{dplyr}} does.
 }
 \examples{
 \dontrun{
-# Get mapping for verifying fields requested in DSL
+# Define index
 index("shakespeare")
 index("shakespeare", "scene")
 index("shakespeare", "act")
 index("plos")
 index("gbif")
 
+# DSL queries default to search across all indices
+bool(must_not = list(term=list(speaker="KING HENRY IV")))
+
 # bool query
 bool(must_not = list(term=list(speaker="KING HENRY IV")))
-index("shakespeare") \%>\%
-   bool(must = list(term=list(speaker="KING HENRY IV")))
 index("shakespeare") \%>\%
    bool(must_not = list(term=list(speaker="KING HENRY IV")))
 index("shakespeare") \%>\%
    bool(should = list(list(term=list(speech_number=1))))
 
-bool(must = list(term=list(user="kimchy")),
-     must_not = list(term=list(user="kimchy")))
-
 # range query
 index("shakespeare") \%>\% range( speech_number <= 5 )
-index("shakespeare") \%>\% range( speech_number <= c(1,5) )
-range( speech_number >= c(1,5) )
+index("shakespeare") \%>\% range( speech_number <= c(1,5) ) # doens't work
+index("shakespeare") \%>\% range( speech_number >= c(1,5) ) # doens't work
 
 # geographic query
 ## point
@@ -106,6 +122,9 @@ index("geoshape") \%>\%
 coords <- list(c(80.0, -20.0), c(-80.0, -20.0), c(-80.0, 60.0), c(40.0, 60.0), c(80.0, -20.0))
 index("geoshape") \%>\%
    geoshape(field = "location", type = "polygon", coordinates = coords)
+
+# limit query
+filter()
 }
 }
 

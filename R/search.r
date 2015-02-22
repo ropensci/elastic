@@ -65,7 +65,14 @@ Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, defaul
 
 #' @export
 #' @rdname Search
-Search_ <- function(.obj, ...) Search(...)
+Search_ <- function(.obj = "", ...){
+  obj <- if(is(.obj, "index")){
+    attr(.obj, "index")
+  } else {
+    .obj
+  }
+  Search(index = obj, ...)
+}
 
 search_POST <- function(path, index=NULL, type=NULL, args, body, raw, ...) 
 {

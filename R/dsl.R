@@ -4,12 +4,13 @@
 #' @importFrom jsonlite unbox
 #' @name elasticdsl
 #' 
-#' @param index asdfds
-#' @param type asdfds
-#' @param what asdfds
-#' @param .obj asdfds
-#' @param x adfadf
-#' @param ... adfadsf
+#' @param index Index name
+#' @param type Type name, Default: NULL, so all types
+#' @param what In \code{\link{index}}, whether to get mappings, aliases, or settings.
+#' @param .obj An index object. If nothing passed defaults to all indices, equivalent to 
+#' doing e.g., \code{localhost:9200/_search}
+#' @param x Input to various functions
+#' @param ... Further args passed on
 #' @details 
 #' The DSL for \code{elastic} makes it easy to do queries against an Elasticsearch 
 #' instance, either local or remote. 
@@ -25,29 +26,27 @@
 #' to execute the search with the query as given. In a sense, this is essentially like 
 #' what \code{\link{dplyr}} does.
 #' @examples \dontrun{
-#' # Get mapping for verifying fields requested in DSL
+#' # Define index
 #' index("shakespeare")
 #' index("shakespeare", "scene")
 #' index("shakespeare", "act")
 #' index("plos")
 #' index("gbif")
 #' 
+#' # DSL queries default to search across all indices
+#' bool(must_not = list(term=list(speaker="KING HENRY IV")))
+#' 
 #' # bool query
 #' bool(must_not = list(term=list(speaker="KING HENRY IV")))
-#' index("shakespeare") %>% 
-#'    bool(must = list(term=list(speaker="KING HENRY IV")))
 #' index("shakespeare") %>% 
 #'    bool(must_not = list(term=list(speaker="KING HENRY IV")))
 #' index("shakespeare") %>% 
 #'    bool(should = list(list(term=list(speech_number=1))))
-#' 
-#' bool(must = list(term=list(user="kimchy")), 
-#'      must_not = list(term=list(user="kimchy")))
-#'      
+#'
 #' # range query
 #' index("shakespeare") %>% range( speech_number <= 5 )
-#' index("shakespeare") %>% range( speech_number <= c(1,5) )
-#' range( speech_number >= c(1,5) )
+#' index("shakespeare") %>% range( speech_number <= c(1,5) ) # doens't work
+#' index("shakespeare") %>% range( speech_number >= c(1,5) ) # doens't work
 #' 
 #' # geographic query
 #' ## point
@@ -66,6 +65,9 @@
 #' coords <- list(c(80.0, -20.0), c(-80.0, -20.0), c(-80.0, 60.0), c(40.0, 60.0), c(80.0, -20.0))
 #' index("geoshape") %>% 
 #'    geoshape(field = "location", type = "polygon", coordinates = coords)
+#' 
+#' # limit query
+#' filter()
 #' }
 NULL
 
@@ -137,6 +139,53 @@ geoshape_ <- function(.obj=list(), ..., .dots, field=NULL){
 #' @rdname elasticdsl
 n <- function(x) x$hits$total
 
+#' @export
+#' @rdname elasticdsl
+filter <- function(){
+  list(filtered = TRUE)
+}
+
+#' @export
+#' @rdname elasticdsl
+boosting <- function(.obj=list(), ..., negative_boost=NULL){
+  boosting_(.obj, .dots = lazyeval::lazy_dots(...), negative_boost=negative_boost) 
+}
+
+#' @export
+#' @rdname elasticdsl
+boosting_ <- function(.obj=list(), ..., .dots, negative_boost=NULL){
+  dots <- lazyeval::all_dots(.dots, ...)
+  query <- as.json(structure(dots, class=c("boosting","lazy_dots")), negative_boost=negative_boost)
+  execute(.obj, query)
+}
+
+#' @export
+#' @rdname elasticdsl
+common <- function(.obj=list(), field, query=NULL, cutoff_frequency=NULL, low_freq_operator=NULL, 
+                   minimum_should_match=NULL){
+  common_(.obj, field=field, query=query,
+          cutoff_frequency=cutoff_frequency,
+          low_freq_operator=low_freq_operator, 
+          minimum_should_match=minimum_should_match)
+}
+
+#' @export
+#' @rdname elasticdsl
+common_ <- function(.obj=list(), field, query=NULL, cutoff_frequency=NULL, low_freq_operator=NULL, 
+                    minimum_should_match=NULL){
+  args <- ec(list(field=field, query=query,
+          cutoff_frequency=cutoff_frequency,
+          low_freq_operator=low_freq_operator, 
+          minimum_should_match=minimum_should_match))
+  dots <- lazyeval::as.lazy_dots(args)
+  query <- as.json(
+    structure(dots, class=c("common","lazy_dots"))
+  )
+  execute(.obj, query)
+}
+
+
+
 as.json <- function(x, ...) UseMethod("as.json")
 
 as.json.range <- function(x, ...){
@@ -164,6 +213,14 @@ as.json.geoshape <- function(x, field, ...){
   alldat <- list(query = list(geo_shape = tmp))
   json <- jsonlite::toJSON(alldat, ..., auto_unbox = TRUE)
   gsub_geoshape(out$type[[1]], json)
+}
+
+as.json.common <- function(x, field, ...){
+  tmp <- setNames(list(list(query = as.character(x$query$expr), 
+                            cutoff_frequency = as.numeric(x$cutoff_frequency$expr))), 
+                  as.character(x$field$expr))
+  alldat <- list(query = list(common = tmp))
+  jsonlite::toJSON(alldat, ..., auto_unbox = TRUE)
 }
 
 gsub_geoshape <- function(type, x){
@@ -195,7 +252,7 @@ combine <- function(.obj, ..., .dots){
 
 # execute on Search
 execute <- function(.obj, query){
-  Search_(index=attr(.obj, "index"), body=query)
+  Search_(.obj, body=query)
 }
 
 # explain <- function(.obj=list(), ...){

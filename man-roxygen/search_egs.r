@@ -8,6 +8,12 @@
 #' accepts is used internally to execute searches, but you can also use it separately if you
 #' want.
 #' @examples \dontrun{
+#' # Search() vs. Search_()
+#' ## Use Search() if you aren't using the elastic DSL
+#' Search()
+#' ## Use Search_() if you are using the DSL
+#' index("shakespeare") %>% Search_()
+#' 
 #' # URI string queries
 #' Search(index="shakespeare")
 #' Search(index="shakespeare", type="act")
@@ -530,4 +536,37 @@
 #' }'
 #' out <- Search('geoshape', body = body)
 #' out$hits$total
+#' 
+#' ## Boosting query
+#' body <- '{
+#'  "query":{
+#'    "boosting" : {
+#'      "positive" : {
+#'         "term" : {
+#'           "play_name" : "Henry IV"
+#'        }
+#'      },
+#'      "negative" : {
+#'         "term" : {
+#'           "speaker" : "WESTMORELAND"
+#'        }
+#'      },
+#'      "negative_boost" : 0.01
+#'    }
+#'  }
+#' }'
+#' Search('shakespeare', body = body)
+#' 
+#' body <- '{
+#'  "query":{
+#'    "common": {
+#'      "text_entry": {
+#'        "query": "drinks",
+#'        "cutoff_frequency": 0.001
+#'      }
+#'    }
+#'  }
+#' }'
+#' Search('shakespeare', body = body)
+#' 
 #' }
