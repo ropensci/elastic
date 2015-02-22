@@ -17,8 +17,7 @@ VignetteBuilder: knitr
 Imports:
     httr,
     RCurl,
-    jsonlite,
-    magrittr
+    jsonlite
 Suggests:
     testthat,
     roxygen2,
