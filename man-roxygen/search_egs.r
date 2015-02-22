@@ -12,6 +12,7 @@
 #' ## Use Search() if you aren't using the elastic DSL
 #' Search()
 #' ## Use Search_() if you are using the DSL
+#' library("magrittr")
 #' index("shakespeare") %>% Search_()
 #' 
 #' # URI string queries
