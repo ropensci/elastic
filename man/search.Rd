@@ -455,7 +455,7 @@ body <- '{
  }
 }'
 index_create(index='gbifgeopoint', body=body)
-path <- system.file("examples", "gbif_geopoint", package = "elastic")
+path <- system.file("examples", "gbif_geopoint.json", package = "elastic")
 docs_bulk(path)
 
 ### Points within a bounding box
@@ -610,7 +610,84 @@ body <- '{
 }'
 out <- Search('geoshape', body = body)
 out$hits$total
+
+# Missing filter
+body <- '{
+ "query":{
+   "constant_score" : {
+     "filter" : {
+       "missing" : { "field" : "play_name" }
+     }
+   }
+ }
+}'
+Search("shakespeare", body = body)
+
+# prefix filter
+body <- '{
+ "query":{
+   "filtered" : {
+     "filter" : {
+       "prefix" : { "speaker" : "we" }
+     }
+   }
+ }
+}'
+Search("shakespeare", body = body)$hits$total
+
+# ids filter
+body <- '{
+ "query":{
+   "filtered" : {
+     "filter" : {
+       "ids" : {
+         "values": ["1","2","3","10","2000"]
+       }
+     }
+   }
+ }
+}'
+Search("shakespeare", body = body)$hits$total
+
+# combined prefix and ids filters
+body <- '{
+ "query":{
+   "filtered" : {
+     "filter" : {
+       "or": [{
+         "ids" : {
+           "values": ["1","2","3","10","2000"]
+         }
+       },
+       {
+         "prefix" : {
+           "speaker" : "we"
+         }
+       }]
+     }
+   }
+ }
+}'
+Search("shakespeare", body = body)$hits$total
+
 }
+body <- '{
+ "query":{
+   "filtered" : {
+     "filter" : {
+       "ids" : {
+         "values": ["1","2","3","10","2000"]
+       }
+     },
+     "filter" : {
+       "prefix" : {
+         "speaker" : "we"
+       }
+     }
+   }
+ }
+}'
+Search("shakespeare", body = body)$hits$total
 }
 \references{
 \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search.html}
