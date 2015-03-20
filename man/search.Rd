@@ -670,7 +670,6 @@ body <- '{
 }'
 Search("shakespeare", body = body)$hits$total
 
-}
 body <- '{
  "query":{
    "filtered" : {
@@ -688,6 +687,7 @@ body <- '{
  }
 }'
 Search("shakespeare", body = body)$hits$total
+}
 }
 \references{
 \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search.html}

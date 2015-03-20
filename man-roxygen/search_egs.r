@@ -586,9 +586,6 @@
 #' }'
 #' Search("shakespeare", body = body)$hits$total
 #'
-#' }
-
-
 #' body <- '{
 #'  "query":{
 #'    "filtered" : {
@@ -606,3 +603,4 @@
 #'  }
 #' }'
 #' Search("shakespeare", body = body)$hits$total
+#' }
