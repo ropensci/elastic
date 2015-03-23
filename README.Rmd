@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 * [Elasticsearch home page](http://elasticsearch.org)
 * [API docs](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/index.html)
-* This client is being developed under `v1.4` of Elasticsearch.
+* This client is being developed under `v1.5` of Elasticsearch.
 
 ## Quick start
 
@@ -58,13 +58,15 @@ If you're using boot2docker, you'll need to use the IP address in place of local
 
 __on OSX__
 
-+ Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.4.tar.gz`
-+ Unzip it: `untar elasticsearch-1.4.4.tar.gz`
-+ Move it: `sudo mv /path/to/elasticsearch-1.4.4 /usr/local` (replace version with your version)
++ Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.5.0.tar.gz`
++ Unzip it: `untar elasticsearch-1.5.0.tar.gz`
++ Move it: `sudo mv /path/to/elasticsearch-1.5.0 /usr/local` (replace version with your version)
 + Navigate to /usr/local: `cd /usr/local`
-+ Add shortcut: `sudo ln -s elasticsearch-1.4.4 elasticsearch` (replace version with your verioon)
++ Add shortcut: `sudo ln -s elasticsearch-1.5.0 elasticsearch` (replace version with your verioon)
 
 You can also install via Homebrew: `brew install elasticsearch`
+
+> Note: for the 1.5 upgrade of Elasticsearch, it wants you to have java 8 or greater. I downloaded Java 8 from here http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html and it seemed to work great.
 
 ### Upgrading Elasticsearch
 
