@@ -63,48 +63,63 @@ Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, defaul
       version=version, q=q, scroll=scroll)), body, raw, ...)
 }
 
-search_POST <- function(path, index=NULL, type=NULL, args, body, raw, ...) 
-{
+search_POST <- function(path, index=NULL, type=NULL, args, body, raw, ...) {
   conn <- es_get_auth()
   url <- make_url(conn)
-  if(is.null(index) && is.null(type)){ url <- paste(url, path, sep="/") } else
-    if(is.null(type) && !is.null(index)){ url <- paste(url, index, path, sep="/") } else {
-      url <- paste(url, index, type, path, sep="/")    
+  if (is.null(index) && is.null(type)) {
+    url <- paste(url, path, sep = "/") 
+  } else {
+    if (is.null(type) && !is.null(index)) {
+      url <- paste(url, index, path, sep = "/") 
+    } else {
+      url <- paste(url, index, type, path, sep = "/")
     }
+  }
   body <- check_inputs(body)
-  tt <- POST(url, query=args, body=body, ...)
-  if(tt$status_code > 202) stop(error_parser(content(tt), 1), call. = FALSE)
+  tt <- POST(url, query = args, body = body, ...)
+  if (tt$status_code > 202) stop(error_parser(tt, 1), call. = FALSE)
   res <- content(tt, as = "text")
-  if(raw) res else jsonlite::fromJSON(res, FALSE)
+  if (raw) res else jsonlite::fromJSON(res, FALSE)
 }
 
-error_parser <- function(y, shard_no=1){
-  if(!is.null(y$error)){
-    y <- y$error
-    if(grepl("SearchParseException", y)){
-      first <- strloc2match(y, 1, ";")
-      shards <- strsplit(substring(y, regexpr(";", y)+17, nchar(y)), "\\}\\{")[[1]]
-      shards <- gsub("\\s}]$|\\s$", "", shards)
-      paste(first, paste0("1st shard:  ", shards[1:shard_no]), sep = "\n")
-    } else { 
-      y 
+error_parser <- function(y, shard_no = 1) {
+  res <- content(y)
+  tryerr <- tryCatch(res$error, error = function(e) e)
+  if (!is(tryerr, "simpleError")) {
+    if (!is.null(res$error)) {
+      y <- res$error
+      if (grepl("SearchParseException", y)) {
+        first <- strloc2match(y, 1, ";")
+        shards <- strsplit(substring(y, regexpr(";", y) + 17, nchar(y)), "\\}\\{")[[1]]
+        shards <- gsub("\\s}]$|\\s$", "", shards)
+        paste(first, paste0("1st shard:  ", shards[1:shard_no]), sep = "\n")
+      } else { 
+        y 
+      }
+    } else {
+      y
     }
   } else {
-    y
+    mssg <- tryCatch(http_status(y)$message, error = function(e) e)
+    if (is(mssg, "simpleError")) {
+      y$status_code
+    } else {
+      mssg
+    }
   }
 }
 
 strmatch <- function(x, y) regmatches(x, regexpr(y, x))
-strloc2match <- function(x, first, y) substring(x, first, regexpr(y, x)-1)
+strloc2match <- function(x, first, y) substring(x, first, regexpr(y, x) - 1)
 
 # Make sure limit is a numeric or integer
-check_num <- function(x, name){
-  if(!is.null(x)){
-    tryx <- tryCatch(as.numeric(as.character(x)), warning=function(e) e)
-    if("warning" %in% class(tryx)){
+check_num <- function(x, name) {
+  if (!is.null(x)) {
+    tryx <- tryCatch(as.numeric(as.character(x)), warning = function(e) e)
+    if ("warning" %in% class(tryx)) {
       stop(sprintf("%s should be a numeric or integer class value", name), call. = FALSE)
     }
-    if(!is(tryx, "numeric") | is.na(tryx))
+    if (!is(tryx, "numeric") | is.na(tryx))
       stop(sprintf("%s should be a numeric or integer class value", name), call. = FALSE)
     return( format(as.character(x), digits = 22) )
   } else {
@@ -112,10 +127,10 @@ check_num <- function(x, name){
   }
 }
 
-make_url <- function(x){
-  if(is.null(x$port) || nchar(x$port) == 0){
+make_url <- function(x) {
+  if (is.null(x$port) || nchar(x$port) == 0) {
     x$base
   } else {
-    paste(x$base, ":", x$port, sep="")
+    paste(x$base, ":", x$port, sep = "")
   }
 }

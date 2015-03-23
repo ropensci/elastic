@@ -38,3 +38,20 @@ test_that("getting json data back from search works", {
   expect_true(jsonlite::validate(f))
   expect_is(jsonlite::fromJSON(f), "list")
 })
+
+test_that("Search fails as expected", {
+  aggs <- list(aggs = list(stats = list(stfff = list(field = "text_entry"))))
+  expect_error(Search(index = "shakespeare", body = aggs), "Could not find aggregator type")
+  
+  expect_error(Search(index = "shakespeare", type = "act", sort = "text_entryasasfd"), "No mapping found for")
+  
+  expect_error(Search(index = "shakespeare", size = "adf"), "size should be a numeric or integer class value")
+  
+  expect_error(Search(index = "shakespeare", from = "asdf"), "from should be a numeric or integer class value")
+  
+  expect_error(Search(index="shakespeare", q="~text_entry:ma~"), "Was expecting one of")
+  
+  expect_error(Search(index="shakespeare", q="line_id:[10 TO x]"), "NumberFormatException")
+  
+  expect_error(Search(index="shakespeare", terminate_after="Afd"), "Failed to parse int parameter")
+})
