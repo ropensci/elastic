@@ -31,9 +31,10 @@
 
 #' @export
 #' @rdname connect
-connect <- function(es_base="http://127.0.0.1", es_port=NULL, es_user = NULL, es_pwd = NULL,
-                       es_key = NULL, force = FALSE, ...)
-{
+connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL, es_pwd = NULL,
+                       es_key = NULL, force = FALSE, ...) {
+
+  es_base <- has_http(es_base)
   auth <- es_auth(es_base=es_base, es_port=es_port, force = force)
   if(is.null(auth$port) || nchar(auth$port) == 0){
     baseurl <- auth$base
@@ -52,9 +53,18 @@ connect <- function(es_base="http://127.0.0.1", es_port=NULL, es_user = NULL, es
                  pwd = es_pwd, key = es_key, es_deets = out), class='es_conn')
 }
 
+has_http <- function(x) {
+  if(!grepl("^http[s]?://", x)) {
+    x <- paste0("http://", x)
+    message("es_base not prefixed with http, using ", x, "\nIf you need https, pass in the complete URL")
+  } else {
+    x
+  }
+}
+
 #' @export
 #' @rdname connect
-connection <- function(){
+connection <- function() {
   auth <- list(base=getOption("es_base"), port=getOption("es_port"))
   if(is.null(auth$port) || nchar(auth$port) == 0){
     baseurl <- auth$base

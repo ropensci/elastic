@@ -5,7 +5,7 @@
 \alias{connection}
 \title{Set connection details to an Elasticsearch engine.}
 \usage{
-connect(es_base = "http://127.0.0.1", es_port = NULL, es_user = NULL,
+connect(es_base = "http://127.0.0.1", es_port = 9200, es_user = NULL,
   es_pwd = NULL, es_key = NULL, force = FALSE, ...)
 
 connection()
