@@ -10,7 +10,7 @@ Search(index = NULL, type = NULL, q = NULL, df = NULL,
   timeout = NULL, terminate_after = NULL, from = NULL, size = NULL,
   search_type = NULL, lowercase_expanded_terms = NULL,
   analyze_wildcard = NULL, version = FALSE, body = list(), raw = FALSE,
-  scroll = NULL, ...)
+  asdf = FALSE, scroll = NULL, ...)
 }
 \arguments{
 \item{index}{Index name}
@@ -72,6 +72,9 @@ See Search Type for more details on the different types of search that can be pe
 \item{body}{Query, either a list or json.}
 
 \item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
+
+\item{asdf}{(logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} to parse JSON
+directly to a data.frame. If \code{FALSE} (Default), list output is given.}
 
 \item{scroll}{(character) Specify how long a consistent view of the index should be maintained
 for scrolled search, e.g., "30s", "1m". See \code{\link{units-time}}.}
