@@ -36,11 +36,16 @@
 #' string to avoid problems with large number conversion to scientific notation. Default: 0.
 #' @param size (character) The number of hits to return. Pass in as a character string 
 #' to avoid problems with large number conversion to scientific notation. Default: 10.
-#' @param search_type The type of the search operation to perform. Can be dfs_query_then_fetch, 
-#' dfs_query_and_fetch, query_then_fetch, query_and_fetch, count, scan. Default: query_then_fetch. 
-#' See Search Type for more details on the different types of search that can be performed.
-#' @param lowercase_expanded_terms Should terms be automatically lowercased or not. Default: TRUE.
-#' @param analyze_wildcard Should wildcard and prefix queries be analyzed or not. Default: FALSE.
+#' @param search_type (character) The type of the search operation to perform. Can be 
+#' \code{query_then_fetch} (Deafault), \code{dfs_query_then_fetch}, \code{count},
+#' \code{scan}, \code{query_and_fetch}, or \code{dfs_query_and_fetch}. The last two are 
+#' not intended to be specified by users.
+#' See \url{http://bit.ly/19Am9xP} for more details on the different types of search that can 
+#' be performed.
+#' @param lowercase_expanded_terms (logical) Should terms be automatically lowercased or not. 
+#' Default: TRUE.
+#' @param analyze_wildcard (logical) Should wildcard and prefix queries be analyzed or not. 
+#' Default: FALSE.
 #' @param version (logical) Print the document version with each document.
 #' @param body Query, either a list or json.
 #' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
