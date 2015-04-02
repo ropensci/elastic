@@ -212,11 +212,11 @@
 #'               "text_entry" : "thou"
 #'           }
 #'       },
-#'       "negative_boost" : 0.2
+#'       "negative_boost" : 0.8
 #'     }
 #'  }
 #' }'
-#' Search(index="shakespeare", body=mmatch)
+#' Search(index="shakespeare", body=boost)
 #'
 #' # Fuzzy query
 #' ## fuzzy query on numerics

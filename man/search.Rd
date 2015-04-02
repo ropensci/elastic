@@ -701,6 +701,6 @@ Search("shakespeare", body = body)$hits$total
 \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search.html}
 }
 \seealso{
-\code{\link{scroll}}
+\code{\link{Search_uri}} \code{\link{scroll}}
 }
 
