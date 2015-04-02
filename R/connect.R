@@ -8,13 +8,13 @@
 #' ignored for now.
 #' @param es_pwd Password, if required for the connection. You can specify, but
 #' ignored for now.
-#' @param es_key An API key, ignored for now
 #' @param force Force re-load of connection details
 #' @param ... Further args passed on to print for the es_conn class.
 #' @details The default configuration is set up for localhost access on port 9200,
 #' with no username or password.
 #'
-#' \code{\link{connection}} calls \code{\link{connect}} internally
+#' \code{\link{connection}} does not ping the Elasticsearch server, but only
+#' prints connection details.
 #'
 #' On package load, \code{\link{connect}} is run to set the default base url and port.
 #'
@@ -31,17 +31,23 @@
 
 #' @export
 #' @rdname connect
-connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL, es_pwd = NULL,
-                       es_key = NULL, force = FALSE, ...) {
+connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL, 
+                    es_pwd = NULL, force = FALSE, ...) {
 
   es_base <- has_http(es_base)
-  auth <- es_auth(es_base=es_base, es_port=es_port, force = force)
+  auth <- es_auth(es_base=es_base, es_port=es_port, es_user=es_user, 
+                  es_pwd=es_pwd, force = force)
   if(is.null(auth$port) || nchar(auth$port) == 0){
     baseurl <- auth$base
   } else {
     baseurl <- paste(auth$base, auth$port, sep = ":")
   }
-  res <- tryCatch(GET(baseurl, ...), error=function(e) e)
+  userpwd <- if(!is.null(es_user) && !is.null(es_pwd)) {
+    authenticate(es_user, es_pwd)
+  } else {
+    NULL
+  }
+  res <- tryCatch(GET(baseurl, c(userpwd, ...)), error=function(e) e)
   if("error" %in% class(res)){
     stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting", baseurl), call. = FALSE)
   }
@@ -50,7 +56,7 @@ connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL, es
   tt <- content(res, as = "text")
   out <- jsonlite::fromJSON(tt, FALSE)
   structure(list(base = auth$base, port = auth$port, user = es_user, 
-                 pwd = es_pwd, key = es_key, es_deets = out), class='es_conn')
+                 pwd = es_pwd, es_deets = out), class='es_conn')
 }
 
 has_http <- function(x) {
@@ -71,7 +77,7 @@ connection <- function() {
   } else {  
     baseurl <- paste(auth$base, auth$port, sep = ":") 
   }
-  res <- tryCatch(GET(baseurl), error=function(e) e)
+  res <- tryCatch(GET(baseurl, make_up()), error=function(e) e)
   if("error" %in% class(res)){
     stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting", baseurl), call. = FALSE)
   }
@@ -79,9 +85,7 @@ connection <- function() {
     stop(sprintf("Error:", res$headers$statusmessage), call. = FALSE)
   tt <- content(res, as = "text")
   out <- jsonlite::fromJSON(tt, FALSE)
-  ll <- list(base=auth$base, port=auth$port, user = NULL, pwd = NULL, key = NULL, es_deets = out)
-  class(ll) <- 'es_conn'
-  return( ll )
+  structure(list(base=auth$base, port=auth$port, user = NULL, pwd = NULL, es_deets = out), class='es_conn')
 }
 
 #' @export
@@ -91,7 +95,6 @@ print.es_conn <- function(x, ...){
   cat(paste('port:     ', fun(x$port)), "\n")
   cat(paste('username: ', fun(x$user)), "\n")
   cat(paste('password: ', fun(x$pwd)), "\n")
-  cat(paste('api key:  ', fun(x$key)), "\n")
   cat(paste('elasticsearch details:  '), "\n")
   cat(paste('      status:                 ', fun(x$es_deets$status)), "\n")
   cat(paste('      name:                   ', fun(x$es_deets$name)), "\n")
@@ -102,36 +105,17 @@ print.es_conn <- function(x, ...){
 
 
 #' Set authentication details
-#'
-#' Only base url and port and used right now. Will add use or username, password, key, etc. later.
 #' @keywords internal
 #' @param es_base (character) Base url
 #' @param es_port (character) Port
 #' @param es_user (character) User name
 #' @param es_pwd (character) Password
-#' @param es_key (character) API key
 #' @param force (logical) Force update
-#'
-#' @details
-#' \itemize{
-#'  \item You can enter your details using the client_id and api_key parameters directly.
-#'  \item You can execute the function without any inputs. The function then first looks in your
-#'  options for the option variables digocean_client_id and digocean_api_key. If they are not found
-#'  the function asks you to enter them. You can set force=TRUE to force the function to ask
-#'  you for new id and key.
-#'  \item Set your options using the function \code{options}. See examples.
-#'  \item Set your options in your .Rprofile file with entries
-#'  \code{options(es_base = '<clientid>')}, \code{options(es_port = '<port>')},
-#'  \code{options(es_user = '<port>')}, \code{options(es_pwd = '<port>')}, and
-#'  \code{options(es_key = '<port>')}
-#' }
-
-es_auth <- function(es_base=NULL, es_port=NULL, es_user=NULL, es_pwd=NULL, es_key=NULL, force=FALSE){
+es_auth <- function(es_base=NULL, es_port=NULL, es_user=NULL, es_pwd=NULL, force=FALSE){
   base <- ifnull(es_base, 'es_base')
   port <- if(is.null(es_port)) "" else es_port
   user <- ifnull(es_user, 'es_user')
   pwd <- ifnull(es_pwd, 'es_pwd')
-  key <- ifnull(es_key, 'es_key')
 
   if (identical(base, "") || force){
     if (!interactive()) {
@@ -150,6 +134,8 @@ es_auth <- function(es_base=NULL, es_port=NULL, es_user=NULL, es_pwd=NULL, es_ke
 
   options(es_base = base)
   options(es_port = port)
+  options(es_user = user)
+  options(es_pwd = pwd)
   list(base = base, port = port)
 }
 
@@ -162,4 +148,10 @@ es_get_auth <- function(){
   port <- getOption("es_port")
   if(is.null(base)) stop("Please run connect()", call. = FALSE)
   list(base=base, port=port)
+}
+
+es_get_user_pwd <- function(){
+  user <- getOption("es_user")
+  pwd <- getOption("es_pwd")
+  list(user=user, pwd=pwd)
 }

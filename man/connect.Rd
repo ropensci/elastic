@@ -6,7 +6,7 @@
 \title{Set connection details to an Elasticsearch engine.}
 \usage{
 connect(es_base = "http://127.0.0.1", es_port = 9200, es_user = NULL,
-  es_pwd = NULL, es_key = NULL, force = FALSE, ...)
+  es_pwd = NULL, force = FALSE, ...)
 
 connection()
 }
@@ -21,8 +21,6 @@ ignored for now.}
 \item{es_pwd}{Password, if required for the connection. You can specify, but
 ignored for now.}
 
-\item{es_key}{An API key, ignored for now}
-
 \item{force}{Force re-load of connection details}
 
 \item{...}{Further args passed on to print for the es_conn class.}
@@ -34,7 +32,8 @@ Set connection details to an Elasticsearch engine.
 The default configuration is set up for localhost access on port 9200,
 with no username or password.
 
-\code{\link{connection}} calls \code{\link{connect}} internally
+\code{\link{connection}} does not ping the Elasticsearch server, but only
+prints connection details.
 
 On package load, \code{\link{connect}} is run to set the default base url and port.
 }
