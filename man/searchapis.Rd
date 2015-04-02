@@ -9,8 +9,10 @@ Search functions.
 \details{
 Elasticsearch search APIs include the following functions:
 \itemize{
- \item \code{\link{Search}} - Search using the URI search API or pass in query
- specification in the body of the request.
+ \item \code{\link{Search}} - Search using the Query DSL via the body of the request.
+ \item \code{\link{Search_uri}} - Search using the URI search API only. This may be
+ needed for servers that block POST requests for security, or maybe you don't need
+ complicated requests, in which case URI only requests are suffice.
  \item \code{\link{search_shards}} - Search shards.
  \item \code{\link{mlt}} - More like this queries.
  \item \code{\link{count}} - Get counts for various searches.
