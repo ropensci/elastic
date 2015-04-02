@@ -5,7 +5,6 @@ man-roxygen
 ^.*\.Rproj$
 ^\.Rproj\.user$
 CONTRIBUTING.md
-tests/test-all.R
 ^appveyor\.yml$
 plos_data.json
 README.Rmd

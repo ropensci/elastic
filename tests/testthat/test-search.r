@@ -1,6 +1,6 @@
 context("search")
 
-options(es_port=9200)
+invisible(connect())
 
 test_that("basic search works", {
   a <- Search(index="shakespeare")

@@ -8,9 +8,6 @@ test_that("connection works", {
 })
 
 test_that("connect fails as expected", {
-  # connecting to a server that doesn't exist
-  expect_error(connect("asdfadfs"), "Failed to connect to asdfadfs")
-  
   # setting options works via options() call
   options(es_port = 9200)
   expect_equal(getOption('es_port'), 9200)
