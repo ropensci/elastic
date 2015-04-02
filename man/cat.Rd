@@ -56,7 +56,7 @@ cat_fielddata(verbose = FALSE, index = NULL, fields = NULL, ...)
 
 \item{fields}{Fields to return, only used with \code{fielddata}}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}}}
+\item{...}{Curl args passed on to \code{\link[httr]{GET}}}
 }
 \description{
 Use the cat Elasticsearch api.

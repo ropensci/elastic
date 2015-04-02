@@ -4,7 +4,7 @@
 #' @param verbose If TRUE (default) the url call used printed to console.
 #' @param index Index name
 #' @param fields Fields to return, only used with \code{fielddata}
-#' @param ... Curl args passed on to \code{\link[httr]{POST}}
+#' @param ... Curl args passed on to \code{\link[httr]{GET}}
 #'
 #' @details See \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/cat.html}
 #' for the cat API documentation.
@@ -106,14 +106,14 @@ cat_shards <- function(verbose=FALSE, index=NULL, fields=NULL, ...) cat_helper('
 cat_fielddata <- function(verbose=FALSE, index=NULL, fields=NULL, ...) cat_helper('fielddata', v=verbose, i=index, f=fields, ...)
 
 
-cat_helper <- function(what='', v=FALSE, i=NULL, f=NULL, ...)
-{
+cat_helper <- function(what='', v=FALSE, i=NULL, f=NULL, ...) {
   url <- make_url(es_get_auth())
   if(!is.null(f)) f <- paste(f, collapse=",")
   url <- sprintf("%s/_cat/%s", url, what)
   if(!is.null(i)) url <- paste0(url, '/', i)
   args <- ec(list(v = if(v) '' else NULL, fields=f))
-  out <- GET(url, query=args, ...)
+  userpwd <- make_up()
+  out <- GET(url, query=args, c(userpwd, ...))
   if(out$status_code > 202) geterror(out)
   if(v) message(URLdecode(out$url))
   dat <- content(out, as = "text")

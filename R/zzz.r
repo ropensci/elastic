@@ -31,3 +31,12 @@ pluck <- function(x, name, type) {
     vapply(x, "[[", name, FUN.VALUE = type)
   }
 }
+
+make_up <- function() {
+  up <- es_get_user_pwd()
+  if (nchar(up$user) != 0 && nchar(up$pwd) != 0) {
+    authenticate(up$user, up$pwd)
+  } else {
+    NULL
+  }
+}
