@@ -4,14 +4,22 @@
 \alias{docs_bulk}
 \title{Use the bulk API to create, index, update, or delete documents.}
 \usage{
-docs_bulk(x, index = NULL, type = NULL, raw = FALSE, ...)
+docs_bulk(x, index = NULL, type = NULL, chunk_size = 1000, raw = FALSE,
+  ...)
 }
 \arguments{
 \item{x}{A data.frame or path to a file to load in the bulk API}
 
-\item{index}{(character) The index name to use. Required.}
+\item{index}{(character) The index name to use. Required for data.frame input, but
+optional for file inputs.}
 
 \item{type}{(character) The type name to use. If left as NULL, will be same name as index.}
+
+\item{chunk_size}{(integer) Size of each chunk. If your data.frame is smaller
+thank \code{chunk_size}, this parameter is essentially ignored. We write in chunks because
+at some point, depending on size of each document, and Elasticsearch setup, writing a very
+large number of documents in one go becomes slow, so chunking can help. This parameter
+is ignored if you pass a file name. Default: 1000}
 
 \item{raw}{(logical) Get raw JSON back or not.}
 
@@ -26,6 +34,12 @@ More on the Bulk API:
 
 This function dispatches on data.frame or character input. Character input has
 to be a file name or the function stops with an error message.
+
+If you pass a data.frame to this function, we by default to an index operation,
+that is, create the record in the index and type given by those parameters to the
+function. Down the road perhaps we will try to support other operations on the
+bulk API. if you pass a file, of course in that file, you can specify any
+operations you want.
 }
 \examples{
 \dontrun{

@@ -2,8 +2,14 @@
 #'
 #' @export
 #' @param x A data.frame or path to a file to load in the bulk API
-#' @param index (character) The index name to use. Required.
+#' @param index (character) The index name to use. Required for data.frame input, but 
+#' optional for file inputs.
 #' @param type (character) The type name to use. If left as NULL, will be same name as index.
+#' @param chunk_size (integer) Size of each chunk. If your data.frame is smaller 
+#' thank \code{chunk_size}, this parameter is essentially ignored. We write in chunks because
+#' at some point, depending on size of each document, and Elasticsearch setup, writing a very
+#' large number of documents in one go becomes slow, so chunking can help. This parameter
+#' is ignored if you pass a file name. Default: 1000
 #' @param raw (logical) Get raw JSON back or not.
 #' @param ... Pass on curl options to \code{\link[httr]{POST}}
 #' @details More on the Bulk API:
@@ -11,6 +17,12 @@
 #' 
 #' This function dispatches on data.frame or character input. Character input has 
 #' to be a file name or the function stops with an error message. 
+#' 
+#' If you pass a data.frame to this function, we by default to an index operation, 
+#' that is, create the record in the index and type given by those parameters to the
+#' function. Down the road perhaps we will try to support other operations on the 
+#' bulk API. if you pass a file, of course in that file, you can specify any 
+#' operations you want. 
 #' @examples \dontrun{
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 #' docs_bulk(plosdat)
@@ -32,21 +44,25 @@
 #' res <- docs_bulk(diamonds, "diam")
 #' Search("diam")$hits$total
 #' }
-docs_bulk <- function(x, index = NULL, type = NULL, raw=FALSE, ...) {
+docs_bulk <- function(x, index = NULL, type = NULL, chunk_size = 1000, raw=FALSE, ...) {
   UseMethod("docs_bulk")
 }
 
 #' @export
-docs_bulk.data.frame <- function(x, index = NULL, type = NULL, raw = FALSE, ...) {
+docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000, raw = FALSE, ...) {
   if (is.null(index)) {
     stop("index can't be NULL when passing a data.frame")
   }
   if (is.null(type)) type <- index
-  docs_bulk(make_bulk(x, index, type), ...)
+  rws <- seq_len(NROW(x))
+  chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
+  for (i in seq_along(chks)) {
+    docs_bulk(make_bulk(x[chks[[i]], ], index, type, chks[[i]]), ...)
+  }
 }
 
 #' @export
-docs_bulk.character <- function(x, index = NULL, type = NULL, raw=FALSE, ...) {
+docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000, raw=FALSE, ...) {
   stopifnot(file.exists(x))
   conn <- es_get_auth()
   url <- paste0(conn$base, ":", conn$port, '/_bulk')
@@ -60,9 +76,9 @@ docs_bulk.character <- function(x, index = NULL, type = NULL, raw=FALSE, ...) {
   if (raw) res else es_parse(res)
 }
 
-make_bulk <- function(df, index, type) {
+make_bulk <- function(df, index, type, counter) {
   metadata_fmt <- '{"index":{"_index":"%s","_type":"%s","_id":%d}}'
-  metadata <- sprintf(metadata_fmt, index, type, seq_len(nrow(df)) - 1L)
+  metadata <- sprintf(metadata_fmt, index, type, counter - 1L)
   data <- jsonlite::toJSON(df, collapse = FALSE)
   tmpf <- tempfile()
   writeLines(paste(metadata, data, sep = "\n"), tmpf)
