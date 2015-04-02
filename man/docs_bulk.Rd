@@ -4,21 +4,28 @@
 \alias{docs_bulk}
 \title{Use the bulk API to create, index, update, or delete documents.}
 \usage{
-docs_bulk(filename, raw = FALSE, ...)
+docs_bulk(x, index = NULL, type = NULL, raw = FALSE, ...)
 }
 \arguments{
-\item{filename}{Path to a file to load in the bulk API}
+\item{x}{A data.frame or path to a file to load in the bulk API}
+
+\item{index}{(character) The index name to use. Required.}
+
+\item{type}{(character) The type name to use. If left as NULL, will be same name as index.}
 
 \item{raw}{(logical) Get raw JSON back or not.}
 
-\item{...}{Pass on curl options to the \code{\link[httr]{POST}} call.}
+\item{...}{Pass on curl options to \code{\link[httr]{POST}}}
 }
 \description{
 Use the bulk API to create, index, update, or delete documents.
 }
 \details{
 More on the Bulk API:
-   \url{http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/bulk.html}.
+\url{http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/bulk.html}.
+
+This function dispatches on data.frame or character input. Character input has
+to be a file name or the function stops with an error message.
 }
 \examples{
 \dontrun{
@@ -32,6 +39,15 @@ aliases_get()
 library("httr")
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 docs_bulk(plosdat, config=verbose())
+
+# From a data.frame
+docs_bulk(mtcars, "hello", "world")
+docs_bulk(iris, "iris", "flowers")
+## type can be missing, but index can not
+docs_bulk(iris, "flowers")
+## big data.frame, 53K rows
+res <- docs_bulk(diamonds, "diam")
+Search("diam")$hits$total
 }
 }
 
