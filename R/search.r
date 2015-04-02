@@ -39,7 +39,7 @@ search_POST <- function(path, index=NULL, type=NULL, args, body, raw, asdf, ...)
   }
   body <- check_inputs(body)
   userpwd <- make_up()
-  tt <- POST(url, query = args, body = body, userpwd, ...)
+  tt <- POST(url, query = args, body = body, c(userpwd, ...))
   if (tt$status_code > 202) stop(error_parser(tt, 1), call. = FALSE)
   res <- content(tt, as = "text")
   if (raw) res else jsonlite::fromJSON(res, asdf)

@@ -51,13 +51,13 @@ aliases_get <- function(index=NULL, alias=NULL, ignore_unavailable=FALSE, ...) {
 #' @rdname alias
 alias_exists <- function(index=NULL, alias=NULL, ...) {
   res <- alias_HEAD(index, alias, ...)
-  if(res$status_code == 200) TRUE else FALSE
+  if (res$status_code == 200) TRUE else FALSE
 }
 
 #' @export
 #' @rdname alias
 alias_create <- function(index=NULL, alias, routing=NULL, filter=NULL, ...) {
-  out <- PUT(alias_url(index, alias), ...)
+  out <- PUT(alias_url(index, alias), c(make_up(), ...))
   stop_for_status(out)
   jsonlite::fromJSON(content(out, "text"), FALSE)
 }
@@ -65,19 +65,18 @@ alias_create <- function(index=NULL, alias, routing=NULL, filter=NULL, ...) {
 #' @export
 #' @rdname alias
 alias_delete <- function(index=NULL, alias, ...) {
-  out <- DELETE(alias_url(index, alias), ...)
+  out <- DELETE(alias_url(index, alias), c(make_up(), ...))
   stop_for_status(out)
   jsonlite::fromJSON(content(out, "text"), FALSE)
 }
 
 alias_GET <- function(index, alias, ignore, ...) {
-  userpwd <- make_up()
-  tt <- GET( alias_url(index, alias), query=ec(list(ignore_unavailable=as_log(ignore))), c(userpwd, ...))
-  if(tt$status_code > 202) geterror(tt)
+  tt <- GET( alias_url(index, alias), query = ec(list(ignore_unavailable = as_log(ignore))), make_up(), ...)
+  if (tt$status_code > 202) geterror(tt)
   jsonlite::fromJSON(content(tt, as = "text"), FALSE)
 }
 
-alias_HEAD <- function(index, alias, ...) HEAD(alias_url(index, alias), ...)
+alias_HEAD <- function(index, alias, ...) HEAD(alias_url(index, alias), c(make_up(), ...))
 
 alias_url <- function(index, alias) {
   url <- make_url(es_get_auth())

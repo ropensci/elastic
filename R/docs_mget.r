@@ -44,8 +44,7 @@
 #' }
 
 docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL, index_type_id=NULL,
-  source=NULL, fields=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
-{
+  source=NULL, fields=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...) {
   check_params(index, type, ids, type_id, index_type_id)
   base <- make_url(es_get_auth())
 
@@ -65,7 +64,7 @@ docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL, index_type_
 
     body <- jsonlite::toJSON(list("ids" = ids))
     url <- paste(base, esc(index), esc(type), '_mget', sep="/")
-    out <- POST(url, body = body, encode = 'json', callopts, query = args)
+    out <- POST(url, body = body, encode = 'json', c(make_up(), callopts), query = args)
 
   }
   # One index, many types, one to many ids
@@ -79,7 +78,7 @@ docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL, index_type_
     docs <- lapply(docs, function(y) modifyList(y, list(`_source` = source, fields = fields)))
     tt <- jsonlite::toJSON(list("docs" = docs))
     url <- paste(base, esc(index), '_mget', sep="/")
-    out <- POST(url, body = tt, encode = 'json', callopts, query = args)
+    out <- POST(url, body = tt, encode = 'json', c(make_up(), callopts), query = args)
 
   }
   # Many indeces, many types, one to many ids
@@ -92,7 +91,7 @@ docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL, index_type_
     })
     tt <- jsonlite::toJSON(list("docs" = docs))
     url <- paste(base, '_mget', sep="/")
-    out <- POST(url, body = tt, encode = 'json', callopts, query = args)
+    out <- POST(url, body = tt, encode = 'json', c(make_up(), callopts), query = args)
 
   }
 

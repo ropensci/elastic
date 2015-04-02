@@ -46,8 +46,7 @@
 explain <- function(index=NULL, type=NULL, id=NULL, source2=NULL, fields=NULL, routing=NULL,
   parent=NULL, preference=NULL, source=NULL, q=NULL, df=NULL, analyzer=NULL, analyze_wildcard=FALSE,
   lowercase_expanded_terms=TRUE, lenient=FALSE, default_operator=NULL, source_exclude=NULL,
-  source_include=NULL, body=NULL, raw=FALSE, ...)
-{
+  source_include=NULL, body=NULL, raw=FALSE, ...) {
   args <- ec(list(`_source`=source2, fields=fields, routing=routing, parent=parent,
           preference=preference, source=source, q=q, df=df, analyzer=analyzer,
           analyze_wildcard=as_log(analyze_wildcard), lowercase_expanded_terms=as_log(lowercase_expanded_terms),
@@ -56,10 +55,10 @@ explain <- function(index=NULL, type=NULL, id=NULL, source2=NULL, fields=NULL, r
   explain_POST(esc(index), esc(type), id, args, body, raw, ...)
 }
 
-explain_POST <- function(index, type, id, args, body, raw, ...){
+explain_POST <- function(index, type, id, args, body, raw, ...) {
   url <- make_url(es_get_auth())
   url <- if(is.null(id)) file.path(url, index, type, "_explain") else file.path(url, index, type, id, "_explain")
-  tt <- if(is.null(body)) POST(url, query=args, ...) else POST(url, query=args, body=body, ...)
+  tt <- if(is.null(body)) POST(url, query=args, c(make_up(), ...)) else POST(url, query=args, body=body, c(make_up(), ...))
   stop_for_status(tt)
   if(raw) content(tt, "text") else jsonlite::fromJSON(content(tt, "text"), FALSE)
 }

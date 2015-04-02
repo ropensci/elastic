@@ -30,8 +30,7 @@
 #' }
 
 docs_get <- function(index, type, id, source=FALSE, fields=NULL, exists=FALSE, 
-  raw=FALSE, callopts=list(), verbose=TRUE, ...)
-{
+  raw=FALSE, callopts=list(), verbose=TRUE, ...) {
   url <- make_url(es_get_auth())
   if(!is.null(fields)) fields <- paste(fields, collapse=",")
 
@@ -40,11 +39,11 @@ docs_get <- function(index, type, id, source=FALSE, fields=NULL, exists=FALSE,
   if(source) url <- paste(url, '_source', sep="/")
 
   if(exists){
-    out <- HEAD(url, query=args, callopts)
+    out <- HEAD(url, query=args, c(make_up(), callopts))
     if(out$status_code == 200) TRUE else FALSE
   } else
   {
-    out <- GET(url, query=args, callopts)
+    out <- GET(url, query=args, c(make_up(), callopts))
     stop_for_status(out)
     if(verbose) message(URLdecode(out$url))
     if(raw){ content(out, as="text") } else { jsonlite::fromJSON(content(out, as="text"), FALSE) }
