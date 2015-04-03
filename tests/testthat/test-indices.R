@@ -18,7 +18,7 @@ test_that("index_exists", {
 
 test_that("index_create", {
   ind <- paste0("stuff_", sample(letters, 1))
-  invisible(tryCatch(index_delete(index = ind), error = function(e) e))
+  invisible(tryCatch(index_delete(index = ind, verbose = FALSE), error = function(e) e))
   a <- index_create(index = ind, verbose = FALSE)
   expect_true(a[[1]])
   expect_named(a, expected = "acknowledged")
