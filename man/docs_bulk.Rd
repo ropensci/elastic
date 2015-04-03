@@ -40,6 +40,11 @@ that is, create the record in the index and type given by those parameters to th
 function. Down the road perhaps we will try to support other operations on the
 bulk API. if you pass a file, of course in that file, you can specify any
 operations you want.
+
+Row names are dropped from data.frame, and top level names for a list are dropped
+as well.
+
+A progress bar gives the progress for data.frames and lists
 }
 \examples{
 \dontrun{
@@ -62,6 +67,12 @@ docs_bulk(iris, "flowers")
 ## big data.frame, 53K rows
 res <- docs_bulk(diamonds, "diam")
 Search("diam")$hits$total
+
+# From a list
+docs_bulk(apply(iris, 1, as.list), index="iris", type="flowers")
+docs_bulk(apply(USArrests, 1, as.list), index="arrests")
+dim_list <- apply(diamonds, 1, as.list)
+out <- docs_bulk(dim_list, index="diamfromlist")
 }
 }
 

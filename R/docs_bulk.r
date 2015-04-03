@@ -23,6 +23,11 @@
 #' function. Down the road perhaps we will try to support other operations on the 
 #' bulk API. if you pass a file, of course in that file, you can specify any 
 #' operations you want. 
+#' 
+#' Row names are dropped from data.frame, and top level names for a list are dropped
+#' as well.
+#' 
+#' A progress bar gives the progress for data.frames and lists
 #' @examples \dontrun{
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 #' docs_bulk(plosdat)
@@ -43,6 +48,12 @@
 #' ## big data.frame, 53K rows
 #' res <- docs_bulk(diamonds, "diam")
 #' Search("diam")$hits$total
+#' 
+#' # From a list
+#' docs_bulk(apply(iris, 1, as.list), index="iris", type="flowers")
+#' docs_bulk(apply(USArrests, 1, as.list), index="arrests")
+#' dim_list <- apply(diamonds, 1, as.list)
+#' out <- docs_bulk(dim_list, index="diamfromlist")
 #' }
 docs_bulk <- function(x, index = NULL, type = NULL, chunk_size = 1000, raw=FALSE, ...) {
   UseMethod("docs_bulk")
@@ -54,10 +65,29 @@ docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000
     stop("index can't be NULL when passing a data.frame")
   }
   if (is.null(type)) type <- index
+  row.names(x) <- NULL
   rws <- seq_len(NROW(x))
   chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
+  pb <- txtProgressBar(min = 0, max = length(chks), initial = 0, style = 3)
   for (i in seq_along(chks)) {
+    setTxtProgressBar(pb, i)
     docs_bulk(make_bulk(x[chks[[i]], ], index, type, chks[[i]]), ...)
+  }
+}
+
+#' @export
+docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000, raw = FALSE, ...) {
+  if (is.null(index)) {
+    stop("index can't be NULL when passing a list")
+  }
+  if (is.null(type)) type <- index
+  x <- unname(x)
+  rws <- seq_len(length(x))
+  chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
+  pb <- txtProgressBar(min = 0, max = length(chks), initial = 0, style = 3)
+  for (i in seq_along(chks)) {
+    setTxtProgressBar(pb, i)
+    docs_bulk(make_bulk(x[chks[[i]]], index, type, chks[[i]]), ...)
   }
 }
 
