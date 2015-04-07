@@ -4,7 +4,7 @@ elastic
 
 
 [![Build Status](https://api.travis-ci.org/ropensci/elastic.png)](https://travis-ci.org/ropensci/elastic)
-[![Build status](https://ci.appveyor.com/api/projects/status/swmmw758mf1heoj2/branch/master)](https://ci.appveyor.com/project/sckott/elastic/branch/master)
+<!-- [![Build status](https://ci.appveyor.com/api/projects/status/swmmw758mf1heoj2/branch/master)](https://ci.appveyor.com/project/sckott/elastic/branch/master) -->
 
 **A general purpose R interface to [Elasticsearch](http://elasticsearch.org)**
 
@@ -148,10 +148,9 @@ connect(es_port = 9200)
 #> port:      9200 
 #> username:  NULL 
 #> password:  NULL 
-#> api key:   NULL 
 #> elasticsearch details:   
 #>       status:                  200 
-#>       name:                    Elias Bogan 
+#>       name:                    Zombie 
 #>       Elasticsearch version:   1.5.0 
 #>       ES version timestamp:    2015-03-23T14:30:58Z 
 #>       lucene version:          4.10.4
