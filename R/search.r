@@ -89,10 +89,10 @@ cn <- function(x) {
   if (!is.null(x)) {
     tryx <- tryCatch(as.numeric(as.character(x)), warning = function(e) e)
     if ("warning" %in% class(tryx)) {
-      stop(sprintf("%s should be a numeric or integer class value", name), call. = FALSE)
+      stop(name, " should be a numeric or integer class value", call. = FALSE)
     }
     if (!is(tryx, "numeric") | is.na(tryx))
-      stop(sprintf("%s should be a numeric or integer class value", name), call. = FALSE)
+      stop(name, " should be a numeric or integer class value", call. = FALSE)
     return( format(x, digits = 22, scientific = FALSE) )
   } else {
     NULL

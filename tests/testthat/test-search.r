@@ -53,5 +53,5 @@ test_that("Search fails as expected", {
   
   expect_error(Search(index="shakespeare", q="line_id:[10 TO x]"), "NumberFormatException")
   
-  expect_error(Search(index="shakespeare", terminate_after="Afd"), "Failed to parse int parameter")
+  expect_error(Search(index="shakespeare", terminate_after="Afd"), "terminate_after should be a numeric")
 })
