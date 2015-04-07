@@ -50,7 +50,7 @@ aliases_get <- function(index=NULL, alias=NULL, ignore_unavailable=FALSE, ...) {
 #' @export
 #' @rdname alias
 alias_exists <- function(index=NULL, alias=NULL, ...) {
-  res <- alias_HEAD(index, alias, ...)
+  res <- HEAD(alias_url(index, alias), ...)
   if (res$status_code == 200) TRUE else FALSE
 }
 
@@ -75,8 +75,6 @@ alias_GET <- function(index, alias, ignore, ...) {
   if (tt$status_code > 202) geterror(tt)
   jsonlite::fromJSON(content(tt, as = "text"), FALSE)
 }
-
-alias_HEAD <- function(index, alias, ...) HEAD(alias_url(index, alias), c(make_up(), ...))
 
 alias_url <- function(index, alias) {
   url <- make_url(es_get_auth())
