@@ -13,13 +13,21 @@ knitr::opts_chunk$set(
 [![Build Status](https://api.travis-ci.org/ropensci/elastic.png)](https://travis-ci.org/ropensci/elastic)
 <!-- [![Build status](https://ci.appveyor.com/api/projects/status/swmmw758mf1heoj2/branch/master)](https://ci.appveyor.com/project/sckott/elastic/branch/master) -->
 
-**A general purpose R interface to [Elasticsearch](http://elasticsearch.org)**
+**A general purpose R interface to [Elasticsearch](https://www.elastic.co/products/elasticsearch)**
 
 ## Elasticsearch info
 
-* [Elasticsearch home page](http://elasticsearch.org)
-* [API docs](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/index.html)
-* This client is being developed under `v1.5` of Elasticsearch.
+* [Elasticsearch home page](https://www.elastic.co/products/elasticsearch)
+* [API docs](http://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
+* This client is being developed under `v1.5` of Elasticsearch, and will generally develop
+following whatever is the current version.
+
+## Security
+
+You're fine running ES locally on your machine, but be careful just throwing up ES on a server with a public IP address - make sure to think about security. 
+
+* [Shield](https://www.elastic.co/products/shield) - This is a paid product provided by Elastic - so probably only applicable to enterprise users
+* DIY security - there are a variety of techniques for securing your Elasticsearch. A number of resources are collected in a [blog post](http://recology.info/2015/02/secure-elasticsearch/) - tools include putting your ES behind something like Nginx, putting basic auth on top of it, using https, etc. 
 
 ## Quick start
 
