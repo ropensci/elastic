@@ -90,7 +90,8 @@ directly to a data.frame. If \code{FALSE} (Default), list output is given.}
 be maintained for scrolled search, e.g., "30s", "1m". See \code{\link{units-time}}.}
 
 \item{search_path}{(character) The path to use for searching. Default to \code{_search},
-but in some cases you may already have that in the base url set using \code{\link{connect}}}
+but in some cases you may already have that in the base url set using \code{\link{connect}},
+in which case you can set this to \code{NULL}}
 
 \item{...}{Curl args passed on to \code{\link[httr]{POST}}}
 }
