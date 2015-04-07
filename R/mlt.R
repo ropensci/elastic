@@ -2,44 +2,48 @@
 #'
 #' @export
 #'
-#' @param index The name of the index
-#' @param type A document type
-#' @param like_text Like text...
-#' @param doc_type The type of the document (use _all to fetch the first document matching the ID
-#' across all types)
-#' @param id The document ID
+#' @param index (character) The name of the index
+#' @param type (character) A document type
+#' @param like_text (character) Like text...
+#' @param doc_type (character) The type of the document (use _all to fetch the first
+#' document matching the ID across all types)
+#' @param id (numeric) The document ID
 #' @param body A specific search request definition
-#' @param boost_terms The boost factor
-#' @param include Whether to include the queried document from the response
-#' @param max_doc_freq The word occurrence frequency as count: words with higher occurrence in the
-#' corpus will be ignored
-#' @param max_query_terms The maximum query terms to be included in the generated query
-#' @param max_word_length The minimum length of the word: longer words will be ignored
-#' @param min_doc_freq The word occurrence frequency as count: words with lower occurrence in the
-#' corpus will be ignored
-#' @param min_term_freq The term frequency as percent: terms with lower occurence in the source
-#' document will be ignored
-#' @param min_word_length The minimum length of the word: shorter words will be ignored
-#' @param mlt_fields Specific fields to perform the query against
-#' @param percent_terms_to_match How many terms have to match in order to consider the document a
-#' match (default: 0.3)
+#' @param boost_terms (numeric) The boost factor
+#' @param include (logical) Whether to include the queried document from the response
+#' @param max_doc_freq (numeric) The word occurrence frequency as count: words with
+#' higher occurrence in the corpus will be ignored
+#' @param max_query_terms (numeric) The maximum query terms to be included in the
+#' generated query
+#' @param max_word_length (numeric) The minimum length of the word: longer words will
+#' be ignored
+#' @param min_doc_freq (numeric) The word occurrence frequency as count: words with
+#' lower occurrence in the corpus will be ignored
+#' @param min_term_freq (numeric) The term frequency as percent: terms with lower occurence
+#' in the source document will be ignored
+#' @param min_word_length (numeric) The minimum length of the word: shorter words will
+#' be ignored
+#' @param mlt_fields (character) Specific fields to perform the query against
+#' @param percent_terms_to_match (numeric) How many terms have to match in order to
+#' consider the document a match (default: 0.3)
 #' @param routing Specific routing value
-#' @param search_from The offset from which to return results
-#' @param search_indices A comma-separated list of indices to perform the query against (default:
-#' the index containing the document)
-#' @param search_query_hint The search query hint
+#' @param search_from (numeric) The offset from which to return results
+#' @param search_indices (character) A comma-separated list of indices to perform the
+#' query against (default: the index containing the document)
+#' @param search_query_hint (character) The search query hint
 #' @param search_scroll A scroll search request definition
-#' @param search_size The number of documents to return (default: 10)
-#' @param search_source A specific search request definition (instead of using the request body)
-#' @param search_type Specific search type (eg. dfs_then_fetch, count, etc)
-#' @param search_types A comma-separated list of types to perform the query against (default: the
-#' same type as the document)
-#' @param stop_words A list of stop words to be ignored
+#' @param search_size (numeric) The number of documents to return (default: 10)
+#' @param search_source A specific search request definition (instead of using the
+#' request body)
+#' @param search_type (character) Specific search type (eg. dfs_then_fetch, count, etc)
+#' @param search_types (character) A comma-separated list of types to perform the query
+#' against (default: the same type as the document)
+#' @param stop_words (character) A list of stop words to be ignored
 #' @param ... Curl options passed on to \code{\link[httr]{GET}}
 #'
-#' @details Currently uses HTTP GET request, so parameters are passed in the URL. Another option
-#' is the "more like this query", which passes the query in the body of a POST request - may
-#' be added later.
+#' @details Currently uses HTTP GET request, so parameters are passed in the URL.
+#' Another option is the "more like this query", which passes the query in the body of
+#' a POST request - may be added later.
 #'
 #' @examples  \dontrun{
 #' mlt(index = "plos", type = "article", id = 5)$hits$total
@@ -75,12 +79,12 @@ mlt <- function(index, type, id, doc_type=NULL, body=NULL,
 {
   url <- make_url(es_get_auth())
   url <- sprintf("%s/%s/%s/%s/%s", url, esc(index), esc(type), id, "_mlt")
-  args <- ec(list(doc_type=doc_type, id=id, body=body, boost_terms=boost_terms,
-    include=include, max_doc_freq=max_doc_freq, max_query_terms=max_query_terms,
-    max_word_length=max_word_length, min_doc_freq=min_doc_freq, min_term_freq=min_term_freq,
-    min_word_length=min_word_length, mlt_fields=mlt_fields, percent_terms_to_match=percent_terms_to_match,
-    routing=routing, search_from=search_from, search_indices=search_indices,
-    search_query_hint=search_query_hint, search_scroll=search_scroll, search_size=search_size,
+  args <- ec(list(doc_type=doc_type, id=cn(id), body=body, boost_terms=boost_terms,
+    include=include, max_doc_freq=cn(max_doc_freq), max_query_terms=cn(max_query_terms),
+    max_word_length=cn(max_word_length), min_doc_freq=cn(min_doc_freq), min_term_freq=cn(min_term_freq),
+    min_word_length=cn(min_word_length), mlt_fields=mlt_fields, percent_terms_to_match=percent_terms_to_match,
+    routing=routing, search_from=cn(search_from), search_indices=search_indices,
+    search_query_hint=search_query_hint, search_scroll=search_scroll, search_size=cn(search_size),
     search_source=search_source, search_type=search_type, search_types=search_types, stop_words=stop_words,
     like_text=like_text))
   es_GET_(url, args, ...)

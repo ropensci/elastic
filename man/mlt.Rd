@@ -14,64 +14,68 @@ mlt(index, type, id, doc_type = NULL, body = NULL, boost_terms = NULL,
   search_types = NULL, stop_words = NULL, like_text = NULL, ...)
 }
 \arguments{
-\item{index}{The name of the index}
+\item{index}{(character) The name of the index}
 
-\item{type}{A document type}
+\item{type}{(character) A document type}
 
-\item{id}{The document ID}
+\item{id}{(numeric) The document ID}
 
-\item{doc_type}{The type of the document (use _all to fetch the first document matching the ID
-across all types)}
+\item{doc_type}{(character) The type of the document (use _all to fetch the first
+document matching the ID across all types)}
 
 \item{body}{A specific search request definition}
 
-\item{boost_terms}{The boost factor}
+\item{boost_terms}{(numeric) The boost factor}
 
-\item{include}{Whether to include the queried document from the response}
+\item{include}{(logical) Whether to include the queried document from the response}
 
-\item{max_doc_freq}{The word occurrence frequency as count: words with higher occurrence in the
-corpus will be ignored}
+\item{max_doc_freq}{(numeric) The word occurrence frequency as count: words with
+higher occurrence in the corpus will be ignored}
 
-\item{max_query_terms}{The maximum query terms to be included in the generated query}
+\item{max_query_terms}{(numeric) The maximum query terms to be included in the
+generated query}
 
-\item{max_word_length}{The minimum length of the word: longer words will be ignored}
+\item{max_word_length}{(numeric) The minimum length of the word: longer words will
+be ignored}
 
-\item{min_doc_freq}{The word occurrence frequency as count: words with lower occurrence in the
-corpus will be ignored}
+\item{min_doc_freq}{(numeric) The word occurrence frequency as count: words with
+lower occurrence in the corpus will be ignored}
 
-\item{min_term_freq}{The term frequency as percent: terms with lower occurence in the source
-document will be ignored}
+\item{min_term_freq}{(numeric) The term frequency as percent: terms with lower occurence
+in the source document will be ignored}
 
-\item{min_word_length}{The minimum length of the word: shorter words will be ignored}
+\item{min_word_length}{(numeric) The minimum length of the word: shorter words will
+be ignored}
 
-\item{mlt_fields}{Specific fields to perform the query against}
+\item{mlt_fields}{(character) Specific fields to perform the query against}
 
-\item{percent_terms_to_match}{How many terms have to match in order to consider the document a
-match (default: 0.3)}
+\item{percent_terms_to_match}{(numeric) How many terms have to match in order to
+consider the document a match (default: 0.3)}
 
 \item{routing}{Specific routing value}
 
-\item{search_from}{The offset from which to return results}
+\item{search_from}{(numeric) The offset from which to return results}
 
-\item{search_indices}{A comma-separated list of indices to perform the query against (default:
-the index containing the document)}
+\item{search_indices}{(character) A comma-separated list of indices to perform the
+query against (default: the index containing the document)}
 
-\item{search_query_hint}{The search query hint}
+\item{search_query_hint}{(character) The search query hint}
 
 \item{search_scroll}{A scroll search request definition}
 
-\item{search_size}{The number of documents to return (default: 10)}
+\item{search_size}{(numeric) The number of documents to return (default: 10)}
 
-\item{search_source}{A specific search request definition (instead of using the request body)}
+\item{search_source}{A specific search request definition (instead of using the
+request body)}
 
-\item{search_type}{Specific search type (eg. dfs_then_fetch, count, etc)}
+\item{search_type}{(character) Specific search type (eg. dfs_then_fetch, count, etc)}
 
-\item{search_types}{A comma-separated list of types to perform the query against (default: the
-same type as the document)}
+\item{search_types}{(character) A comma-separated list of types to perform the query
+against (default: the same type as the document)}
 
-\item{stop_words}{A list of stop words to be ignored}
+\item{stop_words}{(character) A list of stop words to be ignored}
 
-\item{like_text}{Like text...}
+\item{like_text}{(character) Like text...}
 
 \item{...}{Curl options passed on to \code{\link[httr]{GET}}}
 }
@@ -79,9 +83,9 @@ same type as the document)}
 More like this request.
 }
 \details{
-Currently uses HTTP GET request, so parameters are passed in the URL. Another option
-is the "more like this query", which passes the query in the body of a POST request - may
-be added later.
+Currently uses HTTP GET request, so parameters are passed in the URL.
+Another option is the "more like this query", which passes the query in the body of
+a POST request - may be added later.
 }
 \examples{
 \dontrun{

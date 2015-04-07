@@ -11,12 +11,12 @@ Search_uri <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, de
                    analyze_wildcard=NULL, version=FALSE, raw=FALSE, asdf=FALSE, ...) {
   
   search_GET("_search", esc(index), esc(type), 
-              args=ec(list(df=df, analyzer=analyzer, default_operator=default_operator, explain=explain, 
-                           `_source`=source, fields=cl(fields), sort=cl(sort), track_scores=track_scores, 
-                           timeout=timeout, terminate_after=terminate_after, from=check_num(from, "from"), 
-                           size=check_num(size, "size"), search_type=search_type, 
-                           lowercase_expanded_terms=lowercase_expanded_terms, analyze_wildcard=analyze_wildcard, 
-                           version=version, q=q)), raw, asdf, ...)
+    args=ec(list(df=df, analyzer=analyzer, default_operator=default_operator, explain=explain, 
+      `_source`=source, fields=cl(fields), sort=cl(sort), track_scores=track_scores, 
+      timeout=cn(timeout), terminate_after=cn(terminate_after), 
+      from=cn(from), size=cn(size), search_type=search_type,
+      lowercase_expanded_terms=lowercase_expanded_terms, analyze_wildcard=analyze_wildcard, 
+      version=version, q=q)), raw, asdf, ...)
 }
 
 search_GET <- function(path, index=NULL, type=NULL, args, raw, asdf, ...) {

@@ -22,8 +22,8 @@ Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, defaul
   search_POST(search_path, esc(index), esc(type), 
     args=ec(list(df=df, analyzer=analyzer, default_operator=default_operator, explain=explain, 
       `_source`=source, fields=cl(fields), sort=cl(sort), track_scores=track_scores, 
-      timeout=timeout, terminate_after=terminate_after, from=check_num(from, "from"), 
-      size=check_num(size, "size"), search_type=search_type, 
+      timeout=cn(timeout), terminate_after=cn(terminate_after), 
+      from=cn(from), size=cn(size), search_type=search_type, 
       lowercase_expanded_terms=lowercase_expanded_terms, analyze_wildcard=analyze_wildcard, 
       version=version, q=q, scroll=scroll)), body, raw, asdf, ...)
 }
@@ -84,7 +84,8 @@ strmatch <- function(x, y) regmatches(x, regexpr(y, x))
 strloc2match <- function(x, first, y) substring(x, first, regexpr(y, x) - 1)
 
 # Make sure limit is a numeric or integer
-check_num <- function(x, name) {
+cn <- function(x) {
+  name <- substitute(x)
   if (!is.null(x)) {
     tryx <- tryCatch(as.numeric(as.character(x)), warning = function(e) e)
     if ("warning" %in% class(tryx)) {
@@ -92,7 +93,7 @@ check_num <- function(x, name) {
     }
     if (!is(tryx, "numeric") | is.na(tryx))
       stop(sprintf("%s should be a numeric or integer class value", name), call. = FALSE)
-    return( format(as.character(x), digits = 22) )
+    return( format(x, digits = 22, scientific = FALSE) )
   } else {
     NULL
   }
