@@ -7,16 +7,19 @@
 #' @template search_par
 #' @template search_egs
 #' @param body Query, either a list or json.
-#' @param scroll (character) Specify how long a consistent view of the index should be maintained 
-#' for scrolled search, e.g., "30s", "1m". See \code{\link{units-time}}.
+#' @param scroll (character) Specify how long a consistent view of the index should 
+#' be maintained for scrolled search, e.g., "30s", "1m". See \code{\link{units-time}}.
+#' @param search_path (character) The path to use for searching. Default to \code{_search}, 
+#' but in some cases you may already have that in the base url set using \code{\link{connect}}
 #' @seealso  \code{\link{Search_uri}} \code{\link{scroll}}
 
 Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, default_operator=NULL, 
   explain=NULL, source=NULL, fields=NULL, sort=NULL, track_scores=NULL, timeout=NULL, 
   terminate_after=NULL, from=NULL, size=NULL, search_type=NULL, lowercase_expanded_terms=NULL, 
-  analyze_wildcard=NULL, version=FALSE, body=list(), raw=FALSE, asdf=FALSE, scroll=NULL, ...) {
+  analyze_wildcard=NULL, version=FALSE, body=list(), raw=FALSE, asdf=FALSE, scroll=NULL, 
+  search_path="_search", ...) {
   
-  search_POST("_search", esc(index), esc(type), 
+  search_POST(search_path, esc(index), esc(type), 
     args=ec(list(df=df, analyzer=analyzer, default_operator=default_operator, explain=explain, 
       `_source`=source, fields=cl(fields), sort=cl(sort), track_scores=track_scores, 
       timeout=timeout, terminate_after=terminate_after, from=check_num(from, "from"), 
@@ -37,12 +40,17 @@ search_POST <- function(path, index=NULL, type=NULL, args, body, raw, asdf, ...)
       url <- paste(url, index, type, path, sep = "/")
     }
   }
+  url <- prune_trailing_slash(url)
   body <- check_inputs(body)
   userpwd <- make_up()
   tt <- POST(url, query = args, body = body, c(userpwd, ...))
   if (tt$status_code > 202) stop(error_parser(tt, 1), call. = FALSE)
   res <- content(tt, as = "text")
   if (raw) res else jsonlite::fromJSON(res, asdf)
+}
+
+prune_trailing_slash <- function(x) {
+  gsub("\\/$", "", x)
 }
 
 error_parser <- function(y, shard_no = 1) {

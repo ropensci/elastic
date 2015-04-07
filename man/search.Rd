@@ -10,7 +10,7 @@ Search(index = NULL, type = NULL, q = NULL, df = NULL,
   timeout = NULL, terminate_after = NULL, from = NULL, size = NULL,
   search_type = NULL, lowercase_expanded_terms = NULL,
   analyze_wildcard = NULL, version = FALSE, body = list(), raw = FALSE,
-  asdf = FALSE, scroll = NULL, ...)
+  asdf = FALSE, scroll = NULL, search_path = "_search", ...)
 }
 \arguments{
 \item{index}{Index name}
@@ -81,8 +81,11 @@ Default: FALSE.}
 \item{asdf}{(logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} to parse JSON
 directly to a data.frame. If \code{FALSE} (Default), list output is given.}
 
-\item{scroll}{(character) Specify how long a consistent view of the index should be maintained
-for scrolled search, e.g., "30s", "1m". See \code{\link{units-time}}.}
+\item{scroll}{(character) Specify how long a consistent view of the index should
+be maintained for scrolled search, e.g., "30s", "1m". See \code{\link{units-time}}.}
+
+\item{search_path}{(character) The path to use for searching. Default to \code{_search},
+but in some cases you may already have that in the base url set using \code{\link{connect}}}
 
 \item{...}{Curl args passed on to \code{\link[httr]{POST}}}
 }
