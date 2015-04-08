@@ -157,11 +157,11 @@ connect(es_port = 9200)
 #> username:  NULL 
 #> password:  NULL 
 #> elasticsearch details:   
-#>       status:                  200 
-#>       name:                    Ulik 
-#>       Elasticsearch version:   1.5.0 
-#>       ES version timestamp:    2015-03-23T14:30:58Z 
-#>       lucene version:          4.10.4
+#>    status:                  200 
+#>    name:                    Veritas 
+#>    Elasticsearch version:   1.5.0 
+#>    ES version timestamp:    2015-03-23T14:30:58Z 
+#>    lucene version:          4.10.4
 ```
 
 ### Search
@@ -398,6 +398,15 @@ jsonlite::fromJSON(out)
 #> 1 Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar
 #> 2                                     Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition
 ```
+
+## Known pain points
+
+* On secure Elasticsearch servers:
+  * `HEAD` requests don't seem to work, not sure why
+  * If you allow only `GET` requests, a number of functions that require 
+  `POST` requests obviously then won't work. A big one is `Search()`, but 
+  you can use `Search_uri()` to get around this, which uses `GET` instead 
+  of `POST`, but you can't pass a more complicated query via the body
 
 ## Meta
 
