@@ -36,8 +36,7 @@ search_GET <- function(path, index=NULL, type=NULL, args, raw, asdf, ...) {
     }
   }
   url <- prune_trailing_slash(url)
-  userpwd <- make_up()
-  tt <- GET(url, query = args, userpwd, ...)
+  tt <- GET(url, query = args, make_up(), ...)
   if (tt$status_code > 202) stop(error_parser(tt, 1), call. = FALSE)
   res <- content(tt, as = "text")
   if (raw) res else jsonlite::fromJSON(res, asdf)

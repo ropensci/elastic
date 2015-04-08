@@ -23,9 +23,8 @@
 #' search_shards(index = "plos", config=verbose())
 #' }
 
-search_shards <- function(index=NULL, raw=FALSE, routing=NULL, preference=NULL, local=NULL, ...)
-{
+search_shards <- function(index=NULL, raw=FALSE, routing=NULL, preference=NULL, local=NULL, ...) {
   url <- make_url(es_get_auth())
   es_GET_(file.path(url, esc(cl(index)), "_search_shards"),
-          ec(list(routing=routing, preference=preference, local=local)), ...)
+          ec(list(routing = routing, preference = preference, local = local)), ...)
 }

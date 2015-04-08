@@ -18,22 +18,34 @@ es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL,
   }  
   
   args <- ec(list(...))
-  tt <- GET(url, query=args, c(make_up(), callopts))
-  if(tt$status_code > 202) geterror(tt)
+  tt <- GET(url, query=args, mc(make_up(), callopts))
+  if (tt$status_code > 202) geterror(tt)
   res <- content(tt, as = "text")
-  if(!is.null(clazz)){ 
+  if (!is.null(clazz)) { 
     class(res) <- clazz
-    if(raw) res else es_parse(res)
-  } else { res }
+    if (raw) res else es_parse(res)
+  } else { 
+    res
+  }
 }
 
-index_GET <- function(path, index, features, raw, ...) {
+mc <- function(...) {
+  tmp <- ec(list(...))
+  tmp <- tmp[sapply(tmp, length) != 0]
+  if (length(tmp) == 1 && is(tmp, "list")) {
+    tmp[[1]]
+  } else if (all(vapply(tmp, class, "") == "config")) {
+    do.call("c", tmp)
+  }
+}
+
+index_GET <- function(index, features, raw, ...) {
   checkconn()
   url <- make_url(es_get_auth())
   url <- paste0(url, "/", paste0(esc(index), collapse = ","))
   if(!is.null(features)) features <- paste0(paste0("_", features), collapse = ",")
   if(!is.null(features)) url <- paste0(url, "/", features)
-  tt <- GET(url, c(make_up(), ...))
+  tt <- GET(url, make_up(), ...)
   if(tt$status_code > 202) geterror(tt)
   jsonlite::fromJSON(content(tt, as = "text"), FALSE)
 }
@@ -49,7 +61,7 @@ es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, quer
     }
   
   args <- check_inputs(query)
-  tt <- POST(url, body=args, c(make_up(), callopts), encode = "json")
+  tt <- POST(url, body=args, mc(make_up(), callopts), encode = "json")
   if(tt$status_code > 202) geterror(tt)
   res <- content(tt, as = "text")
   if(!is.null(clazz)){ 
@@ -96,8 +108,10 @@ check_inputs <- function(x) {
 }
 
 geterror <- function(z) {
-  if( is.null(z$headers$statusmessage) ){
-    stop(content(z)$error, call. = FALSE)
+  if (is.null(z$headers$statusmessage)) {
+    err <- tryCatch(content(z)$error, error = function(e) e)
+    err <- if (is(err, "simpleError")) content(z) else err
+    stop(err, call. = FALSE)
   } else {
     z$headers$statusmessage
   }

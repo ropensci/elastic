@@ -14,8 +14,8 @@
 #' @references
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs-delete.html}
 #' @examples \dontrun{
-#' docs_delete(index='plos', type='article', id=35)
-#' docs_get(index='plos', type='article', id=35) # and the document is gone
+#' docs_delete(index='plos', type='article', id=36)
+#' docs_get(index='plos', type='article', id=36) # and the document is gone
 #' }
 
 docs_delete <- function(index, type, id, refresh=NULL, routing=NULL, timeout=NULL, version=NULL,
@@ -26,7 +26,7 @@ docs_delete <- function(index, type, id, refresh=NULL, routing=NULL, timeout=NUL
   url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), id)
   args <- ec(list(refresh=refresh, routing=routing, timeout=timeout,
                   version=version, version_type=version_type, ...))
-  out <- DELETE(url, query=args, c(make_up(), callopts))
+  out <- DELETE(url, query=args, mc(make_up(), callopts))
   stop_for_status(out)
   tt <- content(out, as="text")
   jsonlite::fromJSON(tt, FALSE)

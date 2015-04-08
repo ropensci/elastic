@@ -212,6 +212,15 @@ Then parse
 jsonlite::fromJSON(out)
 ```
 
+## Known pain points
+
+* On secure Elasticsearch servers:
+  * `HEAD` requests don't seem to work, not sure why
+  * If you allow only `GET` requests, a number of functions that require 
+  `POST` requests obviously then won't work. A big one is `Search()`, but 
+  you can use `Search_uri()` to get around this, which uses `GET` instead 
+  of `POST`, but you can't pass a more complicated query via the body
+
 ## Meta
 
 * Please [report any issues or bugs](https://github.com/ropensci/elastic/issues)

@@ -99,7 +99,7 @@ docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000,
   stopifnot(file.exists(x))
   conn <- es_get_auth()
   url <- paste0(conn$base, ":", conn$port, '/_bulk')
-  tt <- POST(url, body = upload_file(x, type = "application/json"), ..., encode = "json")
+  tt <- POST(url, make_up(), ..., body = upload_file(x, type = "application/json"), encode = "json")
   if (tt$status_code > 202) {
     if (tt$status_code > 202) stop(content(tt)$error)
     if (content(tt)$status == "ERROR" | content(tt)$status == 500) stop(content(tt)$error_message)

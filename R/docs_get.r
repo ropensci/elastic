@@ -34,20 +34,23 @@ docs_get <- function(index, type, id, source=FALSE, fields=NULL, exists=FALSE,
   
   checkconn()
   url <- make_url(es_get_auth())
-  if(!is.null(fields)) fields <- paste(fields, collapse=",")
+  if (!is.null(fields)) fields <- paste(fields, collapse = ",")
 
   args <- ec(list(fields = cl(fields), ...))
   url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), id)
-  if(source) url <- paste(url, '_source', sep="/")
+  if (source) url <- paste(url, '_source', sep = "/")
 
-  if(exists){
-    out <- HEAD(url, query=args, c(make_up(), callopts))
-    if(out$status_code == 200) TRUE else FALSE
-  } else
-  {
-    out <- GET(url, query=args, c(make_up(), callopts))
+  if (exists) {
+    out <- HEAD(url, query = args, mc(make_up(), callopts))
+    if (out$status_code == 200) TRUE else FALSE
+  } else {
+    out <- GET(url, query = args, mc(make_up(), callopts))
     stop_for_status(out)
-    if(verbose) message(URLdecode(out$url))
-    if(raw){ content(out, as="text") } else { jsonlite::fromJSON(content(out, as="text"), FALSE) }
+    if (verbose) message(URLdecode(out$url))
+    if (raw) { 
+      content(out, as = "text") 
+    } else { 
+      jsonlite::fromJSON(content(out, as = "text"), FALSE) 
+    }
   }
 }

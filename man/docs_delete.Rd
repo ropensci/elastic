@@ -34,8 +34,8 @@ Delete a document.
 }
 \examples{
 \dontrun{
-docs_delete(index='plos', type='article', id=35)
-docs_get(index='plos', type='article', id=35) # and the document is gone
+docs_delete(index='plos', type='article', id=36)
+docs_get(index='plos', type='article', id=36) # and the document is gone
 }
 }
 \references{

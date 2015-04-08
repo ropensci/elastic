@@ -42,7 +42,7 @@ docs_create <- function(index, type, id, body, version=NULL, version_type=NULL, 
 }
 
 create_PUT <- function(url, query=NULL, body=NULL, callopts) {
-  tt <- PUT(url, query = query, body = body, c(make_up(), callopts), encode = "json")
+  tt <- PUT(url, mc(make_up(), callopts), query = query, body = body, encode = "json")
   if (tt$status_code > 202) {
     if (content(tt)$status == 400) stop(content(tt)$error)
   }
