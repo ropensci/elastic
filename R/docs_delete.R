@@ -15,7 +15,7 @@
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs-delete.html}
 #' @examples \dontrun{
 #' docs_delete(index='plos', type='article', id=36)
-#' docs_get(index='plos', type='article', id=36) # and the document is gone
+#' # docs_get(index='plos', type='article', id=36) # and the document is gone
 #' }
 
 docs_delete <- function(index, type, id, refresh=NULL, routing=NULL, timeout=NULL, version=NULL,

@@ -237,7 +237,7 @@ index_get <- function(index=NULL, features=NULL, raw=FALSE, verbose=TRUE, ...) {
 index_exists <- function(index, ...) {
   checkconn()
   url <- file.path(make_url(es_get_auth()), esc(index))
-  res <- HEAD(url, make_up(), ...)
+  res <- HEAD(url, ..., make_up())
   if (res$status_code == 200) TRUE else FALSE
 }
 

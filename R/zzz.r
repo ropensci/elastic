@@ -37,6 +37,6 @@ make_up <- function() {
   if (nchar(up$user) != 0 && nchar(up$pwd) != 0) {
     authenticate(up$user, up$pwd)
   } else {
-    NULL
+    list()
   }
 }

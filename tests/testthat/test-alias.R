@@ -3,8 +3,8 @@ context("alias")
 invisible(connect())
 
 test_that("alias_get works", {
-  invisible(tryCatch(index_delete("plos"), error = function(e) e))
-  index_create("plos")
+  invisible(tryCatch(index_delete("plos", verbose = FALSE), error = function(e) e))
+  invisible(index_create("plos", verbose = FALSE))
   invisible(alias_create(index = "plos", alias = "tables"))
   a <- alias_get(index="plos")
   b <- alias_get(alias="tables")
