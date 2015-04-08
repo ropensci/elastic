@@ -47,6 +47,8 @@ explain <- function(index=NULL, type=NULL, id=NULL, source2=NULL, fields=NULL, r
   parent=NULL, preference=NULL, source=NULL, q=NULL, df=NULL, analyzer=NULL, analyze_wildcard=FALSE,
   lowercase_expanded_terms=TRUE, lenient=FALSE, default_operator=NULL, source_exclude=NULL,
   source_include=NULL, body=NULL, raw=FALSE, ...) {
+  
+  checkconn()
   args <- ec(list(`_source`=source2, fields=fields, routing=routing, parent=parent,
           preference=preference, source=source, q=q, df=df, analyzer=analyzer,
           analyze_wildcard=as_log(analyze_wildcard), lowercase_expanded_terms=as_log(lowercase_expanded_terms),

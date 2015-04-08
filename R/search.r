@@ -30,6 +30,7 @@ Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, defaul
 }
 
 search_POST <- function(path, index=NULL, type=NULL, args, body, raw, asdf, ...) {
+  checkconn()
   conn <- es_get_auth()
   url <- make_url(conn)
   if (is.null(index) && is.null(type)) {

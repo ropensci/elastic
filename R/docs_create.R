@@ -32,6 +32,7 @@ docs_create <- function(index, type, id, body, version=NULL, version_type=NULL, 
   routing=NULL, parent=NULL, timestamp=NULL, ttl=NULL, refresh=NULL, timeout=NULL,
   callopts=list(), ...) {
   
+  checkconn()
   url <- make_url(es_get_auth())
   url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), id)
   query <- ec(list(version=version, version_type=version_type, op_type=op_type, routing=routing,

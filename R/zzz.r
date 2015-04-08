@@ -8,6 +8,7 @@ as_log <- function(x){
 cl <- function(x) if (is.null(x)) NULL else paste0(x, collapse = ",")
 
 scroll_POST <- function(path, args, body, raw, ...) {
+  checkconn()
   url <- make_url(es_get_auth())
   tt <- POST(file.path(url, path), query = args, body = body, c(make_up(), ...))
   if (tt$status_code > 202) stop(error_parser(content(tt)$error, 1))

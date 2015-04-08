@@ -58,6 +58,7 @@ benchmark <- function(raw=FALSE, callopts=list(), query=list(), ...){
 }
 
 bench_POST <- function(query, raw, callopts, ...){
+  checkconn()
   conn <- es_get_auth()
   url <- paste0(conn$base, ":", conn$port, "/shakespeare/_bench")
   args <- check_inputs(query)

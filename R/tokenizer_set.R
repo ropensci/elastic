@@ -33,18 +33,18 @@
 #' index_analyze(text = "hello world", index = "test1", analyzer='my_ngram_analyzer')
 #' }
 
-tokenizer_set <- function(index, body, ...)
-{
-  if(length(index) > 1) stop("Only one index allowed", call. = FALSE)
+tokenizer_set <- function(index, body, ...) {
+  if (length(index) > 1) stop("Only one index allowed", call. = FALSE)
   url <- make_url(es_get_auth())
   url <- sprintf("%s/%s", url, esc(index))
   tokenizer_PUT(url, body, ...)
 }
 
 tokenizer_PUT <- function(url, body, ...){
+  checkconn()
   body <- check_inputs(body)
-  out <- PUT(url, body=body, encode = "json", c(make_up(), ...))
-  if(out$status_code > 202) geterror(out)
+  out <- PUT(url, body = body, encode = "json", c(make_up(), ...))
+  if (out$status_code > 202) geterror(out)
   tt <- content(out, as = "text")
   jsonlite::fromJSON(tt)
 }

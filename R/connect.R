@@ -71,21 +71,22 @@ has_http <- function(x) {
 #' @export
 #' @rdname connect
 connection <- function() {
-  auth <- list(base=getOption("es_base"), port=getOption("es_port"))
-  if(is.null(auth$port) || nchar(auth$port) == 0){
+  auth <- list(base=getOption("es_base"), port=getOption("es_port"), user=getOption("es_user"))
+  if (is.null(auth$port) || nchar(auth$port) == 0) {
     baseurl <- auth$base
   } else {  
     baseurl <- paste(auth$base, auth$port, sep = ":") 
   }
-  res <- tryCatch(GET(baseurl, make_up()), error=function(e) e)
-  if("error" %in% class(res)){
+  res <- tryCatch(GET(baseurl, make_up()), error = function(e) e)
+  if ("error" %in% class(res)) {
     stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting", baseurl), call. = FALSE)
   }
-  if(res$status_code > 200)
+  if (res$status_code > 200)
     stop(sprintf("Error:", res$headers$statusmessage), call. = FALSE)
   tt <- content(res, as = "text")
   out <- jsonlite::fromJSON(tt, FALSE)
-  structure(list(base=auth$base, port=auth$port, user = NULL, pwd = NULL, es_deets = out), class='es_conn')
+  structure(list(base = auth$base, port = auth$port, 
+                 user = auth$user, pwd = "<secret>", es_deets = out), class = 'es_conn')
 }
 
 #' @export
@@ -96,11 +97,11 @@ print.es_conn <- function(x, ...){
   cat(paste('username: ', fun(x$user)), "\n")
   cat(paste('password: ', fun(x$pwd)), "\n")
   cat(paste('elasticsearch details:  '), "\n")
-  cat(paste('      status:                 ', fun(x$es_deets$status)), "\n")
-  cat(paste('      name:                   ', fun(x$es_deets$name)), "\n")
-  cat(paste('      Elasticsearch version:  ', fun(x$es_deets$version$number)), "\n")
-  cat(paste('      ES version timestamp:   ', fun(x$es_deets$version$build_timestamp)), "\n")
-  cat(paste('      lucene version:         ', fun(x$es_deets$version$lucene_version)))
+  cat(paste('   status:                 ', fun(x$es_deets$status)), "\n")
+  cat(paste('   name:                   ', fun(x$es_deets$name)), "\n")
+  cat(paste('   Elasticsearch version:  ', fun(x$es_deets$version$number)), "\n")
+  cat(paste('   ES version timestamp:   ', fun(x$es_deets$version$build_timestamp)), "\n")
+  cat(paste('   lucene version:         ', fun(x$es_deets$version$lucene_version)))
 }
 
 

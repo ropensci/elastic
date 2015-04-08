@@ -236,8 +236,8 @@ index_get <- function(index=NULL, features=NULL, raw=FALSE, verbose=TRUE, ...)
 
 #' @export
 #' @rdname index
-index_exists <- function(index, ...)
-{
+index_exists <- function(index, ...) {
+  checkconn()
   url <- file.path(make_url(es_get_auth()), esc(index))
   res <- HEAD(url, ...)
   if(res$status_code == 200) TRUE else FALSE
@@ -245,20 +245,20 @@ index_exists <- function(index, ...)
 
 #' @export
 #' @rdname index
-index_delete <- function(index, raw=FALSE, verbose=TRUE, ...)
-{
+index_delete <- function(index, raw=FALSE, verbose=TRUE, ...) {
+  checkconn()
   url <- paste0(make_url(es_get_auth()), "/", esc(index))
   out <- DELETE(url, ...)
   stop_for_status(out)
-  if(verbose) message(URLdecode(out$url))
-  tt <- structure(content(out, as="text"), class="index_delete")
-  if(raw){ tt } else { es_parse(tt) }
+  if (verbose) message(URLdecode(out$url))
+  tt <- structure(content(out, as = "text"), class = "index_delete")
+  if (raw){ tt } else { es_parse(tt) }
 }
 
 #' @export
 #' @rdname index
-index_create <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...)
-{
+index_create <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...) {
+  checkconn()
   url <- make_url(es_get_auth())
   out <- PUT(paste0(url, "/", index), body=body, ...)
   stop_for_status(out)
@@ -269,23 +269,20 @@ index_create <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...)
 
 #' @export
 #' @rdname index
-index_close <- function(index, ...)
-{
+index_close <- function(index, ...) {
   close_open(index, "_close", ...)
 }
 
 #' @export
 #' @rdname index
-index_open <- function(index, ...)
-{
+index_open <- function(index, ...) {
   close_open(index, "_open", ...)
 }
 
 #' @export
 #' @rdname index
 index_stats <- function(index=NULL, metric=NULL, completion_fields=NULL, fielddata_fields=NULL,
-  fields=NULL, groups=NULL, level='indices', ...)
-{
+  fields=NULL, groups=NULL, level='indices', ...) {
   url <- make_url(es_get_auth())
   url <- if(is.null(index)) file.path(url, "_stats") else file.path(url, esc(cl(index)), "_stats")
   url <- if(!is.null(metric)) file.path(url, cl(metric)) else url
@@ -296,8 +293,7 @@ index_stats <- function(index=NULL, metric=NULL, completion_fields=NULL, fieldda
 
 #' @export
 #' @rdname index
-index_settings <- function(index="_all", ...)
-{
+index_settings <- function(index="_all", ...) {
   url <- make_url(es_get_auth())
   url <- if(is.null(index) || index == "_all") file.path(url, "_settings") else file.path(url, esc(cl(index)), "_settings")
   es_GET_(url, ...)
@@ -321,8 +317,7 @@ index_recovery <- function(index = NULL, detailed = FALSE, active_only = FALSE, 
 #' @export
 #' @rdname index
 index_optimize <- function(index = NULL, max_num_segments = NULL, only_expunge_deletes = FALSE,
-  flush = TRUE, wait_for_merge = TRUE, ...)
-{
+  flush = TRUE, wait_for_merge = TRUE, ...) {
   args <- ec(list(max_num_segments = max_num_segments,
                   only_expunge_deletes = as_log(only_expunge_deletes),
                   flush = as_log(flush),
@@ -333,8 +328,7 @@ index_optimize <- function(index = NULL, max_num_segments = NULL, only_expunge_d
 
 #' @export
 #' @rdname index
-index_upgrade <- function(index = NULL, wait_for_completion = FALSE, ...)
-{
+index_upgrade <- function(index = NULL, wait_for_completion = FALSE, ...) {
   args <- ec(list(wait_for_completion = as_log(wait_for_completion)))
   es_POST_(index, "_upgrade", args, ...)
 }
@@ -342,8 +336,7 @@ index_upgrade <- function(index = NULL, wait_for_completion = FALSE, ...)
 #' @export
 #' @rdname index
 index_analyze <- function(text=NULL, field=NULL, index=NULL, analyzer=NULL, tokenizer=NULL,
-                          filters=NULL, char_filters=NULL, body=list(), ...)
-{
+                          filters=NULL, char_filters=NULL, body=list(), ...) {
   url <- make_url(es_get_auth())
   if(!is.null(index))
     url <- sprintf("%s/%s/_analyze", url, esc(cl(index)))
@@ -356,8 +349,7 @@ index_analyze <- function(text=NULL, field=NULL, index=NULL, analyzer=NULL, toke
 
 #' @export
 #' @rdname index
-index_flush <- function(index=NULL, force=FALSE, full=FALSE, wait_if_ongoing=FALSE, ...)
-{
+index_flush <- function(index=NULL, force=FALSE, full=FALSE, wait_if_ongoing=FALSE, ...) {
   url <- make_url(es_get_auth())
   if(!is.null(index))
     url <- sprintf("%s/%s/_flush", url, esc(cl(index)))
@@ -370,8 +362,7 @@ index_flush <- function(index=NULL, force=FALSE, full=FALSE, wait_if_ongoing=FAL
 #' @export
 #' @rdname index
 index_clear_cache <- function(index=NULL, filter=FALSE, filter_keys=NULL, fielddata=FALSE,
-                              query_cache=FALSE, id_cache=FALSE, ...)
-{
+                              query_cache=FALSE, id_cache=FALSE, ...) {
   url <- make_url(es_get_auth())
   if(!is.null(index))
     url <- sprintf("%s/%s/_cache/clear", url, esc(cl(index)))
@@ -383,6 +374,7 @@ index_clear_cache <- function(index=NULL, filter=FALSE, filter_keys=NULL, fieldd
 }
 
 close_open <- function(index, which, ...){
+  checkconn()
   url <- make_url(es_get_auth())
   url <- sprintf("%s/%s/%s", url, esc(index), which)
   out <- POST(url, ...)
@@ -397,6 +389,7 @@ es_GET_wrap1 <- function(index, which, args=list(), ...){
 }
 
 es_POST_ <- function(index, which, args=list(), ...){
+  checkconn()
   url <- make_url(es_get_auth())
   url <- if(is.null(index)) file.path(url, which) else file.path(url, esc(cl(index)), which)
   tt <- POST(url, query=args, c(make_up(), ...))
@@ -407,6 +400,7 @@ es_POST_ <- function(index, which, args=list(), ...){
 e_url <- function(x) paste0(x$base, ":", x$port)
 
 analyze_GET <- function(url, args, ...){
+  checkconn()
   out <- GET(url, query=args, c(make_up(), ...))
   stop_for_status(out)
   tt <- content(out, as = "text")
@@ -414,6 +408,7 @@ analyze_GET <- function(url, args, ...){
 }
 
 analyze_POST <- function(url, args, body, ...){
+  checkconn()
   body <- check_inputs(body)
   out <- POST(url, query=args, body=body, c(make_up(), ...))
   stop_for_status(out)
@@ -422,6 +417,7 @@ analyze_POST <- function(url, args, body, ...){
 }
 
 cc_POST <- function(url, args, ...){
+  checkconn()
   tt <- POST(url, body=args, encode = "json", c(make_up(), ...))
   if(tt$status_code > 202) geterror(tt)
   res <- content(tt, as = "text")

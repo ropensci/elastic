@@ -65,8 +65,7 @@ nodes_info <- function(node=NULL, metric=NULL, raw=FALSE, verbose=TRUE, ...){
 #' @export
 #' @rdname nodes
 nodes_hot_threads <- function(node=NULL, metric=NULL, threads=3, interval='500ms', type=NULL,
-  raw=FALSE, verbose=TRUE, ...)
-{
+  raw=FALSE, verbose=TRUE, ...) {
   args <- list(threads=threads, interval=interval, type=type)
   cat(node_GET('hot_threads', metric, node, raw=TRUE, args, ...))
 }
@@ -76,6 +75,7 @@ nodes_hot_threads <- function(node=NULL, metric=NULL, threads=3, interval='500ms
 # }
 
 node_GET <- function(path, metric, node, raw, args, ...) {
+  checkconn()
   url <- make_url(es_get_auth())
   url <- file.path(url, '_nodes')
   if(!is.null(node)){

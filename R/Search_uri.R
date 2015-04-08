@@ -23,6 +23,7 @@ Search_uri <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, de
 }
 
 search_GET <- function(path, index=NULL, type=NULL, args, raw, asdf, ...) {
+  checkconn()
   conn <- es_get_auth()
   url <- make_url(conn)
   if (is.null(index) && is.null(type)) {

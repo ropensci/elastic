@@ -71,6 +71,7 @@ alias_delete <- function(index=NULL, alias, ...) {
 }
 
 alias_GET <- function(index, alias, ignore, ...) {
+  checkconn()
   tt <- GET( alias_url(index, alias), query = ec(list(ignore_unavailable = as_log(ignore))), make_up(), ...)
   if (tt$status_code > 202) geterror(tt)
   jsonlite::fromJSON(content(tt, as = "text"), FALSE)
@@ -78,13 +79,13 @@ alias_GET <- function(index, alias, ignore, ...) {
 
 alias_url <- function(index, alias) {
   url <- make_url(es_get_auth())
-  if(!is.null(index)){
-    if(!is.null(alias))
+  if (!is.null(index)) {
+    if (!is.null(alias))
       sprintf("%s/%s/_alias/%s", url, cl(index), alias)
     else
       sprintf("%s/%s/_alias", url, cl(index))
   } else {
-    if(!is.null(alias))
+    if (!is.null(alias))
       sprintf("%s/_alias/%s", url, alias)
     else
       sprintf("%s/_alias", url)

@@ -31,6 +31,8 @@
 
 docs_get <- function(index, type, id, source=FALSE, fields=NULL, exists=FALSE, 
   raw=FALSE, callopts=list(), verbose=TRUE, ...) {
+  
+  checkconn()
   url <- make_url(es_get_auth())
   if(!is.null(fields)) fields <- paste(fields, collapse=",")
 

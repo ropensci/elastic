@@ -107,13 +107,14 @@ cat_fielddata <- function(verbose=FALSE, index=NULL, fields=NULL, ...) cat_helpe
 
 
 cat_helper <- function(what='', v=FALSE, i=NULL, f=NULL, ...) {
+  checkconn()
   url <- make_url(es_get_auth())
   if(!is.null(f)) f <- paste(f, collapse=",")
   url <- sprintf("%s/_cat/%s", url, what)
   if(!is.null(i)) url <- paste0(url, '/', i)
   args <- ec(list(v = if(v) '' else NULL, fields=f))
   userpwd <- make_up()
-  out <- GET(url, query=args, c(userpwd, ...))
+  out <- GET(url, query=args, userpwd, ...)
   if(out$status_code > 202) geterror(out)
   if(v) message(URLdecode(out$url))
   dat <- content(out, as = "text")

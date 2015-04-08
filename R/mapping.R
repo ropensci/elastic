@@ -138,6 +138,7 @@ field_mapping_get <- function(index = NULL, type = NULL, field, include_defaults
 #' @export
 #' @rdname mapping
 type_exists <- function(index, type, ...){
+  checkconn()
   url <- make_url(es_get_auth())
   res <- HEAD(file.path(url, esc(index), esc(type)), ...)
   if(res$status_code == 200) TRUE else FALSE

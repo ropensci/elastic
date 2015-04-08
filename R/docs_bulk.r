@@ -61,6 +61,7 @@ docs_bulk <- function(x, index = NULL, type = NULL, chunk_size = 1000, raw=FALSE
 
 #' @export
 docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000, raw = FALSE, ...) {
+  checkconn()
   if (is.null(index)) {
     stop("index can't be NULL when passing a data.frame")
   }
@@ -77,6 +78,7 @@ docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000
 
 #' @export
 docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000, raw = FALSE, ...) {
+  checkconn()
   if (is.null(index)) {
     stop("index can't be NULL when passing a list")
   }
@@ -93,6 +95,7 @@ docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000, raw 
 
 #' @export
 docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000, raw=FALSE, ...) {
+  checkconn()
   stopifnot(file.exists(x))
   conn <- es_get_auth()
   url <- paste0(conn$base, ":", conn$port, '/_bulk')

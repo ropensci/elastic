@@ -1,6 +1,7 @@
 # GET wrapper
 es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL, 
                         clazz=NULL, raw, callopts=list(), ...){
+  checkconn()
   url <- make_url(es_get_auth())
   index <- esc(index)
   type <- esc(type)
@@ -27,6 +28,7 @@ es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL,
 }
 
 index_GET <- function(path, index, features, raw, ...) {
+  checkconn()
   url <- make_url(es_get_auth())
   url <- paste0(url, "/", paste0(esc(index), collapse = ","))
   if(!is.null(features)) features <- paste0(paste0("_", features), collapse = ",")
@@ -37,6 +39,7 @@ index_GET <- function(path, index, features, raw, ...) {
 }
 
 es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, query, ...) {
+  checkconn()
   url <- make_url(es_get_auth())
   index <- esc(index)
   type <- esc(type)
@@ -56,12 +59,14 @@ es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, quer
 }
 
 es_DELETE <- function(url, query = list(), ...) {
+  checkconn()
   tt <- DELETE(url, query=query, c(make_up(), ...))
   if(tt$status_code > 202) stop(content(tt)$error)
   jsonlite::fromJSON(content(tt, "text"), FALSE)
 }
 
 es_PUT <- function(url, body = list(), ...) {
+  checkconn()
   body <- check_inputs(body)
   tt <- PUT(url, body=body, encode = 'json', c(make_up(), ...))
   if(tt$status_code > 202) stop(content(tt)$error)
@@ -69,7 +74,8 @@ es_PUT <- function(url, body = list(), ...) {
 }
 
 es_GET_ <- function(url, query = list(), ...) {
-  tt <- GET(url, query=query, c(make_up(), ...))
+  checkconn()
+  tt <- GET(url, query=query, make_up(), ...)
   if(tt$status_code > 202) stop(content(tt)$error)
   jsonlite::fromJSON(content(tt, "text"), FALSE)
 }
