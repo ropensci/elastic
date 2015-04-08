@@ -11,6 +11,9 @@
 #' see hot threads that are in wait or block state.
 #' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
 #' @param verbose If TRUE (default) the url call used printed to console
+#' @param delay (character) By default, the shutdown will be executed after a 1 second 
+#' delay (1s). The delay can be customized by setting the delay parameter in a time 
+#' value format (e.g., \code{10s}). 
 #' @param ... Curl args passed on to \code{\link[httr]{GET}}
 #'
 #' @details \url{http://bit.ly/11gezop}
@@ -48,12 +51,17 @@
 #' nodes_info(metric='jvm')
 #' nodes_info(metric='http')
 #' nodes_hot_threads()
+#' nodes_shutdown()
+#' nodes_shutdown(node = "_local")
+#' nodes_shutdown(node = "_master")
+#' id <- names(nodes_info()$nodes)
+#' nodes_shutdown(node = id)
 #' }
 
 #' @export
 #' @rdname nodes
 nodes_stats <- function(node=NULL, metric=NULL, raw=FALSE, fields=NULL, verbose=TRUE, ...){
-  node_GET('stats', metric, node, raw, ec(list(fields=fields)), ...)
+  node_GET('stats', metric, node, raw, ec(list(fields = fields)), ...)
 }
 
 #' @export
@@ -66,28 +74,49 @@ nodes_info <- function(node=NULL, metric=NULL, raw=FALSE, verbose=TRUE, ...){
 #' @rdname nodes
 nodes_hot_threads <- function(node=NULL, metric=NULL, threads=3, interval='500ms', type=NULL,
   raw=FALSE, verbose=TRUE, ...) {
-  args <- list(threads=threads, interval=interval, type=type)
-  cat(node_GET('hot_threads', metric, node, raw=TRUE, args, ...))
+  args <- list(threads = threads, interval = interval, type = type)
+  cat(node_GET('hot_threads', metric, node, raw = TRUE, args, ...))
 }
 
-# nodes_shutdown <- function(node=NULL, metric=NULL, raw=FALSE, verbose=TRUE, ...){
-#   node_GET('shutdown', metric, node, 'elastic_nodes_shutdown', raw, callopts, list(), ...)
-# }
+#' @export
+#' @rdname nodes
+nodes_shutdown <- function(node=NULL, raw=FALSE, verbose=TRUE, delay=NULL, ...){
+  args <- list(delay = delay)
+  node_POST(path = '_shutdown', node, raw, args, ...)
+}
 
 node_GET <- function(path, metric, node, raw, args, ...) {
   checkconn()
   url <- make_url(es_get_auth())
   url <- file.path(url, '_nodes')
-  if(!is.null(node)){
+  if (!is.null(node)) {
     url <- paste(url, paste(node, collapse = ","), path, sep = "/")
-  } else { url <- paste(url, path, sep = "/") }
-  if(!is.null(metric)){
+  } else { 
+    url <- paste(url, path, sep = "/") 
+  }
+  if (!is.null(metric)) {
     url <- paste(url, paste(metric, collapse = ","), sep = "/")
   }
 
   userpwd <- make_up()
   tt <- GET(url, query = ec(args), c(userpwd, ...))
-  if(tt$status_code > 202) geterror(tt)
+  if (tt$status_code > 202) geterror(tt)
   res <- content(tt, "text")
-  if(raw) res else jsonlite::fromJSON(res, FALSE)
+  if (raw) res else jsonlite::fromJSON(res, FALSE)
+}
+
+node_POST <- function(path, node, raw, args, ...) {
+  checkconn()
+  url <- make_url(es_get_auth())
+  if (!is.null(node)) {
+    url <- paste(url, sprintf("_cluster/nodes/%s/%s", paste(node, collapse = ","), path), sep = "/")
+  } else { 
+    url <- paste(url, path, sep = "/") 
+  }
+  
+  userpwd <- make_up()
+  tt <- POST(url, query = ec(args), userpwd, ...)
+  if (tt$status_code > 202) geterror(tt)
+  res <- content(tt, "text")
+  if (raw) res else jsonlite::fromJSON(res, FALSE)
 }
