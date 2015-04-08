@@ -6,7 +6,7 @@ Description: Connect to Elasticsearch, a NoSQL database built on the Java Virtua
     data, searching for documents with both HTTP query variables and JSON based body
     requests. In addition, elastic provides functions for interacting with APIs for
     indices, documents, nodes, clusters, an interface to the cat API, and more.
-Version: 0.3.4.99
+Version: 0.3.4.999
 Date: 2015-04-07
 License: MIT + file LICENSE
 Authors@R: person("Scott", "Chamberlain", role = c("aut", "cre"),
