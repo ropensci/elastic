@@ -165,8 +165,8 @@ cat_fielddata <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=F
 
 cat_helper <- function(what='', v=FALSE, i=NULL, f=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
   checkconn()
+  stopifnot(is.logical(v), is.logical(help), is.logical(parse), is.logical(bytes))
   help_or_verbose(v, help)
-  stopifnot(is.logical(v), is.logical(help), is.logical(parse))
   url <- make_url(es_get_auth())
   if (!is.null(f)) f <- paste(f, collapse = ",")
   url <- sprintf("%s/_cat/%s", url, what)
@@ -190,9 +190,9 @@ cat_helper <- function(what='', v=FALSE, i=NULL, f=NULL, h=NULL, help=FALSE, byt
 
 cat_pretty <- function(x, verbose = FALSE, help = FALSE) {
   if (help) {
-    read.table(text = x, sep = "|")
+    read.table(text = x, sep = "|", stringsAsFactors = FALSE)
   } else {
-    read.table(text = x, sep = "", header = verbose)
+    read.table(text = x, sep = "", header = verbose, stringsAsFactors = FALSE)
   }
 }
 
