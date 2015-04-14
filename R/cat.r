@@ -1,9 +1,13 @@
 #' Use the cat Elasticsearch api.
 #'
 #' @name cat
-#' @param verbose If TRUE (default) the url call used printed to console.
-#' @param index Index name
-#' @param fields Fields to return, only used with \code{fielddata}
+#' @param verbose (logical) If \code{TRUE} (default) the url call used printed to console
+#' @param index (character) Index name
+#' @param fields (character) Fields to return, only used with \code{fielddata}
+#' @param h (character) Fields to return
+#' @param help (logical) Output available columns, and their meanings
+#' @param bytes (logical) Give numbers back machine friendly. Default: \code{FALSE}
+#' @param parse (logical) Parse to a data.frame or not. Default: \code{FALSE}
 #' @param ... Curl args passed on to \code{\link[httr]{GET}}
 #'
 #' @details See \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/cat.html}
@@ -49,6 +53,20 @@
 #' cat_health(parse = TRUE)
 #' cat_health(parse = TRUE, verbose = TRUE)
 #'
+#' # Get help - what does each column mean
+#' head(cat_indices(help = TRUE, parse = TRUE))
+#' cat_health(help = TRUE, parse = TRUE)
+#' head(cat_nodes(help = TRUE, parse = TRUE))
+#'
+#' # Get back only certain fields
+#' cat_nodes()
+#' cat_nodes(h = c('ip','port','heapPercent','name'))
+#' cat_indices(verbose = TRUE)
+#' cat_indices(verbose = TRUE, h = c('index','docs.count','store.size'))
+#' 
+#' # Get back machine friendly numbers instead of the normal human friendly
+#' cat_indices(verbose = TRUE, bytes = TRUE)
+#'
 #' # Curl options
 #' library("httr")
 #' cat_count(config=verbose())
@@ -56,102 +74,106 @@
 
 #' @export
 #' @rdname cat
-cat_ <- function(verbose=FALSE, index=NULL, fields=NULL, parse=FALSE, ...) {
-  cat_helper('', v=verbose, i=index, f=fields, parse=parse, ...)
+cat_ <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  cat_helper('', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
 
 #' @export
 #' @rdname cat
-cat_aliases <- function(verbose=FALSE, index=NULL, fields=NULL, parse=FALSE, ...) {
-  cat_helper('aliases', v=verbose, i=index, f=fields, parse=parse, ...)
+cat_aliases <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  cat_helper('aliases', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
 
 #' @export
 #' @rdname cat
-cat_allocation <- function(verbose=FALSE, index=NULL, fields=NULL, parse=FALSE, ...) {
-  cat_helper('allocation', v=verbose, i=index, f=fields, parse=parse, ...)
+cat_allocation <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  cat_helper('allocation', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
 
 #' @export
 #' @rdname cat
-cat_count <- function(verbose=FALSE, index=NULL, fields=NULL, parse=FALSE, ...) {
-  cat_helper('count', v=verbose, i=index, f=fields, parse=parse, ...)
+cat_count <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  cat_helper('count', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
 
 #' @export
 #' @rdname cat
-cat_segments <- function(verbose=FALSE, index=NULL, fields=NULL, parse=FALSE, ...) {
-  cat_helper('segments', v=verbose, i=index, f=fields, parse=parse, ...)
+cat_segments <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  cat_helper('segments', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
 
 #' @export
 #' @rdname cat
-cat_health <- function(verbose=FALSE, index=NULL, fields=NULL, parse=FALSE, ...) {
-  cat_helper('health', v=verbose, i=index, f=fields, parse=parse, ...)
+cat_health <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  cat_helper('health', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
 
 #' @export
 #' @rdname cat
-cat_indices <- function(verbose=FALSE, index=NULL, fields=NULL, parse=FALSE, ...) {
-  cat_helper('indices', v=verbose, i=index, f=fields, parse=parse, ...)
+cat_indices <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  cat_helper('indices', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
 
 #' @export
 #' @rdname cat
-cat_master <- function(verbose=FALSE, index=NULL, fields=NULL, parse=FALSE, ...) {
-  cat_helper('master', v=verbose, i=index, f=fields, parse=parse, ...)
+cat_master <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  cat_helper('master', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
 
 #' @export
 #' @rdname cat
-cat_nodes <- function(verbose=FALSE, index=NULL, fields=NULL, parse=FALSE, ...) {
-  cat_helper('nodes', v=verbose, i=index, f=fields, parse=parse, ...)
+cat_nodes <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  cat_helper('nodes', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
 
 #' @export
 #' @rdname cat
-cat_pending_tasks <- function(verbose=FALSE, index=NULL, fields=NULL, parse=FALSE, ...) {
-  cat_helper('pending_tasks', v=verbose, i=index, f=fields, parse=parse, ...)
+cat_pending_tasks <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  cat_helper('pending_tasks', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
 
 #' @export
 #' @rdname cat
-cat_plugins <- function(verbose=FALSE, index=NULL, fields=NULL, parse=FALSE, ...) {
-  cat_helper('plugins', v=verbose, i=index, f=fields, parse=parse, ...)
+cat_plugins <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  cat_helper('plugins', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
 
 #' @export
 #' @rdname cat
-cat_recovery <- function(verbose=FALSE, index=NULL, fields=NULL, parse=FALSE, ...) {
-  cat_helper('recovery', v=verbose, i=index, f=fields, parse=parse, ...)
+cat_recovery <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  cat_helper('recovery', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
 
 #' @export
 #' @rdname cat
-cat_thread_pool <- function(verbose=FALSE, index=NULL, fields=NULL, parse=FALSE, ...) {
-  cat_helper('thread_pool', v=verbose, i=index, f=fields, parse=parse, ...)
+cat_thread_pool <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  cat_helper('thread_pool', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
 
 #' @export
 #' @rdname cat
-cat_shards <- function(verbose=FALSE, index=NULL, fields=NULL, parse=FALSE, ...) {
-  cat_helper('shards', v=verbose, i=index, f=fields, parse=parse, ...)
+cat_shards <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  cat_helper('shards', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
 
 #' @export
 #' @rdname cat
-cat_fielddata <- function(verbose=FALSE, index=NULL, fields=NULL, parse=FALSE, ...) {
-  cat_helper('fielddata', v=verbose, i=index, f=fields, parse=parse, ...)
+cat_fielddata <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  cat_helper('fielddata', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
 
 
-cat_helper <- function(what='', v=FALSE, i=NULL, f=NULL, parse=FALSE, ...) {
+cat_helper <- function(what='', v=FALSE, i=NULL, f=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
   checkconn()
+  help_or_verbose(v, help)
+  stopifnot(is.logical(v), is.logical(help), is.logical(parse))
   url <- make_url(es_get_auth())
   if (!is.null(f)) f <- paste(f, collapse = ",")
   url <- sprintf("%s/_cat/%s", url, what)
   if (!is.null(i)) url <- paste0(url, '/', i)
-  args <- ec(list(v = if(v) '' else NULL, fields = f))
+  args <- ec(list(v = lnull(v), help = lnull(help), fields = f,
+                  h = asnull(paste0(h, collapse = ",")),
+                  bytes = ifbytes(bytes)))
   out <- GET(url, query = args, make_up(), ...)
   if (out$status_code > 202) geterror(out)
   dat <- content(out, as = "text")
@@ -159,13 +181,49 @@ cat_helper <- function(what='', v=FALSE, i=NULL, f=NULL, parse=FALSE, ...) {
     message("Nothing to print")
   } else {
     if (parse) {
-      cat_pretty(dat, v)
+      cat_pretty(dat, v, help)
     } else {
       base::cat(dat)
     }
   }
 }
 
-cat_pretty <- function(x, verbose = FALSE) {
-  read.table(text = x, sep = "", header = verbose)
+cat_pretty <- function(x, verbose = FALSE, help = FALSE) {
+  if (help) {
+    read.table(text = x, sep = "|")
+  } else {
+    read.table(text = x, sep = "", header = verbose)
+  }
+}
+
+help_or_verbose <- function(x, y) {
+  if (x) {
+    if (y) {
+      stop("Can only set verbose or help, not both")
+    }
+  }
+}
+
+lnull <- function(x) {
+  if (x) {
+    ''
+  } else {
+    NULL
+  }
+}
+
+asnull <- function(x) {
+  if (nchar(x) == 0 || is.null(x)) {
+    NULL
+  } else {
+    x
+  }
+}
+
+ifbytes <- function(x) {
+  if (x) {
+    "b"
+  } else {
+    NULL
+  }
 }
