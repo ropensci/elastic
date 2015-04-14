@@ -136,6 +136,7 @@
 #' index_stats('plos')
 #' index_stats(c('plos','gbif'))
 #' index_stats(c('plos','gbif'), metric='refresh')
+#' index_stats(metric = "indices")
 #' index_stats('shakespeare', metric='completion')
 #' index_stats('shakespeare', metric='completion', completion_fields = "completion")
 #' index_stats('shakespeare', metric='fielddata')

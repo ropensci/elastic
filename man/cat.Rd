@@ -19,35 +19,49 @@
 \alias{cat_thread_pool}
 \title{Use the cat Elasticsearch api.}
 \usage{
-cat_(verbose = FALSE, index = NULL, fields = NULL, ...)
+cat_(verbose = FALSE, index = NULL, fields = NULL, parse = FALSE, ...)
 
-cat_aliases(verbose = FALSE, index = NULL, fields = NULL, ...)
+cat_aliases(verbose = FALSE, index = NULL, fields = NULL, parse = FALSE,
+  ...)
 
-cat_allocation(verbose = FALSE, index = NULL, fields = NULL, ...)
+cat_allocation(verbose = FALSE, index = NULL, fields = NULL,
+  parse = FALSE, ...)
 
-cat_count(verbose = FALSE, index = NULL, fields = NULL, ...)
+cat_count(verbose = FALSE, index = NULL, fields = NULL, parse = FALSE,
+  ...)
 
-cat_segments(verbose = FALSE, index = NULL, fields = NULL, ...)
+cat_segments(verbose = FALSE, index = NULL, fields = NULL,
+  parse = FALSE, ...)
 
-cat_health(verbose = FALSE, index = NULL, fields = NULL, ...)
+cat_health(verbose = FALSE, index = NULL, fields = NULL, parse = FALSE,
+  ...)
 
-cat_indices(verbose = FALSE, index = NULL, fields = NULL, ...)
+cat_indices(verbose = FALSE, index = NULL, fields = NULL, parse = FALSE,
+  ...)
 
-cat_master(verbose = FALSE, index = NULL, fields = NULL, ...)
+cat_master(verbose = FALSE, index = NULL, fields = NULL, parse = FALSE,
+  ...)
 
-cat_nodes(verbose = FALSE, index = NULL, fields = NULL, ...)
+cat_nodes(verbose = FALSE, index = NULL, fields = NULL, parse = FALSE,
+  ...)
 
-cat_pending_tasks(verbose = FALSE, index = NULL, fields = NULL, ...)
+cat_pending_tasks(verbose = FALSE, index = NULL, fields = NULL,
+  parse = FALSE, ...)
 
-cat_plugins(verbose = FALSE, index = NULL, fields = NULL, ...)
+cat_plugins(verbose = FALSE, index = NULL, fields = NULL, parse = FALSE,
+  ...)
 
-cat_recovery(verbose = FALSE, index = NULL, fields = NULL, ...)
+cat_recovery(verbose = FALSE, index = NULL, fields = NULL,
+  parse = FALSE, ...)
 
-cat_thread_pool(verbose = FALSE, index = NULL, fields = NULL, ...)
+cat_thread_pool(verbose = FALSE, index = NULL, fields = NULL,
+  parse = FALSE, ...)
 
-cat_shards(verbose = FALSE, index = NULL, fields = NULL, ...)
+cat_shards(verbose = FALSE, index = NULL, fields = NULL, parse = FALSE,
+  ...)
 
-cat_fielddata(verbose = FALSE, index = NULL, fields = NULL, ...)
+cat_fielddata(verbose = FALSE, index = NULL, fields = NULL,
+  parse = FALSE, ...)
 }
 \arguments{
 \item{verbose}{If TRUE (default) the url call used printed to console.}
@@ -96,6 +110,15 @@ cat_thread_pool(verbose=TRUE)
 cat_shards()
 cat_fielddata()
 cat_fielddata(fields='body')
+
+# capture cat data into a data.frame
+cat_(parse = TRUE)
+cat_indices(parse = TRUE)
+cat_indices(parse = TRUE, verbose = TRUE)
+cat_count(parse = TRUE)
+cat_count(parse = TRUE, verbose = TRUE)
+cat_health(parse = TRUE)
+cat_health(parse = TRUE, verbose = TRUE)
 
 # Curl options
 library("httr")

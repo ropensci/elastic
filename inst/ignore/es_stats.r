@@ -1,8 +1,6 @@
 #' Execute a query and get the number of matches for that query.
 #'
-#' @import httr
 #' @export
-#'
 #' @param index Index name
 #' @param type Index type
 #' @param metric A metric to get
@@ -48,7 +46,8 @@
 #' es_stats(metric='get', human='false')
 #' }
 
-es_stats <- function(index=NULL, type=NULL, metric=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...)
-{
+es_stats <- function(index=NULL, type=NULL, metric=NULL, raw=FALSE, 
+                     callopts=list(), verbose=TRUE, ...) {
+  
   es_GET('_stats', index, type, metric, NULL, 'elastic_stats', raw, callopts, ...)
 }
