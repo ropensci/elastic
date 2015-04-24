@@ -31,11 +31,11 @@
 
 #' @export
 #' @rdname connect
-connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL, 
+connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL,
                     es_pwd = NULL, force = FALSE, ...) {
 
   es_base <- has_http(es_base)
-  auth <- es_auth(es_base=es_base, es_port=es_port, es_user=es_user, 
+  auth <- es_auth(es_base=es_base, es_port=es_port, es_user=es_user,
                   es_pwd=es_pwd, force = force)
   if(is.null(auth$port) || nchar(auth$port) == 0){
     baseurl <- auth$base
@@ -55,7 +55,7 @@ connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL,
     stop(sprintf("Error:", res$headers$statusmessage), call. = FALSE)
   tt <- content(res, as = "text")
   out <- jsonlite::fromJSON(tt, FALSE)
-  structure(list(base = auth$base, port = auth$port, user = es_user, 
+  structure(list(base = auth$base, port = auth$port, user = es_user,
                  pwd = es_pwd, es_deets = out), class='es_conn')
 }
 
@@ -74,8 +74,8 @@ connection <- function() {
   auth <- list(base=getOption("es_base"), port=getOption("es_port"), user=getOption("es_user"))
   if (is.null(auth$port) || nchar(auth$port) == 0) {
     baseurl <- auth$base
-  } else {  
-    baseurl <- paste(auth$base, auth$port, sep = ":") 
+  } else {
+    baseurl <- paste(auth$base, auth$port, sep = ":")
   }
   res <- tryCatch(GET(baseurl, make_up()), error = function(e) e)
   if ("error" %in% class(res)) {
@@ -85,14 +85,14 @@ connection <- function() {
     stop(sprintf("Error:", res$headers$statusmessage), call. = FALSE)
   tt <- content(res, as = "text")
   out <- jsonlite::fromJSON(tt, FALSE)
-  structure(list(base = auth$base, port = auth$port, 
+  structure(list(base = auth$base, port = auth$port,
                  user = auth$user, pwd = "<secret>", es_deets = out), class = 'es_conn')
 }
 
 #' @export
 print.es_conn <- function(x, ...){
   fun <- function(x) ifelse(is.null(x), 'NULL', x)
-  cat(paste('uri:      ', fun(x$base)), "\n")
+  cat(paste('url:      ', fun(x$base)), "\n")
   cat(paste('port:     ', fun(x$port)), "\n")
   cat(paste('username: ', fun(x$user)), "\n")
   cat(paste('password: ', fun(x$pwd)), "\n")

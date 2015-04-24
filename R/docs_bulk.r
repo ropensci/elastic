@@ -41,11 +41,11 @@
 #' docs_bulk(plosdat, config=verbose())
 #' 
 #' # From a data.frame
-#' docs_bulk(mtcars, "hello", "world")
+#' docs_bulk(mtcars, index = "hello", type = "world")
 #' docs_bulk(iris, "iris", "flowers")
 #' ## type can be missing, but index can not
 #' docs_bulk(iris, "flowers")
-#' ## big data.frame, 53K rows
+#' ## big data.frame, 53K rows, load ggplot2 package first
 #' res <- docs_bulk(diamonds, "diam")
 #' Search("diam")$hits$total
 #' 
@@ -114,7 +114,9 @@ make_bulk <- function(df, index, type, counter) {
   metadata <- sprintf(metadata_fmt, index, type, counter - 1L)
   data <- jsonlite::toJSON(df, collapse = FALSE)
   tmpf <- tempfile()
-  writeLines(paste(metadata, data, sep = "\n"), tmpf)
+  tmpfconn <- file(tmpf, open = "wt")
+  writeLines(paste(metadata, data, sep = "\n"), tmpfconn)
+  close(tmpfconn)
   invisible(tmpf)
 }
 
