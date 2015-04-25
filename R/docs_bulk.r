@@ -96,7 +96,7 @@ docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000, raw 
 
 #' @export
 docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000, raw=FALSE, ...) {
-  on.exit(closeAllConnections())
+  on.exit(close_conns())
   checkconn()
   stopifnot(file.exists(x))
   conn <- es_get_auth()
@@ -115,11 +115,19 @@ make_bulk <- function(df, index, type, counter) {
   metadata_fmt <- '{"index":{"_index":"%s","_type":"%s","_id":%d}}'
   metadata <- sprintf(metadata_fmt, index, type, counter - 1L)
   data <- jsonlite::toJSON(df, collapse = FALSE)
-  tmpf <- tempfile("bulk")
+  tmpf <- tempfile("elastic__")
 #   tmpfconn <- file(tmpf, open = "wt")
-#   on.exit(close(tmpfconn))
+#   on.exit(close.connection(tmpf))
   writeLines(paste(metadata, data, sep = "\n"), tmpf)
   invisible(tmpf)
+}
+
+close_conns <- function() {
+  cons <- showConnections()
+  ours <- as.integer(rownames(cons)[grepl("/elastic__", cons[, "description"], fixed = TRUE)])
+  for (i in ours) {
+    close(getConnection(i))
+  } 
 }
 
 # make_bulk_plos(index_name='plosmore', fields=c('id','journal','title','abstract','author'), filename="inst/examples/plos_more_data.json")
