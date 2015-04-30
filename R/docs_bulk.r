@@ -116,8 +116,6 @@ make_bulk <- function(df, index, type, counter) {
   metadata <- sprintf(metadata_fmt, index, type, counter - 1L)
   data <- jsonlite::toJSON(df, collapse = FALSE)
   tmpf <- tempfile("elastic__")
-#   tmpfconn <- file(tmpf, open = "wt")
-#   on.exit(close.connection(tmpf))
   writeLines(paste(metadata, data, sep = "\n"), tmpf)
   invisible(tmpf)
 }
