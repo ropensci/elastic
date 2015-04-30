@@ -13,8 +13,7 @@ elastic
 
 * [Elasticsearch home page](https://www.elastic.co/products/elasticsearch)
 * [API docs](http://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
-* This client is being developed under `v1.5` of Elasticsearch, and will generally develop
-following whatever is the current version.
+* This client is being developed under `v1.5.2` of Elasticsearch, and will generally develop following whatever is the current version.
 
 ## Security
 
@@ -62,11 +61,11 @@ If you're using boot2docker, you'll need to use the IP address in place of local
 
 __on OSX__
 
-+ Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.5.0.tar.gz`
-+ Unzip it: `untar elasticsearch-1.5.0.tar.gz`
-+ Move it: `sudo mv /path/to/elasticsearch-1.5.0 /usr/local` (replace version with your version)
++ Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.5.2.tar.gz`
++ Unzip it: `untar elasticsearch-1.5.2.tar.gz`
++ Move it: `sudo mv /path/to/elasticsearch-1.5.2 /usr/local` (replace version with your version)
 + Navigate to /usr/local: `cd /usr/local`
-+ Add shortcut: `sudo ln -s elasticsearch-1.5.0 elasticsearch` (replace version with your verioon)
++ Add shortcut: `sudo ln -s elasticsearch-1.5.2 elasticsearch` (replace version with your verioon)
 
 You can also install via Homebrew: `brew install elasticsearch`
 
@@ -153,15 +152,15 @@ The function `connect()` is used before doing anything else to set the connectio
 
 ```r
 connect(es_port = 9200)
-#> uri:       http://127.0.0.1 
+#> url:       http://127.0.0.1 
 #> port:      9200 
 #> username:  NULL 
 #> password:  NULL 
 #> elasticsearch details:   
 #>    status:                  200 
-#>    name:                    Veritas 
-#>    Elasticsearch version:   1.5.0 
-#>    ES version timestamp:    2015-03-23T14:30:58Z 
+#>    name:                    Jean DeWolff 
+#>    Elasticsearch version:   1.5.2 
+#>    ES version timestamp:    2015-04-27T09:21:06Z 
 #>    lucene version:          4.10.4
 ```
 
