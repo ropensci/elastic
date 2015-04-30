@@ -78,5 +78,4 @@ test_that("index_recovery", {
 
 ## cleanup -----------------------------------
 invisible(index_delete("stuff_yy", verbose = FALSE))
-invisible(index_delete("stuff_zz", verbose = FALSE))
 invisible(index_delete('test_close_open', verbose = FALSE))
