@@ -6,6 +6,5 @@ man-roxygen
 ^\.Rproj\.user$
 CONTRIBUTING.md
 ^appveyor\.yml$
-plos_data.json
 README.Rmd
 cran-comments.md
