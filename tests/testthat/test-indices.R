@@ -37,16 +37,16 @@ test_that("index_delete", {
   expect_error(index_delete("adfadfafafasdfasdfasfasfasfd"), "Not Found")
 })
 
-test_that("index_close, index_open", {
-  invisible(tryCatch(index_delete('test_close_open', verbose = FALSE), error = function(e) e))
-  index_create('test_close_open', verbose = FALSE)
-  index_open('test_close_open')
-
-  expect_true(index_close('test_close_open')[[1]])
-  expect_true(index_open('test_close_open')[[1]])
-  expect_error(index_close("adfadfafafasdfasdfasfasfasfd"), "Not Found")
-  expect_error(index_open("adfadfafafasdfasdfasfasfasfd"), "Not Found")
-})
+# test_that("index_close, index_open", {
+#   invisible(tryCatch(index_delete('test_close_open', verbose = FALSE), error = function(e) e))
+#   index_create('test_close_open', verbose = FALSE)
+#   index_open('test_close_open')
+# 
+#   expect_true(index_close('test_close_open')[[1]])
+#   expect_true(index_open('test_close_open')[[1]])
+#   expect_error(index_close("adfadfafafasdfasdfasfasfasfd"), "Not Found")
+#   expect_error(index_open("adfadfafafasdfasdfasfasfasfd"), "Not Found")
+# })
 
 test_that("index_status", {
   a <- index_status('shakespeare')
@@ -78,4 +78,4 @@ test_that("index_recovery", {
 
 ## cleanup -----------------------------------
 invisible(index_delete("stuff_yy", verbose = FALSE))
-invisible(index_delete('test_close_open', verbose = FALSE))
+# invisible(index_delete('test_close_open', verbose = FALSE))
