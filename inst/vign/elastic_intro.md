@@ -36,22 +36,22 @@ library("elastic")
 
 ## Elasticsearch info
 
-+ [Elasticsearch home page](http://elasticsearch.org)
-+ [API docs](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/index.html)
++ [Elasticsearch home page](https://www.elastic.co/)
++ [API docs](http://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
 
 ## Install Elasticsearch
 
-* [Elasticsearch installation help](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/_installation.html)
+* [Elasticsearch installation help](http://www.elastic.co/guide/en/elasticsearch/reference/current/_installation.html)
 
 __Unix (linux/osx)__
 
-Replace `1.4.1` with the version you are working with.
+Replace `1.5.2` with the version you are working with.
 
-+ Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.1.tar.gz`
-+ Uncompress it: `tar -xvf elasticsearch-1.4.1.tar.gz`
-+ Move it: `sudo mv /path/to/elasticsearch-1.4.1 /usr/local`
++ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads/elasticsearch), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.5.2.tar.gz`
++ Uncompress it: `tar -xvf elasticsearch-1.5.2.tar.gz`
++ Move it: `sudo mv /path/to/elasticsearch-1.5.2 /usr/local`
 + Navigate to /usr/local: `cd /usr/local`
-+ Add shortcut: `sudo ln -s elasticsearch-1.4.1 elasticsearch`
++ Add shortcut: `sudo ln -s elasticsearch-1.5.2 elasticsearch`
 
 On OSX, you can install via Homebrew: `brew install elasticsearch`
 
@@ -78,17 +78,16 @@ connect()
 ```
 
 ```
-#> uri:       http://127.0.0.1 
+#> url:       http://127.0.0.1 
 #> port:      9200 
 #> username:  NULL 
 #> password:  NULL 
-#> api key:   NULL 
 #> elasticsearch details:   
-#>       status:                  200 
-#>       name:                    Taj Nital 
-#>       Elasticsearch version:   1.4.2 
-#>       ES version timestamp:    2014-12-16T14:11:12Z 
-#>       lucene version:          4.10.2
+#>    status:                  200 
+#>    name:                    Jean DeWolff 
+#>    Elasticsearch version:   1.5.2 
+#>    ES version timestamp:    2015-04-27T09:21:06Z 
+#>    lucene version:          4.10.4
 ```
 
 On package load, your base url and port are set to `http://127.0.0.1` and `9200`, respectively. You can of course override these settings per session or for all sessions. 

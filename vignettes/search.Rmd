@@ -51,7 +51,7 @@ out$hits$hits[[1]]
 #> [1] "4"
 #> 
 #> $`_version`
-#> [1] 1
+#> [1] 12
 #> 
 #> $`_score`
 #> [1] 1
@@ -94,7 +94,7 @@ Search(index="shakespeare", type="act")$hits$hits[[1]]
 #> [1] "2227"
 #> 
 #> $`_version`
-#> [1] 1
+#> [1] 12
 #> 
 #> $`_score`
 #> [1] 1
@@ -137,20 +137,20 @@ Search(index="shakespeare", fields=c('play_name','speaker'))$hits$hits[[1]]
 #> [1] "4"
 #> 
 #> $`_version`
-#> [1] 1
+#> [1] 12
 #> 
 #> $`_score`
 #> [1] 1
 #> 
 #> $fields
-#> $fields$speaker
-#> $fields$speaker[[1]]
-#> [1] "KING HENRY IV"
-#> 
-#> 
 #> $fields$play_name
 #> $fields$play_name[[1]]
 #> [1] "Henry IV"
+#> 
+#> 
+#> $fields$speaker
+#> $fields$speaker[[1]]
+#> [1] "KING HENRY IV"
 ```
 
 ### Sorting
@@ -172,7 +172,7 @@ Search(index="shakespeare", type="act", sort="text_entry")$hits$hits[1:2]
 #> [1] "2227"
 #> 
 #> [[1]]$`_version`
-#> [1] 1
+#> [1] 12
 #> 
 #> [[1]]$`_score`
 #> NULL
@@ -214,7 +214,7 @@ Search(index="shakespeare", type="act", sort="text_entry")$hits$hits[1:2]
 #> [1] "2633"
 #> 
 #> [[2]]$`_version`
-#> [1] 1
+#> [1] 12
 #> 
 #> [[2]]$`_score`
 #> NULL
@@ -261,7 +261,7 @@ Search(index="shakespeare", type="act", sort="speaker:desc", fields='speaker')$h
 #> [1] "2633"
 #> 
 #> [[1]]$`_version`
-#> [1] 1
+#> [1] 12
 #> 
 #> [[1]]$`_score`
 #> NULL
@@ -290,7 +290,7 @@ Search(index="shakespeare", type="act", sort="speaker:desc", fields='speaker')$h
 #> [1] "4974"
 #> 
 #> [[2]]$`_version`
-#> [1] 1
+#> [1] 12
 #> 
 #> [[2]]$`_score`
 #> NULL
@@ -333,7 +333,7 @@ Search(index="shakespeare", size=1, from=1, fields='text_entry')$hits
 #> [1] "9"
 #> 
 #> $hits[[1]]$`_version`
-#> [1] 1
+#> [1] 12
 #> 
 #> $hits[[1]]$`_score`
 #> [1] 1
@@ -380,7 +380,7 @@ sapply(Search(index="shakespeare", version=TRUE, size=2)$hits$hits, "[[", "_vers
 ```
 
 ```
-#> [1] 1 1
+#> [1] 12 12
 ```
 
 ### Get raw data
@@ -391,7 +391,7 @@ Search(index="shakespeare", type="scene", raw=TRUE)
 ```
 
 ```
-#> [1] "{\"took\":2,\"timed_out\":false,\"_shards\":{\"total\":5,\"successful\":5,\"failed\":0},\"hits\":{\"total\":34,\"max_score\":1.0,\"hits\":[{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"112\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":113,\"play_name\":\"Henry IV\",\"speech_number\":10,\"line_number\":\"\",\"speaker\":\"WESTMORELAND\",\"text_entry\":\"SCENE II. London. An apartment of the Princes.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"989\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":990,\"play_name\":\"Henry IV\",\"speech_number\":22,\"line_number\":\"\",\"speaker\":\"LADY PERCY\",\"text_entry\":\"SCENE IV. The Boars-Head Tavern, Eastcheap.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2462\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":2463,\"play_name\":\"Henry IV\",\"speech_number\":21,\"line_number\":\"\",\"speaker\":\"FALSTAFF\",\"text_entry\":\"SCENE III. The rebel camp near Shrewsbury.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2784\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":2785,\"play_name\":\"Henry IV\",\"speech_number\":18,\"line_number\":\"\",\"speaker\":\"FALSTAFF\",\"text_entry\":\"SCENE II. The rebel camp.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"3206\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":3207,\"play_name\":\"Henry VI Part 1\",\"speech_number\":8,\"line_number\":\"\",\"speaker\":\"KING HENRY IV\",\"text_entry\":\"SCENE I. Westminster Abbey.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4437\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":4438,\"play_name\":\"Henry VI Part 1\",\"speech_number\":18,\"line_number\":\"\",\"speaker\":\"PLANTAGENET\",\"text_entry\":\"SCENE I. London. The Parliament-house.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4975\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":4976,\"play_name\":\"Henry VI Part 1\",\"speech_number\":11,\"line_number\":\"\",\"speaker\":\"VERNON\",\"text_entry\":\"SCENE I. Paris. A hall of state.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"745\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":746,\"play_name\":\"Henry IV\",\"speech_number\":32,\"line_number\":\"\",\"speaker\":\"GADSHILL\",\"text_entry\":\"SCENE II. The highway, near Gadshill.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2228\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":2229,\"play_name\":\"Henry IV\",\"speech_number\":81,\"line_number\":\"\",\"speaker\":\"FALSTAFF\",\"text_entry\":\"SCENE I. The rebel camp near Shrewsbury.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2588\",\"_version\":1,\"_score\":1.0,\"_source\":{\"line_id\":2589,\"play_name\":\"Henry IV\",\"speech_number\":28,\"line_number\":\"\",\"speaker\":\"SIR WALTER BLUNT\",\"text_entry\":\"SCENE IV. York. The ARCHBISHOPS palace.\"}}]}}"
+#> [1] "{\"took\":2,\"timed_out\":false,\"_shards\":{\"total\":5,\"successful\":5,\"failed\":0},\"hits\":{\"total\":34,\"max_score\":1.0,\"hits\":[{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"112\",\"_version\":12,\"_score\":1.0,\"_source\":{\"line_id\":113,\"play_name\":\"Henry IV\",\"speech_number\":10,\"line_number\":\"\",\"speaker\":\"WESTMORELAND\",\"text_entry\":\"SCENE II. London. An apartment of the Princes.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"989\",\"_version\":12,\"_score\":1.0,\"_source\":{\"line_id\":990,\"play_name\":\"Henry IV\",\"speech_number\":22,\"line_number\":\"\",\"speaker\":\"LADY PERCY\",\"text_entry\":\"SCENE IV. The Boars-Head Tavern, Eastcheap.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2462\",\"_version\":12,\"_score\":1.0,\"_source\":{\"line_id\":2463,\"play_name\":\"Henry IV\",\"speech_number\":21,\"line_number\":\"\",\"speaker\":\"FALSTAFF\",\"text_entry\":\"SCENE III. The rebel camp near Shrewsbury.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2784\",\"_version\":12,\"_score\":1.0,\"_source\":{\"line_id\":2785,\"play_name\":\"Henry IV\",\"speech_number\":18,\"line_number\":\"\",\"speaker\":\"FALSTAFF\",\"text_entry\":\"SCENE II. The rebel camp.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"3206\",\"_version\":12,\"_score\":1.0,\"_source\":{\"line_id\":3207,\"play_name\":\"Henry VI Part 1\",\"speech_number\":8,\"line_number\":\"\",\"speaker\":\"KING HENRY IV\",\"text_entry\":\"SCENE I. Westminster Abbey.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4437\",\"_version\":12,\"_score\":1.0,\"_source\":{\"line_id\":4438,\"play_name\":\"Henry VI Part 1\",\"speech_number\":18,\"line_number\":\"\",\"speaker\":\"PLANTAGENET\",\"text_entry\":\"SCENE I. London. The Parliament-house.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4975\",\"_version\":12,\"_score\":1.0,\"_source\":{\"line_id\":4976,\"play_name\":\"Henry VI Part 1\",\"speech_number\":11,\"line_number\":\"\",\"speaker\":\"VERNON\",\"text_entry\":\"SCENE I. Paris. A hall of state.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"745\",\"_version\":12,\"_score\":1.0,\"_source\":{\"line_id\":746,\"play_name\":\"Henry IV\",\"speech_number\":32,\"line_number\":\"\",\"speaker\":\"GADSHILL\",\"text_entry\":\"SCENE II. The highway, near Gadshill.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2228\",\"_version\":12,\"_score\":1.0,\"_source\":{\"line_id\":2229,\"play_name\":\"Henry IV\",\"speech_number\":81,\"line_number\":\"\",\"speaker\":\"FALSTAFF\",\"text_entry\":\"SCENE I. The rebel camp near Shrewsbury.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2588\",\"_version\":12,\"_score\":1.0,\"_source\":{\"line_id\":2589,\"play_name\":\"Henry IV\",\"speech_number\":28,\"line_number\":\"\",\"speaker\":\"SIR WALTER BLUNT\",\"text_entry\":\"SCENE IV. York. The ARCHBISHOPS palace.\"}}]}}"
 ```
 
 ### Curl debugging
@@ -425,7 +425,7 @@ Search(index="shakespeare", body=aggs)$hits$hits[[1]]
 #> [1] "4"
 #> 
 #> $`_version`
-#> [1] 1
+#> [1] 12
 #> 
 #> $`_score`
 #> [1] 1
@@ -477,7 +477,7 @@ Search(index="shakespeare", body=aggs)$hits$hits[[1]]
 #> [1] "4"
 #> 
 #> $`_version`
-#> [1] 1
+#> [1] 12
 #> 
 #> $`_score`
 #> [1] 1
@@ -521,7 +521,7 @@ Search(index="shakespeare", body=aggs)$hits$hits[[1]]
 #> [1] "4"
 #> 
 #> $`_version`
-#> [1] 1
+#> [1] 12
 #> 
 #> $`_score`
 #> [1] 1
