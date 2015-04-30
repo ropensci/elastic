@@ -4,6 +4,7 @@
 #' @importFrom RCurl curlEscape
 #' @export
 #' 
+#' @name Search
 #' @template search_par
 #' @template search_egs
 #' @param body Query, either a list or json.
