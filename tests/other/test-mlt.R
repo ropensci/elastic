@@ -2,6 +2,11 @@ context("mlt")
 
 invisible(connect())
 
+## create plos index first -----------------------------------
+invisible(tryCatch(index_delete(index = "plos", verbose = FALSE), error = function(e) e))
+plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+invisible(docs_bulk(plosdat))
+
 test_that("mlt basic", {
   mlt1 <- mlt(index = "plos", type = "article", id = 5)$hits$total
   mlt2 <- mlt(index = "plos", type = "article", id = 5, min_doc_freq = 12)$hits$total
@@ -54,3 +59,6 @@ test_that("Maximum query terms to be included in the generated query", {
   expect_true(mlt8 < mlt10)
   expect_true(mlt9 < mlt10)
 })
+
+# cleanup -----------
+invisible(index_delete("plos", verbose = FALSE))

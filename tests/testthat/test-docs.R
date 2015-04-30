@@ -1,4 +1,4 @@
-context("docs_create")
+context("docs")
 
 invisible(connect())
 
@@ -9,7 +9,7 @@ invisible(index_create(index = ind, verbose = FALSE))
 
 test_that("docs_create works", {
   invisible(docs_create(index = ind, type = 'article', id = 1002, body = list(id = "12345", title = "New title")))
-  a <- docs_get(index = ind, type = 'article', id = 1002)
+  a <- docs_get(index = ind, type = 'article', id = 1002, verbose = FALSE)
   expect_is(a, "list")
   expect_is(a$`_source`, "list")
   expect_equal(a$`_id`, "1002")

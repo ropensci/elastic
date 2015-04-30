@@ -75,14 +75,14 @@ mlt <- function(index, type, id, doc_type=NULL, body=NULL,
   min_doc_freq=NULL, min_term_freq=NULL, min_word_length=NULL, mlt_fields=NULL,
   percent_terms_to_match=NULL, routing=NULL, search_from=NULL, search_indices=NULL,
   search_query_hint=NULL, search_scroll=NULL, search_size=NULL, search_source=NULL,
-  search_type=NULL, search_types=NULL, stop_words=NULL, like_text=NULL, ...)
-{
+  search_type=NULL, search_types=NULL, stop_words=NULL, like_text=NULL, ...) {
+  
   url <- make_url(es_get_auth())
   url <- sprintf("%s/%s/%s/%s/%s", url, esc(index), esc(type), id, "_mlt")
   args <- ec(list(doc_type=doc_type, id=id, body=body, boost_terms=boost_terms,
     include=include, max_doc_freq=cn(max_doc_freq), max_query_terms=cn(max_query_terms),
     max_word_length=cn(max_word_length), min_doc_freq=cn(min_doc_freq), min_term_freq=cn(min_term_freq),
-    min_word_length=cn(min_word_length), mlt_fields=mlt_fields, percent_terms_to_match=percent_terms_to_match,
+    min_word_length=cn(min_word_length), mlt_fields=mlt_fields, percent_terms_to_match=cn(percent_terms_to_match),
     routing=routing, search_from=cn(search_from), search_indices=search_indices,
     search_query_hint=search_query_hint, search_scroll=search_scroll, search_size=cn(search_size),
     search_source=search_source, search_type=search_type, search_types=search_types, stop_words=stop_words,

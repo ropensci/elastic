@@ -84,7 +84,7 @@ error_parser <- function(y, shard_no = 1) {
 strmatch <- function(x, y) regmatches(x, regexpr(y, x))
 strloc2match <- function(x, first, y) substring(x, first, regexpr(y, x) - 1)
 
-# Make sure limit is a numeric or integer
+# Make sure variable is a numeric or integer --------------
 cn <- function(x) {
   name <- substitute(x)
   if (!is.null(x)) {
