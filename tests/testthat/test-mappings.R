@@ -84,8 +84,6 @@ test_that("field_mapping_get works", {
   expect_is(fmg4, "list")
   
   expect_equal(length(fmg1$plos$mappings), 0)
-  expect_named(fmg2$plos$mappings$article[1], "_routing")
-  expect_named(fmg2$plos$mappings$article[1], "_routing")
   expect_named(fmg3$plos$mappings$article, "title")
   expect_named(fmg3$plos$mappings$article$title$mapping, "title")
   expect_named(fmg4$plos$mappings$article, c("id", "title"))

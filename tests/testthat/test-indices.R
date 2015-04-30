@@ -17,7 +17,7 @@ test_that("index_exists", {
 })
 
 test_that("index_create", {
-  ind <- paste0("stuff_", sample(letters, 1))
+  ind <- "stuff_yy"
   invisible(tryCatch(index_delete(index = ind, verbose = FALSE), error = function(e) e))
   a <- index_create(index = ind, verbose = FALSE)
   expect_true(a[[1]])
@@ -27,7 +27,7 @@ test_that("index_create", {
 })
 
 test_that("index_delete", {
-  nm <- paste0("stuff_", sample(letters, 1))
+  nm <- "stuff_zz"
   tryCatch(index_delete(index = nm, verbose = FALSE), error = function(e) e)
   a <- index_create(index = nm, verbose = FALSE)
   b <- index_delete(nm, verbose = FALSE)
@@ -41,7 +41,7 @@ test_that("index_close, index_open", {
   invisible(tryCatch(index_delete('test_close_open', verbose = FALSE), error = function(e) e))
   index_create('test_close_open', verbose = FALSE)
   index_open('test_close_open')
-  
+
   expect_true(index_close('test_close_open')[[1]])
   expect_true(index_open('test_close_open')[[1]])
   expect_error(index_close("adfadfafafasdfasdfasfasfasfd"), "Not Found")
@@ -75,3 +75,8 @@ test_that("index_recovery", {
   expect_named(a$shakespeare, "shards")
   expect_error(index_recovery("adfadfafafasdfasdfasfasfasfd"), "missing")
 })
+
+## cleanup -----------------------------------
+invisible(index_delete("stuff_yy", verbose = FALSE))
+invisible(index_delete("stuff_zz", verbose = FALSE))
+invisible(index_delete('test_close_open', verbose = FALSE))
