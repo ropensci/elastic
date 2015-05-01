@@ -1,6 +1,27 @@
 elastic 0.4.0
 ===============
 
+NEW FEATURES
+
+* New function `Search_uri()` where the search is defined entirely in the URL itself. 
+Especially useful for cases in which `POST` requests are forbidden, e.g, on a server
+that prevents `POST` requests (which the function `Search()` uses). (#58)
+* New function `nodes_shutdown()` (#23)
+* `docs_bulk()` gains ability to push data into Elasticsearch via the bulk http API 
+from data.frame or list objects. Previously, this function only would accept a file
+formatted correctly. In addition, gains new parameters: `index` - The index name to use. 
+`type` - The type name to use. `chunk_size` - Size of each chunk. (#60) (#67) (#68)
+
+MINOR IMPROVEMENTS
+
+* `cat_*()` functions gain new parameters: `h` to specify what fields to return; `help` to 
+output available columns, and their meanings; `bytes` to give numbers back machine 
+friendly; `parse` Parse to a data.frame or not
+* `cat_*()` functions can now optionally capture data returned in to a data.frame (#64)
+* `Search()` gains new parameter `search_path` to set the path that is used for searching. 
+The default is `_search`, but sometimes in your configuration you've setup so that 
+you don't need that path, or it's a different path. (023d28762e7e1028fcb0ad17867f08b5e2c92f93)
+
 BUG FIXES
 
 * In `docs_mget()` added internal checker to make sure user passes in the right combination of 
@@ -16,6 +37,8 @@ values passed in to make sure they are numbers. (#46)
 * Across all functions where `index` and `type` parameters used, now using `RCurl::curlEscape()`
 to URL escape. Other parameters passed in are go through `httr` CRUD methods, and do URL escaping
 for us. (#49)
+* Fixed links to development repo in DESCRIPTION file
+* 
 
 elastic 0.3.0
 ===============
