@@ -22,7 +22,7 @@ If you're connecting to a Elasticsearch server already running, skip ahead to \b
 Install Elasticsearch (on OSX)
 \itemize{
  \item Download zip or tar file from Elasticsearch see here for download:
- \url{http://www.elasticsearch.org/overview/elkdownloads/}
+ \url{https://www.elastic.co/downloads/elasticsearch}
  \item Unzip it: \code{untar elasticsearch-1.5.2.tar.gz}
  \item Move it: \code{sudo mv /path/to/elasticsearch-1.5.2 /usr/local}
  (replace version with your version)
