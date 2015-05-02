@@ -5,13 +5,14 @@ elastic
 knitr::opts_chunk$set(
   comment = "#>",
   collapse = TRUE,
-  warning = FALSE, 
+  warning = FALSE,
   message = FALSE
 )
 ```
 
 [![Build Status](https://api.travis-ci.org/ropensci/elastic.svg)](https://travis-ci.org/ropensci/elastic)
 [![Coverage Status](https://coveralls.io/repos/ropensci/elastic/badge.svg)](https://coveralls.io/r/ropensci/elastic)
+[![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/elastic?color=E664A4)](https://github.com/metacran/cranlogs.app)
 <!-- [![Build status](https://ci.appveyor.com/api/projects/status/swmmw758mf1heoj2/branch/master)](https://ci.appveyor.com/project/sckott/elastic/branch/master) -->
 
 **A general purpose R interface to [Elasticsearch](https://www.elastic.co/products/elasticsearch)**
@@ -24,10 +25,10 @@ knitr::opts_chunk$set(
 
 ## Security
 
-You're fine running ES locally on your machine, but be careful just throwing up ES on a server with a public IP address - make sure to think about security. 
+You're fine running ES locally on your machine, but be careful just throwing up ES on a server with a public IP address - make sure to think about security.
 
 * [Shield](https://www.elastic.co/products/shield) - This is a paid product provided by Elastic - so probably only applicable to enterprise users
-* DIY security - there are a variety of techniques for securing your Elasticsearch. A number of resources are collected in a [blog post](http://recology.info/2015/02/secure-elasticsearch/) - tools include putting your ES behind something like Nginx, putting basic auth on top of it, using https, etc. 
+* DIY security - there are a variety of techniques for securing your Elasticsearch. A number of resources are collected in a [blog post](http://recology.info/2015/02/secure-elasticsearch/) - tools include putting your ES behind something like Nginx, putting basic auth on top of it, using https, etc.
 
 ## Quick start
 
@@ -42,7 +43,7 @@ devtools::install_github("ropensci/elastic")
 library('elastic')
 ```
 
-### Install Elasticsearch 
+### Install Elasticsearch
 
 * [Elasticsearch installation help](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/_installation.html)
 
@@ -60,7 +61,7 @@ Then start up a container
 docker run -d -p 9200:9200 elasticsearch
 ```
 
-Then elasticsearch should be available on port 9200, try `curl localhost:9200` and you should get the familiar message indicating ES is on. 
+Then elasticsearch should be available on port 9200, try `curl localhost:9200` and you should get the familiar message indicating ES is on.
 
 If you're using boot2docker, you'll need to use the IP address in place of localhost. Get it by doing `boot2docker ip`.
 
@@ -93,7 +94,7 @@ I create a little bash shortcut called `es` that does both of the above commands
 
 Elasticsearch has a bulk load API to load data in fast. The format is pretty weird though. It's sort of JSON, but would pass no JSON linter. I include a few data sets in `elastic` so it's easy to get up and running, and so when you run examples in this package they'll actually run the same way (hopefully).
 
-I have prepare a non-exported function useful for preparing the weird format that Elasticsearch wants for bulk data loads, that is somewhat specific to PLOS data (See below), but you could modify for your purposes. See `make_bulk_plos()` and `make_bulk_gbif()` [here](https://github.com/ropensci/elastic/blob/master/R/docs_bulk.r). 
+I have prepare a non-exported function useful for preparing the weird format that Elasticsearch wants for bulk data loads, that is somewhat specific to PLOS data (See below), but you could modify for your purposes. See `make_bulk_plos()` and `make_bulk_gbif()` [here](https://github.com/ropensci/elastic/blob/master/R/docs_bulk.r).
 
 #### Shakespeare data
 
@@ -216,9 +217,9 @@ jsonlite::fromJSON(out)
 
 * On secure Elasticsearch servers:
   * `HEAD` requests don't seem to work, not sure why
-  * If you allow only `GET` requests, a number of functions that require 
-  `POST` requests obviously then won't work. A big one is `Search()`, but 
-  you can use `Search_uri()` to get around this, which uses `GET` instead 
+  * If you allow only `GET` requests, a number of functions that require
+  `POST` requests obviously then won't work. A big one is `Search()`, but
+  you can use `Search_uri()` to get around this, which uses `GET` instead
   of `POST`, but you can't pass a more complicated query via the body
 
 ## Meta

@@ -5,6 +5,7 @@ elastic
 
 [![Build Status](https://api.travis-ci.org/ropensci/elastic.svg)](https://travis-ci.org/ropensci/elastic)
 [![Coverage Status](https://coveralls.io/repos/ropensci/elastic/badge.svg)](https://coveralls.io/r/ropensci/elastic)
+[![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/elastic?color=E664A4)](https://github.com/metacran/cranlogs.app)
 <!-- [![Build status](https://ci.appveyor.com/api/projects/status/swmmw758mf1heoj2/branch/master)](https://ci.appveyor.com/project/sckott/elastic/branch/master) -->
 
 **A general purpose R interface to [Elasticsearch](https://www.elastic.co/products/elasticsearch)**
