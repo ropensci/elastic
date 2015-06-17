@@ -129,6 +129,16 @@ close_conns <- function() {
   } 
 }
 
+check_named_vectors <- function(x) {
+  lapply(x, function(z) {
+    if (!is(z, "list")) {
+      as.list(z)
+    } else {
+      z
+    }
+  })
+}
+
 # make_bulk_plos(index_name='plosmore', fields=c('id','journal','title','abstract','author'), filename="inst/examples/plos_more_data.json")
 make_bulk_plos <- function(n = 1000, index='plos', type='article', fields=c('id','title'), filename = "~/plos_data.json"){
   unlink(filename)
