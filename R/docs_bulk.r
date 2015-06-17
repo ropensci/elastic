@@ -85,6 +85,7 @@ docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000, raw 
   }
   if (is.null(type)) type <- index
   x <- unname(x)
+  x <- check_named_vectors(x)
   rws <- seq_len(length(x))
   chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
   pb <- txtProgressBar(min = 0, max = length(chks), initial = 0, style = 3)
