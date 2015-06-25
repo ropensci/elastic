@@ -98,7 +98,9 @@ node_GET <- function(path, metric, node, raw, args, ...) {
     url <- paste(url, paste(metric, collapse = ","), sep = "/")
   }
 
-  tt <- GET(url, query = ec(args), make_up(), ...)
+  args <- ec(args)
+  if (length(args) == 0) args <- NULL
+  tt <- GET(url, query = args, make_up(), ...)
   if (tt$status_code > 202) geterror(tt)
   res <- content(tt, "text")
   if (raw) res else jsonlite::fromJSON(res, FALSE)
@@ -113,7 +115,9 @@ node_POST <- function(path, node, raw, args, ...) {
     url <- paste(url, path, sep = "/") 
   }
   
-  tt <- POST(url, query = ec(args), make_up(), ...)
+  args <- ec(args)
+  if (length(args) == 0) args <- NULL
+  tt <- POST(url, query = args, make_up(), ...)
   if (tt$status_code > 202) geterror(tt)
   res <- content(tt, "text")
   if (raw) res else jsonlite::fromJSON(res, FALSE)

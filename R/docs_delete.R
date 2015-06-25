@@ -26,6 +26,7 @@ docs_delete <- function(index, type, id, refresh=NULL, routing=NULL, timeout=NUL
   url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), id)
   args <- ec(list(refresh=refresh, routing=routing, timeout=timeout,
                   version=version, version_type=version_type, ...))
+  if (length(args) == 0) args <- NULL
   out <- DELETE(url, query=args, mc(make_up(), callopts))
   stop_for_status(out)
   tt <- content(out, as="text")

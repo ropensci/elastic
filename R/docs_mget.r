@@ -60,7 +60,8 @@ docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL, index_type_
     paste(fields, collapse = ",")
   }
   args <- ec(list(...))
-
+  if (length(args) == 0) args <- NULL
+  
   # One index, one type, one to many ids
   if (length(index) == 1 && length(unique(type)) == 1 && length(ids) > 1) {
 

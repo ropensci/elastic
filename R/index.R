@@ -381,13 +381,13 @@ close_open <- function(index, which, ...){
   content(out)
 }
 
-es_GET_wrap1 <- function(index, which, args=list(), ...){
+es_GET_wrap1 <- function(index, which, args=NULL, ...){
   url <- make_url(es_get_auth())
   url <- if(is.null(index)) file.path(url, which) else file.path(url, esc(cl(index)), which)
   es_GET_(url, args, ...)
 }
 
-es_POST_ <- function(index, which, args=list(), ...){
+es_POST_ <- function(index, which, args=NULL, ...){
   checkconn()
   url <- make_url(es_get_auth())
   url <- if(is.null(index)) file.path(url, which) else file.path(url, esc(cl(index)), which)
@@ -398,7 +398,7 @@ es_POST_ <- function(index, which, args=list(), ...){
 
 e_url <- function(x) paste0(x$base, ":", x$port)
 
-analyze_GET <- function(url, args, ...){
+analyze_GET <- function(url, args = NULL, ...){
   checkconn()
   out <- GET(url, query=args, make_up(), ...)
   stop_for_status(out)
@@ -406,7 +406,7 @@ analyze_GET <- function(url, args, ...){
   jsonlite::fromJSON(tt)
 }
 
-analyze_POST <- function(url, args, body, ...){
+analyze_POST <- function(url, args = NULL, body, ...){
   checkconn()
   body <- check_inputs(body)
   out <- POST(url, query=args, body=body, make_up(), ...)
@@ -415,7 +415,7 @@ analyze_POST <- function(url, args, body, ...){
   jsonlite::fromJSON(tt)
 }
 
-cc_POST <- function(url, args, ...){
+cc_POST <- function(url, args = NULL, ...){
   checkconn()
   tt <- POST(url, body=args, encode = "json", make_up(), ...)
   if(tt$status_code > 202) geterror(tt)

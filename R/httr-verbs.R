@@ -18,7 +18,8 @@ es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL,
   }  
   
   args <- ec(list(...))
-  tt <- GET(url, query=args, mc(make_up(), callopts))
+  if (length(args) == 0) args <- NULL
+  tt <- GET(url, query = args, mc(make_up(), callopts))
   if (tt$status_code > 202) geterror(tt)
   res <- content(tt, as = "text")
   if (!is.null(clazz)) { 
@@ -61,6 +62,8 @@ es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, quer
     }
   
   args <- check_inputs(query)
+  if (length(args) == 0) args <- NULL
+  
   tt <- POST(url, body=args, mc(make_up(), callopts), encode = "json")
   if(tt$status_code > 202) geterror(tt)
   res <- content(tt, as = "text")
@@ -70,7 +73,7 @@ es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, quer
   } else { res }
 }
 
-es_DELETE <- function(url, query = list(), ...) {
+es_DELETE <- function(url, query = NULL, ...) {
   checkconn()
   tt <- DELETE(url, query=query, c(make_up(), ...))
   if(tt$status_code > 202) stop(content(tt)$error)
@@ -85,7 +88,7 @@ es_PUT <- function(url, body = list(), ...) {
   jsonlite::fromJSON(content(tt, "text"), FALSE)
 }
 
-es_GET_ <- function(url, query = list(), ...) {
+es_GET_ <- function(url, query = NULL, ...) {
   checkconn()
   tt <- GET(url, query=query, make_up(), ...)
   if(tt$status_code > 202) stop(content(tt)$error)

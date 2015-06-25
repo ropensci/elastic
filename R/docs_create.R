@@ -38,6 +38,7 @@ docs_create <- function(index, type, id, body, version=NULL, version_type=NULL, 
   query <- ec(list(version=version, version_type=version_type, op_type=op_type, routing=routing,
                   parent=parent, timestamp=timestamp, ttl=ttl, refresh=refresh, timeout=timeout,
                   ...))
+  if (length(query) == 0) query <- NULL
   create_PUT(url, query, body, callopts)
 }
 

@@ -37,6 +37,8 @@ docs_get <- function(index, type, id, source=FALSE, fields=NULL, exists=FALSE,
   if (!is.null(fields)) fields <- paste(fields, collapse = ",")
 
   args <- ec(list(fields = cl(fields), ...))
+  if (length(args) == 0) args <- NULL
+  
   url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), id)
   if (source) url <- paste(url, '_source', sep = "/")
 

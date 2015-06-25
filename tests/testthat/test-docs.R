@@ -60,7 +60,7 @@ test_that("docs_mget works", {
   invisible(docs_create(index = ind3, type = "holla", id = 1, body = '{"hello": "world"}'))
   invisible(docs_create(index = ind3, type = "holla", id = 2, body = '{"foo": "bar"}'))
   invisible(docs_create(index = ind3, type = "holla", id = 3, body = '{"tables": "chairs"}'))
-  e <- docs_mget(index = ind3, type = "holla", id = 1:3, verbose = FALSE)
+  e <- docs_mget(index = ind3, type = "holla", ids = 1:3, verbose = FALSE)
   expect_is(e, "list")
   expect_named(e, "docs")
   expect_is(e$docs, "list")
