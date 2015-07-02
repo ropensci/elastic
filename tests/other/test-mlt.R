@@ -1,13 +1,19 @@
 context("mlt")
 
-invisible(connect())
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+  invisible(connect())
+}
 
 ## create plos index first -----------------------------------
-invisible(tryCatch(index_delete(index = "plos", verbose = FALSE), error = function(e) e))
-plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-invisible(docs_bulk(plosdat))
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+  invisible(tryCatch(index_delete(index = "plos", verbose = FALSE), error = function(e) e))
+  plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+  invisible(docs_bulk(plosdat))
+}
 
 test_that("mlt basic", {
+  skip_on_cran()
+
   mlt1 <- mlt(index = "plos", type = "article", id = 5)$hits$total
   mlt2 <- mlt(index = "plos", type = "article", id = 5, min_doc_freq = 12)$hits$total
   mlt3 <- mlt(index = "plos", type = "article", id = 800)$hits$total
@@ -23,6 +29,8 @@ test_that("mlt basic", {
 })
 
 test_that("Return different number of results", {
+  skip_on_cran()
+
   mlt4 <- mlt(index = "plos", type = "article", id = 800, search_size = 1)$hits
   mlt5 <- mlt(index = "plos", type = "article", id = 800, search_size = 2)$hits
 
@@ -37,6 +45,8 @@ test_that("Return different number of results", {
 })
 
 test_that("Exclude stop words", {
+  skip_on_cran()
+
   mlt6 <- mlt(index = "plos", type = "article", id = 800)$hits
   mlt7 <- mlt(index = "plos", type = "article", id = 800, stop_words = "the,and")$hits
 
@@ -47,6 +57,8 @@ test_that("Exclude stop words", {
 })
 
 test_that("Maximum query terms to be included in the generated query", {
+  skip_on_cran()
+
   mlt8 <- mlt(index = "plos", type = "article", id = 800, max_query_terms = 1)$hits$total
   mlt9 <- mlt(index = "plos", type = "article", id = 800, max_query_terms = 2)$hits$total
   mlt10 <- mlt(index = "plos", type = "article", id = 800, max_query_terms = 3)$hits$total
@@ -61,4 +73,6 @@ test_that("Maximum query terms to be included in the generated query", {
 })
 
 # cleanup -----------
-invisible(index_delete("plos", verbose = FALSE))
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+  invisible(index_delete("plos", verbose = FALSE))
+}

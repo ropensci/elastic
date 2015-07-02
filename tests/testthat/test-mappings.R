@@ -1,21 +1,29 @@
 context("mappings")
 
-invisible(connect())
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+  invisible(connect())
+}
 
 ## create plos index first -----------------------------------
-invisible(tryCatch(index_delete(index = "plos", verbose = FALSE), error = function(e) e))
-plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-invisible(docs_bulk(plosdat))
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+  invisible(tryCatch(index_delete(index = "plos", verbose = FALSE), error = function(e) e))
+  plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+  invisible(docs_bulk(plosdat))
+}
 
 test_that("type_exists works", {
+  skip_on_cran()
+
   te1 <- type_exists(index = "plos", type = "article")
   te2 <- type_exists(index = "plos", type = "articles")
-  
+
   expect_true(te1)
   expect_false(te2)
 })
 
 test_that("mapping_create works", {
+  skip_on_cran()
+
   ## listvbody works
   body <- list(reference = list(properties = list(
    journal = list(type="string"),
@@ -23,11 +31,11 @@ test_that("mapping_create works", {
   )))
   invisible(mapping_create(index = "plos", type = "reference", body=body))
   mc2 <- mapping_get("plos", "reference")
-  
+
   expect_is(mc2, "list")
   expect_named(mc2, "plos")
   expect_named(mc2$plos$mappings, "reference")
-  
+
   ### json body works
   body <- '{
     "citation": {
@@ -37,11 +45,11 @@ test_that("mapping_create works", {
   }}}'
   invisible(mapping_create(index = "plos", type = "citation", body=body))
   mc1 <- mapping_get("plos", "citation")
-  
+
   expect_is(mc1, "list")
   expect_named(mc1, "plos")
   expect_named(mc1$plos$mappings, "citation")
-  
+
   ## fails well
   ## A bad mapping body
   body <- list(things = list(properties = list(
@@ -51,23 +59,29 @@ test_that("mapping_create works", {
 })
 
 test_that("mapping_get works", {
+  skip_on_cran()
+
   expect_is(mapping_get('_all'), "list")
   mapping_get(index = "plos")
   expect_named(mapping_get(index = "plos", type = "citation")$plos$mappings, "citation")
-  expect_named(mapping_get(index = "plos", type = c("article", "citation", "reference"))$plos$mappings, 
+  expect_named(mapping_get(index = "plos", type = c("article", "citation", "reference"))$plos$mappings,
                c("reference", "article", "citation"))
 })
 
 test_that("mapping_delete works", {
+  skip_on_cran()
+
   md1 <- mapping_delete("plos", "citation")
-  
+
   expect_is(md1, "list")
   expect_true(md1$acknowledged)
-  
+
   expect_error(mapping_delete("plos", "citation"), "No index has the type")
 })
 
 test_that("field_mapping_get works", {
+  skip_on_cran()
+
   # Get field mappings
   # get all indices
   fmg1 <- field_mapping_get(index = "_all", type = "reference", field = "text")
@@ -77,21 +91,23 @@ test_that("field_mapping_get works", {
   fmg3 <- field_mapping_get(index = "plos", type = "article", field = "title", include_defaults = TRUE)
   # get many
   fmg4 <- field_mapping_get(type = "article", field = c("title", "id"))
-  
+
   expect_is(fmg1, "list")
   expect_is(fmg2, "list")
   expect_is(fmg3, "list")
   expect_is(fmg4, "list")
-  
+
   expect_equal(length(fmg1$plos$mappings), 0)
   expect_named(fmg3$plos$mappings$article, "title")
   expect_named(fmg3$plos$mappings$article$title$mapping, "title")
   expect_named(fmg4$plos$mappings$article, c("id", "title"))
-  
+
   # fails well
   expect_error(field_mapping_get(index = "_all", field = "text"), "is not TRUE")
   expect_error(field_mapping_get(type = "article"), "argument \"field\" is missing")
 })
 
 # cleanup -----------
-invisible(index_delete("plos", verbose = FALSE))
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+  invisible(index_delete("plos", verbose = FALSE))
+}
