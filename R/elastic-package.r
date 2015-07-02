@@ -57,7 +57,9 @@
 #'  Elasticsearch. I collected a number of resources in a blog post at
 #'  \url{http://recology.info/2015/02/secure-elasticsearch/}
 #' }
-#'
+#' 
+#' @importFrom utils read.table txtProgressBar setTxtProgressBar URLdecode modifyList
+#' @importFrom methods is
 #' @docType package
 #' @aliases elastic-package
 #' @author Scott Chamberlain \email{myrmecocystus@@gmail.com}
