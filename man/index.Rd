@@ -15,6 +15,7 @@
 \alias{index_recovery}
 \alias{index_segments}
 \alias{index_settings}
+\alias{index_settings_update}
 \alias{index_stats}
 \alias{index_status}
 \alias{index_upgrade}
@@ -39,6 +40,8 @@ index_stats(index = NULL, metric = NULL, completion_fields = NULL,
   level = "indices", ...)
 
 index_settings(index = "_all", ...)
+
+index_settings_update(index = NULL, body, ...)
 
 index_status(index = NULL, ...)
 
@@ -166,6 +169,11 @@ required in order to clear memory.
 \bold{index_status}: The API endpoint for this function was deprecated in
 Elasticsearch \code{v1.2.0}, and will likely be removed soon. Use \code{\link{index_recovery}}
 instead.
+
+\bold{index_settings_update}: There are a lot of options you can change with this
+function. See
+https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html
+for all the options.
 }
 \examples{
 \dontrun{
@@ -308,11 +316,17 @@ library('httr')
 index_clear_cache(config=verbose())
 
 # Index settings
+## get settings
 index_settings()
 index_settings("_all")
 index_settings('gbif')
 index_settings(c('gbif','plos'))
 index_settings('*s')
+## update settings
+index_create("foobar")
+settings <- list(index = list(number_of_replicas = 4))
+index_settings_update("foobar", body = settings)
+index_get("foobar")$foobar$settings
 }
 }
 \author{

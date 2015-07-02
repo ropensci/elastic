@@ -78,6 +78,11 @@
 #' \bold{index_status}: The API endpoint for this function was deprecated in
 #' Elasticsearch \code{v1.2.0}, and will likely be removed soon. Use \code{\link{index_recovery}}
 #' instead.
+#' 
+#' \bold{index_settings_update}: There are a lot of options you can change with this 
+#' function. See 
+#' https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html 
+#' for all the options.
 #'
 #' @examples \dontrun{
 #' # get information on an index
@@ -219,11 +224,17 @@
 #' index_clear_cache(config=verbose())
 #'
 #' # Index settings
+#' ## get settings
 #' index_settings()
 #' index_settings("_all")
 #' index_settings('gbif')
 #' index_settings(c('gbif','plos'))
 #' index_settings('*s')
+#' ## update settings
+#' index_create("foobar")
+#' settings <- list(index = list(number_of_replicas = 4))
+#' index_settings_update("foobar", body = settings)
+#' index_get("foobar")$foobar$settings
 #' }
 NULL
 
@@ -296,6 +307,18 @@ index_settings <- function(index="_all", ...) {
   url <- make_url(es_get_auth())
   url <- if(is.null(index) || index == "_all") file.path(url, "_settings") else file.path(url, esc(cl(index)), "_settings")
   es_GET_(url, ...)
+}
+
+#' @export
+#' @rdname index
+index_settings_update <- function(index=NULL, body, ...) {
+  url <- make_url(es_get_auth())
+  url <- if (is.null(index)) file.path(url, "_settings") else file.path(url, esc(cl(index)), "_settings")
+  body <- check_inputs(body)
+  tt <- PUT(url, make_up(), ..., body = body)
+  if (tt$status_code > 202) stop(error_parser(tt, 1), call. = FALSE)
+  res <- content(tt, as = "text")
+  jsonlite::fromJSON(res)
 }
 
 #' @export
