@@ -1,7 +1,5 @@
 #' Get multiple documents via the multiple get API.
 #'
-#' @import httr
-#'
 #' @template all
 #' @param ids More than one document id, see examples.
 #' @param type_id List of vectors of length 2, each with an element for type and id.
@@ -12,12 +10,12 @@
 #'
 #' @details There are a lot of terms you can use for Elasticsearch. See here
 #'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
-#'    
+#'
 #' You can pass in one of three combinations of parameters:
 #' \itemize{
-#'  \item Pass in something for \code{index}, \code{type}, and \code{id}. This is the simplest, 
+#'  \item Pass in something for \code{index}, \code{type}, and \code{id}. This is the simplest,
 #'  allowing retrieval from the same index, same type, and many ids.
-#'  \item Pass in only \code{index} and \code{type_id} - this allows you to get multiple 
+#'  \item Pass in only \code{index} and \code{type_id} - this allows you to get multiple
 #'  documents from the same index, but from different types.
 #'  \item Pass in only \code{index_type_id} - this is so that you can get multiple documents
 #'  from different indexes and different types.
@@ -45,7 +43,7 @@
 
 docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL, index_type_id=NULL,
   source=NULL, fields=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...) {
-  
+
   checkconn()
   check_params(index, type, ids, type_id, index_type_id)
   base <- make_url(es_get_auth())
@@ -54,14 +52,14 @@ docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL, index_type_
     if (length(ids) < 2) stop("If ids parameter is used, more than 1 id must be passed", call. = FALSE)
   }
 
-  fields <- if (is.null(fields)) { 
+  fields <- if (is.null(fields)) {
     fields
-  } else { 
+  } else {
     paste(fields, collapse = ",")
   }
   args <- ec(list(...))
   if (length(args) == 0) args <- NULL
-  
+
   # One index, one type, one to many ids
   if (length(index) == 1 && length(unique(type)) == 1 && length(ids) > 1) {
 
@@ -101,10 +99,10 @@ docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL, index_type_
   tt <- content(out, as = "text")
   class(tt) <- "elastic_mget"
 
-  if (raw) { 
-    tt 
-  } else { 
-    es_parse(tt) 
+  if (raw) {
+    tt
+  } else {
+    es_parse(tt)
   }
 }
 

@@ -1,6 +1,5 @@
 #' Full text search of Elasticsearch - body requests.
 #'
-#' @import httr
 #' @keywords internal
 #' @param index Index name
 #' @param type Document type
