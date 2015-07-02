@@ -98,5 +98,4 @@ if (!is(tryconnect, "simpleError")) {
   invisible(index_delete(ind, verbose = FALSE))
   invisible(index_delete(ind2, verbose = FALSE))
   invisible(index_delete(ind3, verbose = FALSE))
-  invisible(index_delete("bbbbbbb", verbose = FALSE))
 }
