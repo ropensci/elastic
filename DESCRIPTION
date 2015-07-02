@@ -6,7 +6,7 @@ Description: Connect to 'Elasticsearch', a 'NoSQL' database built on the 'Java' 
     data, searching for documents with both 'HTTP' query variables and 'JSON' based body
     requests. In addition, 'elastic' provides functions for interacting with 'APIs' for
     'indices', documents, nodes, clusters, an interface to the cat 'API', and more.
-Version: 0.5.0
+Version: 0.5.0.9000
 License: MIT + file LICENSE
 Authors@R: person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "myrmecocystus@gmail.com")
