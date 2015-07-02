@@ -1,3 +1,20 @@
+elastic 0.5.0
+===============
+
+### NEW FEATURES
+
+* Added `index_settings_update()` function to allow updating index settings (#66)
+
+### MINOR IMPROVEMENTS
+
+* Replace `RCurl::curlEscape()` with `curl::curl_escape()` (#81)
+* Explicitly import non-base R functions (#80)
+
+### BUG FIXES
+
+* Fixed problems introduced with `v1` of `httr`
+
+
 elastic 0.4.0
 ===============
 
@@ -38,7 +55,6 @@ values passed in to make sure they are numbers. (#46)
 to URL escape. Other parameters passed in are go through `httr` CRUD methods, and do URL escaping
 for us. (#49)
 * Fixed links to development repo in DESCRIPTION file
-* 
 
 elastic 0.3.0
 ===============
