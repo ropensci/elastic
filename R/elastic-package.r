@@ -61,7 +61,7 @@
 #' @importFrom utils read.table txtProgressBar setTxtProgressBar URLdecode modifyList
 #' @importFrom methods is
 #' @importFrom httr HEAD GET POST PUT DELETE content authenticate stop_for_status upload_file http_status
-#' @importFrom RCurl curlEscape
+#' @importFrom curl curl_escape
 #' @docType package
 #' @aliases elastic-package
 #' @author Scott Chamberlain \email{myrmecocystus@@gmail.com}

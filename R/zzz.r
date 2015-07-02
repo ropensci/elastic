@@ -20,7 +20,7 @@ esc <- function(x) {
   if (is.null(x)) {
     NULL
   } else {
-    RCurl::curlEscape(x)
+    curl::curl_escape(x)
   }
 }
 
