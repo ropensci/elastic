@@ -1,6 +1,7 @@
 <!--
 %\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{elastic introduction}
+%\VignetteEncoding{UTF-8}
 -->
 
 
@@ -45,13 +46,13 @@ library("elastic")
 
 __Unix (linux/osx)__
 
-Replace `1.5.2` with the version you are working with.
+Replace `1.6.0` with the version you are working with.
 
-+ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads/elasticsearch), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.5.2.tar.gz`
-+ Uncompress it: `tar -xvf elasticsearch-1.5.2.tar.gz`
-+ Move it: `sudo mv /path/to/elasticsearch-1.5.2 /usr/local`
++ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads/elasticsearch), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.6.0.tar.gz`
++ Uncompress it: `tar -xvf elasticsearch-1.6.0.tar.gz`
++ Move it: `sudo mv /path/to/elasticsearch-1.6.0 /usr/local`
 + Navigate to /usr/local: `cd /usr/local`
-+ Add shortcut: `sudo ln -s elasticsearch-1.5.2 elasticsearch`
++ Add shortcut: `sudo ln -s elasticsearch-1.6.0 elasticsearch`
 
 On OSX, you can install via Homebrew: `brew install elasticsearch`
 
@@ -84,13 +85,13 @@ connect()
 #> password:  NULL 
 #> elasticsearch details:   
 #>    status:                  200 
-#>    name:                    Jean DeWolff 
-#>    Elasticsearch version:   1.5.2 
-#>    ES version timestamp:    2015-04-27T09:21:06Z 
+#>    name:                    Shola Inkosi 
+#>    Elasticsearch version:   1.6.0 
+#>    ES version timestamp:    2015-06-09T13:36:34Z 
 #>    lucene version:          4.10.4
 ```
 
-On package load, your base url and port are set to `http://127.0.0.1` and `9200`, respectively. You can of course override these settings per session or for all sessions. 
+On package load, your base url and port are set to `http://127.0.0.1` and `9200`, respectively. You can of course override these settings per session or for all sessions.
 
 ## Get some data
 

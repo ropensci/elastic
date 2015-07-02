@@ -1,6 +1,7 @@
 <!--
 %\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{Search}
+%\VignetteEncoding{UTF-8}
 -->
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -22,11 +23,11 @@ library("elastic")
 
 ## The Search function
 
-The main interface to searching documents in your Elasticsearch store is the function `Search()`. I nearly always develop R software using all lowercase, but R has a function called `search()`, and I wanted to avoid collision with that function. 
+The main interface to searching documents in your Elasticsearch store is the function `Search()`. I nearly always develop R software using all lowercase, but R has a function called `search()`, and I wanted to avoid collision with that function.
 
-`Search()` is an interface to both the HTTP search API (in which queries are passed in the URI of the request, meaning queries have to be relatively simple), as well as the POST API, or the Query DSL, in which queries are passed in the body of the request (so can be much more complex). 
+`Search()` is an interface to both the HTTP search API (in which queries are passed in the URI of the request, meaning queries have to be relatively simple), as well as the POST API, or the Query DSL, in which queries are passed in the body of the request (so can be much more complex).
 
-There are a huge amount of ways you can search Elasticsearch documents - this tutorial covers some of them, and highlights the ways in which you interact with the R outputs. 
+There are a huge amount of ways you can search Elasticsearch documents - this tutorial covers some of them, and highlights the ways in which you interact with the R outputs.
 
 ### Search an index
 
@@ -69,7 +70,7 @@ Search(index="shakespeare", size=1, from=1, fields='text_entry')$hits
 
 ### Queries
 
-Using the `q` parameter you can pass in a query, which gets passed in the URI of the query. This type of query is less powerful than the below query passed in the body of the request, using the `body` parameter. 
+Using the `q` parameter you can pass in a query, which gets passed in the URI of the query. This type of query is less powerful than the below query passed in the body of the request, using the `body` parameter.
 
 ```{r}
 Search(index="shakespeare", type="act", q="speaker:KING HENRY IV")$hits$total
@@ -99,7 +100,7 @@ Search(index="shakespeare", type="scene", raw=TRUE)
 
 ### Curl debugging
 
-Common options are `verbose()`, `timeout()`, `progress()`, `config(followlocation=TRUE)`. 
+Common options are `verbose()`, `timeout()`, `progress()`, `config(followlocation=TRUE)`.
 
 ```{r}
 library('httr')

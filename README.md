@@ -15,14 +15,14 @@ elastic
 
 * [Elasticsearch home page](https://www.elastic.co/products/elasticsearch)
 * [API docs](http://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
-* This client is being developed under `v1.5.2` of Elasticsearch, and will generally develop following whatever is the current version.
+* This client is being developed under `v1.6` of Elasticsearch, and will generally develop following whatever is the current version.
 
 ## Security
 
-You're fine running ES locally on your machine, but be careful just throwing up ES on a server with a public IP address - make sure to think about security. 
+You're fine running ES locally on your machine, but be careful just throwing up ES on a server with a public IP address - make sure to think about security.
 
 * [Shield](https://www.elastic.co/products/shield) - This is a paid product provided by Elastic - so probably only applicable to enterprise users
-* DIY security - there are a variety of techniques for securing your Elasticsearch. A number of resources are collected in a [blog post](http://recology.info/2015/02/secure-elasticsearch/) - tools include putting your ES behind something like Nginx, putting basic auth on top of it, using https, etc. 
+* DIY security - there are a variety of techniques for securing your Elasticsearch. A number of resources are collected in a [blog post](http://recology.info/2015/02/secure-elasticsearch/) - tools include putting your ES behind something like Nginx, putting basic auth on top of it, using https, etc.
 
 ## Quick start
 
@@ -39,7 +39,7 @@ devtools::install_github("ropensci/elastic")
 library('elastic')
 ```
 
-### Install Elasticsearch 
+### Install Elasticsearch
 
 * [Elasticsearch installation help](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/_installation.html)
 
@@ -57,21 +57,21 @@ Then start up a container
 docker run -d -p 9200:9200 elasticsearch
 ```
 
-Then elasticsearch should be available on port 9200, try `curl localhost:9200` and you should get the familiar message indicating ES is on. 
+Then elasticsearch should be available on port 9200, try `curl localhost:9200` and you should get the familiar message indicating ES is on.
 
 If you're using boot2docker, you'll need to use the IP address in place of localhost. Get it by doing `boot2docker ip`.
 
 __on OSX__
 
-+ Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.5.2.tar.gz`
-+ Unzip it: `untar elasticsearch-1.5.2.tar.gz`
-+ Move it: `sudo mv /path/to/elasticsearch-1.5.2 /usr/local` (replace version with your version)
++ Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.6.0.tar.gz`
++ Unzip it: `untar elasticsearch-1.6.0.tar.gz`
++ Move it: `sudo mv /path/to/elasticsearch-1.6.0 /usr/local` (replace version with your version)
 + Navigate to /usr/local: `cd /usr/local`
-+ Add shortcut: `sudo ln -s elasticsearch-1.5.2 elasticsearch` (replace version with your verioon)
++ Add shortcut: `sudo ln -s elasticsearch-1.6.0 elasticsearch` (replace version with your verioon)
 
 You can also install via Homebrew: `brew install elasticsearch`
 
-> Note: for the 1.5 upgrade of Elasticsearch, it wants you to have java 8 or greater. I downloaded Java 8 from here http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html and it seemed to work great.
+> Note: for the 1.6 upgrade of Elasticsearch, it wants you to have java 8 or greater. I downloaded Java 8 from here http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html and it seemed to work great.
 
 ### Upgrading Elasticsearch
 
@@ -90,7 +90,7 @@ I create a little bash shortcut called `es` that does both of the above commands
 
 Elasticsearch has a bulk load API to load data in fast. The format is pretty weird though. It's sort of JSON, but would pass no JSON linter. I include a few data sets in `elastic` so it's easy to get up and running, and so when you run examples in this package they'll actually run the same way (hopefully).
 
-I have prepare a non-exported function useful for preparing the weird format that Elasticsearch wants for bulk data loads, that is somewhat specific to PLOS data (See below), but you could modify for your purposes. See `make_bulk_plos()` and `make_bulk_gbif()` [here](https://github.com/ropensci/elastic/blob/master/R/docs_bulk.r). 
+I have prepare a non-exported function useful for preparing the weird format that Elasticsearch wants for bulk data loads, that is somewhat specific to PLOS data (See below), but you could modify for your purposes. See `make_bulk_plos()` and `make_bulk_gbif()` [here](https://github.com/ropensci/elastic/blob/master/R/docs_bulk.r).
 
 #### Shakespeare data
 
@@ -160,9 +160,9 @@ connect(es_port = 9200)
 #> password:  NULL 
 #> elasticsearch details:   
 #>    status:                  200 
-#>    name:                    Jean DeWolff 
-#>    Elasticsearch version:   1.5.2 
-#>    ES version timestamp:    2015-04-27T09:21:06Z 
+#>    name:                    Shola Inkosi 
+#>    Elasticsearch version:   1.6.0 
+#>    ES version timestamp:    2015-06-09T13:36:34Z 
 #>    lucene version:          4.10.4
 ```
 
@@ -405,9 +405,9 @@ jsonlite::fromJSON(out)
 
 * On secure Elasticsearch servers:
   * `HEAD` requests don't seem to work, not sure why
-  * If you allow only `GET` requests, a number of functions that require 
-  `POST` requests obviously then won't work. A big one is `Search()`, but 
-  you can use `Search_uri()` to get around this, which uses `GET` instead 
+  * If you allow only `GET` requests, a number of functions that require
+  `POST` requests obviously then won't work. A big one is `Search()`, but
+  you can use `Search_uri()` to get around this, which uses `GET` instead
   of `POST`, but you can't pass a more complicated query via the body
 
 ## Meta
