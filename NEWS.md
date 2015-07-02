@@ -1,7 +1,7 @@
 elastic 0.4.0
 ===============
 
-NEW FEATURES
+### NEW FEATURES
 
 * New function `Search_uri()` where the search is defined entirely in the URL itself. 
 Especially useful for cases in which `POST` requests are forbidden, e.g, on a server
@@ -12,7 +12,7 @@ from data.frame or list objects. Previously, this function only would accept a f
 formatted correctly. In addition, gains new parameters: `index` - The index name to use. 
 `type` - The type name to use. `chunk_size` - Size of each chunk. (#60) (#67) (#68)
 
-MINOR IMPROVEMENTS
+### MINOR IMPROVEMENTS
 
 * `cat_*()` functions gain new parameters: `h` to specify what fields to return; `help` to 
 output available columns, and their meanings; `bytes` to give numbers back machine 
@@ -22,7 +22,7 @@ friendly; `parse` Parse to a data.frame or not
 The default is `_search`, but sometimes in your configuration you've setup so that 
 you don't need that path, or it's a different path. (023d28762e7e1028fcb0ad17867f08b5e2c92f93)
 
-BUG FIXES
+### BUG FIXES
 
 * In `docs_mget()` added internal checker to make sure user passes in the right combination of 
 `index`, `type`, and `id` parameters, or `index` and `type_id`, or just `index_type_id` (#42)
@@ -45,7 +45,7 @@ elastic 0.3.0
 
 First version to go to CRAN.
 
-NEW FEATURES
+### NEW FEATURES
 
 * Added a function `scroll()` and a `scroll` parameter to the `Search()` function (#36)
 * Added the function `explain()` to easily get at explanation of search results.
@@ -57,7 +57,7 @@ NEW FEATURES
 you can override this by running that fxn yourself, or storing `es_base`, `es_port`, etc. 
 in your `.Rprofile` file.
 
-IMPROVEMENTS
+### IMPROVEMENTS
 
 * Made CouchDB river plugin functions not exported for now, may bring back later. 
 * Added vignettes for an intro and for search details and examples (#2)
@@ -70,7 +70,7 @@ function, passed into the `body` parameter.
 elastic 0.2.0
 ===============
 
-IMPROVEMENTS
+### IMPROVEMENTS
 
 * Remoworked package API. Almost all functions have new names. Sorry for this major change
 but it needed to be done. This brings `elastic` more in line with the official Elasticsearch
@@ -90,6 +90,6 @@ the command in as an argument. For example, `cat('aliases')` becomes `cat_aliase
 elastic 0.1.0
 ===============
 
-NEW FEATURES
+### NEW FEATURES
 
 * First version.
