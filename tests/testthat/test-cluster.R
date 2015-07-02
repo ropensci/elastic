@@ -1,8 +1,6 @@
 context("cluster")
 
-if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
-  invisible(connect())
-}
+invisible(tryCatch(elastic::connect(), error = function(e) e))
 
 test_that("cluster_settings", {
   skip_on_cran()

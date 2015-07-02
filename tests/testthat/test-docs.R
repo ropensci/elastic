@@ -1,11 +1,10 @@
 context("docs")
 
-if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
-  invisible(connect())
-}
+invisible(tryCatch(elastic::connect(), error = function(e) e))
 
 ## create indices first -----------------------------------
-if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+tryconnect = tryCatch(elastic::connect(), error = function(e) e)
+if (!is(tryconnect, "simpleError")) {
   ind <- "stuff_l"
   invisible(tryCatch(index_delete(index = ind, verbose = FALSE), error = function(e) e))
   invisible(index_create(index = ind, verbose = FALSE))
@@ -40,7 +39,7 @@ test_that("docs_create fails as expected", {
 })
 
 ## create indices first
-if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+if (!is(tryconnect, "simpleError")) {
   ind2 <- "stuff_f"
   invisible(tryCatch(index_delete(index = ind2, verbose = FALSE), error = function(e) e))
   invisible(index_create(index = ind2, verbose = FALSE))
@@ -64,7 +63,7 @@ test_that("docs_get works", {
 
 
 ## create indices first
-if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+if (!is(tryconnect, "simpleError")) {
   ind3 <- "stuff_t"
   invisible(tryCatch(index_delete(index = ind3, verbose = FALSE), error = function(e) e))
   invisible(index_create(index = ind3, verbose = FALSE))
@@ -95,7 +94,7 @@ test_that("docs_delete works", {
 })
 
 ## cleanup -----------------------------------
-if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+if (!is(tryconnect, "simpleError")) {
   invisible(index_delete(ind, verbose = FALSE))
   invisible(index_delete(ind2, verbose = FALSE))
   invisible(index_delete(ind3, verbose = FALSE))

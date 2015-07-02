@@ -1,8 +1,6 @@
 context("nodes")
 
-if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
-  invisible(connect())
-}
+invisible(tryCatch(elastic::connect(), error = function(e) e))
 
 test_that("nodes_stats", {
   skip_on_cran()

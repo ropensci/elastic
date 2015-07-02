@@ -1,8 +1,6 @@
 context("ping")
 
-if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
-  invisible(connect())
-}
+invisible(tryCatch(elastic::connect(), error = function(e) e))
 
 test_that("ping", {
 	skip_on_cran()

@@ -1,8 +1,6 @@
 context("alias")
 
-if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
-  invisible(connect())
-}
+invisible(tryCatch(elastic::connect(), error = function(e) e))
 
 test_that("alias_get works", {
   skip_on_cran()

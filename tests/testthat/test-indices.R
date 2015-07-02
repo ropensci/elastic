@@ -1,8 +1,6 @@
 context("indices")
 
-if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
-  invisible(connect())
-}
+invisible(tryCatch(elastic::connect(), error = function(e) e))
 
 test_that("index_get", {
   skip_on_cran()
@@ -95,7 +93,8 @@ test_that("index_recovery", {
 })
 
 ## cleanup -----------------------------------
-if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+tryconnect = tryCatch(elastic::connect(), error = function(e) e)
+if (!is(tryconnect, "simpleError")) {
   invisible(index_delete("stuff_yy", verbose = FALSE))
 }
 # invisible(index_delete('test_close_open', verbose = FALSE))

@@ -1,8 +1,6 @@
 context("search")
 
-if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
-  invisible(connect())
-}
+invisible(tryCatch(elastic::connect(), error = function(e) e))
 
 test_that("basic search works", {
   skip_on_cran()

@@ -1,11 +1,10 @@
 context("mlt")
 
-if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
-  invisible(connect())
-}
+invisible(tryCatch(elastic::connect(), error = function(e) e))
 
 ## create plos index first -----------------------------------
-if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+tryconnect = tryCatch(elastic::connect(), error = function(e) e)
+if (!is(tryconnect, "simpleError")) {
   invisible(tryCatch(index_delete(index = "plos", verbose = FALSE), error = function(e) e))
   plosdat <- system.file("examples", "plos_data.json", package = "elastic")
   invisible(docs_bulk(plosdat))
@@ -73,6 +72,6 @@ test_that("Maximum query terms to be included in the generated query", {
 })
 
 # cleanup -----------
-if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+if (!is(tryconnect, "simpleError")) {
   invisible(index_delete("plos", verbose = FALSE))
 }
