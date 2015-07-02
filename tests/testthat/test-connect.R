@@ -1,7 +1,6 @@
 context("connect")
 
 test_that("connection works", {
-	skip_on_cran()
 
   connect("http://127.0.0.1", 9200)
   con <- connection()
@@ -10,7 +9,6 @@ test_that("connection works", {
 })
 
 test_that("connect fails as expected", {
-	skip_on_cran()
 
   # setting options works via options() call
   options(es_port = 9200)

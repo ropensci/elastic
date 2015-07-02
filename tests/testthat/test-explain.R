@@ -1,10 +1,8 @@
 context("explain")
 
-invisible(tryCatch(elastic::connect(), error = function(e) e))
+invisible(connect())
 
 test_that("explain", {
-  skip_on_cran()
-
   a <- explain(index = "shakespeare", type = "line", id = 42, q = "adfad")
 
   body <- '{

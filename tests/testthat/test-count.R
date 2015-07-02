@@ -1,10 +1,8 @@
 context("count")
 
-invisible(tryCatch(elastic::connect(), error = function(e) e))
+invisible(connect())
 
 test_that("count", {
-  skip_on_cran()
-
   a <- count()
   b <- count(index = 'shakespeare')
   c <- count(index = 'shakespeare', q = "a*")

@@ -1,9 +1,8 @@
 context("search")
 
-invisible(tryCatch(elastic::connect(), error = function(e) e))
+invisible(connect())
 
 test_that("basic search works", {
-  skip_on_cran()
 
   a <- Search(index="shakespeare")
   expect_equal(names(a), c('took','timed_out','_shards','hits'))
@@ -13,28 +12,24 @@ test_that("basic search works", {
 })
 
 test_that("search for document type works", {
-  skip_on_cran()
 
   b <- Search(index="shakespeare", type="line")
   expect_match(vapply(b$hits$hits, "[[", "", "_type"), "line")
 })
 
 test_that("search for specific fields works", {
-  skip_on_cran()
 
   c <- Search(index="shakespeare", fields=c('play_name','speaker'))
   expect_equal(sort(unique(lapply(c$hits$hits, function(x) names(x$fields)))[[1]]), c('play_name','speaker'))
 })
 
 test_that("search paging works", {
-  skip_on_cran()
 
   d <- Search(index="shakespeare", size=1, fields='text_entry')$hits$hits
   expect_equal(length(d), 1)
 })
 
 test_that("search terminate_after parameter works", {
-  skip_on_cran()
 
   e <- Search(index="shakespeare", terminate_after=1)
   expect_equal(length(e), 5)
@@ -42,7 +37,6 @@ test_that("search terminate_after parameter works", {
 })
 
 test_that("getting json data back from search works", {
-  skip_on_cran()
 
   suppressMessages(require('jsonlite'))
   f <- Search(index="shakespeare", type="scene", raw=TRUE)
@@ -52,7 +46,6 @@ test_that("getting json data back from search works", {
 })
 
 test_that("Search fails as expected", {
-  skip_on_cran()
 
   aggs <- list(aggs = list(stats = list(stfff = list(field = "text_entry"))))
   expect_error(Search(index = "shakespeare", body = aggs), "Could not find aggregator type")

@@ -1,9 +1,8 @@
 context("cluster")
 
-invisible(tryCatch(elastic::connect(), error = function(e) e))
+invisible(connect())
 
 test_that("cluster_settings", {
-  skip_on_cran()
 
   out <- cluster_settings()
 
@@ -13,7 +12,6 @@ test_that("cluster_settings", {
 })
 
 test_that("cluster_health", {
-  skip_on_cran()
 
   out2 <- suppressMessages(cluster_health())
 
@@ -25,7 +23,6 @@ test_that("cluster_health", {
 })
 
 test_that("cluster_state", {
-  skip_on_cran()
 
   out3 <- suppressMessages(cluster_state())
 
@@ -37,7 +34,6 @@ test_that("cluster_state", {
 })
 
 test_that("cluster_stats", {
-  skip_on_cran()
 
   out4 <- suppressMessages(cluster_stats())
 
@@ -49,7 +45,6 @@ test_that("cluster_stats", {
 })
 
 test_that("cluster_pending_tasks", {
-  skip_on_cran()
 
   out5 <- suppressMessages(cluster_pending_tasks())
 

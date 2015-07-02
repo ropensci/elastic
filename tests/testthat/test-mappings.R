@@ -1,17 +1,13 @@
 context("mappings")
 
-invisible(tryCatch(elastic::connect(), error = function(e) e))
+invisible(connect())
 
 ## create plos index first -----------------------------------
-tryconnect = tryCatch(elastic::connect(), error = function(e) e)
-if (!is(tryconnect, "simpleError")) {
-  invisible(tryCatch(index_delete(index = "plos", verbose = FALSE), error = function(e) e))
-  plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-  invisible(docs_bulk(plosdat))
-}
+invisible(tryCatch(index_delete(index = "plos", verbose = FALSE), error = function(e) e))
+plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+invisible(docs_bulk(plosdat))
 
 test_that("type_exists works", {
-  skip_on_cran()
 
   te1 <- type_exists(index = "plos", type = "article")
   te2 <- type_exists(index = "plos", type = "articles")
@@ -21,7 +17,6 @@ test_that("type_exists works", {
 })
 
 test_that("mapping_create works", {
-  skip_on_cran()
 
   ## listvbody works
   body <- list(reference = list(properties = list(
@@ -58,7 +53,6 @@ test_that("mapping_create works", {
 })
 
 test_that("mapping_get works", {
-  skip_on_cran()
 
   expect_is(mapping_get('_all'), "list")
   mapping_get(index = "plos")
@@ -68,7 +62,6 @@ test_that("mapping_get works", {
 })
 
 test_that("mapping_delete works", {
-  skip_on_cran()
 
   md1 <- mapping_delete("plos", "citation")
 
@@ -79,7 +72,6 @@ test_that("mapping_delete works", {
 })
 
 test_that("field_mapping_get works", {
-  skip_on_cran()
 
   # Get field mappings
   # get all indices
@@ -107,6 +99,4 @@ test_that("field_mapping_get works", {
 })
 
 # cleanup -----------
-if (!is(tryconnect, "simpleError")) {
-  invisible(index_delete("plos", verbose = FALSE))
-}
+invisible(index_delete("plos", verbose = FALSE))

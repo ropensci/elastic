@@ -1,9 +1,8 @@
 context("cat")
 
-invisible(tryCatch(elastic::connect(), error = function(e) e))
+invisible(connect())
 
 test_that("cat_", {
-  skip_on_cran()
 
   a <- cat_(parse = TRUE)
   expect_is(a, "data.frame")
@@ -14,7 +13,6 @@ test_that("cat_", {
 })
 
 test_that("cat_indices", {
-  skip_on_cran()
 
   b <- cat_indices(index = 'shakespeare', parse = TRUE, verbose = TRUE)
   c <- cat_indices(index = 'shakespeare', parse = TRUE, bytes = TRUE, verbose = TRUE)
@@ -29,7 +27,6 @@ test_that("cat_indices", {
 })
 
 test_that("cat_master", {
-  skip_on_cran()
 
   d <- cat_master(parse = TRUE, verbose = TRUE)
   expect_is(d, "data.frame")

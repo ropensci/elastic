@@ -1,17 +1,13 @@
 context("docs")
 
-invisible(tryCatch(elastic::connect(), error = function(e) e))
+invisible(connect())
 
 ## create indices first -----------------------------------
-tryconnect = tryCatch(elastic::connect(), error = function(e) e)
-if (!is(tryconnect, "simpleError")) {
-  ind <- "stuff_l"
-  invisible(tryCatch(index_delete(index = ind, verbose = FALSE), error = function(e) e))
-  invisible(index_create(index = ind, verbose = FALSE))
-}
+ind <- "stuff_l"
+invisible(tryCatch(index_delete(index = ind, verbose = FALSE), error = function(e) e))
+invisible(index_create(index = ind, verbose = FALSE))
 
 test_that("docs_create works", {
-  skip_on_cran()
 
   invisible(docs_create(index = ind, type = 'article', id = 1002, body = list(id = "12345", title = "New title")))
   a <- docs_get(index = ind, type = 'article', id = 1002, verbose = FALSE)
@@ -27,7 +23,6 @@ test_that("docs_create works", {
 })
 
 test_that("docs_create fails as expected", {
-  skip_on_cran()
 
   expect_error(docs_create("adfadf"), "argument \"type\" is missing, with no default")
   expect_error(docs_create("adfadf", "asdfadf"), "argument \"id\" is missing, with no default")
@@ -39,14 +34,11 @@ test_that("docs_create fails as expected", {
 })
 
 ## create indices first
-if (!is(tryconnect, "simpleError")) {
-  ind2 <- "stuff_f"
-  invisible(tryCatch(index_delete(index = ind2, verbose = FALSE), error = function(e) e))
-  invisible(index_create(index = ind2, verbose = FALSE))
-}
+ind2 <- "stuff_f"
+invisible(tryCatch(index_delete(index = ind2, verbose = FALSE), error = function(e) e))
+invisible(index_create(index = ind2, verbose = FALSE))
 
 test_that("docs_get works", {
-  skip_on_cran()
 
   invisible(docs_create(index = ind2, type = "things", id = 45, body = '{"hello": "world"}'))
   c <- docs_get(index = ind2, type = "things", id = 45, verbose = FALSE)
@@ -63,14 +55,11 @@ test_that("docs_get works", {
 
 
 ## create indices first
-if (!is(tryconnect, "simpleError")) {
-  ind3 <- "stuff_t"
-  invisible(tryCatch(index_delete(index = ind3, verbose = FALSE), error = function(e) e))
-  invisible(index_create(index = ind3, verbose = FALSE))
-}
+ind3 <- "stuff_t"
+invisible(tryCatch(index_delete(index = ind3, verbose = FALSE), error = function(e) e))
+invisible(index_create(index = ind3, verbose = FALSE))
 
 test_that("docs_mget works", {
-  skip_on_cran()
 
   invisible(docs_create(index = ind3, type = "holla", id = 1, body = '{"hello": "world"}'))
   invisible(docs_create(index = ind3, type = "holla", id = 2, body = '{"foo": "bar"}'))
@@ -84,7 +73,6 @@ test_that("docs_mget works", {
 })
 
 test_that("docs_delete works", {
-  skip_on_cran()
 
   f <- docs_delete(index = ind3, type = "holla", id = 3)
   expect_is(f, "list")
@@ -94,8 +82,6 @@ test_that("docs_delete works", {
 })
 
 ## cleanup -----------------------------------
-if (!is(tryconnect, "simpleError")) {
-  invisible(index_delete(ind, verbose = FALSE))
-  invisible(index_delete(ind2, verbose = FALSE))
-  invisible(index_delete(ind3, verbose = FALSE))
-}
+invisible(index_delete(ind, verbose = FALSE))
+invisible(index_delete(ind2, verbose = FALSE))
+invisible(index_delete(ind3, verbose = FALSE))

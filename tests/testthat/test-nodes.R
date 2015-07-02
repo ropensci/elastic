@@ -1,9 +1,8 @@
 context("nodes")
 
-invisible(tryCatch(elastic::connect(), error = function(e) e))
+invisible(connect())
 
 test_that("nodes_stats", {
-  skip_on_cran()
 
   out <- nodes_stats()
   out2 <- nodes_stats(node = names(out$nodes))
@@ -18,7 +17,6 @@ test_that("nodes_stats", {
 })
 
 test_that("nodes_info", {
-  skip_on_cran()
 
   out <- nodes_info()
   out2 <- nodes_info(node = names(out$nodes))
