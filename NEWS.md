@@ -1,3 +1,19 @@
+elastic 0.5.1.9000
+===============
+
+### MINOR IMPROVEMENTS
+
+* `docs_bulk()` now supports passing in document ids (to the `_id` field) 
+as a parameter for each input data.frame or list & supports using ids
+already in data.frame's or lists (#83)
+
+### BUG FIXES
+
+* Fixed problems in `docs_bulk()` in the use case where users use 
+the function in a for loop, for example, and indexing started over, 
+replacing documents with the same id (#83)
+
+
 elastic 0.5.0
 ===============
 

@@ -4,8 +4,8 @@
 \alias{docs_bulk}
 \title{Use the bulk API to create, index, update, or delete documents.}
 \usage{
-docs_bulk(x, index = NULL, type = NULL, chunk_size = 1000, raw = FALSE,
-  ...)
+docs_bulk(x, index = NULL, type = NULL, chunk_size = 1000,
+  doc_ids = NULL, raw = FALSE, ...)
 }
 \arguments{
 \item{x}{A data.frame or path to a file to load in the bulk API}
@@ -20,6 +20,10 @@ thank \code{chunk_size}, this parameter is essentially ignored. We write in chun
 at some point, depending on size of each document, and Elasticsearch setup, writing a very
 large number of documents in one go becomes slow, so chunking can help. This parameter
 is ignored if you pass a file name. Default: 1000}
+
+\item{doc_ids}{(integer) An optional vector of document ids to use. This vector has
+to equal the size of the documents you are passing in, and will error if not.
+Default: not passed}
 
 \item{raw}{(logical) Get raw JSON back or not.}
 
@@ -73,6 +77,60 @@ docs_bulk(apply(iris, 1, as.list), index="iris", type="flowers")
 docs_bulk(apply(USArrests, 1, as.list), index="arrests")
 dim_list <- apply(diamonds, 1, as.list)
 out <- docs_bulk(dim_list, index="diamfromlist")
+
+# When using in a loop
+## We internally get last _id counter to know where to start on next bulk insert
+## but you need to sleep in between docs_bulk calls, longer the bigger the data is
+files <- c(system.file("examples", "test1.csv", package = "elastic"),
+           system.file("examples", "test2.csv", package = "elastic"),
+           system.file("examples", "test3.csv", package = "elastic"))
+for (i in seq_along(files)) {
+  d <- read.csv(files[[i]])
+  docs_bulk(d, index = "testes", type = "docs")
+  Sys.sleep(1)
+}
+count("testes", "docs")
+
+# You can include your own document id numbers
+## Either pass in as an argument
+index_create("testes")
+files <- c(system.file("examples", "test1.csv", package = "elastic"),
+           system.file("examples", "test2.csv", package = "elastic"),
+           system.file("examples", "test3.csv", package = "elastic"))
+tt <- vapply(files, function(z) NROW(read.csv(z)), numeric(1))
+ids <- list(1:tt[1],
+           (tt[1] + 1):(tt[1] + tt[2]),
+           (tt[1] + tt[2] + 1):sum(tt))
+for (i in seq_along(files)) {
+  d <- read.csv(files[[i]])
+  docs_bulk(d, index = "testes", type = "docs", doc_ids = ids[[i]])
+}
+count("testes", "docs")
+index_delete("testes")
+
+## or include in the input data
+### from data.frame's
+index_create("testes")
+files <- c(system.file("examples", "test1_id.csv", package = "elastic"),
+           system.file("examples", "test2_id.csv", package = "elastic"),
+           system.file("examples", "test3_id.csv", package = "elastic"))
+readLines(files[[1]])
+for (i in seq_along(files)) {
+  d <- read.csv(files[[i]])
+  docs_bulk(d, index = "testes", type = "docs")
+}
+count("testes", "docs")
+index_delete("testes")
+
+### from lists
+index_create("testes")
+for (i in seq_along(files)) {
+  d <- read.csv(files[[i]])
+  d <- apply(d, 1, as.list)
+  docs_bulk(d, index = "testes", type = "docs")
+}
+count("testes", "docs")
+index_delete("testes")
 }
 }
 

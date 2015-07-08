@@ -10,6 +10,9 @@
 #' at some point, depending on size of each document, and Elasticsearch setup, writing a very
 #' large number of documents in one go becomes slow, so chunking can help. This parameter
 #' is ignored if you pass a file name. Default: 1000
+#' @param doc_ids (integer) An optional vector of document ids to use. This vector has 
+#' to equal the size of the documents you are passing in, and will error if not. 
+#' Default: not passed
 #' @param raw (logical) Get raw JSON back or not.
 #' @param ... Pass on curl options to \code{\link[httr]{POST}}
 #' @details More on the Bulk API:
@@ -54,49 +57,132 @@
 #' docs_bulk(apply(USArrests, 1, as.list), index="arrests")
 #' dim_list <- apply(diamonds, 1, as.list)
 #' out <- docs_bulk(dim_list, index="diamfromlist")
+#' 
+#' # When using in a loop
+#' ## We internally get last _id counter to know where to start on next bulk insert
+#' ## but you need to sleep in between docs_bulk calls, longer the bigger the data is
+#' files <- c(system.file("examples", "test1.csv", package = "elastic"),
+#'            system.file("examples", "test2.csv", package = "elastic"),
+#'            system.file("examples", "test3.csv", package = "elastic"))
+#' for (i in seq_along(files)) {
+#'   d <- read.csv(files[[i]])
+#'   docs_bulk(d, index = "testes", type = "docs")
+#'   Sys.sleep(1)
 #' }
-docs_bulk <- function(x, index = NULL, type = NULL, chunk_size = 1000, raw=FALSE, ...) {
+#' count("testes", "docs")
+#' 
+#' # You can include your own document id numbers
+#' ## Either pass in as an argument
+#' index_create("testes")
+#' files <- c(system.file("examples", "test1.csv", package = "elastic"),
+#'            system.file("examples", "test2.csv", package = "elastic"),
+#'            system.file("examples", "test3.csv", package = "elastic"))
+#' tt <- vapply(files, function(z) NROW(read.csv(z)), numeric(1))
+#' ids <- list(1:tt[1], 
+#'            (tt[1] + 1):(tt[1] + tt[2]),
+#'            (tt[1] + tt[2] + 1):sum(tt))
+#' for (i in seq_along(files)) {
+#'   d <- read.csv(files[[i]])
+#'   docs_bulk(d, index = "testes", type = "docs", doc_ids = ids[[i]])
+#' }
+#' count("testes", "docs")
+#' index_delete("testes")
+#' 
+#' ## or include in the input data
+#' ### from data.frame's
+#' index_create("testes")
+#' files <- c(system.file("examples", "test1_id.csv", package = "elastic"),
+#'            system.file("examples", "test2_id.csv", package = "elastic"),
+#'            system.file("examples", "test3_id.csv", package = "elastic"))
+#' readLines(files[[1]])
+#' for (i in seq_along(files)) {
+#'   d <- read.csv(files[[i]])
+#'   docs_bulk(d, index = "testes", type = "docs")
+#' }
+#' count("testes", "docs")
+#' index_delete("testes")
+#' 
+#' ### from lists
+#' index_create("testes")
+#' for (i in seq_along(files)) {
+#'   d <- read.csv(files[[i]])
+#'   d <- apply(d, 1, as.list)
+#'   docs_bulk(d, index = "testes", type = "docs")
+#' }
+#' count("testes", "docs")
+#' index_delete("testes")
+#' }
+docs_bulk <- function(x, index = NULL, type = NULL, chunk_size = 1000, 
+                      doc_ids = NULL, raw=FALSE, ...) {
+  
   UseMethod("docs_bulk")
 }
 
 #' @export
-docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000, raw = FALSE, ...) {
+docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000, 
+                                 doc_ids = NULL, raw = FALSE, ...) {
+  
   checkconn()
   if (is.null(index)) {
     stop("index can't be NULL when passing a data.frame")
   }
   if (is.null(type)) type <- index
+  check_doc_ids(x, doc_ids)
   row.names(x) <- NULL
   rws <- seq_len(NROW(x))
-  chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
-  pb <- txtProgressBar(min = 0, max = length(chks), initial = 0, style = 3)
+  data_chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
+  if (!is.null(doc_ids)) {
+    id_chks <- split(doc_ids, ceiling(seq_along(doc_ids) / chunk_size))
+  } else if (has_ids(x)) {
+    rws <- x$id
+    id_chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
+  } else {
+    rws <- shift_start(rws, index, type)
+    id_chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
+  }
+  pb <- txtProgressBar(min = 0, max = length(data_chks), initial = 0, style = 3)
   on.exit(close(pb))
-  for (i in seq_along(chks)) {
+  for (i in seq_along(data_chks)) {
     setTxtProgressBar(pb, i)
-    docs_bulk(make_bulk(x[chks[[i]], ], index, type, chks[[i]]), ...)
+    docs_bulk(make_bulk(x[data_chks[[i]], ], index, type, id_chks[[i]]), ...)
   }
 }
 
 #' @export
-docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000, raw = FALSE, ...) {
+docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000, 
+                           doc_ids = NULL, raw = FALSE, ...) {
+  
   checkconn()
   if (is.null(index)) {
     stop("index can't be NULL when passing a list")
   }
   if (is.null(type)) type <- index
+  check_doc_ids(x, doc_ids)
   x <- unname(x)
   x <- check_named_vectors(x)
   rws <- seq_len(length(x))
-  chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
-  pb <- txtProgressBar(min = 0, max = length(chks), initial = 0, style = 3)
-  for (i in seq_along(chks)) {
+  data_chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
+  if (!is.null(doc_ids)) {
+    id_chks <- split(doc_ids, ceiling(seq_along(doc_ids) / chunk_size))
+  } else if (has_ids(x)) {
+    rws <- as.numeric(sapply(x, "[[", "id"))
+    id_chks <- split(rws, ceiling(seq_along(rws) / chunk_size)) 
+  } else {
+    rws <- shift_start(rws, index, type)
+    id_chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
+  }
+  pb <- txtProgressBar(min = 0, max = length(data_chks), initial = 0, style = 3)
+  on.exit(close(pb))
+  for (i in seq_along(data_chks)) {
     setTxtProgressBar(pb, i)
-    docs_bulk(make_bulk(x[chks[[i]]], index, type, chks[[i]]), ...)
+    docs_bulk(make_bulk(x[data_chks[[i]]], index, type, id_chks[[i]]), ...)
   }
 }
 
 #' @export
-docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000, raw=FALSE, ...) {
+docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000, 
+                                doc_ids = NULL, raw=FALSE, ...) {
+  
   on.exit(close_conns())
   checkconn()
   stopifnot(file.exists(x))
@@ -119,6 +205,35 @@ make_bulk <- function(df, index, type, counter) {
   tmpf <- tempfile("elastic__")
   writeLines(paste(metadata, data, sep = "\n"), tmpf)
   invisible(tmpf)
+}
+
+shift_start <- function(vals, index, type = NULL) {
+  num <- tryCatch(count(index, type), error = function(e) e)
+  if (is(num, "error")) {
+    vals
+  } else {
+    vals + num
+  }
+}
+
+check_doc_ids <- function(x, ids) {
+  if (!is.null(ids)) {
+    if (!all(1:NROW(x) == 1:length(ids))) {
+      stop("ids length must equal number of documents", call. = FALSE)
+    }
+  }
+}
+
+has_ids <- function(x) {
+  if (is(x, "data.frame")) {
+    "id" %in% names(x)
+  } else if (is(x, "list")) {
+    ids <- sapply(x, "[[", "id")
+    tmp <- length(ids) == length(x)
+    if (tmp) TRUE else stop("id field not in every document", call. = FALSE)
+  } else {
+    stop("input must be list or data.frame", call. = FALSE)
+  }
 }
 
 close_conns <- function() {
