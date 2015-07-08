@@ -24,9 +24,16 @@ You're fine running ES locally on your machine, but be careful just throwing up 
 * [Shield](https://www.elastic.co/products/shield) - This is a paid product provided by Elastic - so probably only applicable to enterprise users
 * DIY security - there are a variety of techniques for securing your Elasticsearch. A number of resources are collected in a [blog post](http://recology.info/2015/02/secure-elasticsearch/) - tools include putting your ES behind something like Nginx, putting basic auth on top of it, using https, etc.
 
-## Quick start
+## Installation
 
-### Install elastic
+Stable version from CRAN
+
+
+```r
+install.packages("elastic")
+```
+
+Development version from GitHub
 
 
 ```r
@@ -39,7 +46,7 @@ devtools::install_github("ropensci/elastic")
 library('elastic')
 ```
 
-### Install Elasticsearch
+## Install Elasticsearch
 
 * [Elasticsearch installation help](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/_installation.html)
 
@@ -73,26 +80,26 @@ You can also install via Homebrew: `brew install elasticsearch`
 
 > Note: for the 1.6 upgrade of Elasticsearch, it wants you to have java 8 or greater. I downloaded Java 8 from here http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html and it seemed to work great.
 
-### Upgrading Elasticsearch
+## Upgrading Elasticsearch
 
 I am not totally clear on best practice here, but from what I understand, when you upgrade to a new version of Elasticsearch, place old `elasticsearch/data` and `elasticsearch/config` directories into the new installation (`elasticsearch/` dir). The new elasticsearch instance with replaced data and config directories should automatically update data to the new version and start working. Maybe if you use homebrew on a Mac to upgrade it takes care of this for you - not sure.
 
 Obviously, upgrading Elasticsearch while keeping it running is a different thing ([some help here from Elastic](http://www.elastic.co/guide/en/elasticsearch/reference/current/setup-upgrade.html)).
 
-### Start Elasticsearch
+## Start Elasticsearch
 
 * Navigate to elasticsearch: `cd /usr/local/elasticsearch`
 * Start elasticsearch: `bin/elasticsearch`
 
 I create a little bash shortcut called `es` that does both of the above commands in one step (`cd /usr/local/elasticsearch && bin/elasticsearch`).
 
-### Get some data
+## Get some data
 
 Elasticsearch has a bulk load API to load data in fast. The format is pretty weird though. It's sort of JSON, but would pass no JSON linter. I include a few data sets in `elastic` so it's easy to get up and running, and so when you run examples in this package they'll actually run the same way (hopefully).
 
 I have prepare a non-exported function useful for preparing the weird format that Elasticsearch wants for bulk data loads, that is somewhat specific to PLOS data (See below), but you could modify for your purposes. See `make_bulk_plos()` and `make_bulk_gbif()` [here](https://github.com/ropensci/elastic/blob/master/R/docs_bulk.r).
 
-#### Shakespeare data
+### Shakespeare data
 
 Elasticsearch provides some data on Shakespeare plays. I've provided a subset of this data in this package. Get the path for the file specific to your machine:
 
@@ -115,7 +122,7 @@ curl -XGET http://www.elasticsearch.org/guide/en/kibana/current/snippets/shakesp
 curl -XPUT localhost:9200/_bulk --data-binary @shakespeare.json
 ```
 
-#### Public Library of Science (PLOS) data
+### Public Library of Science (PLOS) data
 
 A dataset inluded in the `elastic` package is metadata for PLOS scholarly articles. Get the file path, then load:
 
@@ -125,7 +132,7 @@ plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 docs_bulk(plosdat)
 ```
 
-#### Global Biodiversity Information Facility (GBIF) data
+### Global Biodiversity Information Facility (GBIF) data
 
 A dataset inluded in the `elastic` package is data for GBIF species occurrence records. Get the file path, then load:
 
@@ -143,11 +150,11 @@ gbifgeo <- system.file("examples", "gbif_geo.json", package = "elastic")
 docs_bulk(gbifgeo)
 ```
 
-#### More data sets
+### More data sets
 
 There are more datasets formatted for bulk loading in the `ropensci/elastic_data` GitHub repository. Find it at [https://github.com/ropensci/elastic_data](https://github.com/ropensci/elastic_data)
 
-### Initialization
+## Initialization
 
 The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
 
@@ -160,13 +167,13 @@ connect(es_port = 9200)
 #> password:  NULL 
 #> elasticsearch details:   
 #>    status:                  200 
-#>    name:                    Shola Inkosi 
+#>    name:                    Gorgon 
 #>    Elasticsearch version:   1.6.0 
 #>    ES version timestamp:    2015-06-09T13:36:34Z 
 #>    lucene version:          4.10.4
 ```
 
-### Search
+## Search
 
 Search the `plos` index and only return 1 result
 
@@ -231,7 +238,7 @@ Search(index = "plos", type = "article", sort = "title", q = "antibody", size = 
 #> [1] "1"
 ```
 
-### Get documents
+## Get documents
 
 Get document with id=1
 
@@ -288,7 +295,7 @@ docs_get(index = 'plos', type = 'article', id = 4, fields = 'id')
 ```
 
 
-### Get multiple documents via the multiget API
+## Get multiple documents via the multiget API
 
 Same index and type, different document ids
 
@@ -373,7 +380,7 @@ docs_mget(index_type_id = list(c("plos", "article", 1), c("gbif", "record", 1)))
 #> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
 ```
 
-### Parsing
+## Parsing
 
 You can optionally get back raw `json` from `Search()`, `docs_get()`, and `docs_mget()` setting parameter `raw=TRUE`.
 
