@@ -3,6 +3,9 @@ language: r
 services:
   - elasticsearch
 
+before_install:
+  - curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.7.1.deb && sudo dpkg -i --force-confnew elasticsearch-1.7.1.deb
+
 r_github_packages:
   - jimhester/covr
 
