@@ -50,6 +50,11 @@ as well.
 
 A progress bar gives the progress for data.frames and lists
 }
+\section{Large numbers for document IDs}{
+
+Until recently, if you had very large integers for document IDs, \code{docs_bulk}
+failed. It should be fixed now. Let us know if not.
+}
 \examples{
 \dontrun{
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
@@ -90,6 +95,7 @@ for (i in seq_along(files)) {
   Sys.sleep(1)
 }
 count("testes", "docs")
+index_delete("testes")
 
 # You can include your own document id numbers
 ## Either pass in as an argument
@@ -122,7 +128,7 @@ for (i in seq_along(files)) {
 count("testes", "docs")
 index_delete("testes")
 
-### from lists
+### from lists via file inputs
 index_create("testes")
 for (i in seq_along(files)) {
   d <- read.csv(files[[i]])

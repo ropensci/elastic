@@ -31,6 +31,11 @@
 #' as well.
 #' 
 #' A progress bar gives the progress for data.frames and lists
+#' 
+#' @section Large numbers for document IDs:
+#' Until recently, if you had very large integers for document IDs, \code{docs_bulk}
+#' failed. It should be fixed now. Let us know if not.
+#' 
 #' @examples \dontrun{
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 #' docs_bulk(plosdat)
@@ -70,6 +75,7 @@
 #'   Sys.sleep(1)
 #' }
 #' count("testes", "docs")
+#' index_delete("testes")
 #' 
 #' # You can include your own document id numbers
 #' ## Either pass in as an argument
@@ -102,7 +108,7 @@
 #' count("testes", "docs")
 #' index_delete("testes")
 #' 
-#' ### from lists
+#' ### from lists via file inputs
 #' index_create("testes")
 #' for (i in seq_along(files)) {
 #'   d <- read.csv(files[[i]])
@@ -124,7 +130,8 @@ docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000
   
   checkconn()
   if (is.null(index)) {
-    stop("index can't be NULL when passing a data.frame")
+    stop("index can't be NULL when passing a data.frame", 
+         call. = FALSE)
   }
   if (is.null(type)) type <- index
   check_doc_ids(x, doc_ids)
@@ -154,7 +161,8 @@ docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
   
   checkconn()
   if (is.null(index)) {
-    stop("index can't be NULL when passing a list")
+    stop("index can't be NULL when passing a list", 
+         call. = FALSE)
   }
   if (is.null(type)) type <- index
   check_doc_ids(x, doc_ids)
@@ -199,7 +207,12 @@ docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000,
 }
 
 make_bulk <- function(df, index, type, counter) {
-  metadata_fmt <- '{"index":{"_index":"%s","_type":"%s","_id":%d}}'
+  if (max(counter) >= 10000000000) {
+    scipen <- getOption("scipen")
+    options(scipen = 100)
+    on.exit(options(scipen = scipen))
+  }
+  metadata_fmt <- '{"index":{"_index":"%s","_type":"%s","_id":%s}}'
   metadata <- sprintf(metadata_fmt, index, type, counter - 1L)
   data <- jsonlite::toJSON(df, collapse = FALSE)
   tmpf <- tempfile("elastic__")
@@ -228,9 +241,13 @@ has_ids <- function(x) {
   if (is(x, "data.frame")) {
     "id" %in% names(x)
   } else if (is(x, "list")) {
-    ids <- sapply(x, "[[", "id")
-    tmp <- length(ids) == length(x)
-    if (tmp) TRUE else stop("id field not in every document", call. = FALSE)
+    ids <- ec(sapply(x, "[[", "id"))
+    if (length(ids) > 0) {
+      tmp <- length(ids) == length(x)
+      if (tmp) TRUE else stop("id field not in every document", call. = FALSE)
+    } else {
+      FALSE
+    }
   } else {
     stop("input must be list or data.frame", call. = FALSE)
   }
