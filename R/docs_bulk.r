@@ -199,8 +199,8 @@ docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000,
 }
 
 make_bulk <- function(df, index, type, counter) {
-  metadata_fmt <- '{"index":{"_index":"%s","_type":"%s","_id":%d}}'
-  metadata <- sprintf(metadata_fmt, index, type, counter - 1L)
+  metadata_fmt <- '{"index":{"_index":"%s","_type":"%s","_id":%s}}'
+  metadata <- sprintf(metadata_fmt, index, type, counter)
   data <- jsonlite::toJSON(df, collapse = FALSE)
   tmpf <- tempfile("elastic__")
   writeLines(paste(metadata, data, sep = "\n"), tmpf)
