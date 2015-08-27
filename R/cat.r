@@ -192,7 +192,7 @@ cat_pretty <- function(x, verbose = FALSE, help = FALSE) {
   if (help) {
     read.table(text = x, sep = "|", stringsAsFactors = FALSE)
   } else {
-    read.table(text = x, sep = "", header = verbose, stringsAsFactors = FALSE)
+    read.delim(text = x, sep = "", header = verbose, stringsAsFactors = FALSE)
   }
 }
 
