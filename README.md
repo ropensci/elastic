@@ -11,6 +11,10 @@ elastic
 
 **A general purpose R interface to [Elasticsearch](https://www.elastic.co/products/elasticsearch)**
 
+## Elasticsearch DSL
+
+Also check out `elasticdsl` - an R DSL for Elasticsearch - [https://github.com/ropensci/elasticdsl](https://github.com/ropensci/elasticdsl)
+
 ## Elasticsearch info
 
 * [Elasticsearch home page](https://www.elastic.co/products/elasticsearch)
