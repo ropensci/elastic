@@ -34,4 +34,4 @@ env:
   matrix:
   - RVERSION=oldrel
   - RVERSION=release
-  - RVERSION=devel
+  - RVERSION=devel COVERAGE=true
