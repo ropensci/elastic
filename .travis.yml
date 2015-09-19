@@ -18,7 +18,7 @@ after_failure:
   - ./pkg-build.sh dump_logs
 
 after_success:
-  - Rscript -e 'covr::codecov()'
+  - if [[ ! -z "$COVERAGE" ]];then ./pkg-build.sh run_script -e 'covr::codecov()'; fi
 
 notifications:
   email:
