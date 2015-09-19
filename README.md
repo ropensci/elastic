@@ -19,7 +19,7 @@ Also check out `elasticdsl` - an R DSL for Elasticsearch - [https://github.com/r
 
 * [Elasticsearch home page](https://www.elastic.co/products/elasticsearch)
 * [API docs](http://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
-* This client is being developed under `v1.7.1` of Elasticsearch, and will generally develop following whatever is the current version.
+* This client is being developed under `v1.7.2` of Elasticsearch, and will generally develop following whatever is the current version.
 
 ## Security
 
@@ -74,12 +74,12 @@ If you're using boot2docker, you'll need to use the IP address in place of local
 
 __on OSX__
 
-+ Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.7.1.tar.gz`
-+ Extract: `tar -zxvf elasticsearch-1.7.1.tar.gz`
-+ Move it: `sudo mv /path/to/elasticsearch-1.7.1 /usr/local` (replace version with your version)
++ Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.7.2.tar.gz`
++ Extract: `tar -zxvf elasticsearch-1.7.2.tar.gz`
++ Move it: `sudo mv /path/to/elasticsearch-1.7.2 /usr/local` (replace version with your version)
 + Navigate to /usr/local: `cd /usr/local`
 + Delete symlinked `elasticsearch` directory: `rm -rf elasticsearch`
-+ Add shortcut: `sudo ln -s elasticsearch-1.7.1 elasticsearch` (replace version with your verioon)
++ Add shortcut: `sudo ln -s elasticsearch-1.7.2 elasticsearch` (replace version with your verioon)
 
 You can also install via Homebrew: `brew install elasticsearch`
 
@@ -171,11 +171,11 @@ connect(es_port = 9200)
 #> username:  NULL 
 #> password:  NULL 
 #> elasticsearch details:   
-#>    status:                  200 
-#>    name:                    Left Hand 
-#>    Elasticsearch version:   1.7.1 
-#>    ES version timestamp:    2015-07-29T09:54:16Z 
-#>    lucene version:          4.10.4
+#>    status:                  NULL 
+#>    name:                    James Dr. Power 
+#>    Elasticsearch version:   2.0.0-beta1 
+#>    ES version timestamp:    2015-08-24T08:41:25Z 
+#>    lucene version:          5.2.1
 ```
 
 ## Search
@@ -193,7 +193,7 @@ Search(index = "plos", size = 1)$hits$hits
 #> [1] "article"
 #> 
 #> [[1]]$`_id`
-#> [1] "4"
+#> [1] "0"
 #> 
 #> [[1]]$`_version`
 #> [1] 1
@@ -203,10 +203,10 @@ Search(index = "plos", size = 1)$hits$hits
 #> 
 #> [[1]]$`_source`
 #> [[1]]$`_source`$id
-#> [1] "10.1371/journal.pone.0107758"
+#> [1] "10.1371/journal.pone.0007737"
 #> 
 #> [[1]]$`_source`$title
-#> [1] "Lactobacilli Inactivate Chlamydia trachomatis through Lactic Acid but Not H2O2"
+#> [1] "Phospholipase C-β4 Is Essential for the Progression of the Normal Sleep Sequence and Ultradian Body Temperature Rhythms in Mice"
 ```
 
 Search the `plos` index, and the `article` document type, sort by title, and query for _antibody_, limit to 1 result
