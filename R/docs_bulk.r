@@ -10,9 +10,9 @@
 #' at some point, depending on size of each document, and Elasticsearch setup, writing a very
 #' large number of documents in one go becomes slow, so chunking can help. This parameter
 #' is ignored if you pass a file name. Default: 1000
-#' @param doc_ids (integer) An optional vector of document ids to use. This vector has 
-#' to equal the size of the documents you are passing in, and will error if not. 
-#' Default: not passed
+#' @param doc_ids An optional vector (character or numeric/integer) of document ids to use. 
+#' This vector has to equal the size of the documents you are passing in, and will error 
+#' if not. If you pass a factor we convert to character. Default: not passed
 #' @param raw (logical) Get raw JSON back or not.
 #' @param ... Pass on curl options to \code{\link[httr]{POST}}
 #' @details More on the Bulk API:
@@ -135,6 +135,7 @@ docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000
   }
   if (is.null(type)) type <- index
   check_doc_ids(x, doc_ids)
+  if (is.factor(doc_ids)) doc_ids <- as.character(doc_ids)
   row.names(x) <- NULL
   rws <- seq_len(NROW(x))
   data_chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
@@ -166,6 +167,7 @@ docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
   }
   if (is.null(type)) type <- index
   check_doc_ids(x, doc_ids)
+  if (is.factor(doc_ids)) doc_ids <- as.character(doc_ids)
   x <- unname(x)
   x <- check_named_vectors(x)
   rws <- seq_len(length(x))
@@ -207,13 +209,28 @@ docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000,
 }
 
 make_bulk <- function(df, index, type, counter) {
-  if (max(counter) >= 10000000000) {
-    scipen <- getOption("scipen")
-    options(scipen = 100)
-    on.exit(options(scipen = scipen))
+  if (!is.character(counter)) {
+    if (max(counter) >= 10000000000) {
+      scipen <- getOption("scipen")
+      options(scipen = 100)
+      on.exit(options(scipen = scipen))
+    }
   }
-  metadata_fmt <- '{"index":{"_index":"%s","_type":"%s","_id":%s}}'
-  metadata <- sprintf(metadata_fmt, index, type, counter - 1L)
+  metadata_fmt <- if (is.character(counter)) {
+    '{"index":{"_index":"%s","_type":"%s","_id":"%s"}}'
+  } else {
+    '{"index":{"_index":"%s","_type":"%s","_id":%s}}'
+  }
+  metadata <- sprintf(
+    metadata_fmt, 
+    index, 
+    type, 
+    if (is.numeric(counter)) {
+      counter - 1L
+    } else {
+      counter
+    }
+  )
   data <- jsonlite::toJSON(df, collapse = FALSE)
   tmpf <- tempfile("elastic__")
   writeLines(paste(metadata, data, sep = "\n"), tmpf)
@@ -231,8 +248,14 @@ shift_start <- function(vals, index, type = NULL) {
 
 check_doc_ids <- function(x, ids) {
   if (!is.null(ids)) {
+    # check class type
+    if (!class(ids) %in% c('character', 'factor', 'numeric', 'integer')) {
+      stop("doc_ids must be of class character, numeric or integer", call. = FALSE)
+    }
+    
+    # check appropriate length
     if (!all(1:NROW(x) == 1:length(ids))) {
-      stop("ids length must equal number of documents", call. = FALSE)
+      stop("doc_ids length must equal number of documents", call. = FALSE)
     }
   }
 }

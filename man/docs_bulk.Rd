@@ -21,9 +21,9 @@ at some point, depending on size of each document, and Elasticsearch setup, writ
 large number of documents in one go becomes slow, so chunking can help. This parameter
 is ignored if you pass a file name. Default: 1000}
 
-\item{doc_ids}{(integer) An optional vector of document ids to use. This vector has
-to equal the size of the documents you are passing in, and will error if not.
-Default: not passed}
+\item{doc_ids}{An optional vector (character or numeric/integer) of document ids to use.
+This vector has to equal the size of the documents you are passing in, and will error
+if not. If you pass a factor we convert to character. Default: not passed}
 
 \item{raw}{(logical) Get raw JSON back or not.}
 
