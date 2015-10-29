@@ -6,22 +6,26 @@
 \title{Set connection details to an Elasticsearch engine.}
 \usage{
 connect(es_base = "http://127.0.0.1", es_port = 9200, es_user = NULL,
-  es_pwd = NULL, force = FALSE, ...)
+  es_pwd = NULL, force = FALSE, errors = "simple", ...)
 
 connection()
 }
 \arguments{
-\item{es_base}{The base url, defaults to localhost (http://127.0.0.1)}
+\item{es_base}{(character) The base url, defaults to localhost (http://127.0.0.1)}
 
-\item{es_port}{port to connect to, defaults to 9200 (optional)}
+\item{es_port}{(character) port to connect to, defaults to 9200 (optional)}
 
-\item{es_user}{User name, if required for the connection. You can specify, but
+\item{es_user}{(character) User name, if required for the connection. You can specify,
+but ignored for now.}
+
+\item{es_pwd}{(character) Password, if required for the connection. You can specify, but
 ignored for now.}
 
-\item{es_pwd}{Password, if required for the connection. You can specify, but
-ignored for now.}
+\item{force}{(logical) Force re-load of connection details}
 
-\item{force}{Force re-load of connection details}
+\item{errors}{(character) One of simple (Default) or complete. Simple gives http code and
+error message on an error, while complete gives both http code and error message,
+and stack trace, if available.}
 
 \item{...}{Further args passed on to print for the es_conn class.}
 }
@@ -36,6 +40,10 @@ with no username or password.
 prints connection details.
 
 On package load, \code{\link{connect}} is run to set the default base url and port.
+
+Internally, we store your preferences with environment variables. That means you
+can set your env vars permanently in .Renviron file, and use them on a server e.g.,
+as private env vars.
 }
 \examples{
 \dontrun{
