@@ -51,11 +51,6 @@
 #' nodes_info(metric='jvm')
 #' nodes_info(metric='http')
 #' nodes_hot_threads()
-#' nodes_shutdown()
-#' nodes_shutdown(node = "_local")
-#' nodes_shutdown(node = "_master")
-#' id <- names(nodes_info()$nodes)
-#' nodes_shutdown(node = id)
 #' }
 
 #' @export
@@ -76,13 +71,6 @@ nodes_hot_threads <- function(node=NULL, metric=NULL, threads=3, interval='500ms
   raw=FALSE, verbose=TRUE, ...) {
   args <- list(threads = threads, interval = interval, type = type)
   cat(node_GET('hot_threads', metric, node, raw = TRUE, args, ...))
-}
-
-#' @export
-#' @rdname nodes
-nodes_shutdown <- function(node=NULL, raw=FALSE, verbose=TRUE, delay=NULL, ...){
-  args <- list(delay = delay)
-  node_POST(path = '_shutdown', node, raw, args, ...)
 }
 
 node_GET <- function(path, metric, node, raw, args, ...) {

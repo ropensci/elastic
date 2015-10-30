@@ -4,7 +4,6 @@
 \alias{nodes}
 \alias{nodes_hot_threads}
 \alias{nodes_info}
-\alias{nodes_shutdown}
 \alias{nodes_stats}
 \title{Elasticsearch nodes endpoints.}
 \usage{
@@ -15,9 +14,6 @@ nodes_info(node = NULL, metric = NULL, raw = FALSE, verbose = TRUE, ...)
 
 nodes_hot_threads(node = NULL, metric = NULL, threads = 3,
   interval = "500ms", type = NULL, raw = FALSE, verbose = TRUE, ...)
-
-nodes_shutdown(node = NULL, raw = FALSE, verbose = TRUE, delay = NULL,
-  ...)
 }
 \arguments{
 \item{node}{The node}
@@ -84,11 +80,6 @@ nodes_info(metric='process')
 nodes_info(metric='jvm')
 nodes_info(metric='http')
 nodes_hot_threads()
-nodes_shutdown()
-nodes_shutdown(node = "_local")
-nodes_shutdown(node = "_master")
-id <- names(nodes_info()$nodes)
-nodes_shutdown(node = id)
 }
 }
 

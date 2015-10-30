@@ -67,13 +67,3 @@
 #' @author Scott Chamberlain \email{myrmecocystus@@gmail.com}
 #' @name elastic
 NULL
-
-#' Defunct functions in elastic
-#'
-#' \itemize{
-#'  \item \code{\link{mlt}}: The MLT API has been removed, use More Like This Query 
-#'  via \code{\link{Search}}
-#' }
-#' 
-#' @name elastic-defunct
-NULL
