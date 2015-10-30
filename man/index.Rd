@@ -226,8 +226,8 @@ index_close('plos')
 index_open('plos')
 
 # Get status of an index
-index_status('plos')
-index_status(c('plos','gbif'))
+# index_status('plos')
+# index_status(c('plos','gbif'))
 
 # Get stats on an index
 index_stats('plos')
@@ -298,13 +298,12 @@ tokenizer_set(index = "shakespeare2", body=body)
 index_analyze(text = "art thouh", index = "shakespeare2", analyzer='my_ngram_analyzer')
 
 # Explicitly flush one or more indices.
-index_flush()
 index_flush(index = "plos")
 index_flush(index = "shakespeare")
 index_flush(index = c("plos","shakespeare"))
-index_flush(wait_if_ongoing = TRUE)
+index_flush(index = "plos", wait_if_ongoing = TRUE)
 library('httr')
-index_flush(config=verbose())
+index_flush(index = "plos", config=verbose())
 
 # Clear either all caches or specific cached associated with one ore more indices.
 index_clear_cache()

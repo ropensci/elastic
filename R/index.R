@@ -134,8 +134,8 @@
 #' index_open('plos')
 #'
 #' # Get status of an index
-#' index_status('plos')
-#' index_status(c('plos','gbif'))
+#' # index_status('plos')
+#' # index_status(c('plos','gbif'))
 #'
 #' # Get stats on an index
 #' index_stats('plos')
@@ -206,13 +206,12 @@
 #' index_analyze(text = "art thouh", index = "shakespeare2", analyzer='my_ngram_analyzer')
 #'
 #' # Explicitly flush one or more indices.
-#' index_flush()
 #' index_flush(index = "plos")
 #' index_flush(index = "shakespeare")
 #' index_flush(index = c("plos","shakespeare"))
-#' index_flush(wait_if_ongoing = TRUE)
+#' index_flush(index = "plos", wait_if_ongoing = TRUE)
 #' library('httr')
-#' index_flush(config=verbose())
+#' index_flush(index = "plos", config=verbose())
 #'
 #' # Clear either all caches or specific cached associated with one ore more indices.
 #' index_clear_cache()
@@ -259,10 +258,10 @@ index_delete <- function(index, raw=FALSE, verbose=TRUE, ...) {
   checkconn()
   url <- paste0(make_url(es_get_auth()), "/", esc(index))
   out <- DELETE(url, make_up(), ...)
-  stop_for_status(out)
   if (verbose) message(URLdecode(out$url))
+  geterror(out)
   tt <- structure(content(out, as = "text"), class = "index_delete")
-  if (raw){ tt } else { es_parse(tt) }
+  if (raw) { tt } else { es_parse(tt) }
 }
 
 #' @export
@@ -270,11 +269,11 @@ index_delete <- function(index, raw=FALSE, verbose=TRUE, ...) {
 index_create <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...) {
   checkconn()
   url <- make_url(es_get_auth())
-  out <- PUT(paste0(url, "/", index), body=body, make_up(), ...)
-  stop_for_status(out)
-  if(verbose) message(URLdecode(out$url))
-  tt <- content(out, as="text")
-  if(raw) tt else jsonlite::fromJSON(tt, FALSE)
+  out <- PUT(paste0(url, "/", index), body = body, make_up(), ...)
+  geterror(out)
+  if (verbose) message(URLdecode(out$url))
+  tt <- content(out, as = "text")
+  if (raw) tt else jsonlite::fromJSON(tt, FALSE)
 }
 
 #' @export
@@ -294,8 +293,8 @@ index_open <- function(index, ...) {
 index_stats <- function(index=NULL, metric=NULL, completion_fields=NULL, fielddata_fields=NULL,
   fields=NULL, groups=NULL, level='indices', ...) {
   url <- make_url(es_get_auth())
-  url <- if(is.null(index)) file.path(url, "_stats") else file.path(url, esc(cl(index)), "_stats")
-  url <- if(!is.null(metric)) file.path(url, cl(metric)) else url
+  url <- if (is.null(index)) file.path(url, "_stats") else file.path(url, esc(cl(index)), "_stats")
+  url <- if (!is.null(metric)) file.path(url, cl(metric)) else url
   args <- ec(list(completion_fields=completion_fields, fielddata_fields=fielddata_fields,
                   fields=fields, groups=groups, level=level))
   es_GET_(url, args, ...)
@@ -316,7 +315,7 @@ index_settings_update <- function(index=NULL, body, ...) {
   url <- if (is.null(index)) file.path(url, "_settings") else file.path(url, esc(cl(index)), "_settings")
   body <- check_inputs(body)
   tt <- PUT(url, make_up(), ..., body = body)
-  if (tt$status_code > 202) stop(error_parser(tt, 1), call. = FALSE)
+  geterror(tt)
   res <- content(tt, as = "text")
   jsonlite::fromJSON(res)
 }
@@ -400,7 +399,8 @@ close_open <- function(index, which, ...){
   url <- make_url(es_get_auth())
   url <- sprintf("%s/%s/%s", url, esc(index), which)
   out <- POST(url, make_up(), ...)
-  stop_for_status(out)
+  # stop_for_status(out)
+  geterror(out)
   content(out)
 }
 

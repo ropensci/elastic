@@ -73,7 +73,7 @@ alias_delete <- function(index=NULL, alias, ...) {
 alias_GET <- function(index, alias, ignore, ...) {
   checkconn()
   tt <- GET( alias_url(index, alias), query = ec(list(ignore_unavailable = as_log(ignore))), make_up(), ...)
-  if (tt$status_code > 202) geterror(tt)
+  geterror(tt)
   jsonlite::fromJSON(content(tt, as = "text"), FALSE)
 }
 

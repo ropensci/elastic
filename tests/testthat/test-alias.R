@@ -47,7 +47,7 @@ test_that("alias_delete works", {
 
 test_that("alias_* functions fail as expected", {
 
-  expect_error(alias_get("adfadf"), "missing")
+  expect_error(alias_get(index = "adfadf"), "missing")
   expect_error(alias_get(alias = "adfadfs"), "missing")
   expect_error(alias_create("Adfafasd", "adfadf"))
 })
