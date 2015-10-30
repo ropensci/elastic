@@ -8,3 +8,4 @@ CONTRIBUTING.md
 ^appveyor\.yml$
 README.Rmd
 cran-comments.md
+\.deb$
