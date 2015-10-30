@@ -9,8 +9,9 @@ Search(index = NULL, type = NULL, q = NULL, df = NULL,
   source = NULL, fields = NULL, sort = NULL, track_scores = NULL,
   timeout = NULL, terminate_after = NULL, from = NULL, size = NULL,
   search_type = NULL, lowercase_expanded_terms = NULL,
-  analyze_wildcard = NULL, version = FALSE, body = list(), raw = FALSE,
-  asdf = FALSE, scroll = NULL, search_path = "_search", ...)
+  analyze_wildcard = NULL, version = FALSE, lenient = FALSE,
+  body = list(), raw = FALSE, asdf = FALSE, scroll = NULL,
+  search_path = "_search", ...)
 }
 \arguments{
 \item{index}{Index name}
@@ -78,6 +79,9 @@ Default: TRUE.}
 Default: FALSE.}
 
 \item{version}{(logical) Print the document version with each document.}
+
+\item{lenient}{If \code{TRUE} will cause format based failures (like providing text to
+a numeric field) to be ignored. Default: \code{FALSE}}
 
 \item{body}{Query, either a list or json.}
 

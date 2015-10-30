@@ -16,7 +16,7 @@
 Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, default_operator=NULL,
   explain=NULL, source=NULL, fields=NULL, sort=NULL, track_scores=NULL, timeout=NULL,
   terminate_after=NULL, from=NULL, size=NULL, search_type=NULL, lowercase_expanded_terms=NULL,
-  analyze_wildcard=NULL, version=FALSE, body=list(), raw=FALSE, asdf=FALSE, scroll=NULL,
+  analyze_wildcard=NULL, version=FALSE, lenient=FALSE, body=list(), raw=FALSE, asdf=FALSE, scroll=NULL,
   search_path="_search", ...) {
 
   search_POST(search_path, esc(index), esc(type),
@@ -25,7 +25,7 @@ Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, defaul
       timeout=cn(timeout), terminate_after=cn(terminate_after),
       from=cn(from), size=cn(size), search_type=search_type,
       lowercase_expanded_terms=lowercase_expanded_terms, analyze_wildcard=analyze_wildcard,
-      version=version, q=q, scroll=scroll)), body, raw, asdf, ...)
+      version=as_log(version), q=q, scroll=scroll, lenient=as_log(lenient))), body, raw, asdf, ...)
 }
 
 search_POST <- function(path, index=NULL, type=NULL, args, body, raw, asdf, ...) {

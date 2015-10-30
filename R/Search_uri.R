@@ -9,9 +9,10 @@
 #' @seealso \code{\link{Search}}
 
 Search_uri <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, default_operator=NULL, 
-                   explain=NULL, source=NULL, fields=NULL, sort=NULL, track_scores=NULL, timeout=NULL, 
-                   terminate_after=NULL, from=NULL, size=NULL, search_type=NULL, lowercase_expanded_terms=NULL, 
-                   analyze_wildcard=NULL, version=FALSE, raw=FALSE, asdf=FALSE, search_path="_search", ...) {
+  explain=NULL, source=NULL, fields=NULL, sort=NULL, track_scores=NULL, timeout=NULL, 
+  terminate_after=NULL, from=NULL, size=NULL, search_type=NULL, lowercase_expanded_terms=NULL, 
+  analyze_wildcard=NULL, version=FALSE, lenient=FALSE, raw=FALSE, 
+  asdf=FALSE, search_path="_search", ...) {
   
   search_GET(search_path, esc(index), esc(type), 
     args=ec(list(df=df, analyzer=analyzer, default_operator=default_operator, explain=explain, 
@@ -19,7 +20,7 @@ Search_uri <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, de
       timeout=cn(timeout), terminate_after=cn(terminate_after), 
       from=cn(from), size=cn(size), search_type=search_type,
       lowercase_expanded_terms=lowercase_expanded_terms, analyze_wildcard=analyze_wildcard, 
-      version=version, q=q)), raw, asdf, ...)
+      version=as_log(version), q=q, lenient=as_log(lenient))), raw, asdf, ...)
 }
 
 search_GET <- function(path, index=NULL, type=NULL, args, raw, asdf, ...) {

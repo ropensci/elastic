@@ -35,10 +35,6 @@ index level}
 
 \item{type}{(character) The type to sample, defaults to cpu, but supports wait and block to
 see hot threads that are in wait or block state.}
-
-\item{delay}{(character) By default, the shutdown will be executed after a 1 second
-delay (1s). The delay can be customized by setting the delay parameter in a time
-value format (e.g., \code{10s}).}
 }
 \description{
 Elasticsearch nodes endpoints.
@@ -53,6 +49,7 @@ select zero or more of:
 \itemize{
  \item indices Indices stats about size, document count, indexing and deletion times, search
  times, field cache size, merges and flushes
+ \item os retrieve information that concern the operating system
  \item fs File system information, data path, free disk space, read/write stats
  \item http HTTP connection information
  \item jvm JVM stats, memory pool information, garbage collection, buffer pools
@@ -79,6 +76,7 @@ nodes_info()
 nodes_info(metric='process')
 nodes_info(metric='jvm')
 nodes_info(metric='http')
+nodes_info(metric='network')
 nodes_hot_threads()
 }
 }

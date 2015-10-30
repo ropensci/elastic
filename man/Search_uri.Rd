@@ -9,8 +9,8 @@ Search_uri(index = NULL, type = NULL, q = NULL, df = NULL,
   source = NULL, fields = NULL, sort = NULL, track_scores = NULL,
   timeout = NULL, terminate_after = NULL, from = NULL, size = NULL,
   search_type = NULL, lowercase_expanded_terms = NULL,
-  analyze_wildcard = NULL, version = FALSE, raw = FALSE, asdf = FALSE,
-  search_path = "_search", ...)
+  analyze_wildcard = NULL, version = FALSE, lenient = FALSE,
+  raw = FALSE, asdf = FALSE, search_path = "_search", ...)
 }
 \arguments{
 \item{index}{Index name}
@@ -78,6 +78,9 @@ Default: TRUE.}
 Default: FALSE.}
 
 \item{version}{(logical) Print the document version with each document.}
+
+\item{lenient}{If \code{TRUE} will cause format based failures (like providing text to
+a numeric field) to be ignored. Default: \code{FALSE}}
 
 \item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
 

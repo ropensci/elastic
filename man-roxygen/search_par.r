@@ -45,6 +45,8 @@
 #' @param analyze_wildcard (logical) Should wildcard and prefix queries be analyzed or not. 
 #' Default: FALSE.
 #' @param version (logical) Print the document version with each document.
+#' @param lenient If \code{TRUE} will cause format based failures (like providing text to 
+#' a numeric field) to be ignored. Default: \code{FALSE}
 #' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
 #' @param asdf (logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} to parse JSON
 #' directly to a data.frame. If \code{FALSE} (Default), list output is given.
