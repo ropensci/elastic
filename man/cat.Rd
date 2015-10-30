@@ -10,6 +10,7 @@
 \alias{cat_health}
 \alias{cat_indices}
 \alias{cat_master}
+\alias{cat_nodeattrs}
 \alias{cat_nodes}
 \alias{cat_pending_tasks}
 \alias{cat_plugins}
@@ -44,6 +45,9 @@ cat_master(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
   help = FALSE, bytes = FALSE, parse = FALSE, ...)
 
 cat_nodes(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
+  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+
+cat_nodeattrs(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
   help = FALSE, bytes = FALSE, parse = FALSE, ...)
 
 cat_pending_tasks(verbose = FALSE, index = NULL, fields = NULL,
@@ -110,6 +114,7 @@ cat_health()
 cat_indices()
 cat_master()
 cat_nodes()
+cat_nodeattrs()
 cat_pending_tasks()
 cat_plugins()
 cat_recovery(verbose=TRUE)

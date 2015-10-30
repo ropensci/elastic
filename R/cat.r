@@ -34,6 +34,7 @@
 #' cat_indices()
 #' cat_master()
 #' cat_nodes()
+#' cat_nodeattrs()
 #' cat_pending_tasks()
 #' cat_plugins()
 #' cat_recovery(verbose=TRUE)
@@ -124,6 +125,12 @@ cat_master <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALS
 #' @rdname cat
 cat_nodes <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
   cat_helper('nodes', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
+}
+
+#' @export
+#' @rdname cat
+cat_nodeattrs <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  cat_helper('nodeattrs', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
 
 #' @export
