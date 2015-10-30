@@ -25,7 +25,7 @@ es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL,
   args <- ec(list(...))
   if (length(args) == 0) args <- NULL
   tt <- GET(url, query = args, mc(make_up(), callopts))
-  if (tt$status_code > 202) geterror(tt)
+  geterror(tt)
   res <- content(tt, as = "text")
   if (!is.null(clazz)) { 
     class(res) <- clazz
