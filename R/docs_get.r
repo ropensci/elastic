@@ -47,7 +47,7 @@ docs_get <- function(index, type, id, source=FALSE, fields=NULL, exists=FALSE,
     if (out$status_code == 200) TRUE else FALSE
   } else {
     out <- GET(url, query = args, mc(make_up(), callopts))
-    stop_for_status(out)
+    if (out$status_code > 202) stop(out$status_code, " - document not found", call. = FALSE)
     if (verbose) message(URLdecode(out$url))
     if (raw) { 
       content(out, as = "text") 

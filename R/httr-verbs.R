@@ -138,13 +138,18 @@ geterror <- function(z) {
         err <- jsonlite::fromJSON(err, simplifyVector = FALSE, simplifyDataFrame = FALSE)
         erropt <- Sys.getenv("ELASTIC_RCLIENT_ERRORS")
         if (erropt == "complete") {
-          stop(err$status, " - ", pluck_reason(err),
+          stop(z$status_code, " - ", pluck_reason(err),
                "\nES stack trace:\n",
                pluck_trace(err), call. = FALSE)
         } else {
           msg <- tryCatch(err$error$reason, error = function(e) e)
-          if (is(msg, "simpleError")) msg <- err$error
-          stop(err$status, " - ", msg, call. = FALSE)
+          if (is(msg, "simpleError")) {
+            msg <- tryCatch(err$error, error = function(e) e)
+            if (is(msg, "simpleError") || is.null(msg)) {
+              msg <- "error"
+            }
+          }
+          stop(z$status_code, " - ", msg, call. = FALSE)
         }
       } else {
         stop("error", call. = FALSE)
@@ -159,21 +164,29 @@ pluck_trace <- function(x) {
   if (is.null(x)) {
     " - no stack trace"
   } else {
-    tryerr <- tryCatch(x$error$root_cause, error = function(e) e)
-    if (is(tryerr, "error")) {
-      sprintf("\n  error: %s", x$error)
-    } else {
-      x <- as.list(unlist(tryerr))
+    te <- tryCatch(x$error$root_cause, error = function(e) e)
+    if (!is(te, "error") || !"error" %in% names(x)) {
+      if (!"error" %in% names(x)) {
+        te <- x
+      }
+      x <- as.list(unlist(te))
       paste0("\n  ", paste(names(x), unname(x), sep = ": ", collapse = "\n  "))
+    } else {
+      sprintf("\n  error: %s", x$error)
     }
   }
 }
 
 pluck_reason <- function(x) {
   tryerr <- tryCatch(x$error$reason, error = function(e) e)
-  if (is(tryerr, "error")) {
-    x$error
+  if (is(tryerr, "error") || is.null(tryerr)) {
+    tryerr <- tryCatch(x$error, error = function(e) e)
+    if (is(tryerr, "error") || is.null(tryerr)) {
+      "error"
+    } else {
+      x
+    }
   } else {
-    x
+    tryerr
   }
 }

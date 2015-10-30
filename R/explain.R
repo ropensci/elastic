@@ -33,14 +33,14 @@
 #' @references
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-shards.html}
 #' @examples \dontrun{
-#' explain(index = "plos", type = "article", id = 10, q = "abstract:used")
+#' explain(index = "plos", type = "article", id = 14, q = "abstract:used")
 #'
 #' body <- '{
 #'  "query": {
 #'    "term": { "abstract": "used" }
 #'  }
 #' }'
-#' explain(index = "plos", type = "article", id = 10, body=body)
+#' explain(index = "plos", type = "article", id = 14, body=body)
 #' }
 
 explain <- function(index=NULL, type=NULL, id=NULL, source2=NULL, fields=NULL, routing=NULL,
@@ -61,6 +61,7 @@ explain_POST <- function(index, type, id, args, body, raw, ...) {
   url <- make_url(es_get_auth())
   url <- if(is.null(id)) file.path(url, index, type, "_explain") else file.path(url, index, type, id, "_explain")
   tt <- if(is.null(body)) POST(url, query=args, make_up(), ...) else POST(url, query=args, body=body, make_up(), ...)
-  stop_for_status(tt)
-  if(raw) content(tt, "text") else jsonlite::fromJSON(content(tt, "text"), FALSE)
+  geterror(tt)
+  # stop_for_status(tt)
+  if (raw) content(tt, "text") else jsonlite::fromJSON(content(tt, "text"), FALSE)
 }

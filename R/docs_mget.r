@@ -36,7 +36,7 @@
 #' docs_mget(index="shakespeare", type_id=list(c("scene",1), c("line",20)))
 #' docs_mget(index="shakespeare", type_id=list(c("scene",1), c("line",20)), fields='play_name')
 #'
-#' # Different indeces and different types
+#' # Different indices and different types
 #' # pass in separately
 #' docs_mget(index_type_id=list(c("shakespeare","line",1), c("plos","article",1)))
 #' }

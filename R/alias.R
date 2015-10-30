@@ -58,7 +58,7 @@ alias_exists <- function(index=NULL, alias=NULL, ...) {
 #' @rdname alias
 alias_create <- function(index=NULL, alias, routing=NULL, filter=NULL, ...) {
   out <- PUT(alias_url(index, alias), c(make_up(), ...))
-  stop_for_status(out)
+  geterror(out)
   jsonlite::fromJSON(content(out, "text"), FALSE)
 }
 
@@ -66,7 +66,7 @@ alias_create <- function(index=NULL, alias, routing=NULL, filter=NULL, ...) {
 #' @rdname alias
 alias_delete <- function(index=NULL, alias, ...) {
   out <- DELETE(alias_url(index, alias), c(make_up(), ...))
-  stop_for_status(out)
+  geterror(out)
   jsonlite::fromJSON(content(out, "text"), FALSE)
 }
 
