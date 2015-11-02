@@ -2,14 +2,10 @@ language: c
 
 sudo: required
 
-services:
-- elasticsearch
-
-before_script:
-- sleep 5
-
 before_install:
-- curl "http://127.0.0.1:9200"
+- curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.7.2.deb && sudo dpkg -i --force-confnew elasticsearch-1.7.2.deb && sudo service elasticsearch start
+- sleep 3
+- sudo service elasticsearch status
 - curl -OL https://raw.githubusercontent.com/metacran/r-builder/master/pkg-build.sh
 - chmod 755 pkg-build.sh
 - "./pkg-build.sh bootstrap"
