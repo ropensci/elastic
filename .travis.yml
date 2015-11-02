@@ -3,7 +3,9 @@ language: c
 sudo: required
 
 before_install:
-- curl -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.0.0/elasticsearch-2.0.0.tar.gz && tar -zxvf elasticsearch-2.0.0.tar.gz && mv elasticsearch-2.0.0 /tmp/ && cd /tmp/elasticsearch-2.0.0 && bin/elasticsearch -d
+- curl -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.0.0/elasticsearch-2.0.0.deb && sudo dpkg -i --force-confnew elasticsearch-2.0.0.deb && sudo service elasticsearch start
+- sleep 3
+- sudo service elasticsearch status
 - curl -OL https://raw.githubusercontent.com/metacran/r-builder/master/pkg-build.sh
 - chmod 755 pkg-build.sh
 - "./pkg-build.sh bootstrap"
