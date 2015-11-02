@@ -48,13 +48,6 @@ test_that("index_delete", {
 #   expect_error(index_open("adfadfafafasdfasdfasfasfasfd"), "Not Found")
 # })
 
-test_that("index_status", {
-  a <- index_status('shakespeare')
-  expect_is(a, "list")
-  expect_named(a$indices, "shakespeare")
-  expect_error(index_status("adfadfafafasdfasdfasfasfasfd", verbose=FALSE), "missing")
-})
-
 test_that("index_stats", {
   a <- index_stats('shakespeare')
   expect_is(a, "list")
