@@ -13,7 +13,7 @@ test_that("count", {
   expect_is(c, "integer")
   expect_is(d, "integer")
 
-  expect_equal(b, 5000)
+  expect_more_than(b, 10)
 
   expect_error(count("adfadf"), "404 - no such index")
   expect_error(count(type = "adfad"), "404 - no such index")

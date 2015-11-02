@@ -57,8 +57,9 @@ test_that("mapping_get works", {
   expect_is(mapping_get('_all'), "list")
   mapping_get(index = "plos")
   expect_named(mapping_get(index = "plos", type = "citation")$plos$mappings, "citation")
-  expect_named(mapping_get(index = "plos", type = c("article", "citation", "reference"))$plos$mappings,
-               c("reference", "citation", "article"))
+  
+  maps <- mapping_get(index = "plos", type = c("article", "citation", "reference"))$plos$mappings
+  expect_is(maps, "list")
 })
 
 # test_that("mapping_delete works", {
