@@ -3,10 +3,9 @@ language: c
 sudo: required
 
 before_install:
-- curl -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.0.0/elasticsearch-2.0.0.deb
-  && sudo dpkg -i --force-confnew elasticsearch-2.0.0.deb && sudo service elasticsearch start
-- sleep 3
-- sudo service elasticsearch status
+- mkdir /tmp/elasticsearch
+- wget -O - http://s3-eu-west-1.amazonaws.com/build.eu-west-1.elastic.co/origin/2.0/nightly/JDK7/elasticsearch-latest-SNAPSHOT.tar.gz | tar xz --directory=/tmp/elasticsearch --strip-components=1
+- /tmp/elasticsearch/bin/elasticsearch -d --path.data /tmp --discovery.zen.ping.multicast.enabled false --script.inline on --script.indexed on --path.repo=/tmp --repositories.url.allowed_urls='http://*' --node.testattr=test
 - curl -OL https://raw.githubusercontent.com/metacran/r-builder/master/pkg-build.sh
 - chmod 755 pkg-build.sh
 - "./pkg-build.sh bootstrap"
