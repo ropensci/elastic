@@ -133,10 +133,6 @@
 #' # open an index
 #' index_open('plos')
 #'
-#' # Get status of an index
-#' # index_status('plos')
-#' # index_status(c('plos','gbif'))
-#'
 #' # Get stats on an index
 #' index_stats('plos')
 #' index_stats(c('plos','gbif'))
@@ -269,7 +265,7 @@ index_delete <- function(index, raw=FALSE, verbose=TRUE, ...) {
 index_create <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...) {
   checkconn()
   url <- make_url(es_get_auth())
-  out <- PUT(paste0(url, "/", index), body = body, make_up(), ...)
+  out <- PUT(paste0(url, "/", esc(index)), body = body, make_up(), ...)
   geterror(out)
   if (verbose) message(URLdecode(out$url))
   tt <- content(out, as = "text")
@@ -319,10 +315,6 @@ index_settings_update <- function(index=NULL, body, ...) {
   res <- content(tt, as = "text")
   jsonlite::fromJSON(res)
 }
-
-#' @export
-#' @rdname index
-index_status <- function(index = NULL, ...) es_GET_wrap1(index, "_status", ...)
 
 #' @export
 #' @rdname index

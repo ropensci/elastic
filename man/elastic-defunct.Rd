@@ -13,6 +13,8 @@
  Running as a Service on Windows
  (\url{https://www.elastic.co/guide/en/elasticsearch/reference/2.0/setup-service-win.html}))
  or use the -p command line option to write the PID to a file.
+ \item \code{\link{index_status}}: _status route for the index API has been removed.
+ Replaced with the Indices Stats and Indices Recovery APIs.
 }
 }
 

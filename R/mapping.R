@@ -92,7 +92,7 @@ mapping_create <- function(index, type, body, ...){
 #' @rdname mapping
 mapping_delete <- function(index, type, ...){
   url <- make_url(es_get_auth())
-  es_DELETE(file.path(url, esc(index), "_mapping", esc(type)), ...)
+  es_DELETE(file.path(url, esc(index), esc(type), "_mapping"), ...)
 }
 
 #' @export

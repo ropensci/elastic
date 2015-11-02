@@ -8,7 +8,7 @@ test_that("basic search works", {
   expect_equal(names(a), c('took','timed_out','_shards','hits'))
   expect_is(a, "list")
   expect_is(a$hits$hits, "list")
-  expect_equal(names(a$hits$hits[[1]]), c('_index','_type','_id','_version','_score','_source'))
+  expect_equal(names(a$hits$hits[[1]]), c('_index','_type','_id','_score','_source'))
 })
 
 test_that("search for document type works", {
@@ -48,17 +48,17 @@ test_that("getting json data back from search works", {
 test_that("Search fails as expected", {
 
   aggs <- list(aggs = list(stats = list(stfff = list(field = "text_entry"))))
-  expect_error(Search(index = "shakespeare", body = aggs), "Could not find aggregator type")
+  expect_error(Search(index = "shakespeare", body = aggs), "all shards failed")
 
-  expect_error(Search(index = "shakespeare", type = "act", sort = "text_entryasasfd"), "No mapping found for")
+  expect_error(Search(index = "shakespeare", type = "act", sort = "text_entryasasfd"), "all shards failed")
 
   expect_error(Search(index = "shakespeare", size = "adf"), "size should be a numeric or integer class value")
 
   expect_error(Search(index = "shakespeare", from = "asdf"), "from should be a numeric or integer class value")
 
-  expect_error(Search(index="shakespeare", q="~text_entry:ma~"), "Was expecting one of")
+  expect_error(Search(index="shakespeare", q="~text_entry:ma~"), "all shards failed")
 
-  expect_error(Search(index="shakespeare", q="line_id:[10 TO x]"), "NumberFormatException")
+  expect_error(Search(index="shakespeare", q="line_id:[10 TO x]"), "400 - all shards failed")
 
   expect_error(Search(index="shakespeare", terminate_after="Afd"), "terminate_after should be a numeric")
 })

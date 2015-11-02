@@ -143,10 +143,14 @@ geterror <- function(z) {
                pluck_trace(err), call. = FALSE)
         } else {
           msg <- tryCatch(err$error$reason, error = function(e) e)
-          if (is(msg, "simpleError")) {
+          if (is(msg, "simpleError") || is.null(msg)) {
             msg <- tryCatch(err$error, error = function(e) e)
             if (is(msg, "simpleError") || is.null(msg)) {
-              msg <- "error"
+              if (!err$found) {
+                msg <- "not found"
+              } else {
+                msg <- "error"
+              }
             }
           }
           stop(z$status_code, " - ", msg, call. = FALSE)

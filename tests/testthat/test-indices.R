@@ -8,7 +8,7 @@ test_that("index_get", {
   expect_is(a, "list")
   expect_is(a$shakespeare, "list")
   expect_equal(length(a$shakespeare$aliases), 0)
-  expect_error(index_get("adfadfadsfasdfadfasdfsf"), "missing")
+  expect_error(index_get("adfadfadsfasdfadfasdfsf"), '404 - no such index')
 })
 
 test_that("index_exists", {
@@ -23,7 +23,7 @@ test_that("index_create", {
   expect_true(a[[1]])
   expect_named(a, expected = "acknowledged")
   expect_is(a, "list")
-  expect_error(index_create("/"), "Bad Request")
+  expect_error(index_create("/"), "Invalid index name")
 })
 
 test_that("index_delete", {
@@ -34,7 +34,7 @@ test_that("index_delete", {
   expect_true(b[[1]])
   expect_named(b, expected = "acknowledged")
   expect_is(b, "list")
-  expect_error(index_delete("adfadfafafasdfasdfasfasfasfd"), "Not Found")
+  expect_error(index_delete("adfadfafafasdfasdfasfasfasfd", verbose=FALSE), "404 - no such index")
 })
 
 # test_that("index_close, index_open", {
@@ -52,28 +52,28 @@ test_that("index_status", {
   a <- index_status('shakespeare')
   expect_is(a, "list")
   expect_named(a$indices, "shakespeare")
-  expect_error(index_status("adfadfafafasdfasdfasfasfasfd"), "missing")
+  expect_error(index_status("adfadfafafasdfasdfasfasfasfd", verbose=FALSE), "missing")
 })
 
 test_that("index_stats", {
   a <- index_stats('shakespeare')
   expect_is(a, "list")
   expect_named(a$indices, "shakespeare")
-  expect_error(index_stats("adfadfafafasdfasdfasfasfasfd"), "missing")
+  expect_error(index_stats("adfadfafafasdfasdfasfasfasfd", verbose=FALSE), "404 - no such index")
 })
 
 test_that("index_segments", {
   a <- index_segments('shakespeare')
   expect_is(a, "list")
   expect_named(a$indices, "shakespeare")
-  expect_error(index_segments("adfadfafafasdfasdfasfasfasfd"), "missing")
+  expect_error(index_segments("adfadfafafasdfasdfasfasfasfd", verbose=FALSE), "404 - no such index")
 })
 
 test_that("index_recovery", {
   a <- index_recovery('shakespeare')
   expect_is(a, "list")
   expect_named(a$shakespeare, "shards")
-  expect_error(index_recovery("adfadfafafasdfasdfasfasfasfd"), "missing")
+  expect_error(index_recovery("adfadfafafasdfasdfasfasfasfd", verbose=FALSE), "404 - no such index")
 })
 
 ## cleanup -----------------------------------

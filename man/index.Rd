@@ -17,7 +17,6 @@
 \alias{index_settings}
 \alias{index_settings_update}
 \alias{index_stats}
-\alias{index_status}
 \alias{index_upgrade}
 \title{Index API operations}
 \usage{
@@ -42,8 +41,6 @@ index_stats(index = NULL, metric = NULL, completion_fields = NULL,
 index_settings(index = "_all", ...)
 
 index_settings_update(index = NULL, body, ...)
-
-index_status(index = NULL, ...)
 
 index_segments(index = NULL, ...)
 
@@ -224,10 +221,6 @@ index_close('plos')
 
 # open an index
 index_open('plos')
-
-# Get status of an index
-# index_status('plos')
-# index_status(c('plos','gbif'))
 
 # Get stats on an index
 index_stats('plos')

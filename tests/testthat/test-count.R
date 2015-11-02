@@ -15,6 +15,6 @@ test_that("count", {
 
   expect_equal(b, 5000)
 
-  expect_error(count("adfadf"), "missing")
-  expect_error(count(type = "adfad"), "missing")
+  expect_error(count("adfadf"), "404 - no such index")
+  expect_error(count(type = "adfad"), "404 - no such index")
 })

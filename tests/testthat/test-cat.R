@@ -7,7 +7,7 @@ test_that("cat_", {
   a <- cat_(parse = TRUE)
   expect_is(a, "data.frame")
   expect_is(a$V1, "character")
-  expect_equal(length(a$V1), 22)
+  expect_equal(length(a$V1), 23)
   expect_is(capture.output(cat_()), "character")
   expect_error(cat_(verbose = "adf"), "is not TRUE")
 })
@@ -22,7 +22,7 @@ test_that("cat_indices", {
   expect_is(b$store.size, "character")
   expect_is(c$store.size, "integer")
 
-  expect_error(cat_indices(index = "adf"), "missing")
+  expect_error(cat_indices(index = "adf"), "404 - no such index")
   expect_error(cat_indices(bytes = "adfad"), "is not TRUE")
 })
 
