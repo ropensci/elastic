@@ -4,11 +4,10 @@ sudo: required
 
 env:
   matrix:
-  - ES_VERSION=1.7.2
-  - ES_VERSION=2.0.0
-  - RVERSION=oldrel
-  - RVERSION=release
-  - RVERSION=devel COVERAGE=true
+  - ES_VERSION=1.7.2 RVERSION=oldrel
+  - ES_VERSION=2.0.0 RVERSION=oldrel
+  - ES_VERSION=1.7.2 RVERSION=release
+  - ES_VERSION=2.0.0 RVERSION=release
 
 before_install:
   - case "$ES_VERSION" in
