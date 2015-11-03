@@ -8,7 +8,7 @@ env:
   - ES_VERSION=2.0.0 
 
 before_install:
-  - case "ES_VERSION" in
+  - case "$ES_VERSION" in
     "") ;;
 
     "1.7.2")
