@@ -81,6 +81,7 @@ has_http <- function(x) {
   if (!grepl("^http[s]?://", x)) {
     x <- paste0("http://", x)
     message("es_base not prefixed with http, using ", x, "\nIf you need https, pass in the complete URL")
+    x
   } else {
     x
   }
