@@ -1,7 +1,7 @@
 language: r
 
 before_install:
-- curl -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.0.0/elasticsearch-$ES_VERSION.deb && sudo dpkg -i --force-confnew elasticsearch-2.0.0.deb && sudo service elasticsearch start
+- curl -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.0.0/elasticsearch-2.0.0.deb && sudo dpkg -i --force-confnew elasticsearch-2.0.0.deb && sudo service elasticsearch start
 - sleep 3
 - sudo service elasticsearch status
 
