@@ -18,8 +18,8 @@ test_that("cluster_health", {
   expect_named(out2)
   expect_is(out2, "list")
   expect_equal(out2$cluster_name, "elasticsearch")
-  expect_is(cluster_health(raw = TRUE), "elastic_cluster_health")
-  expect_is(unclass(cluster_health(raw = TRUE)), "character")
+  expect_is(cluster_health(), "list")
+  expect_error(cluster_health(wait_for_status = "yellow", timeout = "1s"))
 })
 
 test_that("cluster_state", {
@@ -30,7 +30,6 @@ test_that("cluster_state", {
   expect_is(out3, "list")
   expect_equal(out3$cluster_name, "elasticsearch")
   expect_is(cluster_state(raw = TRUE), "elastic_cluster_state")
-  expect_error(cluster_state(index = "af"), "404 - no such index")
 })
 
 test_that("cluster_stats", {
