@@ -12,6 +12,11 @@
 #'
 #' ## Return certain fields
 #' Search(index="shakespeare", fields=c('play_name','speaker'))
+#' 
+#' ## search_type
+#' Search(index="shakespeare", search_type = "query_then_fetch")
+#' Search(index="shakespeare", search_type = "dfs_query_then_fetch")
+#' # Search(index="shakespeare", search_type = "scan") # only when scrolling
 #'
 #' ## sorting
 #' Search(index="shakespeare", type="act", sort="text_entry")
@@ -342,15 +347,11 @@
 #' ## A bool filter
 #' body <- '{
 #'  "query":{
-#'    "filtered":{
-#'      "filter":{
-#'         "bool": {
-#'            "must_not" : {
-#'                "range" : {
-#'                    "year" : { "from" : 2011, "to" : 2012 }
-#'                }
-#'            }
-#'          }
+#'    "bool": {
+#'      "must_not" : {
+#'        "range" : {
+#'          "year" : { "from" : 2011, "to" : 2012 }
+#'        }
 #'      }
 #'    }
 #'  }
@@ -377,7 +378,10 @@
 #' ### Points within a bounding box
 #' body <- '{
 #'  "query":{
-#'    "filtered":{
+#'    "bool" : {
+#'      "must" : {
+#'        "match_all" : {}
+#'      },
 #'      "filter":{
 #'         "geo_bounding_box" : {
 #'           "location" : {
@@ -422,19 +426,22 @@
 #' ### Points within distance range of a point
 #' body <- '{
 #'  "query":{
-#'    "filtered":{
+#'    "bool" : {
+#'      "must" : {
+#'        "match_all" : {}
+#'      },
 #'      "filter":{
-#'         "geo_distance_range" : {
-#'           "from" : "200km",
-#'           "to" : "400km",
-#'           "location" : {
-#'               "lon" : 4,
-#'               "lat" : 50
-#'            }
+#'        "geo_distance_range" : {
+#'          "from" : "200km",
+#'          "to" : "400km",
+#'          "location" : {
+#'            "lon" : 4,
+#'            "lat" : 50
 #'          }
 #'        }
 #'      }
 #'    }
+#'  }
 #' }'
 #' out <- Search('gbifgeopoint', body = body)
 #' out$hits$total
@@ -443,7 +450,10 @@
 #' ### Points within a polygon
 #' body <- '{
 #'  "query":{
-#'    "filtered":{
+#'    "bool" : {
+#'      "must" : {
+#'        "match_all" : {}
+#'      },
 #'      "filter":{
 #'         "geo_polygon" : {
 #'           "location" : {
@@ -541,21 +551,25 @@
 #'
 #' # prefix filter
 #' body <- '{
-#'  "query":{
-#'    "filtered" : {
-#'      "filter" : {
-#'        "prefix" : { "speaker" : "we" }
+#'  "query": {
+#'    "bool": {
+#'      "must": {
+#'        "prefix" : { 
+#'          "speaker" : "we" 
+#'        }
 #'      }
 #'    }
 #'  }
 #' }'
-#' Search("shakespeare", body = body)$hits$total
+#' x <- Search("shakespeare", body = body)
+#' x$hits$total
+#' vapply(x$hits$hits, "[[", "", c("_source", "speaker"))
 #'
 #' # ids filter
 #' body <- '{
 #'  "query":{
-#'    "filtered" : {
-#'      "filter" : {
+#'    "bool": {
+#'      "must": {
 #'        "ids" : {
 #'          "values": ["1","2","3","10","2000"]
 #'        }
@@ -563,44 +577,34 @@
 #'    }
 #'  }
 #' }'
-#' Search("shakespeare", body = body)$hits$total
+#' x <- Search("shakespeare", body = body)
+#' x$hits$total
+#' identical(
+#'  c("1","2","3","10","2000"),
+#'  vapply(x$hits$hits, "[[", "", "_id")
+#' )
 #'
 #' # combined prefix and ids filters
 #' body <- '{
 #'  "query":{
-#'    "filtered" : {
-#'      "filter" : {
-#'        "or": [{
+#'    "bool" : {
+#'      "should" : {
+#'        "or": [
+#'        {
 #'          "ids" : {
 #'            "values": ["1","2","3","10","2000"]
 #'          }
-#'        },
+#'        }, 
 #'        {
 #'          "prefix" : {
 #'            "speaker" : "we"
 #'          }
-#'        }]
+#'        }
+#'      ]
 #'      }
 #'    }
 #'  }
 #' }'
-#' Search("shakespeare", body = body)$hits$total
-#'
-#' body <- '{
-#'  "query":{
-#'    "filtered" : {
-#'      "filter" : {
-#'        "ids" : {
-#'          "values": ["1","2","3","10","2000"]
-#'        }
-#'      },
-#'      "filter" : {
-#'        "prefix" : {
-#'          "speaker" : "we"
-#'        }
-#'      }
-#'    }
-#'  }
-#' }'
-#' Search("shakespeare", body = body)$hits$total
+#' x <- Search("shakespeare", body = body)
+#' x$hits$total
 #' }

@@ -7,6 +7,11 @@
 #'
 #' ## Return certain fields
 #' Search_uri(index="shakespeare", fields=c('play_name','speaker'))
+#' 
+#' ## search_type
+#' Search_uri(index="shakespeare", search_type = "query_then_fetch")
+#' Search_uri(index="shakespeare", search_type = "dfs_query_then_fetch")
+#' # Search_uri(index="shakespeare", search_type = "scan") # only when scrolling
 #'
 #' ## sorting
 #' Search_uri(index="shakespeare", type="act", sort="text_entry")

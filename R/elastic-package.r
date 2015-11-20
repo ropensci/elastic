@@ -58,6 +58,18 @@
 #'  \url{http://recology.info/2015/02/secure-elasticsearch/}
 #' }
 #'
+#' @section Elasticsearch changes:
+#' As of Elasticsearch v2:
+#' \itemize{
+#'  \item You can no longer create fields with dots in the name.
+#'  \item Type names may not start with a dot (other than the special \code{.percolator} type)
+#'  \item Type names may not be longer than 255 characters
+#'  \item Types may no longer be deleted
+#'  \item Queries and filters have been merged — all filter clauses are now query clauses.
+#'     Instead, query clauses can now be used in query context or in filter context. See
+#'     examples in \code{\link{Search}} or \code{\link{Search_uri}}
+#'}
+#'
 #' @importFrom utils read.table read.delim txtProgressBar setTxtProgressBar URLdecode modifyList
 #' @importFrom methods is
 #' @importFrom httr HEAD GET POST PUT DELETE content authenticate stop_for_status upload_file http_status
