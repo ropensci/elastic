@@ -2,12 +2,43 @@
 #'
 #' @name cluster
 #' @param index Index
+#' @param metrics One or more of version, master_node, nodes, routing_table,
+#' metadata, and blocks. See Details.
+#' @param level Can be one of cluster, indices or shards. Controls the details level of the
+#' health information returned. Defaults to cluster.
+#' @param wait_for_status One of green, yellow or red. Will wait (until the timeout 
+#' provided) until the status of the cluster changes to the one provided or better, i.e. 
+#' green > yellow > red. By default, will not wait for any status.
+#' @param wait_for_relocating_shards A number controlling to how many relocating shards 
+#' to wait for. Usually will be 0 to indicate to wait till all relocations have happened. 
+#' Defaults to not wait.
+#' @param wait_for_active_shards A number controlling to how many active shards to wait for. 
+#' Defaults to not wait.
+#' @param wait_for_nodes The request waits until the specified number N of nodes is 
+#' available. It also accepts >=N, <=N, >N and <N. Alternatively, it is possible to use 
+#' ge(N), le(N), gt(N) and lt(N) notation.
+#' @param timeout A time based parameter controlling how long to wait if one of the 
+#' wait_for_XXX are provided. Defaults to 30s.
 #' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
 #' @param callopts Curl args passed on to httr::POST.
 #' @param verbose If TRUE (default) the url call used printed to console.
 #' @param ... Further args passed on to elastic search HTTP API as parameters.
 #'
 #' @details
+#' metrics param options:
+#' \itemize{
+#'  \item version Shows the cluster state version.
+#'  \item master_node Shows the elected master_node part of the response
+#'  \item nodes Shows the nodes part of the response
+#'  \item routing_table Shows the routing_table part of the response. If you supply
+#'  a comma separated list of indices, the returned output will only contain the
+#'  indices listed.
+#'  \item metadata Shows the metadata part of the response. If you supply a comma
+#'  separated list of indices, the returned output will only contain the indices
+#'  listed.
+#'  \item blocks Shows the blocks part of the response
+#' }
+#'
 #' Additional parameters that can be passed in:
 #' \itemize{
 #'   \item metric A comma-separated list of metrics to display. Possible values: '_all',
@@ -37,12 +68,37 @@
 #' @examples \dontrun{
 #' cluster_settings()
 #' cluster_health()
+#'
 #' cluster_state()
+#' cluster_state(metrics = "version")
+#' cluster_state(metrics = "nodes")
+#' cluster_state(metrics = c("version", "nodes"))
+#' cluster_state(metrics = c("version", "nodes", 'blocks'))
+#' cluster_state("shakespeare", metrics = "metadata")
+#' cluster_state(c("shakespeare", "flights"), metrics = "metadata")
+#'
 #' cluster_stats()
 #' cluster_pending_tasks()
+#' 
+#' body <- '{
+#'   "commands" : [ {
+#'     "move" :
+#'       {
+#'         "index" : "test", "shard" : 0,
+#'         "from_node" : "node1", "to_node" : "node2"
+#'       }
+#'     },
+#'     {
+#'       "allocate" : {
+#'           "index" : "test", "shard" : 1, "node" : "node3"
+#'       }
+#'     }
+#'   ]
+#' }'
+#' # cluster_reroute(body =  body)
 #'
-#' # raw json data
-#' cluster_health(raw = TRUE)
+#' cluster_health()
+#' cluster_health(wait_for_status = "yellow", timeout = "3s")
 #' }
 
 #' @export
@@ -53,14 +109,35 @@ cluster_settings <- function(index=NULL, raw=FALSE, callopts=list(), verbose=TRU
 
 #' @export
 #' @rdname cluster
-cluster_health <- function(index=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...){
-  es_GET('_cluster/health', index, NULL, NULL, NULL, 'elastic_cluster_health', raw, callopts, ...)
+cluster_health <- function(index=NULL, level = NULL, wait_for_status = NULL, 
+                           wait_for_relocating_shards = NULL, wait_for_active_shards = NULL, 
+                           wait_for_nodes = NULL, timeout = NULL, raw=FALSE, 
+                           callopts=list(), verbose=TRUE, ...) {
+  
+  checkconn()
+  url <- file.path(make_url(es_get_auth()), '_cluster/health')
+  if (!is.null(index)) {
+    url <- file.path(url, paste0(index, collapse = ","))
+  }
+  args <- ec(list(level = level, wait_for_status = wait_for_status, 
+                  wait_for_relocating_shards = wait_for_relocating_shards, 
+                  wait_for_active_shards = wait_for_active_shards, 
+                  wait_for_nodes = wait_for_nodes, timeout = timeout))
+  es_GET_(url, args, ...)
+  # es_GET('_cluster/health', NULL, NULL, NULL, NULL, 'elastic_cluster_health', raw, callopts, ...)
 }
 
 #' @export
 #' @rdname cluster
-cluster_state <- function(index=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...){
-  es_GET('_cluster/state', index, NULL, NULL, NULL, 'elastic_cluster_state', raw, callopts, ...)
+cluster_state <- function(index=NULL, metrics=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...){
+  path <- '_cluster/state'
+  if (!is.null(metrics)) {
+    path <- file.path(path, paste0(metrics, collapse = ","))
+  }
+  if (!is.null(index)) {
+    path <- file.path(path, paste0(index, collapse = ","))
+  }
+  es_GET(path, NULL, NULL, NULL, NULL, 'elastic_cluster_state', raw, callopts, ...)
 }
 
 #' @export
@@ -71,8 +148,8 @@ cluster_stats <- function(index=NULL, raw=FALSE, callopts=list(), verbose=TRUE, 
 
 #' @export
 #' @rdname cluster
-cluster_reroute <- function(index=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...){
-  es_GET('_cluster/reroute', index, NULL, NULL, NULL, 'elastic_cluster_reroute', raw, callopts, ...)
+cluster_reroute <- function(body, raw=FALSE, callopts=list(), ...){
+  es_POST('_cluster/reroute', query = body, raw = raw, callopts = callopts, ...)
 }
 
 #' @export
