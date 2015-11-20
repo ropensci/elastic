@@ -19,7 +19,7 @@ test_that("cluster_health", {
   expect_is(out2, "list")
   expect_equal(out2$cluster_name, "elasticsearch")
   expect_is(cluster_health(), "list")
-  expect_error(cluster_health(wait_for_status = "yellow", timeout = "1s"))
+  expect_is(cluster_health("shakespeare"), "list")
 })
 
 test_that("cluster_state", {
