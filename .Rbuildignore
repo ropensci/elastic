@@ -10,4 +10,4 @@ README.Rmd
 cran-comments.md
 \.deb$
 es_matrix_travis.yml
-
+notes-v2.md

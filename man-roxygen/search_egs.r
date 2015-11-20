@@ -12,7 +12,7 @@
 #'
 #' ## Return certain fields
 #' Search(index="shakespeare", fields=c('play_name','speaker'))
-#' 
+#'
 #' ## search_type
 #' Search(index="shakespeare", search_type = "query_then_fetch")
 #' Search(index="shakespeare", search_type = "dfs_query_then_fetch")
@@ -554,8 +554,8 @@
 #'  "query": {
 #'    "bool": {
 #'      "must": {
-#'        "prefix" : { 
-#'          "speaker" : "we" 
+#'        "prefix" : {
+#'          "speaker" : "we"
 #'        }
 #'      }
 #'    }
@@ -594,7 +594,7 @@
 #'          "ids" : {
 #'            "values": ["1","2","3","10","2000"]
 #'          }
-#'        }, 
+#'        },
 #'        {
 #'          "prefix" : {
 #'            "speaker" : "we"

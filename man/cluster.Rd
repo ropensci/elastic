@@ -63,6 +63,8 @@ wait_for_XXX are provided. Defaults to 30s.}
 
 \item{metrics}{One or more of version, master_node, nodes, routing_table,
 metadata, and blocks. See Details.}
+
+\item{body}{Query, either a list or json.}
 }
 \description{
 Elasticsearch cluster endpoints

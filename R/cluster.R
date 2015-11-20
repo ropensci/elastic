@@ -19,6 +19,7 @@
 #' ge(N), le(N), gt(N) and lt(N) notation.
 #' @param timeout A time based parameter controlling how long to wait if one of the 
 #' wait_for_XXX are provided. Defaults to 30s.
+#' @param body Query, either a list or json.
 #' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
 #' @param callopts Curl args passed on to httr::POST.
 #' @param verbose If TRUE (default) the url call used printed to console.
