@@ -102,6 +102,10 @@
 #' index_create(index='things')
 #' if (index_exists('plos')) index_delete('plos')
 #' index_create(index='plos')
+#' 
+#' # re-create an index
+#' index_recreate("deer")
+#' index_recreate("deer", verbose = FALSE)
 #'
 #' # delete an index
 #' if (index_exists('plos')) index_delete(index='plos')
@@ -280,6 +284,18 @@ index_create <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...) {
   if (verbose) message(URLdecode(out$url))
   tt <- content(out, as = "text")
   if (raw) tt else jsonlite::fromJSON(tt, FALSE)
+}
+
+#' @export
+#' @rdname index
+index_recreate <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...) {
+  checkconn()
+  if (index_exists(index)) {
+    if (verbose) message("deleting ", index)
+    index_delete(index, verbose = verbose)
+  }
+  if (verbose) message("creating ", index)
+  index_create(index=index, body=body, raw=raw, verbose=verbose, ...)
 }
 
 #' @export

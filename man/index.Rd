@@ -13,6 +13,7 @@
 \alias{index_open}
 \alias{index_optimize}
 \alias{index_recovery}
+\alias{index_recreate}
 \alias{index_segments}
 \alias{index_settings}
 \alias{index_settings_update}
@@ -28,6 +29,9 @@ index_exists(index, ...)
 index_delete(index, raw = FALSE, verbose = TRUE, ...)
 
 index_create(index = NULL, body = NULL, raw = FALSE, verbose = TRUE,
+  ...)
+
+index_recreate(index = NULL, body = NULL, raw = FALSE, verbose = TRUE,
   ...)
 
 index_close(index, ...)
@@ -191,6 +195,10 @@ if (index_exists('things')) index_delete('things')
 index_create(index='things')
 if (index_exists('plos')) index_delete('plos')
 index_create(index='plos')
+
+# re-create an index
+index_recreate("deer")
+index_recreate("deer", verbose = FALSE)
 
 # delete an index
 if (index_exists('plos')) index_delete(index='plos')
