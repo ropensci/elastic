@@ -4,6 +4,11 @@
 #' \code{base::search}. I hate mixing cases, as I think it confuses users, but in this case
 #' it seems neccessary.
 #' @examples \dontrun{
+#' if (!index_exists("shakespeare")) {
+#'   shakespeare <- system.file("examples", "shakespeare_data.json", package = "elastic")
+#'   docs_bulk(shakespeare)
+#' }
+#' 
 #' # URI string queries
 #' Search(index="shakespeare")
 #' Search(index="shakespeare", type="act")
@@ -253,7 +258,7 @@
 #'    }
 #'  }
 #' }'
-#' Search(index="gbifnewgeo", body=geo)
+#' # Search(index="gbifnewgeo", body=geo)
 #'
 #' # range query
 #' ## with numeric
@@ -310,7 +315,7 @@
 #' }'
 #' out <- Search('plos', 'article', body=body)
 #' out$hits$total
-#' sapply(out$hits$hits, function(x) x$highlight$title[[1]])
+#' sapply(out$hits$hits, function(x) x$`_source`$title[[1]])
 #'
 #' ### Common terms query
 #' body <- '{
@@ -371,7 +376,7 @@
 #'    }
 #'  }
 #' }'
-#' index_create(index='gbifgeopoint', body=body)
+#' index_recreate(index='gbifgeopoint', body=body)
 #' path <- system.file("examples", "gbif_geopoint.json", package = "elastic")
 #' docs_bulk(path)
 #'
@@ -481,7 +486,7 @@
 #'    }
 #'  }
 #' }'
-#' index_create(index='geoshape', body=body)
+#' index_recreate(index='geoshape', body=body)
 #' path <- system.file("examples", "gbif_geoshape.json", package = "elastic")
 #' docs_bulk(path)
 #'
