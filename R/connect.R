@@ -30,7 +30,7 @@
 #' connect()
 #'
 #' # or set to a different base url
-#' connect('http://162.243.152.56')
+#' # connect('http://162.243.152.56')
 #'
 #' # See connection details
 #' connection()

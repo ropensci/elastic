@@ -144,7 +144,7 @@ body <- '{
 # cluster_reroute(body =  body)
 
 cluster_health()
-cluster_health(wait_for_status = "yellow", timeout = "3s")
+# cluster_health(wait_for_status = "yellow", timeout = "3s")
 }
 }
 

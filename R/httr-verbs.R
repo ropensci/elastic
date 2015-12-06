@@ -146,11 +146,12 @@ geterror <- function(z) {
           if (is(msg, "simpleError") || is.null(msg)) {
             msg <- tryCatch(err$error, error = function(e) e)
             if (is(msg, "simpleError") || is.null(msg)) {
-              if (!err$found) {
-                msg <- "not found"
-              } else {
-                msg <- "error"
-              }
+              msg <- httr::http_status(z)$message
+              # if (!err$found) {
+              #   msg <- "not found"
+              # } else {
+              #   msg <- "error"
+              # }
             }
           }
           stop(z$status_code, " - ", msg, call. = FALSE)

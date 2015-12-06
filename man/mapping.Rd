@@ -11,7 +11,7 @@
 \usage{
 mapping_create(index, type, body, ...)
 
-mapping_delete(index, type, ...)
+mapping_delete(...)
 
 mapping_get(index = NULL, type = NULL, ...)
 
@@ -41,13 +41,11 @@ Find documentation for each function at:
 \itemize{
  \item mapping_create - \url{http://bit.ly/1xbWqFo}
  \item type_exists - \url{http://bit.ly/10HkZvH}
- \item mapping_delete - \url{http://bit.ly/10Mmvgi}
+ \item mapping_delete - FUNCTION DEFUNCT - instead of deleting mapping, delete 
+ index and recreate index with new mapping
  \item mapping_get - \url{http://bit.ly/1AN2oiw}
  \item field_mapping_get - \url{http://bit.ly/1wHKgCA }
 }
-
-\strong{NOTE:} For the delete method, Elasticsearch documentation notes that: "... most times,
-it make more sense to reindex the data into a fresh index compared to delete large chunks of it."
 }
 \examples{
 \dontrun{
@@ -62,6 +60,7 @@ body <- list(citation = list(properties = list(
  journal = list(type="string"),
  year = list(type="long")
 )))
+if (!index_exists("plos")) index_create("plos")
 mapping_create(index = "plos", type = "citation", body=body)
 
 ### or as json
@@ -71,7 +70,6 @@ body <- '{
       "journal": { "type": "string" },
       "year": { "type": "long" }
 }}}'
-mapping_delete("plos", "citation")
 mapping_create(index = "plos", type = "citation", body=body)
 mapping_get("plos", "citation")
 
@@ -79,10 +77,7 @@ mapping_get("plos", "citation")
 body <- list(things = list(properties = list(
   journal = list("string")
 )))
-mapping_create(index = "plos", type = "things", body=body)
-
-# Delete a mapping
-mapping_delete("plos", "citation")
+# mapping_create(index = "plos", type = "things", body=body)
 
 # Get mappings
 mapping_get('_all')
@@ -92,7 +87,9 @@ mapping_get(index = "shakespeare", type = "act")
 mapping_get(index = "shakespeare", type = c("act","line"))
 
 # Get field mappings
-field_mapping_get(index = "_all", type=c('article','line'), field = "text")
+plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+docs_bulk(plosdat)
+field_mapping_get(index = "_all", type=c('article', 'line'), field = "text")
 field_mapping_get(index = "plos", type = "article", field = "title")
 field_mapping_get(index = "plos", type = "article", field = "*")
 field_mapping_get(index = "plos", type = "article", field = "title", include_defaults = TRUE)
@@ -100,7 +97,8 @@ field_mapping_get(type = c("article","record"), field = c("title","class"))
 field_mapping_get(type = "a*", field = "t*")
 
 # Create geospatial mapping
-docs_bulk("inst/examples/gbif_geopoint.json")
+file <- system.file("examples", "gbif_geopoint.json", package = "elastic")
+docs_bulk(file)
 body <- '{
  "pin" : {
    "properties" : {

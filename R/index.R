@@ -95,12 +95,16 @@
 #' index_exists(index='shakespeare')
 #' index_exists(index='plos')
 #'
-#' # delete an index
-#' index_delete(index='plos')
-#'
 #' # create an index
+#' if (index_exists('twitter')) index_delete('twitter')
 #' index_create(index='twitter')
+#' if (index_exists('things')) index_delete('things')
 #' index_create(index='things')
+#' if (index_exists('plos')) index_delete('plos')
+#' index_create(index='plos')
+#'
+#' # delete an index
+#' if (index_exists('plos')) index_delete(index='plos')
 #'
 #' ## with a body
 #' body <- '{
@@ -111,6 +115,7 @@
 #'    }
 #'  }
 #' }'
+#' if (index_exists('alsothat')) index_delete('alsothat')
 #' index_create(index='alsothat', body=body)
 #'
 #' ## with mappings
@@ -123,11 +128,12 @@
 #'    }
 #'  }
 #' }'
-#' index_create(index='gbifnewgeo', body=body)
+#' if (!index_exists('gbifnewgeo')) index_create(index='gbifnewgeo', body=body)
 #' gbifgeo <- system.file("examples", "gbif_geosmall.json", package = "elastic")
 #' docs_bulk(gbifgeo)
 #'
 #' # close an index
+#' index_create('plos')
 #' index_close('plos')
 #'
 #' # open an index
@@ -198,6 +204,9 @@
 #'              }
 #'       }
 #' }'
+#' if(index_exists("shakespeare2")) {
+#'    index_delete("shakespeare2")
+#' }
 #' tokenizer_set(index = "shakespeare2", body=body)
 #' index_analyze(text = "art thouh", index = "shakespeare2", analyzer='my_ngram_analyzer')
 #'
@@ -226,6 +235,7 @@
 #' index_settings(c('gbif','plos'))
 #' index_settings('*s')
 #' ## update settings
+#' if (index_exists('foobar')) index_delete('foobar')
 #' index_create("foobar")
 #' settings <- list(index = list(number_of_replicas = 4))
 #' index_settings_update("foobar", body = settings)

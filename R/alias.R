@@ -8,13 +8,13 @@
 #' @param filter Ignored for now
 #' @param ... Curl args passed on to \code{\link[httr]{POST}}
 #' @examples \dontrun{
+#' # Create/update an alias
+#' alias_create(index = "plos", alias = "tables")
+#' 
 #' # Retrieve a specified alias
 #' alias_get(index="plos")
 #' alias_get(alias="tables")
 #' aliases_get()
-#'
-#' # Create/update an alias
-#' alias_create(index = "plos", alias = "tables")
 #'
 #' # Check for alias existence
 #' alias_exists(index = "plos")

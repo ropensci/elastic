@@ -2,40 +2,40 @@
 #'
 #' @export
 #' @param x A data.frame or path to a file to load in the bulk API
-#' @param index (character) The index name to use. Required for data.frame input, but 
+#' @param index (character) The index name to use. Required for data.frame input, but
 #' optional for file inputs.
 #' @param type (character) The type name to use. If left as NULL, will be same name as index.
-#' @param chunk_size (integer) Size of each chunk. If your data.frame is smaller 
+#' @param chunk_size (integer) Size of each chunk. If your data.frame is smaller
 #' thank \code{chunk_size}, this parameter is essentially ignored. We write in chunks because
 #' at some point, depending on size of each document, and Elasticsearch setup, writing a very
 #' large number of documents in one go becomes slow, so chunking can help. This parameter
 #' is ignored if you pass a file name. Default: 1000
-#' @param doc_ids An optional vector (character or numeric/integer) of document ids to use. 
-#' This vector has to equal the size of the documents you are passing in, and will error 
+#' @param doc_ids An optional vector (character or numeric/integer) of document ids to use.
+#' This vector has to equal the size of the documents you are passing in, and will error
 #' if not. If you pass a factor we convert to character. Default: not passed
 #' @param raw (logical) Get raw JSON back or not.
 #' @param ... Pass on curl options to \code{\link[httr]{POST}}
 #' @details More on the Bulk API:
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/bulk.html}.
-#' 
-#' This function dispatches on data.frame or character input. Character input has 
-#' to be a file name or the function stops with an error message. 
-#' 
-#' If you pass a data.frame to this function, we by default to an index operation, 
+#'
+#' This function dispatches on data.frame or character input. Character input has
+#' to be a file name or the function stops with an error message.
+#'
+#' If you pass a data.frame to this function, we by default to an index operation,
 #' that is, create the record in the index and type given by those parameters to the
-#' function. Down the road perhaps we will try to support other operations on the 
-#' bulk API. if you pass a file, of course in that file, you can specify any 
-#' operations you want. 
-#' 
+#' function. Down the road perhaps we will try to support other operations on the
+#' bulk API. if you pass a file, of course in that file, you can specify any
+#' operations you want.
+#'
 #' Row names are dropped from data.frame, and top level names for a list are dropped
 #' as well.
-#' 
+#'
 #' A progress bar gives the progress for data.frames and lists
-#' 
+#'
 #' @section Large numbers for document IDs:
 #' Until recently, if you had very large integers for document IDs, \code{docs_bulk}
 #' failed. It should be fixed now. Let us know if not.
-#' 
+#'
 #' @examples \dontrun{
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 #' docs_bulk(plosdat)
@@ -47,22 +47,22 @@
 #' library("httr")
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 #' docs_bulk(plosdat, config=verbose())
-#' 
+#'
 #' # From a data.frame
 #' docs_bulk(mtcars, index = "hello", type = "world")
 #' docs_bulk(iris, "iris", "flowers")
 #' ## type can be missing, but index can not
 #' docs_bulk(iris, "flowers")
 #' ## big data.frame, 53K rows, load ggplot2 package first
-#' res <- docs_bulk(diamonds, "diam")
-#' Search("diam")$hits$total
-#' 
+#' # res <- docs_bulk(diamonds, "diam")
+#' # Search("diam")$hits$total
+#'
 #' # From a list
 #' docs_bulk(apply(iris, 1, as.list), index="iris", type="flowers")
 #' docs_bulk(apply(USArrests, 1, as.list), index="arrests")
-#' dim_list <- apply(diamonds, 1, as.list)
-#' out <- docs_bulk(dim_list, index="diamfromlist")
-#' 
+#' # dim_list <- apply(diamonds, 1, as.list)
+#' # out <- docs_bulk(dim_list, index="diamfromlist")
+#'
 #' # When using in a loop
 #' ## We internally get last _id counter to know where to start on next bulk insert
 #' ## but you need to sleep in between docs_bulk calls, longer the bigger the data is
@@ -76,7 +76,7 @@
 #' }
 #' count("testes", "docs")
 #' index_delete("testes")
-#' 
+#'
 #' # You can include your own document id numbers
 #' ## Either pass in as an argument
 #' index_create("testes")
@@ -84,7 +84,7 @@
 #'            system.file("examples", "test2.csv", package = "elastic"),
 #'            system.file("examples", "test3.csv", package = "elastic"))
 #' tt <- vapply(files, function(z) NROW(read.csv(z)), numeric(1))
-#' ids <- list(1:tt[1], 
+#' ids <- list(1:tt[1],
 #'            (tt[1] + 1):(tt[1] + tt[2]),
 #'            (tt[1] + tt[2] + 1):sum(tt))
 #' for (i in seq_along(files)) {
@@ -93,7 +93,7 @@
 #' }
 #' count("testes", "docs")
 #' index_delete("testes")
-#' 
+#'
 #' ## or include in the input data
 #' ### from data.frame's
 #' index_create("testes")
@@ -107,7 +107,7 @@
 #' }
 #' count("testes", "docs")
 #' index_delete("testes")
-#' 
+#'
 #' ### from lists via file inputs
 #' index_create("testes")
 #' for (i in seq_along(files)) {
@@ -118,19 +118,19 @@
 #' count("testes", "docs")
 #' index_delete("testes")
 #' }
-docs_bulk <- function(x, index = NULL, type = NULL, chunk_size = 1000, 
+docs_bulk <- function(x, index = NULL, type = NULL, chunk_size = 1000,
                       doc_ids = NULL, raw=FALSE, ...) {
-  
+
   UseMethod("docs_bulk")
 }
 
 #' @export
-docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000, 
+docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000,
                                  doc_ids = NULL, raw = FALSE, ...) {
-  
+
   checkconn()
   if (is.null(index)) {
-    stop("index can't be NULL when passing a data.frame", 
+    stop("index can't be NULL when passing a data.frame",
          call. = FALSE)
   }
   if (is.null(type)) type <- index
@@ -157,12 +157,12 @@ docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000
 }
 
 #' @export
-docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000, 
+docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
                            doc_ids = NULL, raw = FALSE, ...) {
-  
+
   checkconn()
   if (is.null(index)) {
-    stop("index can't be NULL when passing a list", 
+    stop("index can't be NULL when passing a list",
          call. = FALSE)
   }
   if (is.null(type)) type <- index
@@ -176,7 +176,7 @@ docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
     id_chks <- split(doc_ids, ceiling(seq_along(doc_ids) / chunk_size))
   } else if (has_ids(x)) {
     rws <- as.numeric(sapply(x, "[[", "id"))
-    id_chks <- split(rws, ceiling(seq_along(rws) / chunk_size)) 
+    id_chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
   } else {
     rws <- shift_start(rws, index, type)
     id_chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
@@ -190,9 +190,9 @@ docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
 }
 
 #' @export
-docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000, 
+docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000,
                                 doc_ids = NULL, raw=FALSE, ...) {
-  
+
   on.exit(close_conns())
   checkconn()
   stopifnot(file.exists(x))
@@ -222,9 +222,9 @@ make_bulk <- function(df, index, type, counter) {
     '{"index":{"_index":"%s","_type":"%s","_id":%s}}'
   }
   metadata <- sprintf(
-    metadata_fmt, 
-    index, 
-    type, 
+    metadata_fmt,
+    index,
+    type,
     if (is.numeric(counter)) {
       counter - 1L
     } else {
@@ -252,7 +252,7 @@ check_doc_ids <- function(x, ids) {
     if (!class(ids) %in% c('character', 'factor', 'numeric', 'integer')) {
       stop("doc_ids must be of class character, numeric or integer", call. = FALSE)
     }
-    
+
     # check appropriate length
     if (!all(1:NROW(x) == 1:length(ids))) {
       stop("doc_ids length must equal number of documents", call. = FALSE)
@@ -281,7 +281,7 @@ close_conns <- function() {
   ours <- as.integer(rownames(cons)[grepl("/elastic__", cons[, "description"], fixed = TRUE)])
   for (i in ours) {
     close(getConnection(i))
-  } 
+  }
 }
 
 check_named_vectors <- function(x) {

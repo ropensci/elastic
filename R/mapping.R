@@ -12,13 +12,12 @@
 #' \itemize{
 #'  \item mapping_create - \url{http://bit.ly/1xbWqFo}
 #'  \item type_exists - \url{http://bit.ly/10HkZvH}
-#'  \item mapping_delete - \url{http://bit.ly/10Mmvgi}
+#'  \item mapping_delete - FUNCTION DEFUNCT - instead of deleting mapping, delete 
+#'  index and recreate index with new mapping
 #'  \item mapping_get - \url{http://bit.ly/1AN2oiw}
 #'  \item field_mapping_get - \url{http://bit.ly/1wHKgCA }
 #' }
 #'
-#' \strong{NOTE:} For the delete method, Elasticsearch documentation notes that: "... most times,
-#' it make more sense to reindex the data into a fresh index compared to delete large chunks of it."
 #' @examples \dontrun{
 #' # Used to check if a type/types exists in an index/indices
 #' type_exists(index = "plos", type = "article")
@@ -31,6 +30,7 @@
 #'  journal = list(type="string"),
 #'  year = list(type="long")
 #' )))
+#' if (!index_exists("plos")) index_create("plos")
 #' mapping_create(index = "plos", type = "citation", body=body)
 #'
 #' ### or as json
@@ -40,7 +40,6 @@
 #'       "journal": { "type": "string" },
 #'       "year": { "type": "long" }
 #' }}}'
-#' mapping_delete("plos", "citation")
 #' mapping_create(index = "plos", type = "citation", body=body)
 #' mapping_get("plos", "citation")
 #'
@@ -48,10 +47,7 @@
 #' body <- list(things = list(properties = list(
 #'   journal = list("string")
 #' )))
-#' mapping_create(index = "plos", type = "things", body=body)
-#'
-#' # Delete a mapping
-#' mapping_delete("plos", "citation")
+#' # mapping_create(index = "plos", type = "things", body=body)
 #'
 #' # Get mappings
 #' mapping_get('_all')
@@ -61,7 +57,9 @@
 #' mapping_get(index = "shakespeare", type = c("act","line"))
 #'
 #' # Get field mappings
-#' field_mapping_get(index = "_all", type=c('article','line'), field = "text")
+#' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+#' docs_bulk(plosdat)
+#' field_mapping_get(index = "_all", type=c('article', 'line'), field = "text")
 #' field_mapping_get(index = "plos", type = "article", field = "title")
 #' field_mapping_get(index = "plos", type = "article", field = "*")
 #' field_mapping_get(index = "plos", type = "article", field = "title", include_defaults = TRUE)
@@ -69,7 +67,8 @@
 #' field_mapping_get(type = "a*", field = "t*")
 #'
 #' # Create geospatial mapping
-#' docs_bulk("inst/examples/gbif_geopoint.json")
+#' file <- system.file("examples", "gbif_geopoint.json", package = "elastic")
+#' docs_bulk(file)
 #' body <- '{
 #'  "pin" : {
 #'    "properties" : {
@@ -90,24 +89,23 @@ mapping_create <- function(index, type, body, ...){
 
 #' @export
 #' @rdname mapping
-mapping_delete <- function(index, type, ...){
-  url <- make_url(es_get_auth())
-  es_DELETE(file.path(url, esc(index), esc(type), "_mapping"), ...)
+mapping_delete <- function(...){
+  .Defunct(msg = "This function is defunct. Instead of deleting a mapping\ndelete the index and recreate with a new mapping")
 }
 
 #' @export
 #' @rdname mapping
 mapping_get <- function(index = NULL, type = NULL, ...){
   url <- make_url(es_get_auth())
-  if(any(index == "_all")){
+  if (any(index == "_all")) {
     url <- file.path(url, "_mapping")
   } else {
-    if(is.null(type)){
+    if (is.null(type)) {
       url <- file.path(url, esc(cl(index)), "_mapping")
-    } else if(is.null(index) && !is.null(type)) {
+    } else if (is.null(index) && !is.null(type)) {
       url <- file.path(url, "_mapping", esc(cl(type)))
-    } else if(!is.null(index) && !is.null(type)) {
-      if(length(index) > 1) stop("You can only pass one index if you also pass a type", call. = FALSE)
+    } else if (!is.null(index) && !is.null(type)) {
+      if (length(index) > 1) stop("You can only pass one index if you also pass a type", call. = FALSE)
       url <- file.path(url, esc(index), "_mapping", esc(cl(type)))
     }
   }
