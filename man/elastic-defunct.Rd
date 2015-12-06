@@ -15,6 +15,8 @@
  or use the -p command line option to write the PID to a file.
  \item \code{\link{index_status}}: _status route for the index API has been removed. 
  Replaced with the Indices Stats and Indices Recovery APIs.
+ \item \code{\link{mapping_delete}}: Elasticsearch dropped this route in their API. Instead 
+ of deleting a mapping, delete the index and recreate with a new mapping.
 }
 }
 

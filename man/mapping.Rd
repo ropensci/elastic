@@ -4,14 +4,11 @@
 \alias{field_mapping_get}
 \alias{mapping}
 \alias{mapping_create}
-\alias{mapping_delete}
 \alias{mapping_get}
 \alias{type_exists}
 \title{Mapping management}
 \usage{
 mapping_create(index, type, body, ...)
-
-mapping_delete(...)
 
 mapping_get(index = NULL, type = NULL, ...)
 

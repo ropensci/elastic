@@ -89,12 +89,6 @@ mapping_create <- function(index, type, body, ...){
 
 #' @export
 #' @rdname mapping
-mapping_delete <- function(...){
-  .Defunct(msg = "This function is defunct. Instead of deleting a mapping\ndelete the index and recreate with a new mapping")
-}
-
-#' @export
-#' @rdname mapping
 mapping_get <- function(index = NULL, type = NULL, ...){
   url <- make_url(es_get_auth())
   if (any(index == "_all")) {
