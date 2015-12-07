@@ -1,7 +1,6 @@
 #' Full text search of Elasticsearch
 #'
 #' @export
-#'
 #' @name Search
 #' @template search_par
 #' @template search_egs

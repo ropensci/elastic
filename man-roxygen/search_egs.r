@@ -8,7 +8,7 @@
 #'   shakespeare <- system.file("examples", "shakespeare_data.json", package = "elastic")
 #'   docs_bulk(shakespeare)
 #' }
-#' 
+#'
 #' # URI string queries
 #' Search(index="shakespeare")
 #' Search(index="shakespeare", type="act")
