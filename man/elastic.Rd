@@ -80,7 +80,7 @@ As of Elasticsearch v2:
  \item Type names may not start with a dot (other than the special \code{.percolator} type)
  \item Type names may not be longer than 255 characters
  \item Types may no longer be deleted
- \item Queries and filters have been merged — all filter clauses are now query clauses.
+ \item Queries and filters have been merged - all filter clauses are now query clauses.
     Instead, query clauses can now be used in query context or in filter context. See
     examples in \code{\link{Search}} or \code{\link{Search_uri}}
 }
