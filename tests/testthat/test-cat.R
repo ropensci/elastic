@@ -7,7 +7,7 @@ test_that("cat_", {
   a <- cat_(parse = TRUE)
   expect_is(a, "data.frame")
   expect_is(a$V1, "character")
-  expect_equal(length(a$V1), 23)
+  expect_gt(length(a$V1), 20)
   expect_is(capture.output(cat_()), "character")
   expect_error(cat_(verbose = "adf"), "is not TRUE")
 })
