@@ -18,10 +18,9 @@ Imports:
     utils,
     methods,
     httr (>= 1.0.0),
-    curl,
-    jsonlite
+    curl (>= 0.9.4),
+    jsonlite (>= 0.9.19)
 Suggests:
     testthat,
-    roxygen2,
     knitr
 RoxygenNote: 5.0.1
