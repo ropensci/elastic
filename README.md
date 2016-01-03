@@ -19,7 +19,7 @@ Also check out `elasticdsl` - an R DSL for Elasticsearch - [https://github.com/r
 
 * [Elasticsearch home page](https://www.elastic.co/products/elasticsearch)
 * [API docs](http://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
-* This client is being developed under `v1.7.2` of Elasticsearch, and will generally develop following whatever is the current version.
+* This client is being developed under `v2.1.1` of Elasticsearch, and will generally develop following whatever is the current version.
 
 ## Security
 
@@ -74,12 +74,12 @@ If you're using boot2docker, you'll need to use the IP address in place of local
 
 __on OSX__
 
-+ Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.0.0/elasticsearch-2.0.0.tar.gz`
-+ Extract: `tar -zxvf elasticsearch-2.0.0.tar.gz`
-+ Move it: `sudo mv /path/to/elasticsearch-2.0.0 /usr/local` (replace version with your version)
++ Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.1.1/elasticsearch-2.1.1.tar.gz`
++ Extract: `tar -zxvf elasticsearch-2.1.1.tar.gz`
++ Move it: `sudo mv /path/to/elasticsearch-2.1.1 /usr/local` (replace version with your version)
 + Navigate to /usr/local: `cd /usr/local`
 + Delete symlinked `elasticsearch` directory: `rm -rf elasticsearch`
-+ Add shortcut: `sudo ln -s elasticsearch-2.0.0 elasticsearch` (replace version with your version)
++ Add shortcut: `sudo ln -s elasticsearch-2.1.1 elasticsearch` (replace version with your version)
 
 You can also install via Homebrew: `brew install elasticsearch`
 
@@ -170,12 +170,13 @@ connect(es_port = 9200)
 #> port:      9200 
 #> username:  NULL 
 #> password:  NULL 
-#> elasticsearch details:   
-#>    status:                  NULL 
-#>    name:                    James Dr. Power 
-#>    Elasticsearch version:   2.0.0-beta1 
-#>    ES version timestamp:    2015-08-24T08:41:25Z 
-#>    lucene version:          5.2.1
+#> errors:    simple 
+#> Elasticsearch (ES) details:   
+#>    name:                    Fer-de-Lance 
+#>    ES version:              2.1.1 
+#>    ES version timestamp:    2015-12-15T13:05:55Z 
+#>    ES build hash:           40e2c53a6b6c2972b3d13846e450e66f4375bd71 
+#>    lucene version:          5.3.1
 ```
 
 ## Search
@@ -194,9 +195,6 @@ Search(index = "plos", size = 1)$hits$hits
 #> 
 #> [[1]]$`_id`
 #> [1] "0"
-#> 
-#> [[1]]$`_version`
-#> [1] 1
 #> 
 #> [[1]]$`_score`
 #> [1] 1
@@ -223,9 +221,6 @@ Search(index = "plos", type = "article", sort = "title", q = "antibody", size = 
 #> 
 #> [[1]]$`_id`
 #> [1] "568"
-#> 
-#> [[1]]$`_version`
-#> [1] 1
 #> 
 #> [[1]]$`_score`
 #> NULL
