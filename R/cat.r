@@ -169,6 +169,15 @@ cat_fielddata <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=F
   cat_helper('fielddata', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
 
+## FIXME - maybe, maybe not incorporate these
+# cat_repositories <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+#   cat_helper('repositories', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
+# }
+# 
+# cat_snapshots <- function(repository, verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+#   cat_helper('snapshots', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, r=repository, ...)
+# }
+
 
 cat_helper <- function(what='', v=FALSE, i=NULL, f=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
   checkconn()
@@ -178,6 +187,7 @@ cat_helper <- function(what='', v=FALSE, i=NULL, f=NULL, h=NULL, help=FALSE, byt
   if (!is.null(f)) f <- paste(f, collapse = ",")
   url <- sprintf("%s/_cat/%s", url, what)
   if (!is.null(i)) url <- paste0(url, '/', i)
+  # if (!is.null(r)) url <- paste0(url, '/', r)
   args <- ec(list(v = lnull(v), help = lnull(help), fields = f,
                   h = asnull(paste0(h, collapse = ",")),
                   bytes = ifbytes(bytes)))
