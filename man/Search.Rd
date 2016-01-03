@@ -46,7 +46,7 @@ each hit. Not specifying any value will cause no fields to return.}
 field within the document, or the special \code{_score} name to indicate sorting based on
 scores. There can be several sort parameters (order is important).}
 
-\item{track_scores}{(logical) When sorting, set to TRUE in order to still track scores
+\item{track_scores}{(logical) When sorting, set to \code{TRUE} in order to still track scores
 and return them as part of each hit.}
 
 \item{timeout}{(numeric) A search timeout, bounding the search request to be executed
@@ -66,15 +66,15 @@ notation. Default: 0}
 to avoid problems with large number conversion to scientific notation. Default: 10.}
 
 \item{search_type}{(character) The type of the search operation to perform. Can be
-\code{query_then_fetch} (default), \code{dfs_query_then_fetch}, or \code{scan}.
-See \url{http://bit.ly/19Am9xP} for more details on the different types of search that can
-be performed.}
+\code{query_then_fetch} (default) or \code{dfs_query_then_fetch}. Types \code{scan} and
+\code{count} are deprecated. See \url{http://bit.ly/19Am9xP} for more details on the
+different types of search that can be performed.}
 
 \item{lowercase_expanded_terms}{(logical) Should terms be automatically lowercased or not.
-Default: TRUE.}
+Default: \code{TRUE}.}
 
 \item{analyze_wildcard}{(logical) Should wildcard and prefix queries be analyzed or not.
-Default: FALSE.}
+Default: \code{FALSE}.}
 
 \item{version}{(logical) Print the document version with each document.}
 
@@ -83,7 +83,7 @@ a numeric field) to be ignored. Default: \code{FALSE}}
 
 \item{body}{Query, either a list or json.}
 
-\item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
+\item{raw}{If \code{TRUE} (default), data is parsed to list. If \code{FALSE}, then raw JSON.}
 
 \item{asdf}{(logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} to parse JSON
 directly to a data.frame. If \code{FALSE} (Default), list output is given.}
@@ -124,7 +124,10 @@ Search(index="shakespeare", fields=c('play_name','speaker'))
 ## search_type
 Search(index="shakespeare", search_type = "query_then_fetch")
 Search(index="shakespeare", search_type = "dfs_query_then_fetch")
-# Search(index="shakespeare", search_type = "scan") # only when scrolling
+### search type "scan" is gone - use scroll instead
+Search(index="shakespeare", scroll = "2m")
+### search type "count" is gone - use size=0 instead
+Search(index="shakespeare", size = 0)$hits$total
 
 ## sorting
 Search(index="shakespeare", type="act", sort="text_entry")

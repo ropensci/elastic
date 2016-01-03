@@ -21,7 +21,10 @@
 #' ## search_type
 #' Search(index="shakespeare", search_type = "query_then_fetch")
 #' Search(index="shakespeare", search_type = "dfs_query_then_fetch")
-#' # Search(index="shakespeare", search_type = "scan") # only when scrolling
+#' ### search type "scan" is gone - use scroll instead
+#' Search(index="shakespeare", scroll = "2m")
+#' ### search type "count" is gone - use size=0 instead
+#' Search(index="shakespeare", size = 0)$hits$total
 #'
 #' ## sorting
 #' Search(index="shakespeare", type="act", sort="text_entry")
