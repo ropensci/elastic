@@ -74,6 +74,7 @@
 #' @importFrom methods is
 #' @importFrom httr HEAD GET POST PUT DELETE content authenticate stop_for_status upload_file http_status
 #' @importFrom curl curl_escape
+#' @importFrom jsonlite fromJSON toJSON
 #' @docType package
 #' @aliases elastic-package
 #' @author Scott Chamberlain \email{myrmecocystus@@gmail.com}

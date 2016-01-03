@@ -1,6 +1,5 @@
 #' Parse raw data from es_get, es_mget, or es_search.
 #'
-#' @importFrom jsonlite fromJSON toJSON
 #' @param input Output from solr_facet
 #' @param parsetype One of 'list' or 'df' (data.frame). Only list possible for now.
 #' @param verbose Print messages or not (default: FALSE).
