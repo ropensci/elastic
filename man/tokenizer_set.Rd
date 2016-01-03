@@ -39,7 +39,9 @@ body <- '{
              }
       }
 }'
-tokenizer_set(index = "test1", body=body)
+if (!"tokenizer" \%in\% names(index_get("test1")$test1$settings$index$analysis)) {
+ tokenizer_set(index = "test1", body=body)
+}
 index_analyze(text = "hello world", index = "test1", analyzer='my_ngram_analyzer')
 }
 }

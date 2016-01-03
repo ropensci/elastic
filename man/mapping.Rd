@@ -97,10 +97,8 @@ field_mapping_get(type = "a*", field = "t*")
 file <- system.file("examples", "gbif_geopoint.json", package = "elastic")
 docs_bulk(file)
 body <- '{
- "pin" : {
-   "properties" : {
-     "location" : { "type" : "geo_point" }
-   }
+ "properties" : {
+   "location" : { "type" : "geo_point" }
  }
 }'
 mapping_create("gbifgeopoint", "record", body=body)
