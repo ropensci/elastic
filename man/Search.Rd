@@ -724,6 +724,7 @@ x$hits$total
 \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search.html}
 }
 \seealso{
-\code{\link{Search_uri}} \code{\link{scroll}} \code{\link{count}}
+\code{\link{Search_uri}} \code{\link{scroll}} 
+\code{\link{count}} \code{\link{validate}}
 }
 
