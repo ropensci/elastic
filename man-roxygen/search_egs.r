@@ -25,6 +25,11 @@
 #' Search(index="shakespeare", scroll = "2m")
 #' ### search type "count" is gone - use size=0 instead
 #' Search(index="shakespeare", size = 0)$hits$total
+#' 
+#' ## search exists check
+#' ### use size set to 0 and terminate_after set to 1
+#' ### if there are > 0 hits, then there are matching documents
+#' Search(index="shakespeare", type="act", size = 0, terminate_after = 1)
 #'
 #' ## sorting
 #' Search(index="shakespeare", type="act", sort="text_entry")
