@@ -3,3 +3,4 @@
 .Rhistory
 inst/ignore/notes*
 notes-v2.md
+.httr-oauth
