@@ -1,8 +1,8 @@
 Package: elastic
 Title: General Purpose Interface to 'Elasticsearch'
 Description: Connect to 'Elasticsearch', a 'NoSQL' database built on the 'Java'
-    Virtual Machine. Interacts with the 'Elasticsearch' 'HTTP' 'API' (http://
-    elasticsearch.org), including functions for setting connection details to
+    Virtual Machine. Interacts with the 'Elasticsearch' 'HTTP' 'API' ('http://
+    elasticsearch.org'), including functions for setting connection details to
     'Elasticsearch' instances, loading bulk data, searching for documents with both
     'HTTP' query variables and 'JSON' based body requests. In addition, 'elastic'
     provides functions for interacting with 'APIs' for 'indices', documents, nodes,
