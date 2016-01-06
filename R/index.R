@@ -350,6 +350,7 @@ index_segments <- function(index = NULL, ...) es_GET_wrap1(index, "_segments", .
 #' @export
 #' @rdname index
 index_recovery <- function(index = NULL, detailed = FALSE, active_only = FALSE, ...){
+  stop_es_version(110, "index_recovery")
   args <- ec(list(detailed = as_log(detailed), active_only = as_log(active_only)))
   es_GET_wrap1(index, "_recovery", args, ...)
 }

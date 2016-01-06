@@ -27,7 +27,8 @@
 #'
 #' # Curl options
 #' library("httr")
-#' aliases_get(config=verbose())
+#' alias_create(index = "plos", alias = "tables")
+#' aliases_get(alias = "tables", config=verbose())
 #' }
 #' @references
 #' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-aliases.html}

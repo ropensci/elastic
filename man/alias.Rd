@@ -57,7 +57,8 @@ alias_exists(alias = "tables")
 
 # Curl options
 library("httr")
-aliases_get(config=verbose())
+alias_create(index = "plos", alias = "tables")
+aliases_get(alias = "tables", config=verbose())
 }
 }
 \author{

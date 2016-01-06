@@ -109,7 +109,8 @@ mapping_get <- function(index = NULL, type = NULL, ...){
 field_mapping_get <- function(index = NULL, type = NULL, field, include_defaults=FALSE, ...){
   stopifnot(!is.null(field))
   url <- make_url(es_get_auth())
-  if(any(index == "_all")){
+  if (any(index == "_all")){
+    stop_es_version(110, "field_mapping_get")
     stopifnot(!is.null(type))
     url <- file.path(url, "_all/_mapping", esc(cl(type)), "field", cl(field))
   } else {

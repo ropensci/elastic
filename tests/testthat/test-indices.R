@@ -65,10 +65,12 @@ test_that("index_segments", {
 })
 
 test_that("index_recovery", {
-  a <- index_recovery('shakespeare')
-  expect_is(a, "list")
-  expect_named(a$shakespeare, "shards")
-  expect_error(index_recovery("adfadfafafasdfasdfasfasfasfd", verbose=FALSE), "no such index||IndexMissingException")
+  if (!es_version() < 110) {
+    a <- index_recovery('shakespeare')
+    expect_is(a, "list")
+    expect_named(a$shakespeare, "shards")
+    expect_error(index_recovery("adfadfafafasdfasdfasfasfasfd", verbose=FALSE), "no such index||IndexMissingException")
+  }
 })
 
 ## cleanup -----------------------------------
