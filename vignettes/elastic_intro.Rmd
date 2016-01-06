@@ -9,7 +9,7 @@
 elastic introduction
 ======
 
-`elastic` is an R client for [Elasticsearch](http://www.elasticsearch.org/). This vignette is an introduction to the package, while other vignettes dive into the details of various topics.
+`elastic` is an R client for [Elasticsearch](https://www.elastic.co/products/elasticsearch). This vignette is an introduction to the package, while other vignettes dive into the details of various topics.
 
 ## Installation
 
@@ -46,13 +46,14 @@ library("elastic")
 
 __Unix (linux/osx)__
 
-Replace `1.6.0` with the version you are working with.
+Replace `2.1.1` with the version you are working with.
 
-+ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads/elasticsearch), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.6.0.tar.gz`
-+ Uncompress it: `tar -xvf elasticsearch-1.6.0.tar.gz`
-+ Move it: `sudo mv /path/to/elasticsearch-1.6.0 /usr/local`
++ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.1.1/elasticsearch-2.1.1.tar.gz`
++ Extract: `tar -zxvf elasticsearch-2.1.1.tar.gz`
++ Move it: `sudo mv /path/to/elasticsearch-2.1.1 /usr/local` (replace version with your version)
 + Navigate to /usr/local: `cd /usr/local`
-+ Add shortcut: `sudo ln -s elasticsearch-1.6.0 elasticsearch`
++ Delete symlinked `elasticsearch` directory: `rm -rf elasticsearch`
++ Add shortcut: `sudo ln -s elasticsearch-2.1.1 elasticsearch` (replace version with your version)
 
 On OSX, you can install via Homebrew: `brew install elasticsearch`
 
@@ -83,12 +84,13 @@ connect()
 #> port:      9200 
 #> username:  NULL 
 #> password:  NULL 
-#> elasticsearch details:   
-#>    status:                  200 
-#>    name:                    Shola Inkosi 
-#>    Elasticsearch version:   1.6.0 
-#>    ES version timestamp:    2015-06-09T13:36:34Z 
-#>    lucene version:          4.10.4
+#> errors:    simple 
+#> Elasticsearch (ES) details:   
+#>    name:                    Desmond Pitt 
+#>    ES version:              2.1.1 
+#>    ES version timestamp:    2015-12-15T13:05:55Z 
+#>    ES build hash:           40e2c53a6b6c2972b3d13846e450e66f4375bd71 
+#>    lucene version:          5.3.1
 ```
 
 On package load, your base url and port are set to `http://127.0.0.1` and `9200`, respectively. You can of course override these settings per session or for all sessions.
@@ -118,7 +120,7 @@ docs_bulk(shakespeare)
 If you need some big data to play with, the shakespeare dataset is a good one to start with. You can get the whole thing and pop it into Elasticsearch (beware, may take up to 10 minutes or so.):
 
 ```sh
-curl -XGET http://www.elasticsearch.org/guide/en/kibana/current/snippets/shakespeare.json > shakespeare.json
+curl -XGET https://www.elastic.co/guide/en/kibana/3.0/snippets/shakespeare.json > shakespeare.json
 curl -XPUT localhost:9200/_bulk --data-binary @shakespeare.json
 ```
 
@@ -172,20 +174,17 @@ Search(index="plos", size=1)$hits$hits
 #> [1] "article"
 #> 
 #> [[1]]$`_id`
-#> [1] "4"
-#> 
-#> [[1]]$`_version`
-#> [1] 1
+#> [1] "0"
 #> 
 #> [[1]]$`_score`
 #> [1] 1
 #> 
 #> [[1]]$`_source`
 #> [[1]]$`_source`$id
-#> [1] "10.1371/journal.pone.0107758"
+#> [1] "10.1371/journal.pone.0007737"
 #> 
 #> [[1]]$`_source`$title
-#> [1] "Lactobacilli Inactivate Chlamydia trachomatis through Lactic Acid but Not H2O2"
+#> [1] "Phospholipase C-β4 Is Essential for the Progression of the Normal Sleep Sequence and Ultradian Body Temperature Rhythms in Mice"
 ```
 
 Search the `plos` index, and the `article` document type, sort by title, and query for _antibody_, limit to 1 result
@@ -205,9 +204,6 @@ Search(index="plos", type="article", sort="title", q="antibody", size=1)$hits$hi
 #> 
 #> [[1]]$`_id`
 #> [1] "568"
-#> 
-#> [[1]]$`_version`
-#> [1] 1
 #> 
 #> [[1]]$`_score`
 #> NULL

@@ -1,5 +1,6 @@
 #' @references
-#' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search.html}
+#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-search.html}
+#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html}
 #' @details This function name has the "S" capitalized to avoid conflict with the function
 #' \code{base::search}. I hate mixing cases, as I think it confuses users, but in this case
 #' it seems neccessary.
@@ -17,7 +18,7 @@
 #'
 #' ## Return certain fields
 #' Search(index="shakespeare", fields=c('play_name','speaker'))
-#' 
+#'
 #' ## Search multiple indices
 #' Search(index = "gbif")$hits$total
 #' Search(index = "shakespeare")$hits$total
@@ -30,7 +31,7 @@
 #' Search(index="shakespeare", scroll = "2m")
 #' ### search type "count" is gone - use size=0 instead
 #' Search(index="shakespeare", size = 0)$hits$total
-#' 
+#'
 #' ## search exists check
 #' ### use size set to 0 and terminate_after set to 1
 #' ### if there are > 0 hits, then there are matching documents

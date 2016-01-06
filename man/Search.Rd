@@ -732,7 +732,8 @@ x$hits$total
 }
 }
 \references{
-\url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search.html}
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-search.html}
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html}
 }
 \seealso{
 \code{\link{Search_uri}} \code{\link{scroll}} 

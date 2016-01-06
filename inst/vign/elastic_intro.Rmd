@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 elastic introduction
 ======
 
-`elastic` is an R client for [Elasticsearch](http://www.elasticsearch.org/). This vignette is an introduction to the package, while other vignettes dive into the details of various topics.
+`elastic` is an R client for [Elasticsearch](https://www.elastic.co/products/elasticsearch). This vignette is an introduction to the package, while other vignettes dive into the details of various topics.
 
 ## Installation
 
@@ -49,13 +49,14 @@ library("elastic")
 
 __Unix (linux/osx)__
 
-Replace `1.6.0` with the version you are working with.
+Replace `2.1.1` with the version you are working with.
 
-+ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads/elasticsearch), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.6.0.tar.gz`
-+ Uncompress it: `tar -xvf elasticsearch-1.6.0.tar.gz`
-+ Move it: `sudo mv /path/to/elasticsearch-1.6.0 /usr/local`
++ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.1.1/elasticsearch-2.1.1.tar.gz`
++ Extract: `tar -zxvf elasticsearch-2.1.1.tar.gz`
++ Move it: `sudo mv /path/to/elasticsearch-2.1.1 /usr/local` (replace version with your version)
 + Navigate to /usr/local: `cd /usr/local`
-+ Add shortcut: `sudo ln -s elasticsearch-1.6.0 elasticsearch`
++ Delete symlinked `elasticsearch` directory: `rm -rf elasticsearch`
++ Add shortcut: `sudo ln -s elasticsearch-2.1.1 elasticsearch` (replace version with your version)
 
 On OSX, you can install via Homebrew: `brew install elasticsearch`
 
@@ -105,7 +106,7 @@ docs_bulk(shakespeare)
 If you need some big data to play with, the shakespeare dataset is a good one to start with. You can get the whole thing and pop it into Elasticsearch (beware, may take up to 10 minutes or so.):
 
 ```sh
-curl -XGET http://www.elasticsearch.org/guide/en/kibana/current/snippets/shakespeare.json > shakespeare.json
+curl -XGET https://www.elastic.co/guide/en/kibana/3.0/snippets/shakespeare.json > shakespeare.json
 curl -XPUT localhost:9200/_bulk --data-binary @shakespeare.json
 ```
 

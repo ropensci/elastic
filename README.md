@@ -56,7 +56,7 @@ library('elastic')
 
 ## Install Elasticsearch
 
-* [Elasticsearch installation help](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/_installation.html)
+* [Elasticsearch installation help](https://www.elastic.co/guide/en/elasticsearch/reference/current/_installation.html)
 
 __w/ Docker__
 
@@ -176,7 +176,7 @@ connect(es_port = 9200)
 #> password:  NULL 
 #> errors:    simple 
 #> Elasticsearch (ES) details:   
-#>    name:                    Armand Martel 
+#>    name:                    Desmond Pitt 
 #>    ES version:              2.1.1 
 #>    ES version timestamp:    2015-12-15T13:05:55Z 
 #>    ES build hash:           40e2c53a6b6c2972b3d13846e450e66f4375bd71 

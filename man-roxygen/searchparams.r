@@ -1,5 +1,6 @@
 #' @details There are a lot of terms you can use for Elasticsearch. See here
-#' \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
+#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html}
+#' for the documentation.
 #'
 #' Here is a list of the common ones:
 #'
