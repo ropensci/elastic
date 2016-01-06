@@ -41,4 +41,3 @@ notifications:
     on_failure: change
   slack:
     secure: TyJn718GQw/lQE0v9QzTRMU2aXppaw65oyfUxfDa7KYjsgfqY0Hq+H3I71bUxBlnUNnW5Hsxm+b+YiaNDEZ2UmJJLr4X34r5mRRABy94nTs7YYLIE2ugtXb1BQArxaFo1HNBm1xNg+CCLWdvfQ6wR7PhT08CuGwwejAr97y5xTQ=
-Status API Training Shop Blog About Pricing
