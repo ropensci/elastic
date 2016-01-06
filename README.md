@@ -19,7 +19,11 @@ Also check out `elasticdsl` - an R DSL for Elasticsearch - [https://github.com/r
 
 * [Elasticsearch home page](https://www.elastic.co/products/elasticsearch)
 * [API docs](http://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
-* This client is being developed under `v2.1.1` of Elasticsearch, and will generally develop following whatever is the current version.
+
+
+## Compatibility
+
+This client is developed following the latest stable releases, currently `v2.1.1`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
 
 ## Security
 
@@ -74,7 +78,7 @@ If you're using boot2docker, you'll need to use the IP address in place of local
 
 __on OSX__
 
-+ Download zip or tar file from Elasticsearch [see here for download](http://www.elasticsearch.org/overview/elkdownloads/), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.1.1/elasticsearch-2.1.1.tar.gz`
++ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.1.1/elasticsearch-2.1.1.tar.gz`
 + Extract: `tar -zxvf elasticsearch-2.1.1.tar.gz`
 + Move it: `sudo mv /path/to/elasticsearch-2.1.1 /usr/local` (replace version with your version)
 + Navigate to /usr/local: `cd /usr/local`
@@ -172,7 +176,7 @@ connect(es_port = 9200)
 #> password:  NULL 
 #> errors:    simple 
 #> Elasticsearch (ES) details:   
-#>    name:                    Fer-de-Lance 
+#>    name:                    Armand Martel 
 #>    ES version:              2.1.1 
 #>    ES version timestamp:    2015-12-15T13:05:55Z 
 #>    ES build hash:           40e2c53a6b6c2972b3d13846e450e66f4375bd71 
@@ -422,5 +426,7 @@ jsonlite::fromJSON(out)
 * Please [report any issues or bugs](https://github.com/ropensci/elastic/issues)
 * License: MIT
 * Get citation information for `elastic` in R doing `citation(package = 'elastic')`
+* Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). 
+By participating in this project you agree to abide by its terms.
 
 [![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)

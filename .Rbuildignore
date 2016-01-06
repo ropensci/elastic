@@ -12,3 +12,4 @@ cran-comments.md
 es_matrix_travis.yml
 notes-v2.md
 ^\.httr-oauth$
+^CONDUCT\.md$
