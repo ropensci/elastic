@@ -14,7 +14,7 @@ Search(index = NULL, type = NULL, q = NULL, df = NULL,
   search_path = "_search", ...)
 }
 \arguments{
-\item{index}{Index name}
+\item{index}{Index name, one or more}
 
 \item{type}{Document type}
 
@@ -120,6 +120,11 @@ Search(index="shakespeare", type="line")
 
 ## Return certain fields
 Search(index="shakespeare", fields=c('play_name','speaker'))
+
+## Search multiple indices
+Search(index = "gbif")$hits$total
+Search(index = "shakespeare")$hits$total
+Search(index = c("gbif", "shakespeare"))$hits$total
 
 ## search_type
 Search(index="shakespeare", search_type = "query_then_fetch")

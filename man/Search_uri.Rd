@@ -13,7 +13,7 @@ Search_uri(index = NULL, type = NULL, q = NULL, df = NULL,
   raw = FALSE, asdf = FALSE, search_path = "_search", ...)
 }
 \arguments{
-\item{index}{Index name}
+\item{index}{Index name, one or more}
 
 \item{type}{Document type}
 

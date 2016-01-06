@@ -13,6 +13,8 @@ msearch(x, raw = FALSE, asdf = FALSE, ...)
 
 \item{asdf}{(logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} to parse JSON
 directly to a data.frame. If \code{FALSE} (Default), list output is given.}
+
+\item{...}{Curl args passed on to \code{\link[httr]{POST}}}
 }
 \description{
 Performs multiple searches, defined in a file

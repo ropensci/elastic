@@ -19,7 +19,7 @@ Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, defaul
   analyze_wildcard=NULL, version=FALSE, lenient=FALSE, body=list(), raw=FALSE, asdf=FALSE, scroll=NULL,
   search_path="_search", ...) {
 
-  search_POST(search_path, esc(index), esc(type),
+  search_POST(search_path, cl(esc(index)), esc(type),
     args=ec(list(df=df, analyzer=analyzer, default_operator=default_operator, explain=explain,
       `_source`=source, fields=cl(fields), sort=cl(sort), track_scores=track_scores,
       timeout=cn(timeout), terminate_after=cn(terminate_after),

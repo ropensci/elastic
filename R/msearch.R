@@ -7,6 +7,8 @@
 #' @param raw (logical) Get raw JSON back or not.
 #' @param asdf (logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} to parse JSON
 #' directly to a data.frame. If \code{FALSE} (Default), list output is given.
+#' @param ... Curl args passed on to \code{\link[httr]{POST}}
+#' 
 #' @details This function behaves similarly to \code{\link{docs_bulk}} - performs
 #' searches based on queries defined in a file.
 #' @seealso \code{\link{Search_uri}} \code{\link{Search}}

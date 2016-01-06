@@ -1,4 +1,4 @@
-#' @param index Index name
+#' @param index Index name, one or more
 #' @param type Document type
 #' @param q The query string (maps to the query_string query, see Query String Query
 #' for more details). See \url{http://bit.ly/esquerystring} for documentation and

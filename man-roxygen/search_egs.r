@@ -17,6 +17,11 @@
 #'
 #' ## Return certain fields
 #' Search(index="shakespeare", fields=c('play_name','speaker'))
+#' 
+#' ## Search multiple indices
+#' Search(index = "gbif")$hits$total
+#' Search(index = "shakespeare")$hits$total
+#' Search(index = c("gbif", "shakespeare"))$hits$total
 #'
 #' ## search_type
 #' Search(index="shakespeare", search_type = "query_then_fetch")
