@@ -132,5 +132,5 @@ type_exists <- function(index, type, ...){
   checkconn()
   url <- make_url(es_get_auth())
   res <- HEAD(file.path(url, esc(index), esc(type)), make_up(), ...)
-  if(res$status_code == 200) TRUE else FALSE
+  if (res$status_code == 200) TRUE else FALSE
 }
