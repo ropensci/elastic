@@ -12,11 +12,11 @@
 #' \itemize{
 #'  \item Download zip or tar file from Elasticsearch see here for download:
 #'  \url{https://www.elastic.co/downloads/elasticsearch}
-#'  \item Unzip it: \code{untar elasticsearch-1.6.0.tar.gz}
-#'  \item Move it: \code{sudo mv /path/to/elasticsearch-1.6.0 /usr/local}
+#'  \item Unzip it: \code{untar elasticsearch-2.1.1.tar.gz}
+#'  \item Move it: \code{sudo mv /path/to/elasticsearch-2.1.1 /usr/local}
 #'  (replace version with your version)
 #'  \item Navigate to /usr/local: \code{cd /usr/local}
-#'  \item Add shortcut: \code{sudo ln -s elasticsearch-1.6.0 elasticsearch}
+#'  \item Add shortcut: \code{sudo ln -s elasticsearch-2.1.1 elasticsearch}
 #'  (replace version with your verioon)
 #' }
 #'

@@ -1,18 +1,67 @@
-elastic 0.5.1.9000
-===============
+elastic 0.6.0
+=============
+
+Compatibility for many Elasticsearch versions has improved. We've tested on ES versions
+from the current (`v2.1.1`) back to `v1.0.0`, and `elastic` works with all versions.
+There are some functions that stop with a message with some ES versions simply 
+because older versions may not have had particular ES features. Please do let us 
+know if you have problems with older versions of ES, so we can improve compatibility.
+
+### NEW FEATURES
+
+* Added `index_settings_update()` function to allow updating index settings (#66)
+* All errors from the Elasticsearch server are now given back as `JSON`. 
+Error parsing has thus changed in `elastic`. We now have two levels of error
+behavior: 'simple' and 'complete'. These can be set in `connect()` with the 
+`errors` parameter. Simple errors give back often just that there was an error,
+sometimes a message with explanation is supplied. Complete errors give 
+more explanation and even the ES stack trace if supplied in the ES error 
+response (#92) (#93)
+* New function `msearch()` to do multi-searches. This works by defining queries 
+in a file, much like is done for a file to be used in bulk loading. (#103)
+* New function `validate()` to validate a search. (#105)
+* New suite of functions to work with the percolator service: `percolate_count()`, 
+`percolate_delete()`, `percolate_list()`, `percolate_match()`, `percolate_register()`. 
+The percolator works by first storing queries into an index and then you define 
+documents in order to retrieve these queries. (#106)
+* New function `field_stats()` to find statistical properties of a field without 
+executing a search (#107)
+* Added a Code of Conduct
+* New function `cat_nodeattrs()`
+* New function `index_recreate()` as a convenience function that detects if an 
+index exists, and if so, deletes it first, then creates it again.
 
 ### MINOR IMPROVEMENTS
 
 * `docs_bulk()` now supports passing in document ids (to the `_id` field) 
-as a parameter for each input data.frame or list & supports using ids
+via the parameter `doc_ids` for each input data.frame or list & supports using ids
 already in data.frame's or lists (#83)
+* `cat_*()` functions cleaned up. previously, some functions had parameters
+that were essentially silently ignored. Those parameters dropped now
+from the functions. (#96)
+* Elasticsearch had for a while 'search exists' functionality (via `/_search/exists`), 
+but have removed that in favor of using regular `_search` with `size=0` and 
+`terminate_after=1` instead. (#104)
+* New parameter `lenient` in `Search()` and `Search_uri` to allow format based 
+failures to be ignored, or not ignored.
+* Better error handling for `docs_get()` when gthe document isn't found
 
 ### BUG FIXES
 
 * Fixed problems in `docs_bulk()` in the use case where users use 
 the function in a for loop, for example, and indexing started over, 
 replacing documents with the same id (#83)
+* Fixed bug in `cat_()` functions in which they sometimes failed 
+when `parse=TRUE` (#88)
+* Fixed bug in `docs_bulk()` in which user supplied document IDs weren't being 
+passed correctly internally (#90)
+* Fixed bug in `Search()` and `Search_uri()` where multiple indices weren't 
+supported, whereas they should have been - supported now (#115)
 
+### DEFUNCT
+
+* The following functions are now defunct: `mlt()`, `nodes_shutdown()`, `index_status()`, 
+and `mapping_delete()` (#94) (#98) (#99) (#110)
 
 elastic 0.5.0
 ===============
