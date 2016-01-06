@@ -41,6 +41,7 @@
 field_stats <- function(fields = NULL, index = NULL, level = "cluster", body = list(),
                         raw = FALSE, asdf = FALSE, ...) {
 
+  stop_es_version(160, "field_stats")
   if (!is.null(fields)) fields <- paste(fields, collapse = ",")
   args <- ec(list(fields = fields, level = level))
   search_POST("_field_stats", cl(esc(index)), args = args, body = body, raw = raw, asdf = asdf, ...)

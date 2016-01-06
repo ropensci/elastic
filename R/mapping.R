@@ -74,7 +74,7 @@
 #'    "location" : { "type" : "geo_point" }
 #'  }
 #' }'
-#' mapping_create("gbifgeopoint", "record", body=body)
+#' mapping_create("gbifgeopoint", "record", body = body)
 #' }
 
 #' @export

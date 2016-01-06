@@ -34,7 +34,7 @@
 #' cat_indices()
 #' cat_master()
 #' cat_nodes()
-#' cat_nodeattrs()
+#' # cat_nodeattrs() # not available in older ES versions
 #' cat_pending_tasks()
 #' cat_plugins()
 #' cat_recovery(verbose=TRUE)
@@ -131,6 +131,7 @@ cat_nodes <- function(verbose=FALSE, h=NULL, help=FALSE, bytes=FALSE, parse=FALS
 #' @export
 #' @rdname cat
 cat_nodeattrs <- function(verbose=FALSE, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  stop_es_version(160, "cat_nodeattrs")
   cat_helper('nodeattrs', v=verbose, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
 

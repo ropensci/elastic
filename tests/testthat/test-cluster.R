@@ -40,7 +40,7 @@ test_that("cluster_stats", {
   expect_is(out4, "list")
   expect_is(out4$indices, "list")
   expect_is(cluster_stats(raw = TRUE), "elastic_cluster_stats")
-  expect_error(cluster_stats(index = "af"), "404 - no such index")
+  expect_error(cluster_stats(index = "af"), "no such index||IndexMissing")
 })
 
 test_that("cluster_pending_tasks", {
@@ -52,5 +52,5 @@ test_that("cluster_pending_tasks", {
   expect_is(out5$tasks, "list")
   expect_equal(length(out5$tasks), 0)
   expect_is(cluster_pending_tasks(raw = TRUE), "elastic_cluster_pending_tasks")
-  expect_error(cluster_pending_tasks(index = "af"), "404 - no such index")
+  expect_error(cluster_pending_tasks(index = "af"), "no such index||IndexMissing")
 })

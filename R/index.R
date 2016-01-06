@@ -250,6 +250,7 @@ NULL
 #' @export
 #' @rdname index
 index_get <- function(index=NULL, features=NULL, raw=FALSE, verbose=TRUE, ...) {
+  stop_es_version(120, "index_get")
   index_GET(index, features, raw, ...)
 }
 
@@ -368,6 +369,7 @@ index_optimize <- function(index = NULL, max_num_segments = NULL, only_expunge_d
 #' @export
 #' @rdname index
 index_upgrade <- function(index = NULL, wait_for_completion = FALSE, ...) {
+  stop_es_version(120, "index_get")
   args <- ec(list(wait_for_completion = as_log(wait_for_completion)))
   es_POST_(index, "_upgrade", args, ...)
 }

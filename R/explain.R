@@ -31,7 +31,7 @@
 #' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
 #' @param ... Curl args passed on to \code{\link[httr]{GET}}
 #' @references
-#' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-shards.html}
+#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-explain.html}
 #' @examples \dontrun{
 #' explain(index = "plos", type = "article", id = 14, q = "abstract:used")
 #'

@@ -113,7 +113,7 @@ cat_health()
 cat_indices()
 cat_master()
 cat_nodes()
-cat_nodeattrs()
+# cat_nodeattrs() # not available in older ES versions
 cat_pending_tasks()
 cat_plugins()
 cat_recovery(verbose=TRUE)

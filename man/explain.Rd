@@ -78,6 +78,6 @@ explain(index = "plos", type = "article", id = 14, body=body)
 }
 }
 \references{
-\url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-shards.html}
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-explain.html}
 }
 

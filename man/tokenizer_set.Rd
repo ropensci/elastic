@@ -19,6 +19,7 @@ Tokenizer operations
 \examples{
 \dontrun{
 # set tokenizer
+
 ## NGram tokenizer
 body <- '{
         "settings" : {
@@ -39,9 +40,8 @@ body <- '{
              }
       }
 }'
-if (!"tokenizer" \%in\% names(index_get("test1")$test1$settings$index$analysis)) {
- tokenizer_set(index = "test1", body=body)
-}
+if (index_exists('test1')) index_delete('test1')
+tokenizer_set(index = "test1", body=body)
 index_analyze(text = "hello world", index = "test1", analyzer='my_ngram_analyzer')
 }
 }

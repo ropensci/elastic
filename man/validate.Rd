@@ -18,7 +18,7 @@ Validate a search
 }
 \examples{
 \dontrun{
-index_create("twitter")
+if (!index_exists("twitter")) index_create("twitter")
 docs_create('twitter', type='tweet', id=1, body = list(
    "user" = "foobar", 
    "post_date" = "2014-01-03",

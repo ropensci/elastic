@@ -3,12 +3,14 @@ context("indices")
 invisible(connect())
 
 test_that("index_get", {
-  a <- index_get(index = 'shakespeare')
-  expect_equal(names(a), "shakespeare")
-  expect_is(a, "list")
-  expect_is(a$shakespeare, "list")
-  expect_equal(length(a$shakespeare$aliases), 0)
-  expect_error(index_get("adfadfadsfasdfadfasdfsf"), '404 - no such index')
+  if (!es_version() < 120) {
+    a <- index_get(index = 'shakespeare')
+    expect_equal(names(a), "shakespeare")
+    expect_is(a, "list")
+    expect_is(a$shakespeare, "list")
+    expect_equal(length(a$shakespeare$aliases), 0)
+    expect_error(index_get("adfadfadsfasdfadfasdfsf"), 'no such index||IndexMissingException')
+  }
 })
 
 test_that("index_exists", {
@@ -28,13 +30,13 @@ test_that("index_create", {
 
 test_that("index_delete", {
   nm <- "stuff_zz"
-  tryCatch(index_delete(index = nm, verbose = FALSE), error = function(e) e)
+  invisible(tryCatch(index_delete(index = nm, verbose = FALSE), error = function(e) e))
   a <- index_create(index = nm, verbose = FALSE)
   b <- index_delete(nm, verbose = FALSE)
   expect_true(b[[1]])
   expect_named(b, expected = "acknowledged")
   expect_is(b, "list")
-  expect_error(index_delete("adfadfafafasdfasdfasfasfasfd", verbose=FALSE), "404 - no such index")
+  expect_error(index_delete("adfadfafafasdfasdfasfasfasfd", verbose=FALSE), "no such index||IndexMissingException")
 })
 
 # test_that("index_close, index_open", {
@@ -52,21 +54,21 @@ test_that("index_stats", {
   a <- index_stats('shakespeare')
   expect_is(a, "list")
   expect_named(a$indices, "shakespeare")
-  expect_error(index_stats("adfadfafafasdfasdfasfasfasfd", verbose=FALSE), "404 - no such index")
+  expect_error(index_stats("adfadfafafasdfasdfasfasfasfd", verbose=FALSE), "no such index||IndexMissingException")
 })
 
 test_that("index_segments", {
   a <- index_segments('shakespeare')
   expect_is(a, "list")
   expect_named(a$indices, "shakespeare")
-  expect_error(index_segments("adfadfafafasdfasdfasfasfasfd", verbose=FALSE), "404 - no such index")
+  expect_error(index_segments("adfadfafafasdfasdfasfasfasfd", verbose=FALSE), "no such index||IndexMissingException")
 })
 
 test_that("index_recovery", {
   a <- index_recovery('shakespeare')
   expect_is(a, "list")
   expect_named(a$shakespeare, "shards")
-  expect_error(index_recovery("adfadfafafasdfasdfasfasfasfd", verbose=FALSE), "404 - no such index")
+  expect_error(index_recovery("adfadfafafasdfasdfasfasfasfd", verbose=FALSE), "no such index||IndexMissingException")
 })
 
 ## cleanup -----------------------------------

@@ -32,8 +32,7 @@ test_that("search paging works", {
 test_that("search terminate_after parameter works", {
 
   e <- Search_uri(index="shakespeare", terminate_after=1)
-  expect_equal(length(e), 5)
-  expect_equal(names(e), c('took','timed_out','terminated_early','_shards','hits'))
+  expect_is(e$hits, "list")
 })
 
 test_that("getting json data back from search works", {

@@ -37,7 +37,7 @@ test_that("multi-search fails well", {
   
   ### same, but complete errors
   invisible(connect(errors = "complete"))
-  expect_error(msearch(ff), "action_request_validation_exception")
+  expect_error(msearch(ff), "action_request_validation_exception||ActionRequestValidationException")
   
   ## same as above
   ff <- tempfile(fileext = ".json")

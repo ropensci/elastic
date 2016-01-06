@@ -45,11 +45,17 @@ test_that("mapping_create works", {
   expect_named(mc1$plos$mappings, "citation")
 
   ## fails well
-  ## A bad mapping body
+  ### A bad mapping body
   body <- list(things = list(properties = list(
     journal = list("string")
   )))
-  expect_error(mapping_create(index = "plos", type = "things", body=body), "Expected map for property")
+  if (es_version() < 120) {
+    expect_error(mapping_create(index = "plos", type = "things", body = body), 
+                 "ClassCastException")
+  } else {
+    expect_error(mapping_create(index = "plos", type = "things", body = body), 
+                 "Expected map for property")
+  }
 })
 
 test_that("mapping_get works", {

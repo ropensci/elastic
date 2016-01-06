@@ -15,6 +15,6 @@ test_that("count", {
 
   expect_more_than(b, 10)
 
-  expect_error(count("adfadf"), "404 - no such index")
-  expect_error(count(type = "adfad"), "404 - no such index")
+  expect_error(count("adfadf"), "no such index||IndexMissing")
+  expect_error(count(type = "adfad"), "no such index||IndexMissing")
 })
