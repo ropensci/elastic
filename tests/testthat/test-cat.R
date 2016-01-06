@@ -9,7 +9,6 @@ test_that("cat_", {
   expect_is(a$V1, "character")
   expect_gt(length(a$V1), 20)
   expect_is(capture.output(cat_()), "character")
-  expect_error(cat_(verbose = "adf"), "is not TRUE")
 })
 
 test_that("cat_indices", {

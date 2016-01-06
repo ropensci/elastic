@@ -20,60 +20,61 @@
 \alias{cat_thread_pool}
 \title{Use the cat Elasticsearch api.}
 \usage{
-cat_(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_(parse = FALSE, ...)
 
-cat_aliases(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_aliases(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
+  bytes = FALSE, parse = FALSE, ...)
 
-cat_allocation(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_allocation(verbose = FALSE, h = NULL, help = FALSE, bytes = FALSE,
+  parse = FALSE, ...)
 
-cat_count(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_count(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
+  bytes = FALSE, parse = FALSE, ...)
 
-cat_segments(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_segments(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
+  bytes = FALSE, parse = FALSE, ...)
 
-cat_health(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_health(verbose = FALSE, h = NULL, help = FALSE, bytes = FALSE,
+  parse = FALSE, ...)
 
-cat_indices(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_indices(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
+  bytes = FALSE, parse = FALSE, ...)
 
-cat_master(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_master(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
+  bytes = FALSE, parse = FALSE, ...)
 
-cat_nodes(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_nodes(verbose = FALSE, h = NULL, help = FALSE, bytes = FALSE,
+  parse = FALSE, ...)
 
-cat_nodeattrs(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_nodeattrs(verbose = FALSE, h = NULL, help = FALSE, bytes = FALSE,
+  parse = FALSE, ...)
 
-cat_pending_tasks(verbose = FALSE, index = NULL, fields = NULL,
-  h = NULL, help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_pending_tasks(verbose = FALSE, h = NULL, help = FALSE,
+  bytes = FALSE, parse = FALSE, ...)
 
-cat_plugins(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_plugins(verbose = FALSE, h = NULL, help = FALSE, bytes = FALSE,
+  parse = FALSE, ...)
 
-cat_recovery(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_recovery(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
+  bytes = FALSE, parse = FALSE, ...)
 
-cat_thread_pool(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_thread_pool(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
+  bytes = FALSE, parse = FALSE, ...)
 
-cat_shards(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_shards(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
+  bytes = FALSE, parse = FALSE, ...)
 
 cat_fielddata(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
   help = FALSE, bytes = FALSE, parse = FALSE, ...)
 }
 \arguments{
+\item{parse}{(logical) Parse to a data.frame or not. Default: \code{FALSE}}
+
+\item{...}{Curl args passed on to \code{\link[httr]{GET}}}
+
 \item{verbose}{(logical) If \code{TRUE} (default) the url call used printed to console}
 
 \item{index}{(character) Index name}
-
-\item{fields}{(character) Fields to return, only used with \code{fielddata}}
 
 \item{h}{(character) Fields to return}
 
@@ -81,9 +82,7 @@ cat_fielddata(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
 
 \item{bytes}{(logical) Give numbers back machine friendly. Default: \code{FALSE}}
 
-\item{parse}{(logical) Parse to a data.frame or not. Default: \code{FALSE}}
-
-\item{...}{Curl args passed on to \code{\link[httr]{GET}}}
+\item{fields}{(character) Fields to return, only used with \code{fielddata}}
 }
 \description{
 Use the cat Elasticsearch api.
@@ -142,6 +141,7 @@ head(cat_nodes(help = TRUE, parse = TRUE))
 # Get back only certain fields
 cat_nodes()
 cat_nodes(h = c('ip','port','heapPercent','name'))
+cat_nodes(h = c('id', 'ip', 'port', 'v', 'm'))
 cat_indices(verbose = TRUE)
 cat_indices(verbose = TRUE, h = c('index','docs.count','store.size'))
 
