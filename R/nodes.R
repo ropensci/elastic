@@ -13,7 +13,8 @@
 #' @param verbose If TRUE (default) the url call used printed to console
 #' @param ... Curl args passed on to \code{\link[httr]{GET}}
 #'
-#' @details \url{http://bit.ly/11gezop}
+#' @details 
+#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-nodes-stats.html}
 #'
 #' By default, all stats are returned. You can limit this by combining any of indices, os, process,
 #' jvm, network, transport, http, fs, breaker and thread_pool. With the metric parameter you can

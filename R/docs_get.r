@@ -13,7 +13,7 @@
 #' @param ... Further args passed on to elastic search HTTP API as parameters.
 #' 
 #' @references
-#' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs-get.html}
+#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html}
 #' 
 #' @examples \dontrun{
 #' docs_get(index='shakespeare', type='line', id=10)

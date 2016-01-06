@@ -16,7 +16,7 @@
 #' @param raw (logical) Get raw JSON back or not.
 #' @param ... Pass on curl options to \code{\link[httr]{POST}}
 #' @details More on the Bulk API:
-#' \url{http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/bulk.html}.
+#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html}.
 #'
 #' This function dispatches on data.frame or character input. Character input has
 #' to be a file name or the function stops with an error message.

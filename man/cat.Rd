@@ -88,7 +88,7 @@ cat_fielddata(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
 Use the cat Elasticsearch api.
 }
 \details{
-See \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/cat.html}
+See \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/cat.html}
 for the cat API documentation.
 
 Note how \code{\link{cat_}} has an underscore at the end to avoid conflict with the function

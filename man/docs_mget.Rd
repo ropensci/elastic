@@ -36,9 +36,6 @@ type, and id.}
 Get multiple documents via the multiple get API.
 }
 \details{
-There are a lot of terms you can use for Elasticsearch. See here
-   \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
-
 You can pass in one of three combinations of parameters:
 \itemize{
  \item Pass in something for \code{index}, \code{type}, and \code{id}. This is the simplest,
@@ -69,5 +66,8 @@ docs_mget(index="shakespeare", type_id=list(c("scene",1), c("line",20)), fields=
 # pass in separately
 docs_mget(index_type_id=list(c("shakespeare","line",1), c("plos","article",1)))
 }
+}
+\references{
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-multi-get.html}
 }
 

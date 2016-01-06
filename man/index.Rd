@@ -156,12 +156,12 @@ Index API operations
 }
 \details{
 \bold{index_analyze}:
-\url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-analyze.html}
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-analyze.html}
 This method can accept a string of text in the body, but this function passes it as a
 parameter in a GET request to simplify.
 
 \bold{index_flush}:
-\url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-flush.html}
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-flush.html}
 From the ES website: The flush process of an index basically frees memory from the index by
 flushing data to the index storage and clearing the internal transaction log. By default,
 Elasticsearch uses memory heuristics in order to automatically trigger flush operations as
@@ -343,6 +343,6 @@ index_get("foobar")$foobar$settings
 Scott Chamberlain <myrmecocystus@gmail.com>
 }
 \references{
-\url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices.html}
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices.html}
 }
 

@@ -10,12 +10,16 @@
 #' @details
 #' Find documentation for each function at:
 #' \itemize{
-#'  \item mapping_create - \url{http://bit.ly/1xbWqFo}
-#'  \item type_exists - \url{http://bit.ly/10HkZvH}
+#'  \item mapping_create - 
+#'  \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-put-mapping.html}
+#'  \item type_exists - 
+#'  \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-types-exists.html}
 #'  \item mapping_delete - FUNCTION DEFUNCT - instead of deleting mapping, delete 
 #'  index and recreate index with new mapping
-#'  \item mapping_get - \url{http://bit.ly/1AN2oiw}
-#'  \item field_mapping_get - \url{http://bit.ly/1wHKgCA }
+#'  \item mapping_get - 
+#'  \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-mapping.html}
+#'  \item field_mapping_get - 
+#'\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-field-mapping.html}
 #' }
 #'
 #' @examples \dontrun{

@@ -7,7 +7,7 @@
 #' @param verbose If TRUE (default) the url call used printed to console.
 #' @param ... Further args passed on to elastic search HTTP API as parameters.
 #' @details See docs for the count API here
-#' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-count.html}
+#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-count.html}
 #' 
 #' You can also get a count of documents using \code{\link{Search}} or 
 #' \code{\link{Search_uri}} and setting \code{size = 0}

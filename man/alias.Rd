@@ -65,6 +65,6 @@ aliases_get(alias = "tables", config=verbose())
 Scott Chamberlain <myrmecocystus@gmail.com>
 }
 \references{
-\url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-aliases.html}
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-aliases.html}
 }
 

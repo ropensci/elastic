@@ -19,8 +19,9 @@ Search(index = NULL, type = NULL, q = NULL, df = NULL,
 \item{type}{Document type}
 
 \item{q}{The query string (maps to the query_string query, see Query String Query
-for more details). See \url{http://bit.ly/esquerystring} for documentation and
-examples.}
+for more details). See 
+https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
+for documentation and examples.}
 
 \item{df}{(character) The default field to use when no field prefix is defined
 within the query.}

@@ -1,5 +1,6 @@
 #' Get multiple documents via the multiple get API.
 #'
+#' @export
 #' @template all
 #' @param ids More than one document id, see examples.
 #' @param type_id List of vectors of length 2, each with an element for type and id.
@@ -8,8 +9,9 @@
 #' @param source (logical) If \code{TRUE}, return source.
 #' @param fields Fields to return from the response object.
 #'
-#' @details There are a lot of terms you can use for Elasticsearch. See here
-#'    \url{http://www.elasticsearch.org/guide/reference/query-dsl/} for the documentation.
+#' @references 
+#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-multi-get.html}
+#' @details 
 #'
 #' You can pass in one of three combinations of parameters:
 #' \itemize{
@@ -20,7 +22,6 @@
 #'  \item Pass in only \code{index_type_id} - this is so that you can get multiple documents
 #'  from different indexes and different types.
 #' }
-#' @export
 #' @examples \dontrun{
 #' # Same index and type
 #' docs_mget(index="shakespeare", type="line", ids=c(9,10))

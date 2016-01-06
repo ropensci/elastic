@@ -1,8 +1,9 @@
 #' @param index Index name, one or more
 #' @param type Document type
 #' @param q The query string (maps to the query_string query, see Query String Query
-#' for more details). See \url{http://bit.ly/esquerystring} for documentation and
-#' examples.
+#' for more details). See 
+#'https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
+#' for documentation and examples.
 #' @param df (character) The default field to use when no field prefix is defined
 #' within the query.
 #' @param analyzer (character) The analyzer name to be used when analyzing the

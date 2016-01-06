@@ -12,7 +12,7 @@
 #' @param callopts Curl args passed on to \code{\link[httr]{DELETE}}
 #' @param ... Further args to query DSL
 #' @references
-#' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs-delete.html}
+#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html}
 #' @examples \dontrun{
 #' docs_delete(index='plos', type='article', id=36)
 #' # docs_get(index='plos', type='article', id=36) # and the document is gone

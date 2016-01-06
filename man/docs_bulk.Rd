@@ -34,7 +34,7 @@ Use the bulk API to create, index, update, or delete documents.
 }
 \details{
 More on the Bulk API:
-\url{http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/bulk.html}.
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html}.
 
 This function dispatches on data.frame or character input. Character input has
 to be a file name or the function stops with an error message.

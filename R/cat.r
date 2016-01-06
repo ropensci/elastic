@@ -10,7 +10,7 @@
 #' @param parse (logical) Parse to a data.frame or not. Default: \code{FALSE}
 #' @param ... Curl args passed on to \code{\link[httr]{GET}}
 #'
-#' @details See \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/cat.html}
+#' @details See \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/cat.html}
 #' for the cat API documentation.
 #'
 #' Note how \code{\link{cat_}} has an underscore at the end to avoid conflict with the function

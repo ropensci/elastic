@@ -40,7 +40,7 @@ see hot threads that are in wait or block state.}
 Elasticsearch nodes endpoints.
 }
 \details{
-\url{http://bit.ly/11gezop}
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-nodes-stats.html}
 
 By default, all stats are returned. You can limit this by combining any of indices, os, process,
 jvm, network, transport, http, fs, breaker and thread_pool. With the metric parameter you can

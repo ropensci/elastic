@@ -22,7 +22,7 @@
 #' @param callopts Curl args passed on to \code{\link[httr]{DELETE}}
 #' @param ... Further args to query DSL
 #' @references
-#' \url{http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs-index_.html}
+#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html}
 #' @examples \dontrun{
 #' docs_create(index='plos', type='article', id=1002, body=list(id="12345", title="New title"))
 #' docs_get(index='plos', type='article', id=1002) # and the document is there now
