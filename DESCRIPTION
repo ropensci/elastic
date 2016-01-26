@@ -1,14 +1,14 @@
 Package: elastic
 Title: General Purpose Interface to 'Elasticsearch'
 Description: Connect to 'Elasticsearch', a 'NoSQL' database built on the 'Java'
-    Virtual Machine. Interacts with the 'Elasticsearch' 'HTTP' 'API' 
+    Virtual Machine. Interacts with the 'Elasticsearch' 'HTTP' 'API'
     (<https://www.elastic.co/products/elasticsearch>), including functions for
-    setting connection details to 'Elasticsearch' instances, loading bulk data, 
-    searching for documents with both 'HTTP' query variables and 'JSON' based body 
-    requests. In addition, 'elastic' provides functions for interacting with 'APIs' 
-    for 'indices', documents, nodes, clusters, an interface to the cat 'API', and 
+    setting connection details to 'Elasticsearch' instances, loading bulk data,
+    searching for documents with both 'HTTP' query variables and 'JSON' based body
+    requests. In addition, 'elastic' provides functions for interacting with 'APIs'
+    for 'indices', documents, nodes, clusters, an interface to the cat 'API', and
     more.
-Version: 0.6.0
+Version: 0.6.0.9000
 License: MIT + file LICENSE
 Authors@R: person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "myrmecocystus@gmail.com")
