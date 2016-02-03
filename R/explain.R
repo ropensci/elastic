@@ -62,6 +62,5 @@ explain_POST <- function(index, type, id, args, body, raw, ...) {
   url <- if(is.null(id)) file.path(url, index, type, "_explain") else file.path(url, index, type, id, "_explain")
   tt <- if(is.null(body)) POST(url, query=args, make_up(), ...) else POST(url, query=args, body=body, make_up(), ...)
   geterror(tt)
-  # stop_for_status(tt)
-  if (raw) content(tt, "text") else jsonlite::fromJSON(content(tt, "text"), FALSE)
+  if (raw) cont_utf8(tt) else jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }

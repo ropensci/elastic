@@ -182,7 +182,7 @@ percolate_PUT <- function(url, args, body = list(), ...) {
   body <- check_inputs(body)
   tt <- PUT(url, body = body, query = args, encode = 'json', c(make_up(), ...))
   geterror(tt)
-  jsonlite::fromJSON(content(tt, "text"), FALSE)
+  jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }
 
 percolate_POST <- function(url, args = NULL, body = list(), ...) {
@@ -190,5 +190,5 @@ percolate_POST <- function(url, args = NULL, body = list(), ...) {
   body <- check_inputs(body)
   tt <- POST(url, body = body, query = args, encode = 'json', make_up(), ...)
   geterror(tt)
-  jsonlite::fromJSON(content(tt, "text"), FALSE)
+  jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }

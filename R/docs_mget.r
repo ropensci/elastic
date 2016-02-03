@@ -97,7 +97,7 @@ docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL, index_type_
 
   stop_for_status(out)
   if (verbose) message(URLdecode(out$url))
-  tt <- content(out, as = "text")
+  tt <- cont_utf8(out)
   class(tt) <- "elastic_mget"
 
   if (raw) {

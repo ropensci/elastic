@@ -199,11 +199,8 @@ docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000,
   conn <- es_get_auth()
   url <- paste0(conn$base, ":", conn$port, '/_bulk')
   tt <- POST(url, make_up(), ..., body = upload_file(x, type = "application/json"), encode = "json")
-  if (tt$status_code > 202) {
-    if (tt$status_code > 202) stop(content(tt)$error)
-    if (content(tt)$status == "ERROR" | content(tt)$status == 500) stop(content(tt)$error_message)
-  }
-  res <- content(tt, as = "text")
+  geterror(tt)
+  res <- cont_utf8(tt)
   res <- structure(res, class = "bulk_make")
   if (raw) res else es_parse(res)
 }
@@ -300,7 +297,7 @@ make_bulk_plos <- function(n = 1000, index='plos', type='article', fields=c('id'
   args <- ec(list(q = "*:*", rows=n, fl=paste0(fields, collapse = ","), fq='doc_type:full', wt='json'))
   res <- GET("http://api.plos.org/search", query=args)
   stop_for_status(res)
-  tt <- jsonlite::fromJSON(content(res, as = "text"), FALSE)
+  tt <- jsonlite::fromJSON(cont_utf8(res), FALSE)
   docs <- tt$response$docs
   docs <- lapply(docs, function(x){
     x[sapply(x, length)==0] <- "null"
@@ -340,5 +337,5 @@ make_bulk_gbif <- function(n = 600, index='gbif', type='record', filename = "~/g
 
 getgbif <- function(x){
   res <- GET("http://api.gbif.org/v1/occurrence/search", query=list(limit=300, offset=x))
-  jsonlite::fromJSON(content(res, "text"), FALSE)$results
+  jsonlite::fromJSON(cont_utf8(res), FALSE)$results
 }

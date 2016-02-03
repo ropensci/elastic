@@ -211,7 +211,7 @@ cat_helper <- function(what='', v=FALSE, i=NULL, f=NULL, h=NULL, help=FALSE, byt
                   bytes = ifbytes(bytes)))
   out <- GET(url, query = args, make_up(), ...)
   if (out$status_code > 202) geterror(out)
-  dat <- content(out, as = "text")
+  dat <- cont_utf8(out)
   if (identical(dat, "")) {
     message("Nothing to print")
   } else {

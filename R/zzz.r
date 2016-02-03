@@ -1,5 +1,7 @@
 ec <- function(l) Filter(Negate(is.null), l)
 
+cont_utf8 <- function(x) content(x, as = "text", encoding = "UTF-8")
+
 as_log <- function(x){
   stopifnot(is.logical(x))
   if (x) 'true' else 'false'
@@ -12,8 +14,7 @@ scroll_POST <- function(path, args, body, raw, ...) {
   url <- make_url(es_get_auth())
   tt <- POST(file.path(url, path), make_up(), ..., query = args, body = body)
   geterror(tt)
-  # if (tt$status_code > 202) stop(error_parser(content(tt)$error, 1))
-  res <- content(tt, as = "text")
+  res <- cont_utf8(tt)
   if (raw) res else jsonlite::fromJSON(res, FALSE)
 }
 

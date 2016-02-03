@@ -30,6 +30,6 @@ msearch <- function(x, raw = FALSE, asdf = FALSE, ...) {
   url <- paste0(conn$base, ":", conn$port, '/_msearch')
   tt <- POST(url, make_up(), ..., body = upload_file(x, type = "application/json"), encode = "json")
   geterror(tt)
-  res <- content(tt, as = "text")
+  res <- cont_utf8(tt)
   if (raw) res else jsonlite::fromJSON(res, asdf)
 }

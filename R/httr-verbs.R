@@ -26,7 +26,7 @@ es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL,
   if (length(args) == 0) args <- NULL
   tt <- GET(url, query = args, mc(make_up(), callopts))
   geterror(tt)
-  res <- content(tt, as = "text")
+  res <- cont_utf8(tt)
   if (!is.null(clazz)) { 
     class(res) <- clazz
     if (raw) res else es_parse(res)
@@ -53,7 +53,7 @@ index_GET <- function(index, features, raw, ...) {
   if (!is.null(features)) url <- paste0(url, "/", features)
   tt <- GET(url, make_up(), ...)
   if (tt$status_code > 202) geterror(tt)
-  jsonlite::fromJSON(content(tt, as = "text"), FALSE)
+  jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }
 
 es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, query, ...) {
@@ -77,7 +77,7 @@ es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, quer
   tt <- POST(url, body = args, mc(make_up(), callopts), encode = "json")
   geterror(tt)
   # if(tt$status_code > 202) geterror(tt)
-  res <- content(tt, as = "text")
+  res <- cont_utf8(tt)
   if (!is.null(clazz)) { 
     class(res) <- clazz
     if (raw) res else es_parse(input = res)
@@ -90,8 +90,7 @@ es_DELETE <- function(url, query = NULL, ...) {
   checkconn()
   tt <- DELETE(url, query = query, c(make_up(), ...))
   geterror(tt)
-  # if(tt$status_code > 202) stop(content(tt)$error)
-  jsonlite::fromJSON(content(tt, "text"), FALSE)
+  jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }
 
 es_PUT <- function(url, body = list(), ...) {
@@ -99,16 +98,14 @@ es_PUT <- function(url, body = list(), ...) {
   body <- check_inputs(body)
   tt <- PUT(url, body = body, encode = 'json', c(make_up(), ...))
   geterror(tt)
-  # if (tt$status_code > 202) stop(content(tt)$error)
-  jsonlite::fromJSON(content(tt, "text"), FALSE)
+  jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }
 
 es_GET_ <- function(url, query = NULL, ...) {
   checkconn()
   tt <- GET(url, query = query, make_up(), ...)
   geterror(tt)
-  # if(tt$status_code > 202) stop(content(tt)$error)
-  jsonlite::fromJSON(content(tt, "text"), FALSE)
+  jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }
 
 check_inputs <- function(x) {
@@ -132,9 +129,12 @@ geterror <- function(z) {
   if (!is(z, "response")) stop("Input to error parser must be a httr response object")
   if (z$status_code > 202) {
     if (is.null(z$headers$statusmessage)) {
-      err <- tryCatch(content(z, "text"), error = function(e) e)
-      err <- if (is(err, "simpleError")) content(z) else err
+      err <- tryCatch(cont_utf8(z), error = function(e) e)
+      err <- if (is(err, "simpleError")) jsonlite::fromJSON(cont_utf8(z), FALSE) else err
       if (!is(err, "simpleError")) {
+        if (nchar(cont_utf8(z)) == 0) {
+          stop(http_status(z)$message, call. = FALSE)
+        }
         err <- jsonlite::fromJSON(err, simplifyVector = FALSE, simplifyDataFrame = FALSE)
         erropt <- Sys.getenv("ELASTIC_RCLIENT_ERRORS")
         if (erropt == "complete") {

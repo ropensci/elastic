@@ -45,41 +45,13 @@ search_POST <- function(path, index=NULL, type=NULL, args, body, raw, asdf, ...)
   body <- check_inputs(body)
   tt <- POST(url, make_up(), ..., query = args, body = body)
   geterror(tt)
-  # if (tt$status_code > 202) stop(error_parser(tt, 1), call. = FALSE)
-  res <- content(tt, as = "text")
+  res <- cont_utf8(tt)
   if (raw) res else jsonlite::fromJSON(res, asdf)
 }
 
 prune_trailing_slash <- function(x) {
   gsub("\\/$", "", x)
 }
-
-# error_parser <- function(y, shard_no = 1) {
-#   res <- content(y)
-#   tryerr <- tryCatch(res$error, error = function(e) e)
-#   if (!is(tryerr, "simpleError")) {
-#     if (!is.null(res$error)) {
-#       y <- res$error
-#       if (grepl("SearchParseException", y)) {
-#         first <- strloc2match(y, 1, ";")
-#         shards <- strsplit(substring(y, regexpr(";", y) + 17, nchar(y)), "\\}\\{")[[1]]
-#         shards <- gsub("\\s}]$|\\s$", "", shards)
-#         paste(first, paste0("1st shard:  ", shards[1:shard_no]), sep = "\n")
-#       } else {
-#         y
-#       }
-#     } else {
-#       y
-#     }
-#   } else {
-#     mssg <- tryCatch(http_status(y)$message, error = function(e) e)
-#     if (is(mssg, "simpleError")) {
-#       y$status_code
-#     } else {
-#       mssg
-#     }
-#   }
-# }
 
 strmatch <- function(x, y) regmatches(x, regexpr(y, x))
 strloc2match <- function(x, first, y) substring(x, first, regexpr(y, x) - 1)

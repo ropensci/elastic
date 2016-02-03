@@ -61,7 +61,7 @@ connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL,
   if (res$status_code > 200) {
     stop(sprintf("Error:", res$headers$statusmessage), call. = FALSE)
   }
-  tt <- content(res, as = "text")
+  tt <- cont_utf8(res)
   out <- jsonlite::fromJSON(tt, FALSE)
   
   # errors
@@ -104,7 +104,7 @@ connection <- function() {
   }
   if (res$status_code > 200)
     stop(sprintf("Error:", res$headers$statusmessage), call. = FALSE)
-  tt <- content(res, as = "text")
+  tt <- cont_utf8(res)
   out <- jsonlite::fromJSON(tt, FALSE)
   structure(list(base = auth$base, 
                  port = auth$port,

@@ -40,6 +40,6 @@ search_GET <- function(path, index=NULL, type=NULL, args, raw, asdf, ...) {
   tt <- GET(url, query = args, make_up(), ...)
   geterror(tt)
   # if (tt$status_code > 202) stop(error_parser(tt, 1), call. = FALSE)
-  res <- content(tt, as = "text")
+  res <- cont_utf8(tt)
   if (raw) res else jsonlite::fromJSON(res, asdf)
 }

@@ -29,6 +29,6 @@ docs_delete <- function(index, type, id, refresh=NULL, routing=NULL, timeout=NUL
   if (length(args) == 0) args <- NULL
   out <- DELETE(url, query=args, mc(make_up(), callopts))
   stop_for_status(out)
-  tt <- content(out, as="text")
+  tt <- cont_utf8(out)
   jsonlite::fromJSON(tt, FALSE)
 }
