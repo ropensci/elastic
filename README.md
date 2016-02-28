@@ -74,7 +74,7 @@ docker run -d -p 9200:9200 elasticsearch
 
 Then elasticsearch should be available on port 9200, try `curl localhost:9200` and you should get the familiar message indicating ES is on.
 
-If you're using boot2docker, you'll need to use the IP address in place of localhost. Get it by doing `boot2docker ip`.
+If you're using boot2docker, you'll need to use the IP address in place of localhost. Get it by doing `boot2docker ip` or `docker-machine ip [env ...]`
 
 __on OSX__
 
@@ -101,6 +101,26 @@ Obviously, upgrading Elasticsearch while keeping it running is a different thing
 * Start elasticsearch: `bin/elasticsearch`
 
 I create a little bash shortcut called `es` that does both of the above commands in one step (`cd /usr/local/elasticsearch && bin/elasticsearch`).
+
+## Initialization
+
+The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
+
+
+```r
+connect(es_port = 9200)
+#> url:       http://127.0.0.1
+#> port:      9200
+#> username:  NULL
+#> password:  NULL
+#> errors:    simple
+#> Elasticsearch (ES) details:
+#>    name:                    Desmond Pitt
+#>    ES version:              2.1.1
+#>    ES version timestamp:    2015-12-15T13:05:55Z 
+#>    ES build hash:           40e2c53a6b6c2972b3d13846e450e66f4375bd71 
+#>    lucene version:          5.3.1
+```
 
 ## Get some data
 
@@ -163,25 +183,6 @@ docs_bulk(gbifgeo)
 
 There are more datasets formatted for bulk loading in the `ropensci/elastic_data` GitHub repository. Find it at [https://github.com/ropensci/elastic_data](https://github.com/ropensci/elastic_data)
 
-## Initialization
-
-The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
-
-
-```r
-connect(es_port = 9200)
-#> url:       http://127.0.0.1 
-#> port:      9200 
-#> username:  NULL 
-#> password:  NULL 
-#> errors:    simple 
-#> Elasticsearch (ES) details:   
-#>    name:                    Desmond Pitt 
-#>    ES version:              2.1.1 
-#>    ES version timestamp:    2015-12-15T13:05:55Z 
-#>    ES build hash:           40e2c53a6b6c2972b3d13846e450e66f4375bd71 
-#>    lucene version:          5.3.1
-```
 
 ## Search
 
@@ -242,9 +243,9 @@ Search(index = "plos", type = "article", sort = "title", q = "antibody", size = 
 #> [1] "1"
 ```
 
-## Get documents
+## Get individual documents
 
-Get document with id=1
+Get the document with id=1
 
 
 ```r
