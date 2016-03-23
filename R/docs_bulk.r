@@ -32,6 +32,15 @@
 #'
 #' A progress bar gives the progress for data.frames and lists
 #'
+#' @section Document IDs:
+#' Document IDs can be passed in via the \code{doc_ids} paramater when passing in
+#' data.frame or list, but not with files. If ids not passed to \code{doc_ids}, 
+#' we assign document IDs from 1 to length of the object (rows of a data.frame,
+#' or length of a list). In the future we may allow the user to select whether
+#' they want to assign sequential numeric IDs or to allow Elasticsearch to 
+#' assign IDs, which are UUIDs that are actually sequential, so you still can
+#' determine an order of your documents.
+#'
 #' @section Large numbers for document IDs:
 #' Until recently, if you had very large integers for document IDs, \code{docs_bulk}
 #' failed. It should be fixed now. Let us know if not.
@@ -50,6 +59,8 @@
 #'
 #' # From a data.frame
 #' docs_bulk(mtcars, index = "hello", type = "world")
+#' ## field names cannot contain dots
+#' names(iris) <- gsub("\\.", "_", names(iris))
 #' docs_bulk(iris, "iris", "flowers")
 #' ## type can be missing, but index can not
 #' docs_bulk(iris, "flowers")
@@ -222,11 +233,12 @@ make_bulk <- function(df, index, type, counter) {
     metadata_fmt,
     index,
     type,
-    if (is.numeric(counter)) {
-      counter - 1L
-    } else {
-      counter
-    }
+    counter
+    # if (is.numeric(counter)) {
+    #   counter - 1L
+    # } else {
+    #   counter
+    # }
   )
   data <- jsonlite::toJSON(df, collapse = FALSE)
   tmpf <- tempfile("elastic__")
