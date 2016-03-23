@@ -1,4 +1,5 @@
 language: r
+cache: packages
 
 env:
   matrix:
@@ -37,7 +38,7 @@ before_install:
       export ES_VERSION=2.1.0 ;
       curl -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/$ES_VERSION/elasticsearch-$ES_VERSION.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION.deb && sudo service elasticsearch start
       ;;
-      
+
     "2.2.0")
       export ES_VERSION=2.2.0 ;
       curl -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/$ES_VERSION/elasticsearch-$ES_VERSION.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION.deb && sudo service elasticsearch start
@@ -46,9 +47,6 @@ before_install:
 
   - sleep 3
   - sudo service elasticsearch status
-
-r_packages:
-- covr
 
 after_success:
 - Rscript -e 'covr::codecov()'

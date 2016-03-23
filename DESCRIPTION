@@ -22,6 +22,8 @@ Imports:
     curl (>= 0.9.4),
     jsonlite (>= 0.9.19)
 Suggests:
+    roxygen2 (>= 5.0.1),
     testthat,
-    knitr
+    knitr,
+    covr
 RoxygenNote: 5.0.1
