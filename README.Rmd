@@ -30,7 +30,7 @@ Also check out `elasticdsl` - an R DSL for Elasticsearch - [https://github.com/r
 
 ## Compatibility
 
-This client is developed following the latest stable releases, currently `v2.2.0`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
+This client is developed following the latest stable releases, currently `v2.2.1`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
 
 ## Security
 
@@ -82,12 +82,12 @@ If you're using boot2docker, you'll need to use the IP address in place of local
 
 __on OSX__
 
-+ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.2.0/elasticsearch-2.2.0.tar.gz`
-+ Extract: `tar -zxvf elasticsearch-2.2.0.tar.gz`
-+ Move it: `sudo mv /path/to/elasticsearch-2.2.0 /usr/local` (replace version with your version)
++ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.2.1/elasticsearch-2.2.1.tar.gz`
++ Extract: `tar -zxvf elasticsearch-2.2.1.tar.gz`
++ Move it: `sudo mv /path/to/elasticsearch-2.2.1 /usr/local` (replace version with your version)
 + Navigate to /usr/local: `cd /usr/local`
 + Delete symlinked `elasticsearch` directory: `rm -rf elasticsearch`
-+ Add shortcut: `sudo ln -s elasticsearch-2.2.0 elasticsearch` (replace version with your version)
++ Add shortcut: `sudo ln -s elasticsearch-2.2.1 elasticsearch` (replace version with your version)
 
 You can also install via Homebrew: `brew install elasticsearch`
 
@@ -243,7 +243,7 @@ jsonlite::fromJSON(out)
 * Please [report any issues or bugs](https://github.com/ropensci/elastic/issues)
 * License: MIT
 * Get citation information for `elastic` in R doing `citation(package = 'elastic')`
-* Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). 
+* Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md).
 By participating in this project you agree to abide by its terms.
 
 [![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
