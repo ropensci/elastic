@@ -5,7 +5,7 @@
 \title{Use the bulk API to create, index, update, or delete documents.}
 \usage{
 docs_bulk(x, index = NULL, type = NULL, chunk_size = 1000,
-  doc_ids = NULL, raw = FALSE, ...)
+  doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...)
 }
 \arguments{
 \item{x}{A data.frame or path to a file to load in the bulk API}
@@ -24,6 +24,10 @@ is ignored if you pass a file name. Default: 1000}
 \item{doc_ids}{An optional vector (character or numeric/integer) of document ids to use.
 This vector has to equal the size of the documents you are passing in, and will error
 if not. If you pass a factor we convert to character. Default: not passed}
+
+\item{es_ids}{(boolean) Let Elasticsearch assign document IDs as UUIDs. These are sequential,
+so there is order to the IDs they assign. If \code{TRUE}, \code{doc_ids} is ignored.
+Default: \code{TRUE}}
 
 \item{raw}{(logical) Get raw JSON back or not.}
 
@@ -122,7 +126,7 @@ ids <- list(1:tt[1],
            (tt[1] + tt[2] + 1):sum(tt))
 for (i in seq_along(files)) {
   d <- read.csv(files[[i]])
-  docs_bulk(d, index = "testes", type = "docs", doc_ids = ids[[i]])
+  docs_bulk(d, index = "testes", type = "docs", doc_ids = ids[[i]], es_ids = FALSE)
 }
 count("testes", "docs")
 index_delete("testes")

@@ -13,6 +13,9 @@
 #' @param doc_ids An optional vector (character or numeric/integer) of document ids to use.
 #' This vector has to equal the size of the documents you are passing in, and will error
 #' if not. If you pass a factor we convert to character. Default: not passed
+#' @param es_ids (boolean) Let Elasticsearch assign document IDs as UUIDs. These are sequential,
+#' so there is order to the IDs they assign. If \code{TRUE}, \code{doc_ids} is ignored.
+#' Default: \code{TRUE}
 #' @param raw (logical) Get raw JSON back or not.
 #' @param ... Pass on curl options to \code{\link[httr]{POST}}
 #' @details More on the Bulk API:
@@ -100,7 +103,7 @@
 #'            (tt[1] + tt[2] + 1):sum(tt))
 #' for (i in seq_along(files)) {
 #'   d <- read.csv(files[[i]])
-#'   docs_bulk(d, index = "testes", type = "docs", doc_ids = ids[[i]])
+#'   docs_bulk(d, index = "testes", type = "docs", doc_ids = ids[[i]], es_ids = FALSE)
 #' }
 #' count("testes", "docs")
 #' index_delete("testes")
@@ -130,14 +133,14 @@
 #' index_delete("testes")
 #' }
 docs_bulk <- function(x, index = NULL, type = NULL, chunk_size = 1000,
-                      doc_ids = NULL, raw=FALSE, ...) {
+                      doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
 
   UseMethod("docs_bulk")
 }
 
 #' @export
 docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000,
-                                 doc_ids = NULL, raw = FALSE, ...) {
+                                 doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
 
   checkconn()
   if (is.null(index)) {
@@ -163,13 +166,13 @@ docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000
   on.exit(close(pb))
   for (i in seq_along(data_chks)) {
     setTxtProgressBar(pb, i)
-    docs_bulk(make_bulk(x[data_chks[[i]], ], index, type, id_chks[[i]]), ...)
+    docs_bulk(make_bulk(x[data_chks[[i]], ], index, type, id_chks[[i]], es_ids), ...)
   }
 }
 
 #' @export
 docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
-                           doc_ids = NULL, raw = FALSE, ...) {
+                           doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
 
   checkconn()
   if (is.null(index)) {
@@ -196,13 +199,13 @@ docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
   on.exit(close(pb))
   for (i in seq_along(data_chks)) {
     setTxtProgressBar(pb, i)
-    docs_bulk(make_bulk(x[data_chks[[i]]], index, type, id_chks[[i]]), ...)
+    docs_bulk(make_bulk(x[data_chks[[i]]], index, type, id_chks[[i]], es_ids), ...)
   }
 }
 
 #' @export
 docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000,
-                                doc_ids = NULL, raw=FALSE, ...) {
+                                doc_ids = NULL, es_ids = TRUE, raw=FALSE, ...) {
 
   on.exit(close_conns())
   checkconn()
@@ -216,7 +219,7 @@ docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000,
   if (raw) res else es_parse(res)
 }
 
-make_bulk <- function(df, index, type, counter) {
+make_bulk <- function(df, index, type, counter, es_ids) {
   if (!is.character(counter)) {
     if (max(counter) >= 10000000000) {
       scipen <- getOption("scipen")
@@ -224,21 +227,20 @@ make_bulk <- function(df, index, type, counter) {
       on.exit(options(scipen = scipen))
     }
   }
-  metadata_fmt <- if (is.character(counter)) {
-    '{"index":{"_index":"%s","_type":"%s","_id":"%s"}}'
+  metadata_fmt <- if (es_ids) {
+    '{"index":{"_index":"%s","_type":"%s"}}'
   } else {
-    '{"index":{"_index":"%s","_type":"%s","_id":%s}}'
+    if (is.character(counter)) {
+      '{"index":{"_index":"%s","_type":"%s","_id":"%s"}}'
+    } else {
+      '{"index":{"_index":"%s","_type":"%s","_id":%s}}'
+    }
   }
   metadata <- sprintf(
     metadata_fmt,
     index,
     type,
     counter
-    # if (is.numeric(counter)) {
-    #   counter - 1L
-    # } else {
-    #   counter
-    # }
   )
   data <- jsonlite::toJSON(df, collapse = FALSE)
   tmpf <- tempfile("elastic__")
