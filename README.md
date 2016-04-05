@@ -23,7 +23,7 @@ Also check out `elasticdsl` - an R DSL for Elasticsearch - [https://github.com/r
 
 ## Compatibility
 
-This client is developed following the latest stable releases, currently `v2.2.1`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
+This client is developed following the latest stable releases, currently `v2.3.1`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
 
 ## Security
 
@@ -74,16 +74,16 @@ docker run -d -p 9200:9200 elasticsearch
 
 Then elasticsearch should be available on port 9200, try `curl localhost:9200` and you should get the familiar message indicating ES is on.
 
-If you're using boot2docker, you'll need to use the IP address in place of localhost. Get it by doing `boot2docker ip` or `docker-machine ip [env ...]`
+If you're using boot2docker, you'll need to use the IP address in place of localhost. Get it by doing `boot2docker ip`.
 
 __on OSX__
 
-+ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.2.1/elasticsearch-2.2.1.tar.gz`
-+ Extract: `tar -zxvf elasticsearch-2.2.1.tar.gz`
-+ Move it: `sudo mv /path/to/elasticsearch-2.2.1 /usr/local` (replace version with your version)
++ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.3.1/elasticsearch-2.3.1.tar.gz`
++ Extract: `tar -zxvf elasticsearch-2.3.1.tar.gz`
++ Move it: `sudo mv elasticsearch-2.3.1 /usr/local` (replace version with your version)
 + Navigate to /usr/local: `cd /usr/local`
 + Delete symlinked `elasticsearch` directory: `rm -rf elasticsearch`
-+ Add shortcut: `sudo ln -s elasticsearch-2.2.1 elasticsearch` (replace version with your version)
++ Add shortcut: `sudo ln -s elasticsearch-2.3.1 elasticsearch` (replace version with your version)
 
 You can also install via Homebrew: `brew install elasticsearch`
 
@@ -101,26 +101,6 @@ Obviously, upgrading Elasticsearch while keeping it running is a different thing
 * Start elasticsearch: `bin/elasticsearch`
 
 I create a little bash shortcut called `es` that does both of the above commands in one step (`cd /usr/local/elasticsearch && bin/elasticsearch`).
-
-## Initialization
-
-The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
-
-
-```r
-connect(es_port = 9200)
-#> url:       http://127.0.0.1
-#> port:      9200
-#> username:  NULL
-#> password:  NULL
-#> errors:    simple
-#> Elasticsearch (ES) details:
-#>    name:                    Desmond Pitt
-#>    ES version:              2.1.1
-#>    ES version timestamp:    2015-12-15T13:05:55Z
-#>    ES build hash:           40e2c53a6b6c2972b3d13846e450e66f4375bd71
-#>    lucene version:          5.3.1
-```
 
 ## Get some data
 
@@ -183,6 +163,25 @@ docs_bulk(gbifgeo)
 
 There are more datasets formatted for bulk loading in the `ropensci/elastic_data` GitHub repository. Find it at [https://github.com/ropensci/elastic_data](https://github.com/ropensci/elastic_data)
 
+## Initialization
+
+The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
+
+
+```r
+connect(es_port = 9200)
+#> url:       http://127.0.0.1 
+#> port:      9200 
+#> username:  NULL 
+#> password:  NULL 
+#> errors:    simple 
+#> Elasticsearch (ES) details:   
+#>    name:                    Turac 
+#>    ES version:              2.3.0 
+#>    ES version timestamp:    2016-03-29T07:54:48Z 
+#>    ES build hash:           8371be8d5fe5df7fb9c0516c474d77b9feddd888 
+#>    lucene version:          5.5.0
+```
 
 ## Search
 
@@ -194,20 +193,20 @@ Search(index = "plos", size = 1)$hits$hits
 #> [[1]]
 #> [[1]]$`_index`
 #> [1] "plos"
-#>
+#> 
 #> [[1]]$`_type`
 #> [1] "article"
-#>
+#> 
 #> [[1]]$`_id`
 #> [1] "0"
-#>
+#> 
 #> [[1]]$`_score`
 #> [1] 1
-#>
+#> 
 #> [[1]]$`_source`
 #> [[1]]$`_source`$id
 #> [1] "10.1371/journal.pone.0007737"
-#>
+#> 
 #> [[1]]$`_source`$title
 #> [1] "Phospholipase C-β4 Is Essential for the Progression of the Normal Sleep Sequence and Ultradian Body Temperature Rhythms in Mice"
 ```
@@ -220,55 +219,55 @@ Search(index = "plos", type = "article", sort = "title", q = "antibody", size = 
 #> [[1]]
 #> [[1]]$`_index`
 #> [1] "plos"
-#>
+#> 
 #> [[1]]$`_type`
 #> [1] "article"
-#>
+#> 
 #> [[1]]$`_id`
 #> [1] "568"
-#>
+#> 
 #> [[1]]$`_score`
 #> NULL
-#>
+#> 
 #> [[1]]$`_source`
 #> [[1]]$`_source`$id
 #> [1] "10.1371/journal.pone.0085002"
-#>
+#> 
 #> [[1]]$`_source`$title
 #> [1] "Evaluation of 131I-Anti-Angiotensin II Type 1 Receptor Monoclonal Antibody as a Reporter for Hepatocellular Carcinoma"
-#>
-#>
+#> 
+#> 
 #> [[1]]$sort
 #> [[1]]$sort[[1]]
 #> [1] "1"
 ```
 
-## Get individual documents
+## Get documents
 
-Get the document with id=1
+Get document with id=1
 
 
 ```r
 docs_get(index = 'plos', type = 'article', id = 4)
 #> $`_index`
 #> [1] "plos"
-#>
+#> 
 #> $`_type`
 #> [1] "article"
-#>
+#> 
 #> $`_id`
 #> [1] "4"
-#>
+#> 
 #> $`_version`
-#> [1] 1
-#>
+#> [1] 2
+#> 
 #> $found
 #> [1] TRUE
-#>
+#> 
 #> $`_source`
 #> $`_source`$id
 #> [1] "10.1371/journal.pone.0107758"
-#>
+#> 
 #> $`_source`$title
 #> [1] "Lactobacilli Inactivate Chlamydia trachomatis through Lactic Acid but Not H2O2"
 ```
@@ -280,19 +279,19 @@ Get certain fields
 docs_get(index = 'plos', type = 'article', id = 4, fields = 'id')
 #> $`_index`
 #> [1] "plos"
-#>
+#> 
 #> $`_type`
 #> [1] "article"
-#>
+#> 
 #> $`_id`
 #> [1] "4"
-#>
+#> 
 #> $`_version`
-#> [1] 1
-#>
+#> [1] 2
+#> 
 #> $found
 #> [1] TRUE
-#>
+#> 
 #> $fields
 #> $fields$id
 #> $fields$id[[1]]
@@ -311,48 +310,48 @@ docs_mget(index = "plos", type = "article", id = 1:2)
 #> $docs[[1]]
 #> $docs[[1]]$`_index`
 #> [1] "plos"
-#>
+#> 
 #> $docs[[1]]$`_type`
 #> [1] "article"
-#>
+#> 
 #> $docs[[1]]$`_id`
 #> [1] "1"
-#>
+#> 
 #> $docs[[1]]$`_version`
-#> [1] 1
-#>
+#> [1] 4
+#> 
 #> $docs[[1]]$found
 #> [1] TRUE
-#>
+#> 
 #> $docs[[1]]$`_source`
 #> $docs[[1]]$`_source`$id
 #> [1] "10.1371/journal.pone.0098602"
-#>
+#> 
 #> $docs[[1]]$`_source`$title
 #> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
-#>
-#>
-#>
+#> 
+#> 
+#> 
 #> $docs[[2]]
 #> $docs[[2]]$`_index`
 #> [1] "plos"
-#>
+#> 
 #> $docs[[2]]$`_type`
 #> [1] "article"
-#>
+#> 
 #> $docs[[2]]$`_id`
 #> [1] "2"
-#>
+#> 
 #> $docs[[2]]$`_version`
-#> [1] 1
-#>
+#> [1] 2
+#> 
 #> $docs[[2]]$found
 #> [1] TRUE
-#>
+#> 
 #> $docs[[2]]$`_source`
 #> $docs[[2]]$`_source`$id
 #> [1] "10.1371/journal.pone.0107757"
-#>
+#> 
 #> $docs[[2]]$`_source`$title
 #> [1] "Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition"
 ```
@@ -364,23 +363,23 @@ Different indeces, types, and ids
 docs_mget(index_type_id = list(c("plos", "article", 1), c("gbif", "record", 1)))$docs[[1]]
 #> $`_index`
 #> [1] "plos"
-#>
+#> 
 #> $`_type`
 #> [1] "article"
-#>
+#> 
 #> $`_id`
 #> [1] "1"
-#>
+#> 
 #> $`_version`
-#> [1] 1
-#>
+#> [1] 4
+#> 
 #> $found
 #> [1] TRUE
-#>
+#> 
 #> $`_source`
 #> $`_source`$id
 #> [1] "10.1371/journal.pone.0098602"
-#>
+#> 
 #> $`_source`$title
 #> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
 ```
@@ -394,7 +393,7 @@ For example:
 
 ```r
 (out <- docs_mget(index = "plos", type = "article", id = 1:2, raw = TRUE))
-#> [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"1\",\"_version\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098602\",\"title\":\"Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar\"}},{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"2\",\"_version\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0107757\",\"title\":\"Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition\"}}]}"
+#> [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"1\",\"_version\":4,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098602\",\"title\":\"Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar\"}},{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"2\",\"_version\":2,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0107757\",\"title\":\"Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition\"}}]}"
 #> attr(,"class")
 #> [1] "elastic_mget"
 ```
@@ -406,8 +405,8 @@ Then parse
 jsonlite::fromJSON(out)
 #> $docs
 #>   _index   _type _id _version found                   _source.id
-#> 1   plos article   1        1  TRUE 10.1371/journal.pone.0098602
-#> 2   plos article   2        1  TRUE 10.1371/journal.pone.0107757
+#> 1   plos article   1        4  TRUE 10.1371/journal.pone.0098602
+#> 2   plos article   2        2  TRUE 10.1371/journal.pone.0107757
 #>                                                                                                                                                _source.title
 #> 1 Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar
 #> 2                                     Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition
