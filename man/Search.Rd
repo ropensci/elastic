@@ -64,7 +64,9 @@ character string to avoid problems with large number conversion to scientific
 notation. Default: 0}
 
 \item{size}{(character) The number of hits to return. Pass in as a character string
-to avoid problems with large number conversion to scientific notation. Default: 10.}
+to avoid problems with large number conversion to scientific notation. Default: 10.
+The default maximum is 10,000 - however, you can change this default maximum by
+changing the \code{index.max_result_window} index level parameter.}
 
 \item{search_type}{(character) The type of the search operation to perform. Can be
 \code{query_then_fetch} (default) or \code{dfs_query_then_fetch}. Types \code{scan} and
