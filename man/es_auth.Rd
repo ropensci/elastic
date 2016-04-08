@@ -4,19 +4,23 @@
 \alias{es_auth}
 \title{Set authentication details}
 \usage{
-es_auth(es_base = NULL, es_port = NULL, es_user = NULL, es_pwd = NULL,
-  force = FALSE)
+es_auth(es_host = NULL, es_port = NULL, es_transport_schema = NULL,
+  es_user = NULL, es_pwd = NULL, force = FALSE, es_base = NULL)
 }
 \arguments{
-\item{es_base}{(character) Base url}
+\item{es_host}{(character) Base url}
 
 \item{es_port}{(character) Port}
+
+\item{es_transport_schema}{(character) http or https. Default: \code{http}}
 
 \item{es_user}{(character) User name}
 
 \item{es_pwd}{(character) Password}
 
 \item{force}{(logical) Force update}
+
+\item{es_base}{(character) deprecated, use es_host}
 }
 \description{
 Set authentication details

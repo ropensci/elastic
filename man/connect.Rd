@@ -5,15 +5,18 @@
 \alias{connection}
 \title{Set connection details to an Elasticsearch engine.}
 \usage{
-connect(es_base = "http://127.0.0.1", es_port = 9200, es_user = NULL,
-  es_pwd = NULL, force = FALSE, errors = "simple", ...)
+connect(es_host = "127.0.0.1", es_port = 9200,
+  es_transport_schema = "http", es_user = NULL, es_pwd = NULL,
+  force = FALSE, errors = "simple", es_base = NULL, ...)
 
 connection()
 }
 \arguments{
-\item{es_base}{(character) The base url, defaults to localhost (http://127.0.0.1)}
+\item{es_host}{(character) The base host, defaults to \code{127.0.0.1}}
 
-\item{es_port}{(character) port to connect to, defaults to 9200 (optional)}
+\item{es_port}{(character) port to connect to, defaults to \code{9200} (optional)}
+
+\item{es_transport_schema}{(character) http or https. Default: \code{http}}
 
 \item{es_user}{(character) User name, if required for the connection. You can specify, 
 but ignored for now.}
@@ -26,6 +29,8 @@ ignored for now.}
 \item{errors}{(character) One of simple (Default) or complete. Simple gives http code and 
 error message on an error, while complete gives both http code and error message, 
 and stack trace, if available.}
+
+\item{es_base}{(character) Deprecated, use \code{es_host}}
 
 \item{...}{Further args passed on to print for the es_conn class.}
 }
@@ -51,7 +56,7 @@ as private env vars.
 connect()
 
 # or set to a different base url
-# connect('http://162.243.152.56')
+# connect('162.243.152.53')
 
 # See connection details
 connection()

@@ -1,9 +1,11 @@
 #' Set connection details to an Elasticsearch engine.
 #'
 #' @name connect
+#' @export
 #'
-#' @param es_base (character) The base url, defaults to localhost (http://127.0.0.1)
-#' @param es_port (character) port to connect to, defaults to 9200 (optional)
+#' @param es_host (character) The base host, defaults to \code{127.0.0.1}
+#' @param es_port (character) port to connect to, defaults to \code{9200} (optional)
+#' @param es_transport_schema (character) http or https. Default: \code{http}
 #' @param es_user (character) User name, if required for the connection. You can specify, 
 #' but ignored for now.
 #' @param es_pwd (character) Password, if required for the connection. You can specify, but
@@ -13,6 +15,8 @@
 #' error message on an error, while complete gives both http code and error message, 
 #' and stack trace, if available.
 #' @param ... Further args passed on to print for the es_conn class.
+#' @param es_base (character) Deprecated, use \code{es_host}
+#' 
 #' @details The default configuration is set up for localhost access on port 9200,
 #' with no username or password.
 #'
@@ -30,24 +34,35 @@
 #' connect()
 #'
 #' # or set to a different base url
-#' # connect('http://162.243.152.56')
+#' # connect('162.243.152.53')
 #'
 #' # See connection details
 #' connection()
 #' }
+connect <- function(es_host = "127.0.0.1", es_port = 9200, 
+                    es_transport_schema = "http", es_user = NULL,
+                    es_pwd = NULL, force = FALSE, errors = "simple", 
+                    es_base = NULL, ...) {
 
-#' @export
-#' @rdname connect
-connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL,
-                    es_pwd = NULL, force = FALSE, errors = "simple", ...) {
-
-  es_base <- has_http(es_base)
-  auth <- es_auth(es_base = es_base, es_port = es_port, es_user = es_user,
+  calls <- names(sapply(match.call(), deparse))[-1]
+  calls_vec <- "es_base" %in% calls
+  if (any(calls_vec)) {
+    stop("The parameter es_base has been deprecated, use es_host", call. = FALSE)
+  }
+  
+  # strip off transport if found
+  if (grepl("^http[s]?://", es_host)) {
+    message("Found http or https on es_host, stripping off, see the docs")
+    es_host <- sub("^http[s]?://", "", es_host)
+  }
+  
+  auth <- es_auth(es_host = es_host, es_port = es_port, 
+                  es_transport_schema = es_transport_schema, es_user = es_user,
                   es_pwd = es_pwd, force = force)
   if (is.null(auth$port) || nchar(auth$port) == 0) {
-    baseurl <- auth$base
+    baseurl <- sprintf("%s://%s", auth$transport, auth$host)
   } else {
-    baseurl <- paste(auth$base, auth$port, sep = ":")
+    baseurl <- sprintf("%s://%s:%s", auth$transport, auth$host, auth$port)
   }
   userpwd <- if (!is.null(es_user) && !is.null(es_pwd)) {
     authenticate(es_user, es_pwd)
@@ -68,57 +83,54 @@ connect <- function(es_base="http://127.0.0.1", es_port=9200, es_user = NULL,
   errors <- match.arg(errors, c('simple', 'complete'))
   Sys.setenv("ELASTIC_RCLIENT_ERRORS" = errors)
   
-  structure(list(base = auth$base, 
-                 port = auth$port, 
-                 user = es_user,
-                 pwd = es_pwd,
-                 es_deets = out,
-                 errors = Sys.getenv("ELASTIC_RCLIENT_ERRORS")), 
-            class = 'es_conn')
-}
-
-has_http <- function(x) {
-  if (!grepl("^http[s]?://", x)) {
-    x <- paste0("http://", x)
-    message("es_base not prefixed with http, using ", x, "\nIf you need https, pass in the complete URL")
-    x
-  } else {
-    x
-  }
+  structure(list(
+    host = auth$host,
+    port = auth$port, 
+    transport = auth$transport,
+    user = es_user,
+    pwd = es_pwd,
+    es_deets = out,
+    errors = Sys.getenv("ELASTIC_RCLIENT_ERRORS")), 
+    class = 'es_conn')
 }
 
 #' @export
 #' @rdname connect
 connection <- function() {
-  auth <- list(base = Sys.getenv("ES_BASE"), 
+  auth <- list(host = Sys.getenv("ES_HOST"), 
                port = Sys.getenv("ES_PORT"), 
+               transport = Sys.getenv("ES_TRANSPORT"),
                user = Sys.getenv("ES_USER"))
   if (is.null(auth$port) || nchar(auth$port) == 0) {
-    baseurl <- auth$base
+    baseurl <- sprintf("%s://%s", auth$transport, auth$host)
   } else {
-    baseurl <- paste(auth$base, auth$port, sep = ":")
+    baseurl <- sprintf("%s://%s:%s", auth$transport, auth$host, auth$port)
   }
   res <- tryCatch(GET(baseurl, make_up()), error = function(e) e)
   if ("error" %in% class(res)) {
     stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting", baseurl), call. = FALSE)
   }
-  if (res$status_code > 200)
+  if (res$status_code > 200) {
     stop(sprintf("Error:", res$headers$statusmessage), call. = FALSE)
+  }
   tt <- cont_utf8(res)
   out <- jsonlite::fromJSON(tt, FALSE)
-  structure(list(base = auth$base, 
-                 port = auth$port,
-                 user = auth$user, 
-                 pwd = "<secret>", 
-                 es_deets = out,
-                 errors = Sys.getenv("ELASTIC_RCLIENT_ERRORS")), 
-            class = 'es_conn')
+  structure(list(
+    transport = auth$transport,
+    host = auth$host, 
+    port = auth$port,
+    user = auth$user, 
+    pwd = "<secret>", 
+    es_deets = out,
+    errors = Sys.getenv("ELASTIC_RCLIENT_ERRORS")), 
+    class = 'es_conn')
 }
 
 #' @export
 print.es_conn <- function(x, ...){
   fun <- function(x) ifelse(is.null(x), 'NULL', x)
-  cat(paste('url:      ', fun(x$base)), "\n")
+  cat(paste('transport: ', fun(x$transport)), "\n")
+  cat(paste('host:      ', fun(x$host)), "\n")
   cat(paste('port:     ', fun(x$port)), "\n")
   cat(paste('username: ', fun(x$user)), "\n")
   cat(paste('password: ', fun(x$pwd)), "\n")
@@ -134,39 +146,51 @@ print.es_conn <- function(x, ...){
 
 #' Set authentication details
 #' @keywords internal
-#' @param es_base (character) Base url
+#' @param es_host (character) Base url
 #' @param es_port (character) Port
+#' @param es_transport_schema (character) http or https. Default: \code{http}
 #' @param es_user (character) User name
 #' @param es_pwd (character) Password
 #' @param force (logical) Force update
-es_auth <- function(es_base=NULL, es_port=NULL, es_user=NULL, es_pwd=NULL, force=FALSE){
-  base <- ifnull(es_base, 'ES_BASE')
+#' @param es_base (character) deprecated, use es_host
+es_auth <- function(es_host = NULL, es_port = NULL, es_transport_schema = NULL, 
+                    es_user = NULL, es_pwd = NULL, force = FALSE, es_base = NULL) {
+  
+  calls <- names(sapply(match.call(), deparse))[-1]
+  calls_vec <- "es_base" %in% calls
+  if (any(calls_vec)) {
+    stop("The parameter es_base has been deprecated, use es_host", call. = FALSE)
+  }
+  
+  host <- ifnull(es_host, 'ES_HOST')
   port <- if (is.null(es_port)) "" else es_port
+  transport <- ifnull(es_transport_schema, 'ES_TRANSPORT_SCHEMA')
   user <- ifnull(es_user, 'ES_USER')
   pwd <- ifnull(es_pwd, 'ES_PWD')
 
-  if (identical(base, "") || force) {
+  if (identical(host, "") || force) {
     if (!interactive()) {
-      stop("Please set env var ES_BASE for your base url for your Elasticsearch server",
+      stop("Please set env var ES_HOST for your host url for your Elasticsearch server",
            call. = FALSE)
     }
-    message("Couldn't find env var ES_BASE See ?es_auth for more details.")
-    message("Please enter your Elasticsearch base url and press enter:")
-    base <- readline(": ")
-    if (identical(base, "")) {
-      stop("Elasticsearch base url entry failed", call. = FALSE)
+    message("Couldn't find env var ES_HOST See ?es_auth for more details.")
+    message("Please enter your Elasticsearch host url and press enter:")
+    host <- readline(": ")
+    if (identical(host, "")) {
+      stop("Elasticsearch host url entry failed", call. = FALSE)
     }
-    message("Updating ES_BASE env var\n")
-    Sys.setenv(ES_BASE = base)
+    message("Updating ES_HOST env var\n")
+    Sys.setenv(ES_HOST = host)
   } else { 
-    base <- base 
+    host <- host 
   }
 
-  Sys.setenv(ES_BASE = base)
+  Sys.setenv(ES_HOST = host)
+  Sys.setenv(ES_TRANSPORT = transport)
   Sys.setenv(ES_PORT = port)
   Sys.setenv(ES_USER = user)
   Sys.setenv(ES_PWD = pwd)
-  list(base = base, port = port)
+  list(host = host, port = port, transport = transport)
 }
 
 ifnull <- function(x, y){
@@ -174,10 +198,11 @@ ifnull <- function(x, y){
 }
 
 es_get_auth <- function(){
-  base <- Sys.getenv("ES_BASE")
+  transport <- Sys.getenv("ES_TRANSPORT")
+  host <- Sys.getenv("ES_HOST")
   port <- Sys.getenv("ES_PORT")
-  if (is.null(base)) stop("Please run connect()", call. = FALSE)
-  list(base = base, port = port)
+  if (is.null(host)) stop("Please run connect()", call. = FALSE)
+  list(transport = transport, host = host, port = port)
 }
 
 es_get_user_pwd <- function(){
@@ -187,9 +212,10 @@ es_get_user_pwd <- function(){
 }
 
 make_url <- function(x) {
+  url <- sprintf("%s://%s", x$transport, x$host)
   if (is.null(x$port) || nchar(x$port) == 0) {
-    x$base
+    url
   } else {
-    paste(x$base, ":", x$port, sep = "")
+    paste(url, ":", x$port, sep = "")
   }
 }
