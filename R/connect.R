@@ -14,6 +14,10 @@
 #' @param errors (character) One of simple (Default) or complete. Simple gives http code and 
 #' error message on an error, while complete gives both http code and error message, 
 #' and stack trace, if available.
+#' @param headers Either an object of class \code{request} or a list that can be coerced to 
+#' an object of class \code{request} via \code{\link[httr]{add_headers}}. These headers are 
+#' used in all requests. To use headers in individual requests and not others, pass in 
+#' headers using \code{\link[httr]{add_headers}} via \code{...} in a function call.
 #' @param ... Further args passed on to print for the es_conn class.
 #' @param es_base (character) Deprecated, use \code{es_host}
 #' 
@@ -38,11 +42,16 @@
 #'
 #' # See connection details
 #' connection()
+#' 
+#' # set headers
+#' connect(headers = list(a = 5))
+#' ## or
+#' connect(headers = add_headers(list(a = 5)))
 #' }
 connect <- function(es_host = "127.0.0.1", es_port = 9200, 
                     es_transport_schema = "http", es_user = NULL,
                     es_pwd = NULL, force = FALSE, errors = "simple", 
-                    es_base = NULL, ...) {
+                    es_base = NULL, headers = NULL, ...) {
 
   calls <- names(sapply(match.call(), deparse))[-1]
   calls_vec <- "es_base" %in% calls
@@ -83,6 +92,10 @@ connect <- function(es_host = "127.0.0.1", es_port = 9200,
   errors <- match.arg(errors, c('simple', 'complete'))
   Sys.setenv("ELASTIC_RCLIENT_ERRORS" = errors)
   
+  # cache headers in an environment
+  rm(list = ls(envir = es_env), envir = es_env)
+  es_env$headers <- as_headers(headers)
+  
   structure(list(
     host = auth$host,
     port = auth$port, 
@@ -90,7 +103,8 @@ connect <- function(es_host = "127.0.0.1", es_port = 9200,
     user = es_user,
     pwd = es_pwd,
     es_deets = out,
-    errors = Sys.getenv("ELASTIC_RCLIENT_ERRORS")), 
+    headers = es_env$headers,
+    errors = Sys.getenv("ELASTIC_RCLIENT_ERRORS")),
     class = 'es_conn')
 }
 
@@ -122,6 +136,7 @@ connection <- function() {
     user = auth$user, 
     pwd = "<secret>", 
     es_deets = out,
+    headers = es_env$headers,
     errors = Sys.getenv("ELASTIC_RCLIENT_ERRORS")), 
     class = 'es_conn')
 }
@@ -132,6 +147,7 @@ print.es_conn <- function(x, ...){
   cat(paste('transport: ', fun(x$transport)), "\n")
   cat(paste('host:      ', fun(x$host)), "\n")
   cat(paste('port:     ', fun(x$port)), "\n")
+  cat(paste('headers (names): ', ph(x$headers)), "\n")
   cat(paste('username: ', fun(x$user)), "\n")
   cat(paste('password: ', fun(x$pwd)), "\n")
   cat(paste('errors:   ', fun(x$errors)), "\n")
@@ -219,3 +235,23 @@ make_url <- function(x) {
     paste(url, ":", x$port, sep = "")
   }
 }
+
+as_headers <- function(x) {
+  UseMethod("as_headers")
+}
+as_headers.default <- function(x) NULL
+as_headers.request <- function(x) x
+as_headers.list <- function(x) {
+  do.call(add_headers, x)
+}
+
+ph <- function(x) {
+  if (is.null(x)) {
+    'NULL'
+  } else {
+    str <- paste0(names(x$headers), collapse = ", ")
+    if (nchar(str) > 30) paste0(substring(str, 1, 30), " ...") else str
+  }
+}
+
+es_env <- new.env()

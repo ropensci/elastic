@@ -7,7 +7,7 @@
 \usage{
 connect(es_host = "127.0.0.1", es_port = 9200,
   es_transport_schema = "http", es_user = NULL, es_pwd = NULL,
-  force = FALSE, errors = "simple", es_base = NULL, ...)
+  force = FALSE, errors = "simple", es_base = NULL, headers = NULL, ...)
 
 connection()
 }
@@ -31,6 +31,11 @@ error message on an error, while complete gives both http code and error message
 and stack trace, if available.}
 
 \item{es_base}{(character) Deprecated, use \code{es_host}}
+
+\item{headers}{Either an object of class \code{request} or a list that can be coerced to 
+an object of class \code{request} via \code{\link[httr]{add_headers}}. These headers are 
+used in all requests. To use headers in individual requests and not others, pass in 
+headers using \code{\link[httr]{add_headers}} via \code{...} in a function call.}
 
 \item{...}{Further args passed on to print for the es_conn class.}
 }
@@ -60,6 +65,11 @@ connect()
 
 # See connection details
 connection()
+
+# set headers
+connect(headers = list(a = 5))
+## or
+connect(headers = add_headers(list(a = 5)))
 }
 }
 
