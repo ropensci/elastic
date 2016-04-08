@@ -185,3 +185,11 @@ es_get_user_pwd <- function(){
   pwd <- Sys.getenv("ES_PWD")
   list(user = user, pwd = pwd)
 }
+
+make_url <- function(x) {
+  if (is.null(x$port) || nchar(x$port) == 0) {
+    x$base
+  } else {
+    paste(x$base, ":", x$port, sep = "")
+  }
+}

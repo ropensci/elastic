@@ -27,19 +27,10 @@ search_GET <- function(path, index=NULL, type=NULL, args, raw, asdf, ...) {
   checkconn()
   conn <- es_get_auth()
   url <- make_url(conn)
-  if (is.null(index) && is.null(type)) {
-    url <- paste(url, path, sep = "/")
-  } else {
-    if (is.null(type) && !is.null(index)) {
-      url <- paste(url, index, path, sep = "/")
-    } else {
-      url <- paste(url, index, type, path, sep = "/")
-    }
-  }
+  url <- construct_url(url, path, index, type)
   url <- prune_trailing_slash(url)
   tt <- GET(url, query = args, make_up(), ...)
   geterror(tt)
-  # if (tt$status_code > 202) stop(error_parser(tt, 1), call. = FALSE)
   res <- cont_utf8(tt)
   if (raw) res else jsonlite::fromJSON(res, asdf)
 }

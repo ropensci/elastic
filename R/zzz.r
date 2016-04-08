@@ -49,3 +49,39 @@ stop_es_version <- function(ver_check, fxn) {
     stop(fxn, " is not available for this Elasticsearch version", call. = FALSE)
   }
 }
+
+# Make sure variable is a numeric or integer --------------
+cn <- function(x) {
+  name <- substitute(x)
+  if (!is.null(x)) {
+    tryx <- tryCatch(as.numeric(as.character(x)), warning = function(e) e)
+    if ("warning" %in% class(tryx)) {
+      stop(name, " should be a numeric or integer class value", call. = FALSE)
+    }
+    if (!is(tryx, "numeric") | is.na(tryx))
+      stop(name, " should be a numeric or integer class value", call. = FALSE)
+    return( format(x, digits = 22, scientific = FALSE) )
+  } else {
+    NULL
+  }
+}
+
+strmatch <- function(x, y) regmatches(x, regexpr(y, x))
+
+strloc2match <- function(x, first, y) substring(x, first, regexpr(y, x) - 1)
+
+prune_trailing_slash <- function(x) {
+  gsub("\\/$", "", x)
+}
+
+construct_url <- function(url, path, index, type) {
+  if (is.null(index) && is.null(type)) {
+    paste(url, path, sep = "/")
+  } else {
+    if (is.null(type) && !is.null(index)) {
+      paste(url, index, path, sep = "/")
+    } else {
+      paste(url, index, type, path, sep = "/")
+    }
+  } 
+}

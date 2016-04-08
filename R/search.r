@@ -32,50 +32,11 @@ search_POST <- function(path, index=NULL, type=NULL, args, body, raw, asdf, ...)
   checkconn()
   conn <- es_get_auth()
   url <- make_url(conn)
-  if (is.null(index) && is.null(type)) {
-    url <- paste(url, path, sep = "/")
-  } else {
-    if (is.null(type) && !is.null(index)) {
-      url <- paste(url, index, path, sep = "/")
-    } else {
-      url <- paste(url, index, type, path, sep = "/")
-    }
-  }
+  url <- construct_url(url, path, index, type)
   url <- prune_trailing_slash(url)
   body <- check_inputs(body)
   tt <- POST(url, make_up(), ..., query = args, body = body)
   geterror(tt)
   res <- cont_utf8(tt)
   if (raw) res else jsonlite::fromJSON(res, asdf)
-}
-
-prune_trailing_slash <- function(x) {
-  gsub("\\/$", "", x)
-}
-
-strmatch <- function(x, y) regmatches(x, regexpr(y, x))
-strloc2match <- function(x, first, y) substring(x, first, regexpr(y, x) - 1)
-
-# Make sure variable is a numeric or integer --------------
-cn <- function(x) {
-  name <- substitute(x)
-  if (!is.null(x)) {
-    tryx <- tryCatch(as.numeric(as.character(x)), warning = function(e) e)
-    if ("warning" %in% class(tryx)) {
-      stop(name, " should be a numeric or integer class value", call. = FALSE)
-    }
-    if (!is(tryx, "numeric") | is.na(tryx))
-      stop(name, " should be a numeric or integer class value", call. = FALSE)
-    return( format(x, digits = 22, scientific = FALSE) )
-  } else {
-    NULL
-  }
-}
-
-make_url <- function(x) {
-  if (is.null(x$port) || nchar(x$port) == 0) {
-    x$base
-  } else {
-    paste(x$base, ":", x$port, sep = "")
-  }
 }
