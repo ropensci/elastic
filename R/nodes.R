@@ -88,7 +88,7 @@ node_GET <- function(path, metric, node, raw, args, ...) {
 
   args <- ec(args)
   if (length(args) == 0) args <- NULL
-  tt <- GET(url, query = args, make_up(), ...)
+  tt <- GET(url, query = args, make_up(), es_env$headers, ...)
   if (tt$status_code > 202) geterror(tt)
   res <- cont_utf8(tt)
   if (raw) res else jsonlite::fromJSON(res, FALSE)
@@ -105,7 +105,7 @@ node_POST <- function(path, node, raw, args, ...) {
   
   args <- ec(args)
   if (length(args) == 0) args <- NULL
-  tt <- POST(url, query = args, make_up(), ...)
+  tt <- POST(url, query = args, make_up(), es_env$headers, ...)
   if (tt$status_code > 202) geterror(tt)
   res <- cont_utf8(tt)
   if (raw) res else jsonlite::fromJSON(res, FALSE)

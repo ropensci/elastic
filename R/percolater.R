@@ -180,7 +180,7 @@ percolate_delete <- function(index, id) {
 percolate_PUT <- function(url, args, body = list(), ...) {
   checkconn()
   body <- check_inputs(body)
-  tt <- PUT(url, body = body, query = args, encode = 'json', c(make_up(), ...))
+  tt <- PUT(url, body = body, query = args, encode = 'json', make_up(), es_env$headers, ...)
   geterror(tt)
   jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }
@@ -188,7 +188,7 @@ percolate_PUT <- function(url, args, body = list(), ...) {
 percolate_POST <- function(url, args = NULL, body = list(), ...) {
   checkconn()
   body <- check_inputs(body)
-  tt <- POST(url, body = body, query = args, encode = 'json', make_up(), ...)
+  tt <- POST(url, body = body, query = args, encode = 'json', make_up(), es_env$headers, ...)
   geterror(tt)
   jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }

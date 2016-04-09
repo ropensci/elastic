@@ -70,9 +70,11 @@
 #'     examples in \code{\link{Search}} or \code{\link{Search_uri}}
 #'}
 #'
-#' @importFrom utils read.table read.delim txtProgressBar setTxtProgressBar URLdecode modifyList
+#' @importFrom utils read.table read.delim txtProgressBar 
+#' setTxtProgressBar URLdecode modifyList
 #' @importFrom methods is
-#' @importFrom httr HEAD GET POST PUT DELETE content authenticate stop_for_status upload_file http_status
+#' @importFrom httr HEAD GET POST PUT DELETE content authenticate 
+#' stop_for_status upload_file http_status add_headers
 #' @importFrom curl curl_escape
 #' @importFrom jsonlite fromJSON toJSON
 #' @docType package

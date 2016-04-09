@@ -212,7 +212,7 @@ docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000,
   stopifnot(file.exists(x))
   conn <- es_get_auth()
   url <- paste0(conn$base, ":", conn$port, '/_bulk')
-  tt <- POST(url, make_up(), ..., body = upload_file(x, type = "application/json"), encode = "json")
+  tt <- POST(url, make_up(), es_env$headers, ..., body = upload_file(x, type = "application/json"), encode = "json")
   geterror(tt)
   res <- cont_utf8(tt)
   res <- structure(res, class = "bulk_make")

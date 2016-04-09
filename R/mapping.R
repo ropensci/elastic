@@ -135,6 +135,6 @@ field_mapping_get <- function(index = NULL, type = NULL, field, include_defaults
 type_exists <- function(index, type, ...){
   checkconn()
   url <- make_url(es_get_auth())
-  res <- HEAD(file.path(url, esc(index), esc(type)), make_up(), ...)
+  res <- HEAD(file.path(url, esc(index), esc(type)), make_up(), es_env$headers, ...)
   if (res$status_code == 200) TRUE else FALSE
 }

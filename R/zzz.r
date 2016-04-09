@@ -12,7 +12,7 @@ cl <- function(x) if (is.null(x)) NULL else paste0(x, collapse = ",")
 scroll_POST <- function(path, args, body, raw, ...) {
   checkconn()
   url <- make_url(es_get_auth())
-  tt <- POST(file.path(url, path), make_up(), ..., query = args, body = body)
+  tt <- POST(file.path(url, path), make_up(), es_env$headers, ..., query = args, body = body)
   geterror(tt)
   res <- cont_utf8(tt)
   if (raw) res else jsonlite::fromJSON(res, FALSE)

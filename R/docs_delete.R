@@ -27,7 +27,7 @@ docs_delete <- function(index, type, id, refresh=NULL, routing=NULL, timeout=NUL
   args <- ec(list(refresh=refresh, routing=routing, timeout=timeout,
                   version=version, version_type=version_type, ...))
   if (length(args) == 0) args <- NULL
-  out <- DELETE(url, query=args, mc(make_up(), callopts))
+  out <- DELETE(url, query=args, c(es_env$headers, mc(make_up(), callopts)))
   stop_for_status(out)
   tt <- cont_utf8(out)
   jsonlite::fromJSON(tt, FALSE)

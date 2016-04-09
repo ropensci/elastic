@@ -24,7 +24,7 @@ es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL,
   
   args <- ec(list(...))
   if (length(args) == 0) args <- NULL
-  tt <- GET(url, query = args, mc(make_up(), callopts))
+  tt <- GET(url, query = args, c(es_env$headers, mc(make_up(), callopts)))
   geterror(tt)
   res <- cont_utf8(tt)
   if (!is.null(clazz)) { 
@@ -51,7 +51,7 @@ index_GET <- function(index, features, raw, ...) {
   url <- paste0(url, "/", paste0(esc(index), collapse = ","))
   if (!is.null(features)) features <- paste0(paste0("_", features), collapse = ",")
   if (!is.null(features)) url <- paste0(url, "/", features)
-  tt <- GET(url, make_up(), ...)
+  tt <- GET(url, make_up(), es_env$headers, ...)
   if (tt$status_code > 202) geterror(tt)
   jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }
@@ -74,7 +74,7 @@ es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, quer
   args <- check_inputs(query)
   if (length(args) == 0) args <- NULL
   
-  tt <- POST(url, body = args, mc(make_up(), callopts), encode = "json")
+  tt <- POST(url, body = args, c(es_env$headers, mc(make_up(), callopts)), encode = "json")
   geterror(tt)
   # if(tt$status_code > 202) geterror(tt)
   res <- cont_utf8(tt)
@@ -88,7 +88,7 @@ es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, quer
 
 es_DELETE <- function(url, query = NULL, ...) {
   checkconn()
-  tt <- DELETE(url, query = query, c(make_up(), ...))
+  tt <- DELETE(url, query = query, c(make_up(), es_env$headers, ...))
   geterror(tt)
   jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }
@@ -96,14 +96,14 @@ es_DELETE <- function(url, query = NULL, ...) {
 es_PUT <- function(url, body = list(), ...) {
   checkconn()
   body <- check_inputs(body)
-  tt <- PUT(url, body = body, encode = 'json', c(make_up(), ...))
+  tt <- PUT(url, body = body, encode = 'json', c(make_up(), es_env$headers, ...))
   geterror(tt)
   jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }
 
 es_GET_ <- function(url, query = NULL, ...) {
   checkconn()
-  tt <- GET(url, query = query, make_up(), ...)
+  tt <- GET(url, query = query, make_up(), es_env$headers, ...)
   geterror(tt)
   jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }

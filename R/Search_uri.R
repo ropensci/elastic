@@ -29,7 +29,7 @@ search_GET <- function(path, index=NULL, type=NULL, args, raw, asdf, ...) {
   url <- make_url(conn)
   url <- construct_url(url, path, index, type)
   url <- prune_trailing_slash(url)
-  tt <- GET(url, query = args, make_up(), ...)
+  tt <- GET(url, query = args, make_up(), es_env$headers, ...)
   geterror(tt)
   res <- cont_utf8(tt)
   if (raw) res else jsonlite::fromJSON(res, asdf)
