@@ -13,3 +13,5 @@ es_matrix_travis.yml
 notes-v2.md
 ^\.httr-oauth$
 ^CONDUCT\.md$
+test/test-all.R
+
