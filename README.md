@@ -127,7 +127,7 @@ docs_bulk(shakespeare)
 If you need some big data to play with, the shakespeare dataset is a good one to start with. You can get the whole thing and pop it into Elasticsearch (beware, may take up to 10 minutes or so.):
 
 ```sh
-curl -XGET http://www.elasticsearch.org/guide/en/kibana/current/snippets/shakespeare.json > shakespeare.json
+curl -XGET https://www.elastic.co/guide/en/kibana/3.0/snippets/shakespeare.json > shakespeare.json
 curl -XPUT localhost:9200/_bulk --data-binary @shakespeare.json
 ```
 
