@@ -13,7 +13,7 @@ test_that("count", {
   expect_is(c, "integer")
   expect_is(d, "integer")
 
-  expect_more_than(b, 10)
+  expect_gt(b, 10)
 
   expect_error(count("adfadf"), "no such index||IndexMissing")
   expect_error(count(type = "adfad"), "no such index||IndexMissing")
