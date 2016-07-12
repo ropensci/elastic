@@ -20,6 +20,8 @@ be supplied.}
 
 \item{body}{(character) Define parameters and or supply a document to get termvectors for}
 
+\item{pretty}{(logical) pretty print. Default: \code{TRUE}}
+
 \item{field_statistics}{(character) Specifies if document count, sum of document
 frequencies and sum of total term frequencies should be returned. Default: \code{TRUE}}
 
@@ -51,6 +53,8 @@ frequency should be returned. Default: \code{FALSE}}
 
 \item{version_type}{(character) Specific version type, valid choices are: 'internal',
 'external', 'external_gte', 'force'}
+
+\item{...}{Curl args passed on to \code{\link[httr]{POST}}}
 }
 \description{
 Termvectors

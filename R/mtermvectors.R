@@ -3,8 +3,7 @@
 #' @export
 #' @param index (character) The index in which the document resides.
 #' @param type (character) The type of the document.
-#' @param id (character) The id of the document, when not specified a doc param should
-#' be supplied.
+#' @param ids (character) One or more document ids
 #' @param body (character) Define parameters and or supply a document to get termvectors for
 #' @param field_statistics (character) Specifies if document count, sum of document
 #' frequencies and sum of total term frequencies should be returned. Default: \code{TRUE}
@@ -26,6 +25,8 @@
 #' @param version (character) Explicit version number for concurrency control
 #' @param version_type (character) Specific version type, valid choices are: 'internal',
 #' 'external', 'external_gte', 'force'
+#' @param pretty (logical) pretty print. Default: \code{TRUE}
+#' @param ... Curl args passed on to \code{\link[httr]{POST}}
 #'
 #' @references
 #' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-multi-termvectors.html}

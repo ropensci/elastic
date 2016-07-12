@@ -26,6 +26,8 @@
 #' @param version (character) Explicit version number for concurrency control
 #' @param version_type (character) Specific version type, valid choices are: 'internal',
 #' 'external', 'external_gte', 'force'
+#' @param pretty (logical) pretty print. Default: \code{TRUE}
+#' @param ... Curl args passed on to \code{\link[httr]{POST}}
 #'
 #' @references
 #' \url{http://www.elastic.co/guide/en/elasticsearch/reference/current/docs-termvectors.html}
