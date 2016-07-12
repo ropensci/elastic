@@ -9,11 +9,11 @@ as_log <- function(x){
 
 cl <- function(x) if (is.null(x)) NULL else paste0(x, collapse = ",")
 
-scroll_POST <- function(path, args, body, raw, ...) {
+scroll_POST <- function(path, args, body, raw, allowed_codes, ...) {
   checkconn()
   url <- make_url(es_get_auth())
   tt <- POST(file.path(url, path), make_up(), es_env$headers, ..., query = args, body = body)
-  geterror(tt)
+  geterror(tt, allowed_codes)
   res <- cont_utf8(tt)
   if (raw) res else jsonlite::fromJSON(res, FALSE)
 }

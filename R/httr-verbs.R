@@ -125,7 +125,7 @@ check_inputs <- function(x) {
   }
 }
 
-geterror <- function(z) {
+geterror <- function(z, allowed_codes = NULL) {
   if (!is(z, "response")) stop("Input to error parser must be a httr response object")
   if (z$status_code > 202) {
     if (is.null(z$headers$statusmessage)) {

@@ -21,19 +21,19 @@
 #' scroll(scroll_id = res$`_scroll_id`)
 #' 
 #' # Get all results - one approach is to use a while loop
-#' res <- Search(index = 'shakespeare', q="a*", scroll="5m", search_type = "scan")
+#' res <- Search(index = 'shakespeare', q="a*", scroll="5m", search_type = "scan", size = 200)
 #' out <- list()
 #' hits <- 1
-#' while(hits != 0){
+#' while (hits != 0) {
 #'   res <- scroll(scroll_id = res$`_scroll_id`)
 #'   hits <- length(res$hits$hits)
-#'   if(hits > 0)
-#'     out <- c(out, res$hits$hits)
+#'   if (hits > 0) out <- c(out, res$hits$hits)
 #' }
 #' length(out)
 #' out[[1]]
 #' }
 
-scroll <- function(scroll_id, scroll="1m", raw=FALSE, ...){
-  scroll_POST(path = "_search/scroll", args=list(scroll=scroll), body=scroll_id, raw=raw, ...)
+scroll <- function(scroll_id, scroll = "1m", raw = FALSE, allowed_codes = NULL, ...) {
+  scroll_POST(path = "_search/scroll", args = list(scroll = scroll), 
+              body = scroll_id, raw = raw, allowed_codes = allowed_codes, ...)
 }
