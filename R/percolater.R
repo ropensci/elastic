@@ -28,6 +28,9 @@
 #' @param ... Curl options. Or in \code{percolate_list} function, further args passed on
 #' to \code{\link{Search}}
 #' 
+#' @references 
+#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-percolate.html}
+#' 
 #' @details Additional body options, pass those in the body. These aren't query string 
 #' parameters:
 #' \itemize{

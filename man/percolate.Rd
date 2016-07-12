@@ -154,4 +154,7 @@ percolate_delete(index = "myindex", id = 2)
 ## not working yet
 }
 }
+\references{
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-percolate.html}
+}
 
