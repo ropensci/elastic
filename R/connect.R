@@ -203,7 +203,7 @@ es_auth <- function(es_host = NULL, es_port = NULL, es_path = NULL, es_transport
   
   host <- ifnull(es_host, 'ES_HOST')
   port <- if (is.null(es_port)) "" else es_port
-  path <- if (is.null(es_path)) "" else es_path
+  path <- ifnull(es_path, 'ES_PATH')
   transport <- ifnull(es_transport_schema, 'ES_TRANSPORT_SCHEMA')
   user <- ifnull(es_user, 'ES_USER')
   pwd <- ifnull(es_pwd, 'ES_PWD')
@@ -260,7 +260,7 @@ make_url <- function(x) {
   } else {
     paste(url, ":", x$port, sep = "")
   }
-  if (!is.null(x$path)) {
+  if (!is.null(x$path) && nchar(x$path) > 0) {
     url <- file.path(url, x$path)
   }
   url
