@@ -5,7 +5,7 @@
 \alias{connection}
 \title{Set connection details to an Elasticsearch engine.}
 \usage{
-connect(es_host = "127.0.0.1", es_port = 9200,
+connect(es_host = "127.0.0.1", es_port = 9200, es_path = NULL,
   es_transport_schema = "http", es_user = NULL, es_pwd = NULL,
   force = FALSE, errors = "simple", es_base = NULL, headers = NULL, ...)
 
@@ -15,6 +15,9 @@ connection()
 \item{es_host}{(character) The base host, defaults to \code{127.0.0.1}}
 
 \item{es_port}{(character) port to connect to, defaults to \code{9200} (optional)}
+
+\item{es_path}{(character) context path that is appended to the end of the 
+url. Default: NULL, ignored}
 
 \item{es_transport_schema}{(character) http or https. Default: \code{http}}
 
@@ -46,22 +49,33 @@ Set connection details to an Elasticsearch engine.
 The default configuration is set up for localhost access on port 9200,
 with no username or password.
 
-\code{\link{connection}} does not ping the Elasticsearch server, but only
-prints connection details.
+\code{\link{connect}} and \code{\link{connection}} no longer ping the Elasticsearch 
+server, but only print your connection details.
 
-On package load, \code{\link{connect}} is run to set the default base url and port.
-
-Internally, we store your preferences with environment variables. That means you 
+Internally, we store your connection settings with environment variables. That means you 
 can set your env vars permanently in .Renviron file, and use them on a server e.g., 
-as private env vars.
+as private env vars
 }
 \examples{
 \dontrun{
-# the default is set to localhost and port 9200
+# the default is set to 127.0.0.1 (i.e., localhost) and port 9200
 connect()
 
-# or set to a different base url
-# connect('162.243.152.53')
+# set a different host
+# connect(es_host = '162.243.152.53')
+# => http://162.243.152.53:9200
+
+# set a different port
+# connect(es_port = 8000)
+# => http://localhost:8000
+
+# set a different context path
+# connect(es_path = 'foo_bar')
+# => http://localhost:9200/foo_bar
+
+# set to https
+# connect(es_transport_schema = 'https')
+# => https://localhost:9200
 
 # See connection details
 connection()
