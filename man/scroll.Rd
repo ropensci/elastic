@@ -2,22 +2,40 @@
 % Please edit documentation in R/scroll.R
 \name{scroll}
 \alias{scroll}
+\alias{scroll_clear}
 \title{Scroll search function}
 \usage{
 scroll(scroll_id, scroll = "1m", raw = FALSE, ...)
+
+scroll_clear(scroll_id = NULL, all = FALSE, ...)
 }
 \arguments{
-\item{scroll_id}{(character) Scroll id}
+\item{scroll_id}{(character) For \code{scroll}, a single scroll id; for 
+\code{scroll_clear}, one or more scroll id's}
 
 \item{scroll}{(character) Specify how long a consistent view of the index should be maintained 
 for scrolled search, e.g., "30s", "1m". See \code{\link{units-time}}.}
 
-\item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
+\item{raw}{(logical) If \code{TRUE} (default), data is parsed to list. 
+If \code{FALSE}, then raw JSON.}
 
 \item{...}{Curl args passed on to \code{\link[httr]{POST}}}
+
+\item{all}{(logical) If \code{TRUE} (default) then all search contexts cleared. 
+If \code{FALSE}, scroll id's must be passed to \code{scroll_id}}
 }
 \description{
 Scroll search function
+}
+\details{
+Scores will be zero for all documents that are returned from a scroll
+request. Dems da rules.
+}
+\section{Clear scroll}{
+
+Search context are automatically removed when the scroll timeout has been exceeded. 
+Keeping scrolls open has a cost, so scrolls should be explicitly cleared as soon 
+as the scroll is not being used anymore using \code{scroll_clear}
 }
 \examples{
 \dontrun{
@@ -44,7 +62,28 @@ while(hits != 0){
 }
 length(out)
 out[[1]]
+
+# clear scroll
+## individual scroll id
+res <- Search(index = 'shakespeare', q="a*", scroll="5m", search_type = "scan")
+scroll_clear(scroll_id = res$`_scroll_id`)
+
+## many scroll ids
+res1 <- Search(index = 'shakespeare', q="c*", scroll="5m", search_type = "scan")
+res2 <- Search(index = 'shakespeare', q="d*", scroll="5m", search_type = "scan")
+nodes_stats(metric = "indices")$nodes[[1]]$indices$search$open_contexts
+scroll_clear(scroll_id = c(res1$`_scroll_id`, res2$`_scroll_id`))
+nodes_stats(metric = "indices")$nodes[[1]]$indices$search$open_contexts
+
+## all scroll ids
+res1 <- Search(index = 'shakespeare', q="f*", scroll="1m", search_type = "scan")
+res2 <- Search(index = 'shakespeare', q="g*", scroll="1m", search_type = "scan")
+res3 <- Search(index = 'shakespeare', q="k*", scroll="1m", search_type = "scan")
+scroll_clear(all = TRUE)
 }
+}
+\references{
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-scroll.html}
 }
 \seealso{
 \code{\link{Search}}

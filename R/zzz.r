@@ -18,6 +18,14 @@ scroll_POST <- function(path, args, body, raw, ...) {
   if (raw) res else jsonlite::fromJSON(res, FALSE)
 }
 
+scroll_DELETE <- function(path, body, ...) {
+  checkconn()
+  url <- make_url(es_get_auth())
+  tt <- DELETE(file.path(url, path), make_up(), es_env$headers, ..., body = body, encode = "json")
+  geterror(tt)
+  tt$status_code == 200
+}
+
 esc <- function(x) {
   if (is.null(x)) {
     NULL
