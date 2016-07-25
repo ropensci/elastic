@@ -1,3 +1,35 @@
+elastic 0.7.0
+=============
+
+### NEW FEATURES
+
+* New function `scroll_clear()` to clear search contexts created when
+using `scroll()` (#140)
+* New function `ping()` to ping an Elasticsearch server to see if
+it is up (#138)
+* `connect()` gains new parameter `es_path` to specify a context path, 
+e.g., the `bar` in `http://foo.com/bar` (#137)
+
+### MINOR IMPROVEMENTS
+
+* Change all `httr::content()` calls to parse to plain text
+and UTF-8 encoding (#118)
+* Added note to docs that when using `scroll()` all scores are
+zero b/c scores are not calculated/tracked (#127)
+* `connect()` no longer pings the ES server when run, but can
+now be done separately with `ping()` (#139)
+* Let http request headers be sent with all requests - set with 
+`connect()` (#129)
+* Added `transport_schema` param to `connect()` to specify 
+http or https (#130)
+* By default use UUIDs with bulk API with `docs_bulk()` (#125)
+
+### BUG FIXES
+
+* Fix to fail well on empty body sent by user (#119)
+* Fix to `docs_bulk()` function so that user supplied `doc_ids` 
+are not changed at all now (#123)
+
 elastic 0.6.0
 =============
 
