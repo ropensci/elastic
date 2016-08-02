@@ -7,12 +7,9 @@ man-roxygen
 CONTRIBUTING.md
 ^appveyor\.yml$
 README.Rmd
-cran-comments.md
 \.deb$
 es_matrix_travis.yml
 notes-v2.md
 ^\.httr-oauth$
 ^CONDUCT\.md$
-tests/test-all.R
-
 ^cran-comments\.md$
