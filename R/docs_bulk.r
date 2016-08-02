@@ -139,6 +139,13 @@ docs_bulk <- function(x, index = NULL, type = NULL, chunk_size = 1000,
 }
 
 #' @export
+docs_bulk.default <- function(x, index = NULL, type = NULL, chunk_size = 1000,
+                      doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
+  
+  stop("no 'docs_bulk' method for class ", class(x), call. = FALSE)
+}
+
+#' @export
 docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000,
                                  doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
 
@@ -210,8 +217,7 @@ docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000,
   on.exit(close_conns())
   checkconn()
   stopifnot(file.exists(x))
-  conn <- es_get_auth()
-  url <- paste0(conn$base, ":", conn$port, '/_bulk')
+  url <- paste0(make_url(es_get_auth()), '/_bulk')
   tt <- POST(url, make_up(), es_env$headers, ..., body = upload_file(x, type = "application/json"), encode = "json")
   geterror(tt)
   res <- cont_utf8(tt)

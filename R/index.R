@@ -439,8 +439,6 @@ es_POST_ <- function(index, which, args=NULL, ...){
   jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }
 
-e_url <- function(x) paste0(x$base, ":", x$port)
-
 analyze_GET <- function(url, args = NULL, ...){
   checkconn()
   out <- GET(url, query=args, make_up(), es_env$headers, ...)
