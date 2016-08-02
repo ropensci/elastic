@@ -2,6 +2,7 @@
 
 S3method(docs_bulk,character)
 S3method(docs_bulk,data.frame)
+S3method(docs_bulk,default)
 S3method(docs_bulk,list)
 S3method(es_parse,bulk_make)
 S3method(es_parse,elastic_cluster_health)
