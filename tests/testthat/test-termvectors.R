@@ -8,7 +8,8 @@ if (!index_exists('omdb')) {
 }
 
 test_that("termvectors works", {
-  
+  skip_on_travis()
+
   body <- '{
     "fields" : ["Plot"],
     "offsets" : true,
@@ -16,15 +17,15 @@ test_that("termvectors works", {
     "term_statistics" : true,
     "field_statistics" : true
   }'
-  
+
   aa <- termvectors('omdb', 'omdb', 'AVXdx8Eqg_0Z_tpMDyP_', body = body)
-  
-  
+
+
   expect_is(aa, 'list')
   expect_equal(aa$`_index`, "omdb")
   expect_equal(aa$`_type`, "omdb")
   expect_is(aa$`_id`, "character")
-  
+
   expect_is(aa$term_vectors, "list")
   expect_named(aa$term_vectors, 'Plot')
   expect_named(aa$term_vectors$Plot, c('field_statistics', 'terms'))
@@ -35,10 +36,12 @@ test_that("termvectors works", {
 })
 
 test_that("termvectors fails well", {
+  skip_on_travis()
+
   expect_error(termvectors(), "argument \"index\" is missing")
   expect_error(termvectors("omdb"), "argument \"type\" is missing")
   expect_error(termvectors("omdb", "omdb"), "Validation Failed")
-  
+
   body <- '{
      "fields" : ["Plot"],
      "offsets" : true,
@@ -46,9 +49,9 @@ test_that("termvectors fails well", {
      "term_statistics" : true,
     "field_statistics" : true
   }'
-  
-  expect_error(termvectors('omdb', 'omdb', body = body), 
+
+  expect_error(termvectors('omdb', 'omdb', body = body),
                "Validation Failed")
-  expect_equal(length(termvectors('omdb', 'omdb', 'AVXdx8Eqg_0Z_tpMDyP_')$term_vectors), 
+  expect_equal(length(termvectors('omdb', 'omdb', 'AVXdx8Eqg_0Z_tpMDyP_')$term_vectors),
                0)
 })
