@@ -20,7 +20,7 @@ License components with restrictions and base license permitting such:
 
 -------
 
-This version includes an important bug fixe, and a minor improvement 
+This version includes an important bug fix, and a minor improvement 
 to improve result consistency for a S3 method.
 
 Thanks! 
