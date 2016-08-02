@@ -2,6 +2,11 @@ context("mtermvectors")
 
 invisible(connect())
 
+if (!index_exists('omdb')) {
+  omdb <- system.file("examples", "omdb.json", package = "elastic")
+  invisible(docs_bulk(omdb))
+}
+
 body <- '{
        "ids" : ["AVXdx8Eqg_0Z_tpMDyP_", "AVXdx8Eqg_0Z_tpMDyQ1"],
        "parameters": {

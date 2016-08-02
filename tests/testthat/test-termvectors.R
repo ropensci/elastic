@@ -2,6 +2,11 @@ context("termvectors")
 
 invisible(connect())
 
+if (!index_exists('omdb')) {
+  omdb <- system.file("examples", "omdb.json", package = "elastic")
+  invisible(docs_bulk(omdb))
+}
+
 test_that("termvectors works", {
   
   body <- '{
@@ -18,7 +23,7 @@ test_that("termvectors works", {
   expect_is(aa, 'list')
   expect_equal(aa$`_index`, "omdb")
   expect_equal(aa$`_type`, "omdb")
-  expect_equal(aa$`_id`, "AVXdx8Eqg_0Z_tpMDyP_")
+  expect_is(aa$`_id`, "character")
   
   expect_is(aa$term_vectors, "list")
   expect_named(aa$term_vectors, 'Plot')
