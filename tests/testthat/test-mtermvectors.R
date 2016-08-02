@@ -20,7 +20,7 @@ test_that("mtermvectors works", {
   
   expect_equal(aa$docs[[1]]$`_index`, "omdb")
   expect_equal(aa$docs[[1]]$`_type`, "omdb")
-  expect_equal(aa$docs[[1]]$`_id`, "AVXdx8Eqg_0Z_tpMDyP_")
+  expect_is(aa$docs[[1]]$`_id`, "character")
   
   expect_is(aa$docs[[1]]$term_vectors, "list")
   expect_named(aa$docs[[1]]$term_vectors, 'Plot')
@@ -29,7 +29,7 @@ test_that("mtermvectors works", {
   expect_is(aa$docs[[1]]$term_vectors$Plot$terms, "list")
   expect_is(aa$docs[[1]]$term_vectors$Plot$terms[[1]], "list")
   expect_named(aa$docs[[1]]$term_vectors$Plot$terms[[1]]$tokens[[1]], c('position', 'start_offset', 'end_offset'))
-  })
+})
 
 test_that("mtermvectors fails well", {
   expect_error(mtermvectors(body = body), "index is missing")
