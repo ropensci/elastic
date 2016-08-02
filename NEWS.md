@@ -1,3 +1,21 @@
+elastic 0.7.2
+=============
+
+### MINOR IMPROVEMENTS
+
+* Changed `docs_bulk()` to always return a list, whether it's given a file,
+data.frame, or list. For a file, a named list is returned, while for a 
+data.frame or list an unnamed list is returned as many chunks can be processed
+and we don't attempt to wrangle the list output. Inputs of data.frame and list
+used to return `NULL` as we didn't return anything from the internal for loop. 
+You can wrap `docs_bulk` in `invisible()` if you don't want the list printed 
+(#142)
+
+### BUG FIXES
+
+* Fixed bug in `docs_bulk()` and `msearch()` in which base URL construction
+was not done correctly (#141) thanks @steeled !
+
 elastic 0.7.0
 =============
 

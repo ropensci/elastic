@@ -20,8 +20,8 @@ License components with restrictions and base license permitting such:
 
 -------
 
-This version includes bug fixes, minor improvements, and some 
-new functions.
+This version includes an important bug fixe, and a minor improvement 
+to improve result consistency for a S3 method.
 
 Thanks! 
 Scott Chamberlain
