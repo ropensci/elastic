@@ -3,7 +3,7 @@
 #' @export
 #' @param index (character) The name of the index. Required
 #' @param type (character) The type of the document. Required
-#' @param id (numeric) The document ID. Required
+#' @param id (numeric/character) The document ID. Can be numeric or character. Required
 #' @param body The document.
 #' @param version (character) Explicit version number for concurrency control
 #' @param version_type (character) Specific version type. One of internal, external,

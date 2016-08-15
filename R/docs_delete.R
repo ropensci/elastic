@@ -3,7 +3,7 @@
 #' @export
 #' @param index (character) The name of the index. Required
 #' @param type (character) The type of the document. Required
-#' @param id (numeric) The document ID. Required
+#' @param id (numeric/character) The document ID. Can be numeric or character. Required
 #' @param refresh (logical) Refresh the index after performing the operation
 #' @param routing (charcter) Specific routing value
 #' @param timeout (charcter) Explicit operation timeout, e.g,. 5m (for 5 minutes)
@@ -14,6 +14,13 @@
 #' @references
 #' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html}
 #' @examples \dontrun{
+#' if (!index_exists("plos")) {
+#'  plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+#'  docs_bulk(plosdat)
+#' }
+#' 
+#' # delete a document
+#' docs_get(index='plos', type='article', id=36)
 #' docs_delete(index='plos', type='article', id=36)
 #' # docs_get(index='plos', type='article', id=36) # and the document is gone
 #' }

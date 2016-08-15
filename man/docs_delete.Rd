@@ -13,7 +13,7 @@ docs_delete(index, type, id, refresh = NULL, routing = NULL,
 
 \item{type}{(character) The type of the document. Required}
 
-\item{id}{(numeric) The document ID. Required}
+\item{id}{(numeric/character) The document ID. Can be numeric or character. Required}
 
 \item{refresh}{(logical) Refresh the index after performing the operation}
 
@@ -34,6 +34,13 @@ Delete a document.
 }
 \examples{
 \dontrun{
+if (!index_exists("plos")) {
+ plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+ docs_bulk(plosdat)
+}
+
+# delete a document
+docs_get(index='plos', type='article', id=36)
 docs_delete(index='plos', type='article', id=36)
 # docs_get(index='plos', type='article', id=36) # and the document is gone
 }

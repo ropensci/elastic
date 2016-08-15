@@ -13,7 +13,7 @@ docs_create(index, type, id, body, version = NULL, version_type = NULL,
 
 \item{type}{(character) The type of the document. Required}
 
-\item{id}{(numeric) The document ID. Required}
+\item{id}{(numeric/character) The document ID. Can be numeric or character. Required}
 
 \item{body}{The document.}
 

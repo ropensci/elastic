@@ -8,11 +8,11 @@ docs_get(index, type, id, source = FALSE, fields = NULL, exists = FALSE,
   raw = FALSE, callopts = list(), verbose = TRUE, ...)
 }
 \arguments{
-\item{index}{Index. Required.}
+\item{index}{(character) The name of the index. Required}
 
-\item{type}{Document type. Required.}
+\item{type}{(character) The type of the document. Required}
 
-\item{id}{Document id. Required.}
+\item{id}{(numeric/character) The document ID. Can be numeric or character. Required}
 
 \item{source}{(logical) If \code{TRUE}, return source.}
 
