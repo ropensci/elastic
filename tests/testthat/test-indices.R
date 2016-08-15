@@ -28,6 +28,19 @@ test_that("index_create", {
   expect_error(index_create("/"), "Invalid index name")
 })
 
+test_that("index_create fails on illegal characters", {
+  expect_error(index_create("a\\b"), "Invalid index name")
+  expect_error(index_create("a/b"), "Invalid index name")
+  expect_error(index_create("a*b"), "Invalid index name")
+  expect_error(index_create("a?b"), "Invalid index name")
+  expect_error(index_create("a\"b"), "Invalid index name")
+  expect_error(index_create("a<b"), "Invalid index name")
+  expect_error(index_create("a>b"), "Invalid index name")
+  expect_error(index_create("a|b"), "Invalid index name")
+  expect_error(index_create("a,b"), "Invalid index name")
+  expect_error(index_create("a b"), "Invalid index name")
+})
+
 test_that("index_delete", {
   nm <- "stuff_zz"
   invisible(tryCatch(index_delete(index = nm, verbose = FALSE), error = function(e) e))

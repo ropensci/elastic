@@ -44,6 +44,65 @@ test_that("getting json data back from search works", {
   expect_is(jsonlite::fromJSON(f), "list")
 })
 
+test_that("Search works with special characters", {
+  if (index_exists("a+b")) {
+    invisible(index_delete("a+b"))
+  }
+  invisible(index_create("a+b"))
+  invisible(docs_create(index = "a+b", type = "wiz", id=1, body=list(a="ddd", b="eee")))
+  
+  vv <- Search(index = "a+b")
+  
+  expect_is(vv, "list")
+  expect_equal(length(vv$hits$hits), 1)
+  expect_equal(vapply(vv$hits$hits, "[[", "", "_index"), 'a+b')
+  
+  if (index_exists("a^z")) {
+    invisible(index_delete("a^z"))
+  }
+  index_create("a^z")
+  invisible(docs_create(index = "a^z", type = "bang", id=1, body=list(a="fff", b="ggg")))
+  
+  vv <- Search(index = "a^z")
+  
+  expect_is(vv, "list")
+  expect_equal(length(vv$hits$hits), 1)
+  expect_equal(vapply(vv$hits$hits, "[[", "", "_index"), 'a^z')
+  
+  if (index_exists("a$z")) {
+    invisible(index_delete("a$z"))
+  }
+  index_create("a$z")
+  invisible(docs_create(index = "a$z", type = "bang", id=1, body=list(a="fff", b="ggg")))
+  
+  vv <- Search(index = "a$z")
+  
+  expect_is(vv, "list")
+  expect_equal(length(vv$hits$hits), 1)
+  expect_equal(vapply(vv$hits$hits, "[[", "", "_index"), 'a$z')
+})
+
+test_that("Search works with wild card", {
+  if (index_exists("voobardang1")) {
+    invisible(index_delete("voobardang1"))
+  }
+  invisible(index_create("voobardang1"))
+  invisible(docs_create(index = "voobardang1", type = "wiz", id=1, body=list(a="ddd", b="eee")))
+  
+  if (index_exists("voobardang2")) {
+    invisible(index_delete("voobardang2"))
+  }
+  index_create("voobardang2")
+  invisible(docs_create(index = "voobardang2", type = "bang", id=1, body=list(a="fff", b="ggg")))
+  
+  vv <- Search(index = "voobardang*")
+  
+  expect_is(vv, "list")
+  expect_equal(length(vv$hits$hits), 2)
+  expect_equal(vapply(vv$hits$hits, "[[", "", "_index"), c('voobardang1', 'voobardang2'))
+  expect_equal(vapply(vv$hits$hits, "[[", "", "_id"), c('1', '1'))
+})
+
 test_that("Search fails as expected", {
 
   aggs <- list(aggs = list(stats = list(stfff = list(field = "text_entry"))))
