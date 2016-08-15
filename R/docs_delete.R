@@ -5,8 +5,8 @@
 #' @param type (character) The type of the document. Required
 #' @param id (numeric/character) The document ID. Can be numeric or character. Required
 #' @param refresh (logical) Refresh the index after performing the operation
-#' @param routing (charcter) Specific routing value
-#' @param timeout (charcter) Explicit operation timeout, e.g,. 5m (for 5 minutes)
+#' @param routing (character) Specific routing value
+#' @param timeout (character) Explicit operation timeout, e.g,. 5m (for 5 minutes)
 #' @param version (character) Explicit version number for concurrency control
 #' @param version_type (character) Specific version type. One of internal or external
 #' @param callopts Curl args passed on to \code{\link[httr]{DELETE}}

@@ -17,9 +17,9 @@ docs_delete(index, type, id, refresh = NULL, routing = NULL,
 
 \item{refresh}{(logical) Refresh the index after performing the operation}
 
-\item{routing}{(charcter) Specific routing value}
+\item{routing}{(character) Specific routing value}
 
-\item{timeout}{(charcter) Explicit operation timeout, e.g,. 5m (for 5 minutes)}
+\item{timeout}{(character) Explicit operation timeout, e.g,. 5m (for 5 minutes)}
 
 \item{version}{(character) Explicit version number for concurrency control}
 
