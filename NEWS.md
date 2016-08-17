@@ -1,3 +1,27 @@
+elastic 0.7.4
+=============
+
+### NEW FEATURES
+
+* package gains new set of functions for working with search templates:
+`Search_template()`, `Search_template_register()`, `Search_template_get()`, 
+`Search_template_delete()`, and `Search_template_render()`  (#101)
+
+### MINOR IMPROVEMENTS
+
+* Improved documentation for `docs_delete`, `docs_get` and `docs_create` 
+to list correctly that numeric and character values are accepted for 
+the id parameter - before stated that numeric values allowed only (#144)
+thanks @dominoFire
+* Added tests for illegal characters in index names.
+
+### BUG FIXES
+
+* Fixed bug introduced into `Search` and related functions where 
+wildcards in indeces didn't work. Turned out we url escaped twice
+unintentionally. Fixed now, and more tests added for wildcards. 
+(#143) thanks @martijnvanbeers
+
 elastic 0.7.2
 =============
 

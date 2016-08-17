@@ -20,8 +20,8 @@ License components with restrictions and base license permitting such:
 
 -------
 
-This version includes an important bug fix, and a minor improvement 
-to improve result consistency for a S3 method.
+This version includes new suite of functions for an Elasticsearch feature,
+a bug fix, more tests, and a documentation improvement.
 
 Thanks! 
 Scott Chamberlain
