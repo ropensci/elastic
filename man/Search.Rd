@@ -86,7 +86,8 @@ a numeric field) to be ignored. Default: \code{FALSE}}
 
 \item{body}{Query, either a list or json.}
 
-\item{raw}{If \code{TRUE} (default), data is parsed to list. If \code{FALSE}, then raw JSON.}
+\item{raw}{(logical) If \code{FALSE} (default), data is parsed to list. 
+If \code{TRUE}, then raw JSON returned}
 
 \item{asdf}{(logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} to parse JSON
 directly to a data.frame. If \code{FALSE} (Default), list output is given.}
@@ -738,7 +739,7 @@ x$hits$total
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html}
 }
 \seealso{
-\code{\link{Search_uri}} \code{\link{scroll}} 
+\code{\link{Search_uri}} \code{\link{Search_template}} \code{\link{scroll}} 
 \code{\link{count}} \code{\link{validate}}
 }
 
