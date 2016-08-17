@@ -52,7 +52,7 @@ with \code{Search_template_delete}
 You can also pre-register search templates by storing them in the 
 \code{config/scripts} directory, in a file using the .mustache 
 extension. In order to execute the stored template, reference it 
-by it’s name under the template key, like 
+by it's name under the template key, like 
 \code{"file": "templateName", ...}
 }
 \examples{
