@@ -3,7 +3,10 @@
 #' @name connect
 #' @export
 #'
-#' @param es_host (character) The base host, defaults to \code{127.0.0.1}
+#' @param es_host (character) The base host, defaults to \code{127.0.0.1}. Synonym
+#' of \code{es_base}
+#' @param es_base (character) Synonym of \code{es_host}, and will be gone in a 
+#' future version of \pkg{elastic}
 #' @param es_port (character) port to connect to, defaults to \code{9200} (optional)
 #' @param es_path (character) context path that is appended to the end of the 
 #' url. Default: NULL, ignored
@@ -21,7 +24,6 @@
 #' used in all requests. To use headers in individual requests and not others, pass in 
 #' headers using \code{\link[httr]{add_headers}} via \code{...} in a function call.
 #' @param ... Further args passed on to print for the es_conn class.
-#' @param es_base (character) Deprecated, use \code{es_host}
 #' 
 #' @details The default configuration is set up for localhost access on port 9200,
 #' with no username or password.
@@ -32,6 +34,8 @@
 #' Internally, we store your connection settings with environment variables. That means you 
 #' can set your env vars permanently in .Renviron file, and use them on a server e.g., 
 #' as private env vars
+#' 
+#' @seealso \code{\link{ping}} to check your connection
 #'
 #' @examples \dontrun{
 #' # the default is set to 127.0.0.1 (i.e., localhost) and port 9200
@@ -69,7 +73,8 @@ connect <- function(es_host = "127.0.0.1", es_port = 9200, es_path = NULL,
   calls <- names(sapply(match.call(), deparse))[-1]
   calls_vec <- "es_base" %in% calls
   if (any(calls_vec)) {
-    stop("The parameter es_base has been deprecated, use es_host", call. = FALSE)
+    es_host <- es_base
+    warning("'es_base' will be removed in a future version of this pkg.\nuse 'es_host' going forward", call. = FALSE)
   }
   
   # strip off transport if found

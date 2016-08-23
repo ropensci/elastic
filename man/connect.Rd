@@ -12,7 +12,8 @@ connect(es_host = "127.0.0.1", es_port = 9200, es_path = NULL,
 connection()
 }
 \arguments{
-\item{es_host}{(character) The base host, defaults to \code{127.0.0.1}}
+\item{es_host}{(character) The base host, defaults to \code{127.0.0.1}. Synonym
+of \code{es_base}}
 
 \item{es_port}{(character) port to connect to, defaults to \code{9200} (optional)}
 
@@ -33,7 +34,8 @@ ignored for now.}
 error message on an error, while complete gives both http code and error message, 
 and stack trace, if available.}
 
-\item{es_base}{(character) Deprecated, use \code{es_host}}
+\item{es_base}{(character) Synonym of \code{es_host}, and will be gone in a 
+future version of \pkg{elastic}}
 
 \item{headers}{Either an object of class \code{request} or a list that can be coerced to 
 an object of class \code{request} via \code{\link[httr]{add_headers}}. These headers are 
@@ -85,5 +87,8 @@ connect(headers = list(a = 5))
 ## or
 connect(headers = add_headers(list(a = 5)))
 }
+}
+\seealso{
+\code{\link{ping}} to check your connection
 }
 

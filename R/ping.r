@@ -2,6 +2,7 @@
 #'
 #' @export
 #' @param ... Curl args passed on to \code{\link[httr]{GET}}
+#' @seealso \code{\link{connect}}
 #' @examples \dontrun{
 #' ping()
 #' }
