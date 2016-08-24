@@ -9,6 +9,7 @@ if (!index_exists('omdb')) {
 
 test_that("termvectors works", {
   skip_on_travis()
+  if (gsub("\\.", "", ping()$version$number) < 130) skip('feature not in this ES version')
 
   body <- '{
     "fields" : ["Plot"],
@@ -18,7 +19,8 @@ test_that("termvectors works", {
     "field_statistics" : true
   }'
 
-  aa <- termvectors('omdb', 'omdb', 'AVXdx8Eqg_0Z_tpMDyP_', body = body)
+  id <- vapply(Search("omdb", size = 1)$hits$hits, "[[", "", "_id")
+  aa <- termvectors('omdb', 'omdb', id, body = body)
 
 
   expect_is(aa, 'list')
@@ -37,6 +39,7 @@ test_that("termvectors works", {
 
 test_that("termvectors fails well", {
   skip_on_travis()
+  if (gsub("\\.", "", ping()$version$number) < 130) skip('feature not in this ES version')
 
   expect_error(termvectors(), "argument \"index\" is missing")
   expect_error(termvectors("omdb"), "argument \"type\" is missing")

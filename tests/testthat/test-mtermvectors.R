@@ -7,18 +7,20 @@ if (!index_exists('omdb')) {
   invisible(docs_bulk(omdb))
 }
 
-body <- '{
-       "ids" : ["AVXdx8Eqg_0Z_tpMDyP_", "AVXdx8Eqg_0Z_tpMDyQ1"],
+ids <- vapply(Search("omdb", size = 2)$hits$hits, "[[", "", "_id")
+body <- sprintf('{
+       "ids" : ["%s", "%s"],
        "parameters": {
            "fields": [
                "Plot"
            ],
            "term_statistics": true
        }
-  }'
+  }', ids[1], ids[2])
 
 test_that("mtermvectors works", {
   skip_on_travis()
+  if (gsub("\\.", "", ping()$version$number) < 130) skip('feature not in this ES version')
 
   aa <- mtermvectors('omdb', 'omdb', body = body)
 

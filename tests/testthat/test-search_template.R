@@ -27,27 +27,37 @@ body2 <- '{
  }
 }'
 
+iris2 <- setNames(iris, gsub("\\.", "_", names(iris)))
+
 test_that("basic Search_template works", {
-  if (!index_exists("iris")) invisible(docs_bulk(iris, "iris"))
+  if (gsub("\\.", "", ping()$version$number) < 200) skip('feature not in this ES version')
+  
+  if (index_exists("iris")) invisible(suppressMessages(index_delete("iris")))
+  invisible(docs_bulk(iris2, "iris"))
 
   a <- Search_template(body = body1)
   expect_equal(names(a), c('took','timed_out','_shards','hits'))
   expect_is(a, "list")
   expect_is(a$hits$hits, "list")
   expect_equal(
-    unique(vapply(a$hits$hits, "[[", "", c('_source', 'Species'))),
+    unique(sapply(a$hits$hits, "[[", c('_source', 'Species'))),
     "setosa"
   )
   expect_equal(length(a$hits$hits), 3)
 })
 
 test_that("Search_template - raw parameter works", {
+  if (gsub("\\.", "", ping()$version$number) < 200) skip('feature not in this ES version')
+  
   b <- Search_template(body = body1, raw = TRUE)
   expect_is(b, "character")
 })
 
 test_that("Search_template pre-registration works", {
-  if (!index_exists("iris")) invisible(docs_bulk(iris, "iris"))
+  if (gsub("\\.", "", ping()$version$number) < 200) skip('feature not in this ES version')
+  
+  if (!index_exists("iris")) invisible(suppressMessages(index_delete("iris")))
+  invisible(docs_bulk(iris2, "iris"))
 
   a <- Search_template_register('foobar', body = body2)
   expect_is(a, "list")
@@ -67,7 +77,9 @@ test_that("Search_template pre-registration works", {
                "Not Found")
 })
 
-test_that("Search_template validate works", {
+test_that("Search_template validate (aka, render) works", {
+  if (gsub("\\.", "", ping()$version$number) < 200) skip('feature not in this ES version')
+  
   a <- Search_template_render(body = body1)
   
   expect_is(a, "list")
@@ -80,6 +92,8 @@ test_that("Search_template validate works", {
 })
 
 test_that("search_template fails as expected", {
+  if (gsub("\\.", "", ping()$version$number) < 200) skip('feature not in this ES version')
+  
   expect_error(Search_template(index = "shakespeare", body = list(a = 5)),
                "all shards failed")
   expect_error(Search_template(body = 5), "all shards failed")
