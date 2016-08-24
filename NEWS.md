@@ -1,3 +1,13 @@
+elastic 0.7.6
+=============
+
+### BUG FIXES
+
+* Allow usage of `es_base` parameter in `connect()` - Now, instead of 
+`stop()` on `es_base` usage, we use its value for `es_host`. Only 
+pass in one or the other of `es_base` and `es_host`, not both. 
+(#146) thanks @MarcinKosinski
+
 elastic 0.7.4
 =============
 

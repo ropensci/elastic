@@ -20,8 +20,7 @@ License components with restrictions and base license permitting such:
 
 -------
 
-This version includes new suite of functions for an Elasticsearch feature,
-a bug fix, more tests, and a documentation improvement.
+This version includes a bug fix.
 
 Thanks! 
 Scott Chamberlain
