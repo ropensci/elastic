@@ -24,7 +24,7 @@
 #' msearch("~/mysearch.json")
 #' }
 msearch <- function(x, raw = FALSE, asdf = FALSE, ...) {
-  checkconn()
+  checkconn(...)
   if (!file.exists(x)) stop("file ", x, " does not exist", call. = FALSE)
   url <- paste0(make_url(es_get_auth()), '/_msearch')
   tt <- POST(url, make_up(), es_env$headers, ..., body = upload_file(x, type = "application/json"), encode = "json")

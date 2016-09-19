@@ -92,12 +92,14 @@ If \code{TRUE}, then raw JSON returned}
 \item{asdf}{(logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} to parse JSON
 directly to a data.frame. If \code{FALSE} (Default), list output is given.}
 
-\item{scroll}{(character) Specify how long a consistent view of the index should
-be maintained for scrolled search, e.g., "30s", "1m". See \code{\link{units-time}}.}
+\item{scroll}{(character) Specify how long a consistent view of the index 
+should be maintained for scrolled search, e.g., "30s", "1m". See 
+\code{\link{units-time}}.}
 
-\item{search_path}{(character) The path to use for searching. Default to \code{_search},
-but in some cases you may already have that in the base url set using \code{\link{connect}},
-in which case you can set this to \code{NULL}}
+\item{search_path}{(character) The path to use for searching. Default 
+to \code{_search}, but in some cases you may already have that in the base 
+url set using \code{\link{connect}}, in which case you can set this 
+to \code{NULL}}
 
 \item{...}{Curl args passed on to \code{\link[httr]{POST}}}
 }
@@ -739,7 +741,7 @@ x$hits$total
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html}
 }
 \seealso{
-\code{\link{Search_uri}} \code{\link{Search_template}} \code{\link{scroll}} 
-\code{\link{count}} \code{\link{validate}}
+\code{\link{Search_uri}} \code{\link{Search_template}} 
+\code{\link{scroll}} \code{\link{count}} \code{\link{validate}}
 }
 

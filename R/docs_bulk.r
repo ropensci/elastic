@@ -156,7 +156,7 @@ docs_bulk.default <- function(x, index = NULL, type = NULL, chunk_size = 1000,
 docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000,
                                  doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
 
-  checkconn()
+  checkconn(...)
   if (is.null(index)) {
     stop("index can't be NULL when passing a data.frame",
          call. = FALSE)
@@ -190,7 +190,7 @@ docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000
 docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
                            doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
 
-  checkconn()
+  checkconn(...)
   if (is.null(index)) {
     stop("index can't be NULL when passing a list",
          call. = FALSE)
@@ -226,7 +226,7 @@ docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000,
                                 doc_ids = NULL, es_ids = TRUE, raw=FALSE, ...) {
 
   on.exit(close_conns())
-  checkconn()
+  checkconn(...)
   stopifnot(file.exists(x))
   url <- paste0(make_url(es_get_auth()), '/_bulk')
   tt <- POST(url, make_up(), es_env$headers, ..., body = upload_file(x, type = "application/json"), encode = "json")

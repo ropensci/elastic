@@ -43,7 +43,7 @@ tokenizer_set <- function(index, body, ...) {
 }
 
 tokenizer_PUT <- function(url, body, ...){
-  checkconn()
+  checkconn(...)
   body <- check_inputs(body)
   out <- PUT(url, make_up(), es_env$headers, ..., body = body, encode = "json")
   if (out$status_code > 202) geterror(out)

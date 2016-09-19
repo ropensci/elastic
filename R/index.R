@@ -257,7 +257,7 @@ index_get <- function(index=NULL, features=NULL, raw=FALSE, verbose=TRUE, ...) {
 #' @export
 #' @rdname index
 index_exists <- function(index, ...) {
-  checkconn()
+  checkconn(...)
   url <- file.path(make_url(es_get_auth()), esc(index))
   res <- HEAD(url, ..., make_up())
   if (res$status_code == 200) TRUE else FALSE
@@ -266,7 +266,7 @@ index_exists <- function(index, ...) {
 #' @export
 #' @rdname index
 index_delete <- function(index, raw=FALSE, verbose=TRUE, ...) {
-  checkconn()
+  checkconn(...)
   url <- paste0(make_url(es_get_auth()), "/", esc(index))
   out <- DELETE(url, make_up(), ...)
   if (verbose) message(URLdecode(out$url))
@@ -278,7 +278,7 @@ index_delete <- function(index, raw=FALSE, verbose=TRUE, ...) {
 #' @export
 #' @rdname index
 index_create <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...) {
-  checkconn()
+  checkconn(...)
   url <- make_url(es_get_auth())
   out <- PUT(paste0(url, "/", esc(index)), body = body, make_up(), ...)
   geterror(out)
@@ -290,7 +290,7 @@ index_create <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...) {
 #' @export
 #' @rdname index
 index_recreate <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...) {
-  checkconn()
+  checkconn(...)
   if (index_exists(index)) {
     if (verbose) message("deleting ", index)
     index_delete(index, verbose = verbose)
@@ -406,17 +406,18 @@ index_flush <- function(index=NULL, force=FALSE, full=FALSE, wait_if_ongoing=FAL
 index_clear_cache <- function(index=NULL, filter=FALSE, filter_keys=NULL, fielddata=FALSE,
                               query_cache=FALSE, id_cache=FALSE, ...) {
   url <- make_url(es_get_auth())
-  if(!is.null(index))
+  if (!is.null(index)) {
     url <- sprintf("%s/%s/_cache/clear", url, esc(cl(index)))
-  else
+  } else {
     url <- sprintf("%s/_cache/clear", url)
+  }
   args <- ec(list(filter=as_log(filter), filter_keys=filter_keys, fielddata=as_log(fielddata),
                   query_cache=as_log(query_cache), id_cache=as_log(id_cache)))
   cc_POST(url, args, ...)
 }
 
 close_open <- function(index, which, ...){
-  checkconn()
+  checkconn(...)
   url <- make_url(es_get_auth())
   url <- sprintf("%s/%s/%s", url, esc(index), which)
   out <- POST(url, make_up(), ...)
@@ -426,12 +427,12 @@ close_open <- function(index, which, ...){
 
 es_GET_wrap1 <- function(index, which, args=NULL, ...){
   url <- make_url(es_get_auth())
-  url <- if(is.null(index)) file.path(url, which) else file.path(url, esc(cl(index)), which)
+  url <- if (is.null(index)) file.path(url, which) else file.path(url, esc(cl(index)), which)
   es_GET_(url, args, ...)
 }
 
 es_POST_ <- function(index, which, args=NULL, ...){
-  checkconn()
+  checkconn(...)
   url <- make_url(es_get_auth())
   url <- if (is.null(index)) file.path(url, which) else file.path(url, esc(cl(index)), which)
   tt <- POST(url, query = args, make_up(), es_env$headers, ...)
@@ -440,26 +441,26 @@ es_POST_ <- function(index, which, args=NULL, ...){
 }
 
 analyze_GET <- function(url, args = NULL, ...){
-  checkconn()
-  out <- GET(url, query=args, make_up(), es_env$headers, ...)
+  checkconn(...)
+  out <- GET(url, query = args, make_up(), es_env$headers, ...)
   stop_for_status(out)
   tt <- cont_utf8(out)
   jsonlite::fromJSON(tt)
 }
 
 analyze_POST <- function(url, args = NULL, body, ...){
-  checkconn()
+  checkconn(...)
   body <- check_inputs(body)
-  out <- POST(url, query=args, body=body, make_up(), es_env$headers, ...)
+  out <- POST(url, query = args, body = body, make_up(), es_env$headers, ...)
   stop_for_status(out)
   tt <- cont_utf8(out)
   jsonlite::fromJSON(tt)
 }
 
 cc_POST <- function(url, args = NULL, ...){
-  checkconn()
-  tt <- POST(url, body=args, encode = "json", make_up(), es_env$headers, ...)
-  if(tt$status_code > 202) geterror(tt)
+  checkconn(...)
+  tt <- POST(url, body = args, encode = "json", make_up(), es_env$headers, ...)
+  if (tt$status_code > 202) geterror(tt)
   res <- cont_utf8(tt)
   jsonlite::fromJSON(res, FALSE)
 }

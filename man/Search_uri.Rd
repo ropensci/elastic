@@ -89,9 +89,10 @@ If \code{TRUE}, then raw JSON returned}
 \item{asdf}{(logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} to parse JSON
 directly to a data.frame. If \code{FALSE} (Default), list output is given.}
 
-\item{search_path}{(character) The path to use for searching. Default to \code{_search},
-but in some cases you may already have that in the base url set using \code{\link{connect}},
-in which case you can set this to \code{NULL}}
+\item{search_path}{(character) The path to use for searching. Default 
+to \code{_search}, but in some cases you may already have that in the base 
+url set using \code{\link{connect}}, in which case you can set this 
+to \code{NULL}}
 
 \item{...}{Curl args passed on to \code{\link[httr]{POST}}}
 }
@@ -194,6 +195,7 @@ out <- Search_uri(index="shakespeare", type="line", config=verbose())
 }
 }
 \seealso{
-\code{\link{Search}} \code{\link{Search_template}} \code{\link{count}}
+\code{\link{Search}} \code{\link{Search_template}} 
+\code{\link{count}}
 }
 

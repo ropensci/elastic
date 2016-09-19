@@ -128,7 +128,7 @@ Search_template_get <- function(template, ...) {
   if (gsub("\\.", "", ping()$version$number) < 110) {
     stop("search template not available in this ES version", call. = FALSE)
   }
-  checkconn()
+  checkconn(...)
   url <- make_url(es_get_auth())
   url <- paste0(url, "/_search/template/", template)
   es_GET_(url, ...)
@@ -141,7 +141,7 @@ Search_template_delete <- function(template, ...) {
   if (gsub("\\.", "", ping()$version$number) < 110) {
     stop("search template not available in this ES version", call. = FALSE)
   }
-  checkconn()
+  checkconn(...)
   url <- make_url(es_get_auth())
   url <- paste0(url, "/_search/template/", template)
   es_DELETE(url, ...)

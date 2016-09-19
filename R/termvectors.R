@@ -87,7 +87,7 @@ termvectors <- function(index, type, id = NULL, body = list(), pretty = TRUE,
 
 # helpers ------------------------
 tv_POST <- function(path, index, type, id, args, body, ...) {
-  checkconn()
+  checkconn(...)
   url <- make_url(es_get_auth())
   url <- construct_url(url, path, index, type, id)
   tt <- httr::POST(url, query = args, body = body, encode = "json", make_up(), es_env$headers, ...)

@@ -74,7 +74,7 @@ nodes_hot_threads <- function(node=NULL, metric=NULL, threads=3, interval='500ms
 }
 
 node_GET <- function(path, metric, node, raw, args, ...) {
-  checkconn()
+  checkconn(...)
   url <- make_url(es_get_auth())
   url <- file.path(url, '_nodes')
   if (!is.null(node)) {
@@ -95,7 +95,7 @@ node_GET <- function(path, metric, node, raw, args, ...) {
 }
 
 node_POST <- function(path, node, raw, args, ...) {
-  checkconn()
+  checkconn(...)
   url <- make_url(es_get_auth())
   if (!is.null(node)) {
     url <- paste(url, sprintf("_cluster/nodes/%s/%s", paste(node, collapse = ","), path), sep = "/")

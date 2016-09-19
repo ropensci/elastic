@@ -137,7 +137,7 @@ type_exists <- function(index, type, ...){
   if (gsub("\\.", "", ping()$version$number) <= 100) {
     stop("type exists not available in this ES version", call. = FALSE)
   }
-  checkconn()
+  checkconn(...)
   url <- make_url(es_get_auth())
   res <- HEAD(file.path(url, esc(index), esc(type)), make_up(), es_env$headers, ...)
   if (res$status_code == 200) TRUE else FALSE

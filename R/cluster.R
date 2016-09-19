@@ -115,7 +115,6 @@ cluster_health <- function(index=NULL, level = NULL, wait_for_status = NULL,
                            wait_for_nodes = NULL, timeout = NULL, raw=FALSE, 
                            callopts=list(), verbose=TRUE, ...) {
   
-  checkconn()
   url <- file.path(make_url(es_get_auth()), '_cluster/health')
   if (!is.null(index)) {
     url <- file.path(url, paste0(index, collapse = ","))
