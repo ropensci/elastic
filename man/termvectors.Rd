@@ -15,15 +15,17 @@ termvectors(index, type, id = NULL, body = list(), pretty = TRUE,
 
 \item{type}{(character) The type of the document.}
 
-\item{id}{(character) The id of the document, when not specified a doc param should
-be supplied.}
+\item{id}{(character) The id of the document, when not specified a doc 
+param should be supplied.}
 
-\item{body}{(character) Define parameters and or supply a document to get termvectors for}
+\item{body}{(character) Define parameters and or supply a document to get 
+termvectors for}
 
 \item{pretty}{(logical) pretty print. Default: \code{TRUE}}
 
-\item{field_statistics}{(character) Specifies if document count, sum of document
-frequencies and sum of total term frequencies should be returned. Default: \code{TRUE}}
+\item{field_statistics}{(character) Specifies if document count, sum 
+of document frequencies and sum of total term frequencies should be 
+returned. Default: \code{TRUE}}
 
 \item{fields}{(character) A comma-separated list of fields to return.}
 
@@ -41,18 +43,18 @@ Default: \code{TRUE}}
 \item{realtime}{(character) Specifies if request is real-time as opposed to
 near-real-time (Default: \code{TRUE}).}
 
-\item{preference}{(character) Specify the node or shard the operation should be
-performed on (Default: \code{random}).}
+\item{preference}{(character) Specify the node or shard the operation 
+should be performed on (Default: \code{random}).}
 
 \item{routing}{(character) Specific routing value.}
 
-\item{term_statistics}{(character) Specifies if total term frequency and document
-frequency should be returned. Default: \code{FALSE}}
+\item{term_statistics}{(character) Specifies if total term frequency and 
+document frequency should be returned. Default: \code{FALSE}}
 
 \item{version}{(character) Explicit version number for concurrency control}
 
-\item{version_type}{(character) Specific version type, valid choices are: 'internal',
-'external', 'external_gte', 'force'}
+\item{version_type}{(character) Specific version type, valid choices are: 
+'internal', 'external', 'external_gte', 'force'}
 
 \item{...}{Curl args passed on to \code{\link[httr]{POST}}}
 }
