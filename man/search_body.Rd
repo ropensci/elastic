@@ -12,13 +12,15 @@ search_body(index = NULL, type = NULL, raw = FALSE, callopts = list(),
 
 \item{type}{Document type}
 
-\item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
+\item{raw}{If TRUE (default), data is parsed to list. If \code{FALSE}, then 
+raw JSON.}
 
-\item{callopts}{Curl args passed on to httr::POST.}
+\item{callopts}{Curl args passed on to \code{httr::POST}}
 
 \item{query}{Query, either a list or json.}
 
-\item{...}{Further args passed on to elastic search HTTP API as parameters. Not used right now.}
+\item{...}{Further args passed on to elastic search HTTP API as parameters. 
+Not used right now.}
 }
 \description{
 Full text search of Elasticsearch - body requests.
@@ -51,7 +53,8 @@ match <- '{"query": {"match" : {"text_entry" : "Two Gentlemen"}}}'
 # search_body(index="shakespeare", query=match)
 
 # multi-match (multiple fields that is) query
-mmatch <- '{"query": {"multi_match" : {"query" : "henry", "fields": ["text_entry","play_name"]}}}'
+mmatch <- '{"query": {"multi_match" : {"query" : "henry", "fields": 
+["text_entry","play_name"]}}}'
 # search_body(index="shakespeare", query=mmatch)
 
 # bool query

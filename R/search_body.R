@@ -3,10 +3,12 @@
 #' @keywords internal
 #' @param index Index name
 #' @param type Document type
-#' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
-#' @param callopts Curl args passed on to httr::POST.
+#' @param raw If TRUE (default), data is parsed to list. If \code{FALSE}, then 
+#' raw JSON.
+#' @param callopts Curl args passed on to \code{httr::POST}
 #' @param query Query, either a list or json.
-#' @param ... Further args passed on to elastic search HTTP API as parameters. Not used right now.
+#' @param ... Further args passed on to elastic search HTTP API as parameters. 
+#' Not used right now.
 #' @examples \dontrun{
 #' # pass in as an R list
 #' # aggs <- list(aggs = list(stats = list(terms = list(field = "text_entry"))))
@@ -34,7 +36,8 @@
 #' # search_body(index="shakespeare", query=match)
 #'
 #' # multi-match (multiple fields that is) query
-#' mmatch <- '{"query": {"multi_match" : {"query" : "henry", "fields": ["text_entry","play_name"]}}}'
+#' mmatch <- '{"query": {"multi_match" : {"query" : "henry", "fields": 
+#' ["text_entry","play_name"]}}}'
 #' # search_body(index="shakespeare", query=mmatch)
 #'
 #' # bool query
@@ -68,16 +71,15 @@
 #' }'
 #' # search_body(index="shakespeare", query=mmatch)
 #' }
-
-search_body <- function(index=NULL, type=NULL, raw=FALSE, callopts=list(), query=list(), ...)
-{
-  es_POST(path = "_search",
-              index = index,
-              type = type,
-              clazz = 'elastic_search',
-              raw = raw,
-              callopts = callopts,
-              query = query,
-              ...)
+search_body <- function(index=NULL, type=NULL, raw=FALSE, 
+                        callopts=list(), query=list(), ...) {
+  es_POST(
+    path = "_search",
+    index = index,
+    type = type,
+    clazz = 'elastic_search',
+    raw = raw,
+    callopts = callopts,
+    query = query,
+    ...)
 }
-

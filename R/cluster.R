@@ -124,7 +124,6 @@ cluster_health <- function(index=NULL, level = NULL, wait_for_status = NULL,
                   wait_for_active_shards = wait_for_active_shards, 
                   wait_for_nodes = wait_for_nodes, timeout = timeout))
   es_GET_(url, args, ...)
-  # es_GET('_cluster/health', NULL, NULL, NULL, NULL, 'elastic_cluster_health', raw, callopts, ...)
 }
 
 #' @export

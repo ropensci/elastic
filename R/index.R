@@ -290,13 +290,12 @@ index_create <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...) {
 #' @export
 #' @rdname index
 index_recreate <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...) {
-  checkconn(...)
-  if (index_exists(index)) {
+  if (index_exists(index, ...)) {
     if (verbose) message("deleting ", index)
-    index_delete(index, verbose = verbose)
+    index_delete(index, verbose = verbose, ...)
   }
   if (verbose) message("creating ", index)
-  index_create(index=index, body=body, raw=raw, verbose=verbose, ...)
+  index_create(index = index, body = body, raw = raw, verbose = verbose, ...)
 }
 
 #' @export
@@ -334,6 +333,7 @@ index_settings <- function(index="_all", ...) {
 #' @export
 #' @rdname index
 index_settings_update <- function(index=NULL, body, ...) {
+  checkconn(...)
   url <- make_url(es_get_auth())
   url <- if (is.null(index)) file.path(url, "_settings") else file.path(url, esc(cl(index)), "_settings")
   body <- check_inputs(body)
@@ -380,10 +380,11 @@ index_upgrade <- function(index = NULL, wait_for_completion = FALSE, ...) {
 index_analyze <- function(text=NULL, field=NULL, index=NULL, analyzer=NULL, tokenizer=NULL,
                           filters=NULL, char_filters=NULL, body=list(), ...) {
   url <- make_url(es_get_auth())
-  if(!is.null(index))
+  if (!is.null(index)) {
     url <- sprintf("%s/%s/_analyze", url, esc(cl(index)))
-  else
+  } else {
     url <- sprintf("%s/_analyze", url)
+  }
   args <- ec(list(text=text, analyzer=analyzer, tokenizer=tokenizer, filters=filters,
                   char_filters=char_filters, field=field))
   analyze_POST(url, args, body, ...)$tokens
@@ -393,10 +394,11 @@ index_analyze <- function(text=NULL, field=NULL, index=NULL, analyzer=NULL, toke
 #' @rdname index
 index_flush <- function(index=NULL, force=FALSE, full=FALSE, wait_if_ongoing=FALSE, ...) {
   url <- make_url(es_get_auth())
-  if(!is.null(index))
+  if (!is.null(index)) {
     url <- sprintf("%s/%s/_flush", url, esc(cl(index)))
-  else
+  } else {
     url <- sprintf("%s/_flush", url)
+  }
   args <- ec(list(force=as_log(force), full=as_log(full), wait_if_ongoing=as_log(wait_if_ongoing)))
   cc_POST(url, args, ...)
 }
