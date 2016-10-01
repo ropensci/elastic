@@ -24,8 +24,8 @@ alias_delete(index = NULL, alias, ...)
 
 \item{alias}{An alias name}
 
-\item{ignore_unavailable}{(logical) What to do if an specified index name doesn't exist. If set
-to TRUE then those indices are ignored.}
+\item{ignore_unavailable}{(logical) What to do if an specified index name 
+doesn't exist. If set to \code{TRUE} then those indices are ignored.}
 
 \item{...}{Curl args passed on to \code{\link[httr]{POST}}}
 

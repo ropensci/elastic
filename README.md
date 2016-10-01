@@ -5,7 +5,7 @@ elastic
 
 [![Build Status](https://api.travis-ci.org/ropensci/elastic.svg)](https://travis-ci.org/ropensci/elastic)
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/elastic?color=E664A4)](https://github.com/metacran/cranlogs.app)
-[![cran version](http://www.r-pkg.org/badges/version/elastic)](http://cran.rstudio.com/web/packages/elastic)
+[![cran version](http://www.r-pkg.org/badges/version/elastic)](https://cran.r-project.org/package=elastic)
 <!-- [![codecov.io](https://codecov.io/github/ropensci/elastic/coverage.svg?branch=master)](https://codecov.io/github/ropensci/elastic?branch=master) -->
 <!-- [![Build status](https://ci.appveyor.com/api/projects/status/swmmw758mf1heoj2/branch/master)](https://ci.appveyor.com/project/sckott/elastic/branch/master) -->
 
@@ -23,7 +23,7 @@ Also check out `elasticdsl` - an R DSL for Elasticsearch - [https://github.com/r
 
 ## Compatibility
 
-This client is developed following the latest stable releases, currently `v2.3.4`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
+This client is developed following the latest stable releases, currently `v2.3.5`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
 
 ## Security
 
@@ -78,12 +78,12 @@ If you're using boot2docker, you'll need to use the IP address in place of local
 
 __on OSX__
 
-+ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.3.4/elasticsearch-2.3.4.tar.gz`
-+ Extract: `tar -zxvf elasticsearch-2.3.4.tar.gz`
-+ Move it: `sudo mv elasticsearch-2.3.4 /usr/local` (replace version with your version)
++ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.3.5/elasticsearch-2.3.5.tar.gz`
++ Extract: `tar -zxvf elasticsearch-2.3.5.tar.gz`
++ Move it: `sudo mv elasticsearch-2.3.5 /usr/local` (replace version with your version)
 + Navigate to /usr/local: `cd /usr/local`
 + Delete symlinked `elasticsearch` directory: `rm -rf elasticsearch`
-+ Add shortcut: `sudo ln -s elasticsearch-2.3.4 elasticsearch` (replace version with your version)
++ Add shortcut: `sudo ln -s elasticsearch-2.3.5 elasticsearch` (replace version with your version)
 
 You can also install via Homebrew: `brew install elasticsearch`
 
@@ -172,17 +172,12 @@ The function `connect()` is used before doing anything else to set the connectio
 connect(es_port = 9200)
 #> transport:  http 
 #> host:       127.0.0.1 
-#> port:      9200 
-#> headers (names):  NULL 
-#> username:  NULL 
-#> password:  NULL 
-#> errors:    simple 
-#> Elasticsearch (ES) details:   
-#>    name:                    Doctor Anthony Droom 
-#>    ES version:              2.3.4 
-#>    ES version timestamp:    2016-06-30T11:24:31Z 
-#>    ES build hash:           e455fd0c13dceca8dbbdbb1665d068ae55dabe3f 
-#>    lucene version:          5.5.0
+#> port:       9200 
+#> path:       NULL 
+#> username:   NULL 
+#> password:   <secret> 
+#> errors:     simple 
+#> headers (names):  NULL
 ```
 
 ## Search

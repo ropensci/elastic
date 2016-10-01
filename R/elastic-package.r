@@ -12,12 +12,12 @@
 #' \itemize{
 #'  \item Download zip or tar file from Elasticsearch see here for download:
 #'  \url{https://www.elastic.co/downloads/elasticsearch}
-#'  \item Unzip it: \code{untar elasticsearch-2.1.1.tar.gz}
-#'  \item Move it: \code{sudo mv elasticsearch-2.1.1 /usr/local}
+#'  \item Unzip it: \code{untar elasticsearch-2.3.5.tar.gz}
+#'  \item Move it: \code{sudo mv elasticsearch-2.3.5 /usr/local}
 #'  (replace version with your version)
 #'  \item Navigate to /usr/local: \code{cd /usr/local}
-#'  \item Add shortcut: \code{sudo ln -s elasticsearch-2.1.1 elasticsearch}
-#'  (replace version with your verioon)
+#'  \item Add shortcut: \code{sudo ln -s elasticsearch-2.3.5 elasticsearch}
+#'  (replace version with your version)
 #' }
 #'
 #' For help on other platforms, see
@@ -68,7 +68,12 @@
 #'  \item Queries and filters have been merged - all filter clauses are now query clauses.
 #'     Instead, query clauses can now be used in query context or in filter context. See
 #'     examples in \code{\link{Search}} or \code{\link{Search_uri}}
-#'}
+#' }
+#' 
+#' @section index names:
+#' The following are illegal characters, and can not be used in index names or types: 
+#' \code{\\}, \code{/}, \code{*}, \code{?}, \code{<}, 
+#' \code{>}, \code{|}, \code{,} (comma). double quote and whitespace are also illegal.
 #'
 #' @importFrom utils read.table read.delim txtProgressBar 
 #' setTxtProgressBar URLdecode modifyList

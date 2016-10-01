@@ -1,9 +1,26 @@
-R CMD CHECK passed on my local OS X install on R 3.2.3 and R development 
-version, Ubuntu running on Travis-CI, and Win builder.
+## Test environments
 
-This is a re-submission of the same package version with a fix for 
-a badly formed URL in the Description field of the DESCRIPTION file.
+* local OS X install, R 3.3.1
+* ubuntu 12.04 (on travis-ci), R 3.3.1
+* win-builder (devel and release)
 
-This submission adds many new functions, and fixes some bugs.
+## R CMD check results
 
-Thanks! Scott Chamberlain
+0 errors | 0 warnings | 1 note
+
+License components with restrictions and base license permitting such:
+     MIT + file LICENSE
+   File 'LICENSE':
+     YEAR: 2016
+     COPYRIGHT HOLDER: Scott Chamberlain
+
+## Reverse dependencies
+
+* There are no reverse dependencies
+
+-------
+
+This version includes a bug fix.
+
+Thanks! 
+Scott Chamberlain

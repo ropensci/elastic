@@ -12,7 +12,6 @@ test_that("basic search works", {
 })
 
 test_that("search for document type works", {
-
   b <- Search(index="shakespeare", type="line")
   expect_match(vapply(b$hits$hits, "[[", "", "_type"), "line")
 })
@@ -42,6 +41,67 @@ test_that("getting json data back from search works", {
   expect_is(f, "character")
   expect_true(jsonlite::validate(f))
   expect_is(jsonlite::fromJSON(f), "list")
+})
+
+test_that("Search works with special characters - +", {
+  invisible(tryCatch(index_delete("a+b"), error = function(e) e))
+  invisible(index_create("a+b"))
+  invisible(docs_create(index = "a+b", type = "wiz", id=1, body=list(a="ddd", b="eee")))
+  
+  Sys.sleep(1)
+  aplusb <- Search(index = "a+b")
+  
+  expect_is(aplusb, "list")
+  expect_equal(length(aplusb$hits$hits), 1)
+  expect_equal(vapply(aplusb$hits$hits, "[[", "", "_index"), 'a+b')
+})
+
+test_that("Search works with special characters - ^", {
+  invisible(tryCatch(index_delete("a^z"), error = function(e) e))
+  invisible(index_create("a^z"))
+  invisible(docs_create(index = "a^z", type = "bang", id=1, body=list(a="fff", b="ggg")))
+  
+  Sys.sleep(1)
+  ahatz <- Search(index = "a^z")
+  
+  expect_is(ahatz, "list")
+  expect_equal(length(ahatz$hits$hits), 1)
+  expect_equal(vapply(ahatz$hits$hits, "[[", "", "_index"), 'a^z')
+})
+  
+test_that("Search works with special characters - $", {
+  invisible(tryCatch(index_delete("a$z"), error = function(e) e))
+  invisible(index_create("a$z"))
+  invisible(docs_create(index = "a$z", type = "bang", id=1, body=list(a="fff", b="ggg")))
+  
+  Sys.sleep(1)
+  adollarz <- Search(index = "a$z")
+  
+  expect_is(adollarz, "list")
+  expect_equal(length(adollarz$hits$hits), 1)
+  expect_equal(vapply(adollarz$hits$hits, "[[", "", "_index"), 'a$z')
+})
+
+test_that("Search works with wild card", {
+  if (index_exists("voobardang1")) {
+    invisible(index_delete("voobardang1"))
+  }
+  invisible(index_create("voobardang1"))
+  invisible(docs_create(index = "voobardang1", type = "wiz", id=1, body=list(a="ddd", b="eee")))
+
+  if (index_exists("voobardang2")) {
+    invisible(index_delete("voobardang2"))
+  }
+  index_create("voobardang2")
+  invisible(docs_create(index = "voobardang2", type = "bang", id=1, body=list(a="fff", b="ggg")))
+  
+  Sys.sleep(1)
+  aster <- Search(index = "voobardang*")
+  
+  expect_is(aster, "list")
+  expect_equal(length(aster$hits$hits), 2)
+  expect_equal(vapply(aster$hits$hits, "[[", "", "_index"), c('voobardang1', 'voobardang2'))
+  expect_equal(vapply(aster$hits$hits, "[[", "", "_id"), c('1', '1'))
 })
 
 test_that("Search fails as expected", {

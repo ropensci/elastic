@@ -10,12 +10,20 @@ as_log <- function(x){
 cl <- function(x) if (is.null(x)) NULL else paste0(x, collapse = ",")
 
 scroll_POST <- function(path, args, body, raw, allowed_codes, ...) {
-  checkconn()
+  checkconn(...)
   url <- make_url(es_get_auth())
   tt <- POST(file.path(url, path), make_up(), es_env$headers, ..., query = args, body = body)
   geterror(tt, allowed_codes)
   res <- cont_utf8(tt)
   if (raw) res else jsonlite::fromJSON(res, FALSE)
+}
+
+scroll_DELETE <- function(path, body, ...) {
+  checkconn(...)
+  url <- make_url(es_get_auth())
+  tt <- DELETE(file.path(url, path), make_up(), es_env$headers, ..., body = body, encode = "json")
+  geterror(tt)
+  tt$status_code == 200
 }
 
 esc <- function(x) {
@@ -44,7 +52,7 @@ make_up <- function() {
 }
 
 stop_es_version <- function(ver_check, fxn) {
-  ver <- as.numeric(gsub("\\.", "", connection()$es_deets$version$number))
+  ver <- as.numeric(gsub("\\.", "", info()$version$number))
   if (ver < ver_check) {
     stop(fxn, " is not available for this Elasticsearch version", call. = FALSE)
   }
@@ -74,14 +82,20 @@ prune_trailing_slash <- function(x) {
   gsub("\\/$", "", x)
 }
 
-construct_url <- function(url, path, index, type) {
+construct_url <- function(url, path, index, type = NULL, id = NULL) {
+  index <- esc(index)
+  type <- esc(type)
   if (is.null(index) && is.null(type)) {
     paste(url, path, sep = "/")
   } else {
     if (is.null(type) && !is.null(index)) {
       paste(url, index, path, sep = "/")
-    } else {
+    } else if (!is.null(type) && !is.null(index) && is.null(id)) {
       paste(url, index, type, path, sep = "/")
+    } else if (!is.null(type) && !is.null(index) && !is.null(id)) {
+      paste(url, index, type, id, path, sep = "/")
+    } else if (!is.null(type) && is.null(index) && !is.null(id)) {
+      stop("If a document ID is given, an index type must be given", call. = FALSE)
     }
-  } 
+  }
 }

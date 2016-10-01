@@ -2,8 +2,8 @@
 #'
 #' @param index An index name
 #' @param alias An alias name
-#' @param ignore_unavailable (logical) What to do if an specified index name doesn't exist. If set
-#' to TRUE then those indices are ignored.
+#' @param ignore_unavailable (logical) What to do if an specified index name 
+#' doesn't exist. If set to \code{TRUE} then those indices are ignored.
 #' @param routing Ignored for now
 #' @param filter Ignored for now
 #' @param ... Curl args passed on to \code{\link[httr]{POST}}
@@ -51,6 +51,7 @@ aliases_get <- function(index=NULL, alias=NULL, ignore_unavailable=FALSE, ...) {
 #' @export
 #' @rdname alias
 alias_exists <- function(index=NULL, alias=NULL, ...) {
+  checkconn(...)
   res <- HEAD(alias_url(index, alias), ...)
   if (res$status_code == 200) TRUE else FALSE
 }
@@ -58,6 +59,7 @@ alias_exists <- function(index=NULL, alias=NULL, ...) {
 #' @export
 #' @rdname alias
 alias_create <- function(index=NULL, alias, routing=NULL, filter=NULL, ...) {
+  checkconn(...)
   out <- PUT(alias_url(index, alias), c(es_env$headers, make_up(), ...))
   geterror(out)
   jsonlite::fromJSON(cont_utf8(out), FALSE)
@@ -66,13 +68,14 @@ alias_create <- function(index=NULL, alias, routing=NULL, filter=NULL, ...) {
 #' @export
 #' @rdname alias
 alias_delete <- function(index=NULL, alias, ...) {
+  checkconn(...)
   out <- DELETE(alias_url(index, alias), c(es_env$headers, make_up(), ...))
   geterror(out)
   jsonlite::fromJSON(cont_utf8(out), FALSE)
 }
 
 alias_GET <- function(index, alias, ignore, ...) {
-  checkconn()
+  checkconn(...)
   tt <- GET(alias_url(index, alias), 
              query = ec(list(ignore_unavailable = as_log(ignore))), 
              make_up(), es_env$headers, ...)

@@ -18,6 +18,7 @@
 #' Default: \code{TRUE}
 #' @param raw (logical) Get raw JSON back or not.
 #' @param ... Pass on curl options to \code{\link[httr]{POST}}
+#' 
 #' @details More on the Bulk API:
 #' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html}.
 #'
@@ -33,7 +34,11 @@
 #' Row names are dropped from data.frame, and top level names for a list are dropped
 #' as well.
 #'
-#' A progress bar gives the progress for data.frames and lists
+#' A progress bar gives the progress for data.frames and lists - the progress bar is 
+#' based around a for loop, where progress indicates progress along the iterations 
+#' of the for loop, where each iteration is a chunk of data that's converted to 
+#' bulk format, then pushed into Elasticsearch. The \code{character} method has 
+#' no for loop, so no progress bar.
 #'
 #' @section Document IDs:
 #' Document IDs can be passed in via the \code{doc_ids} paramater when passing in
@@ -48,6 +53,8 @@
 #' Until recently, if you had very large integers for document IDs, \code{docs_bulk}
 #' failed. It should be fixed now. Let us know if not.
 #'
+#' @return A list
+#' 
 #' @examples \dontrun{
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 #' docs_bulk(plosdat)
@@ -139,10 +146,17 @@ docs_bulk <- function(x, index = NULL, type = NULL, chunk_size = 1000,
 }
 
 #' @export
+docs_bulk.default <- function(x, index = NULL, type = NULL, chunk_size = 1000,
+                      doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
+  
+  stop("no 'docs_bulk' method for class ", class(x), call. = FALSE)
+}
+
+#' @export
 docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000,
                                  doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
 
-  checkconn()
+  checkconn(...)
   if (is.null(index)) {
     stop("index can't be NULL when passing a data.frame",
          call. = FALSE)
@@ -164,17 +178,19 @@ docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000
   }
   pb <- txtProgressBar(min = 0, max = length(data_chks), initial = 0, style = 3)
   on.exit(close(pb))
+  resl <- vector(mode = "list", length = length(data_chks))
   for (i in seq_along(data_chks)) {
     setTxtProgressBar(pb, i)
-    docs_bulk(make_bulk(x[data_chks[[i]], ], index, type, id_chks[[i]], es_ids), ...)
+    resl[[i]] <- docs_bulk(make_bulk(x[data_chks[[i]], ], index, type, id_chks[[i]], es_ids), ...)
   }
+  return(resl)
 }
 
 #' @export
 docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
                            doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
 
-  checkconn()
+  checkconn(...)
   if (is.null(index)) {
     stop("index can't be NULL when passing a list",
          call. = FALSE)
@@ -197,10 +213,12 @@ docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
   }
   pb <- txtProgressBar(min = 0, max = length(data_chks), initial = 0, style = 3)
   on.exit(close(pb))
+  resl <- vector(mode = "list", length = length(data_chks))
   for (i in seq_along(data_chks)) {
     setTxtProgressBar(pb, i)
-    docs_bulk(make_bulk(x[data_chks[[i]]], index, type, id_chks[[i]], es_ids), ...)
+    resl[[i]] <- docs_bulk(make_bulk(x[data_chks[[i]]], index, type, id_chks[[i]], es_ids), ...)
   }
+  return(resl)
 }
 
 #' @export
@@ -208,10 +226,9 @@ docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000,
                                 doc_ids = NULL, es_ids = TRUE, raw=FALSE, ...) {
 
   on.exit(close_conns())
-  checkconn()
+  checkconn(...)
   stopifnot(file.exists(x))
-  conn <- es_get_auth()
-  url <- paste0(conn$base, ":", conn$port, '/_bulk')
+  url <- paste0(make_url(es_get_auth()), '/_bulk')
   tt <- POST(url, make_up(), es_env$headers, ..., body = upload_file(x, type = "application/json"), encode = "json")
   geterror(tt)
   res <- cont_utf8(tt)

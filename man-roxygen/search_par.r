@@ -48,7 +48,8 @@
 #' @param version (logical) Print the document version with each document.
 #' @param lenient If \code{TRUE} will cause format based failures (like providing text to
 #' a numeric field) to be ignored. Default: \code{FALSE}
-#' @param raw If \code{TRUE} (default), data is parsed to list. If \code{FALSE}, then raw JSON.
+#' @param raw (logical) If \code{FALSE} (default), data is parsed to list. 
+#' If \code{TRUE}, then raw JSON returned
 #' @param asdf (logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} to parse JSON
 #' directly to a data.frame. If \code{FALSE} (Default), list output is given.
 #' @param ... Curl args passed on to \code{\link[httr]{POST}}

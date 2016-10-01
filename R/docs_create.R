@@ -3,13 +3,13 @@
 #' @export
 #' @param index (character) The name of the index. Required
 #' @param type (character) The type of the document. Required
-#' @param id (numeric) The document ID. Required
+#' @param id (numeric/character) The document ID. Can be numeric or character. Required
 #' @param body The document.
 #' @param version (character) Explicit version number for concurrency control
 #' @param version_type (character) Specific version type. One of internal, external,
 #' external_gte, or force
-#' @param op_type (charcter) Operation type. One of create, or ...
-#' @param routing (charcter) Specific routing value
+#' @param op_type (character) Operation type. One of create, or ...
+#' @param routing (character) Specific routing value
 #' @param parent (numeric) A parent document ID
 #' @param timestamp (date) Explicit timestamp for the document
 #' @param ttl (aka \dQuote{time to live}) Expiration time for the document.
@@ -18,7 +18,7 @@
 #' based on the time of indexing or on any time provided. The provided ttl must be strictly
 #' positive and can be a number (in milliseconds) or any valid time value (e.g, 86400000, 1d).
 #' @param refresh (logical) Refresh the index after performing the operation
-#' @param timeout (charcter) Explicit operation timeout, e.g,. 5m (for 5 minutes)
+#' @param timeout (character) Explicit operation timeout, e.g,. 5m (for 5 minutes)
 #' @param callopts Curl args passed on to \code{\link[httr]{DELETE}}
 #' @param ... Further args to query DSL
 #' @references

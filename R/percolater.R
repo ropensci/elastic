@@ -28,6 +28,9 @@
 #' @param ... Curl options. Or in \code{percolate_list} function, further args passed on
 #' to \code{\link{Search}}
 #' 
+#' @references 
+#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-percolate.html}
+#' 
 #' @details Additional body options, pass those in the body. These aren't query string 
 #' parameters:
 #' \itemize{
@@ -169,16 +172,9 @@ percolate_delete <- function(index, id) {
   es_DELETE(url)
 }
 
-# mpercolate <- function(index=NULL, type=NULL, doc=NULL, body=list(), 
-#   routing = NULL, preference = NULL, ignore_unavailable = NULL, 
-#   percolate_format = NULL, ...) {
-#   
-#   es_PUT(esc(index), esc(type), body, raw, asdf, ...)
-# }
-
 # helpers ------------
 percolate_PUT <- function(url, args, body = list(), ...) {
-  checkconn()
+  checkconn(...)
   body <- check_inputs(body)
   tt <- PUT(url, body = body, query = args, encode = 'json', make_up(), es_env$headers, ...)
   geterror(tt)
@@ -186,7 +182,7 @@ percolate_PUT <- function(url, args, body = list(), ...) {
 }
 
 percolate_POST <- function(url, args = NULL, body = list(), ...) {
-  checkconn()
+  checkconn(...)
   body <- check_inputs(body)
   tt <- POST(url, body = body, query = args, encode = 'json', make_up(), es_env$headers, ...)
   geterror(tt)

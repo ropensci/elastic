@@ -4,8 +4,9 @@
 \alias{es_auth}
 \title{Set authentication details}
 \usage{
-es_auth(es_host = NULL, es_port = NULL, es_transport_schema = NULL,
-  es_user = NULL, es_pwd = NULL, force = FALSE, es_base = NULL)
+es_auth(es_host = NULL, es_port = NULL, es_path = NULL,
+  es_transport_schema = NULL, es_user = NULL, es_pwd = NULL,
+  force = FALSE, es_base = NULL)
 }
 \arguments{
 \item{es_host}{(character) Base url}

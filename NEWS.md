@@ -1,3 +1,87 @@
+elastic 0.7.6
+=============
+
+### BUG FIXES
+
+* Allow usage of `es_base` parameter in `connect()` - Now, instead of 
+`stop()` on `es_base` usage, we use its value for `es_host`. Only 
+pass in one or the other of `es_base` and `es_host`, not both. 
+(#146) thanks @MarcinKosinski
+
+elastic 0.7.4
+=============
+
+### NEW FEATURES
+
+* package gains new set of functions for working with search templates:
+`Search_template()`, `Search_template_register()`, `Search_template_get()`, 
+`Search_template_delete()`, and `Search_template_render()`  (#101)
+
+### MINOR IMPROVEMENTS
+
+* Improved documentation for `docs_delete`, `docs_get` and `docs_create` 
+to list correctly that numeric and character values are accepted for 
+the id parameter - before stated that numeric values allowed only (#144)
+thanks @dominoFire
+* Added tests for illegal characters in index names.
+
+### BUG FIXES
+
+* Fixed bug introduced into `Search` and related functions where 
+wildcards in indeces didn't work. Turned out we url escaped twice
+unintentionally. Fixed now, and more tests added for wildcards. 
+(#143) thanks @martijnvanbeers
+
+elastic 0.7.2
+=============
+
+### MINOR IMPROVEMENTS
+
+* Changed `docs_bulk()` to always return a list, whether it's given a file,
+data.frame, or list. For a file, a named list is returned, while for a 
+data.frame or list an unnamed list is returned as many chunks can be processed
+and we don't attempt to wrangle the list output. Inputs of data.frame and list
+used to return `NULL` as we didn't return anything from the internal for loop. 
+You can wrap `docs_bulk` in `invisible()` if you don't want the list printed 
+(#142)
+
+### BUG FIXES
+
+* Fixed bug in `docs_bulk()` and `msearch()` in which base URL construction
+was not done correctly (#141) thanks @steeled !
+
+elastic 0.7.0
+=============
+
+### NEW FEATURES
+
+* New function `scroll_clear()` to clear search contexts created when
+using `scroll()` (#140)
+* New function `ping()` to ping an Elasticsearch server to see if
+it is up (#138)
+* `connect()` gains new parameter `es_path` to specify a context path, 
+e.g., the `bar` in `http://foo.com/bar` (#137)
+
+### MINOR IMPROVEMENTS
+
+* Change all `httr::content()` calls to parse to plain text
+and UTF-8 encoding (#118)
+* Added note to docs that when using `scroll()` all scores are
+zero b/c scores are not calculated/tracked (#127)
+* `connect()` no longer pings the ES server when run, but can
+now be done separately with `ping()` (#139)
+* Let http request headers be sent with all requests - set with 
+`connect()` (#129)
+* Added `transport_schema` param to `connect()` to specify 
+http or https (#130)
+* By default use UUIDs with bulk API with `docs_bulk()` (#125)
+
+### BUG FIXES
+
+* Fix to fail well on empty body sent by user (#119)
+* Fix to `docs_bulk()` function so that user supplied `doc_ids` 
+are not changed at all now (#123)
+
 elastic 0.6.0
 =============
 

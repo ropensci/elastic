@@ -1,7 +1,7 @@
 # GET wrapper
 es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL, 
                         clazz=NULL, raw, callopts=list(), ...){
-  checkconn()
+  checkconn(...)
   url <- make_url(es_get_auth())
   index <- esc(index)
   type <- esc(type)
@@ -46,7 +46,7 @@ mc <- function(...) {
 }
 
 index_GET <- function(index, features, raw, ...) {
-  checkconn()
+  checkconn(...)
   url <- make_url(es_get_auth())
   url <- paste0(url, "/", paste0(esc(index), collapse = ","))
   if (!is.null(features)) features <- paste0(paste0("_", features), collapse = ",")
@@ -57,7 +57,7 @@ index_GET <- function(index, features, raw, ...) {
 }
 
 es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, query, ...) {
-  checkconn()
+  checkconn(...)
   url <- make_url(es_get_auth())
   index <- esc(index)
   type <- esc(type)
@@ -87,14 +87,14 @@ es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, quer
 }
 
 es_DELETE <- function(url, query = NULL, ...) {
-  checkconn()
+  checkconn(...)
   tt <- DELETE(url, query = query, c(make_up(), es_env$headers, ...))
   geterror(tt)
   jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }
 
 es_PUT <- function(url, body = list(), ...) {
-  checkconn()
+  checkconn(...)
   body <- check_inputs(body)
   tt <- PUT(url, body = body, encode = 'json', c(make_up(), es_env$headers, ...))
   geterror(tt)
@@ -102,7 +102,7 @@ es_PUT <- function(url, body = list(), ...) {
 }
 
 es_GET_ <- function(url, query = NULL, ...) {
-  checkconn()
+  checkconn(...)
   tt <- GET(url, query = query, make_up(), es_env$headers, ...)
   geterror(tt)
   jsonlite::fromJSON(cont_utf8(tt), FALSE)
@@ -147,11 +147,6 @@ geterror <- function(z, allowed_codes = NULL) {
             msg <- tryCatch(err$error, error = function(e) e)
             if (is(msg, "simpleError") || is.null(msg)) {
               msg <- httr::http_status(z)$message
-              # if (!err$found) {
-              #   msg <- "not found"
-              # } else {
-              #   msg <- "error"
-              # }
             }
           }
           stop(z$status_code, " - ", msg, call. = FALSE)

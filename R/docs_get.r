@@ -1,9 +1,9 @@
 #' Get documents via the get API.
 #'
 #' @export
-#' @param index Index. Required.
-#' @param type Document type. Required.
-#' @param id Document id. Required.
+#' @param index (character) The name of the index. Required
+#' @param type (character) The type of the document. Required
+#' @param id (numeric/character) The document ID. Can be numeric or character. Required
 #' @param source (logical) If \code{TRUE}, return source.
 #' @param fields Fields to return from the response object.
 #' @param exists (logical) Only return a logical as to whether the document exists or not.
@@ -32,7 +32,7 @@
 docs_get <- function(index, type, id, source=FALSE, fields=NULL, exists=FALSE, 
   raw=FALSE, callopts=list(), verbose=TRUE, ...) {
   
-  checkconn()
+  checkconn(...)
   url <- make_url(es_get_auth())
   if (!is.null(fields)) fields <- paste(fields, collapse = ",")
 
@@ -48,7 +48,6 @@ docs_get <- function(index, type, id, source=FALSE, fields=NULL, exists=FALSE,
   } else {
     out <- GET(url, query = args, c(es_env$headers, mc(make_up(), callopts)))
     geterror(out)
-    #if (out$status_code > 202) stop(out$status_code, " - document not found", call. = FALSE)
     if (verbose) message(URLdecode(out$url))
     if (raw) { 
       cont_utf8(out) 

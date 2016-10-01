@@ -17,4 +17,7 @@ Ping an Elasticsearch server.
 ping()
 }
 }
+\seealso{
+\code{\link{connect}}
+}
 

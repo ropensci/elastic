@@ -33,6 +33,9 @@ Default: \code{TRUE}}
 
 \item{...}{Pass on curl options to \code{\link[httr]{POST}}}
 }
+\value{
+A list
+}
 \description{
 Use the bulk API to create, index, update, or delete documents.
 }
@@ -52,7 +55,11 @@ operations you want.
 Row names are dropped from data.frame, and top level names for a list are dropped
 as well.
 
-A progress bar gives the progress for data.frames and lists
+A progress bar gives the progress for data.frames and lists - the progress bar is 
+based around a for loop, where progress indicates progress along the iterations 
+of the for loop, where each iteration is a chunk of data that's converted to 
+bulk format, then pushed into Elasticsearch. The \code{character} method has 
+no for loop, so no progress bar.
 }
 \section{Document IDs}{
 

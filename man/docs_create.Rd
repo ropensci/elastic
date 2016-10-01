@@ -13,7 +13,7 @@ docs_create(index, type, id, body, version = NULL, version_type = NULL,
 
 \item{type}{(character) The type of the document. Required}
 
-\item{id}{(numeric) The document ID. Required}
+\item{id}{(numeric/character) The document ID. Can be numeric or character. Required}
 
 \item{body}{The document.}
 
@@ -22,9 +22,9 @@ docs_create(index, type, id, body, version = NULL, version_type = NULL,
 \item{version_type}{(character) Specific version type. One of internal, external,
 external_gte, or force}
 
-\item{op_type}{(charcter) Operation type. One of create, or ...}
+\item{op_type}{(character) Operation type. One of create, or ...}
 
-\item{routing}{(charcter) Specific routing value}
+\item{routing}{(character) Specific routing value}
 
 \item{parent}{(numeric) A parent document ID}
 
@@ -38,7 +38,7 @@ positive and can be a number (in milliseconds) or any valid time value (e.g, 864
 
 \item{refresh}{(logical) Refresh the index after performing the operation}
 
-\item{timeout}{(charcter) Explicit operation timeout, e.g,. 5m (for 5 minutes)}
+\item{timeout}{(character) Explicit operation timeout, e.g,. 5m (for 5 minutes)}
 
 \item{callopts}{Curl args passed on to \code{\link[httr]{DELETE}}}
 

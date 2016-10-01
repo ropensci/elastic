@@ -198,7 +198,7 @@ cat_fielddata <- function(verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=F
 
 
 cat_helper <- function(what='', v=FALSE, i=NULL, f=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
-  checkconn()
+  checkconn(...)
   stopifnot(is.logical(v), is.logical(help), is.logical(parse), is.logical(bytes))
   help_or_verbose(v, help)
   url <- make_url(es_get_auth())
