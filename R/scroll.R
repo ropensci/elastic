@@ -66,6 +66,12 @@
 #' res2 <- Search(index = 'shakespeare', q="g*", scroll="1m", search_type = "scan")
 #' res3 <- Search(index = 'shakespeare', q="k*", scroll="1m", search_type = "scan")
 #' scroll_clear(all = TRUE)
+#' 
+#' ## allowed codes
+#' connect(es_user = "es_admin", es_pwd = "helloworld")
+#' res <- Search(index = 'shakespeare', q="a*", scroll="1m", 
+#'   search_type = "scan")
+#' scroll(scroll_id = res$`_scroll_id`, allowed_codes = 404)
 #' }
 scroll <- function(scroll_id, scroll = "1m", raw = FALSE, allowed_codes = NULL, ...) {
   scroll_POST("_search/scroll", args = list(scroll = scroll),

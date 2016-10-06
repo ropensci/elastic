@@ -127,7 +127,7 @@ check_inputs <- function(x) {
 
 geterror <- function(z, allowed_codes = NULL) {
   if (!is(z, "response")) stop("Input to error parser must be a httr response object")
-  if (z$status_code > 202) {
+  if (z$status_code > 202 || z$status_code %in% allowed_codes) {
     if (is.null(z$headers$statusmessage)) {
       err <- tryCatch(cont_utf8(z), error = function(e) e)
       err <- if (is(err, "simpleError")) jsonlite::fromJSON(cont_utf8(z), FALSE) else err
