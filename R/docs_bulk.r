@@ -138,6 +138,15 @@
 #' }
 #' count("testes", "docs")
 #' index_delete("testes")
+#' 
+#' # data.frame's with a single column
+#' ## this didn't use to work, but now should work
+#' db <- paste0(sample(letters, 10), collapse = "")
+#' index_create(db)
+#' res <- data.frame(foo = 1:10)
+#' out <- docs_bulk(x = res, index = db)
+#' count(db)
+#' index_delete(db)
 #' }
 docs_bulk <- function(x, index = NULL, type = NULL, chunk_size = 1000,
                       doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
@@ -181,7 +190,7 @@ docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000
   resl <- vector(mode = "list", length = length(data_chks))
   for (i in seq_along(data_chks)) {
     setTxtProgressBar(pb, i)
-    resl[[i]] <- docs_bulk(make_bulk(x[data_chks[[i]], ], index, type, id_chks[[i]], es_ids), ...)
+    resl[[i]] <- docs_bulk(make_bulk(x[data_chks[[i]], , drop = FALSE], index, type, id_chks[[i]], es_ids), ...)
   }
   return(resl)
 }

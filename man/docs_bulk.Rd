@@ -161,6 +161,15 @@ for (i in seq_along(files)) {
 }
 count("testes", "docs")
 index_delete("testes")
+
+# data.frame's with a single column
+## this didn't use to work, but now should work
+db <- paste0(sample(letters, 10), collapse = "")
+index_create(db)
+res <- data.frame(foo = 1:10)
+out <- docs_bulk(x = res, index = db)
+count(db)
+index_delete(db)
 }
 }
 
