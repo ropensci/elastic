@@ -52,7 +52,7 @@ aliases_get <- function(index=NULL, alias=NULL, ignore_unavailable=FALSE, ...) {
 #' @rdname alias
 alias_exists <- function(index=NULL, alias=NULL, ...) {
   checkconn(...)
-  res <- HEAD(alias_url(index, alias), ...)
+  res <- HEAD(alias_url(index, alias), es_env$headers, make_up(), ...)
   if (res$status_code == 200) TRUE else FALSE
 }
 
@@ -60,7 +60,7 @@ alias_exists <- function(index=NULL, alias=NULL, ...) {
 #' @rdname alias
 alias_create <- function(index=NULL, alias, routing=NULL, filter=NULL, ...) {
   checkconn(...)
-  out <- PUT(alias_url(index, alias), c(es_env$headers, make_up(), ...))
+  out <- PUT(alias_url(index, alias), es_env$headers, make_up(), ...)
   geterror(out)
   jsonlite::fromJSON(cont_utf8(out), FALSE)
 }
@@ -69,7 +69,7 @@ alias_create <- function(index=NULL, alias, routing=NULL, filter=NULL, ...) {
 #' @rdname alias
 alias_delete <- function(index=NULL, alias, ...) {
   checkconn(...)
-  out <- DELETE(alias_url(index, alias), c(es_env$headers, make_up(), ...))
+  out <- DELETE(alias_url(index, alias), es_env$headers, make_up(), ...)
   geterror(out)
   jsonlite::fromJSON(cont_utf8(out), FALSE)
 }

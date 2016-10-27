@@ -34,8 +34,8 @@ Get documents via the get API.
 \examples{
 \dontrun{
 docs_get(index='shakespeare', type='line', id=10)
-docs_get(index='shakespeare', type='line', id=3)
-docs_get(index='shakespeare', type='line', id=3, source=TRUE)
+docs_get(index='shakespeare', type='line', id=12)
+docs_get(index='shakespeare', type='line', id=12, source=TRUE)
 
 # Get certain fields
 docs_get(index='shakespeare', type='line', id=10, fields='play_name')

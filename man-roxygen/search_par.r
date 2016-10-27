@@ -14,9 +14,14 @@
 #' the hits was computed. Default: \code{FALSE}
 #' @param source (logical) Set to \code{FALSE} to disable retrieval of the \code{_source}
 #' field. You can also retrieve part of the document by using \code{_source_include} &
-#' \code{_source_exclude} (see the \code{body} documentation for more details)
+#' \code{_source_exclude} (see the \code{body} documentation for more details). You
+#' can also include a comma-delimited string of fields from the source document 
+#' that you want back. See also the \strong{fields} parameter
 #' @param fields (character) The selective stored fields of the document to return for
 #' each hit. Not specifying any value will cause no fields to return.
+#' Note that in Elasticsearch v5 and greater, \strong{fields} parameter has changed 
+#' to \strong{stored_fields}, which is not on by default. You can however, pass 
+#' fields to \strong{source} parameter
 #' @param sort (character) Sorting to perform. Can either be in the form of fieldName, or
 #' \code{fieldName:asc}/\code{fieldName:desc}. The fieldName can either be an actual
 #' field within the document, or the special \code{_score} name to indicate sorting based on

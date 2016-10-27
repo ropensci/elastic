@@ -24,7 +24,7 @@ test_that("basic multi-search works", {
   expect_equal(length(bb$responses), 1)
 
   expect_is(cc, "list")
-  expect_equal(length(cc$responses), 4)
+  expect_equal(length(cc$responses), 3)
 })
 
 test_that("multi-search fails well", {

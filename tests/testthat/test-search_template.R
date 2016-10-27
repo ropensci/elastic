@@ -61,7 +61,11 @@ test_that("Search_template pre-registration works", {
 
   a <- Search_template_register('foobar', body = body2)
   expect_is(a, "list")
-  expect_equal(a$`_id`, "foobar")
+  if (gsub("\\.", "", ping()$version$number) >= 500) {
+    expect_named(a, "acknowledged")
+  } else {
+    expect_equal(a$`_id`, "foobar")
+  }
   
   b <- Search_template_get('foobar')
   expect_is(b, "list")
@@ -71,8 +75,12 @@ test_that("Search_template pre-registration works", {
   
   c <- Search_template_delete('foobar')
   expect_is(c, "list")
-  expect_equal(c$`_id`, "foobar")
-  expect_true(c$found)
+  if (gsub("\\.", "", ping()$version$number) >= 500) {
+    expect_named(c, "acknowledged")
+  } else {
+    expect_equal(c$`_id`, "foobar")
+    expect_true(c$found)
+  }
   expect_error(Search_template_get("foobar"), 
                "Not Found")
 })
@@ -94,8 +102,19 @@ test_that("Search_template validate (aka, render) works", {
 test_that("search_template fails as expected", {
   if (gsub("\\.", "", ping()$version$number) < 200) skip('feature not in this ES version')
   
-  expect_error(Search_template(index = "shakespeare", body = list(a = 5)),
-               "all shards failed")
-  expect_error(Search_template(body = 5), "all shards failed")
-  expect_error(Search_template(raw = 4), "'raw' parameter must be")
+  if (gsub("\\.", "", ping()$version$number) >= 500) {
+    expect_error(Search_template(index = "shakespeare", body = list(a = 5)),
+                 "\\[search_template\\] unknown field \\[a\\], parser not found")
+  } else {
+    expect_error(Search_template(index = "shakespeare", body = list(a = 5)),
+                 "all shards failed") 
+  }
+  
+  if (gsub("\\.", "", ping()$version$number) >= 500) {
+    expect_error(Search_template(body = 5), "Compressor detection can only be called")
+  } else {
+    expect_error(Search_template(body = 5), "all shards failed")
+  }
+  
+  expect_error(Search_template(raw = 4), "'raw' parameter must be") 
 })

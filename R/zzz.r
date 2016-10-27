@@ -3,9 +3,14 @@ ec <- function(l) Filter(Negate(is.null), l)
 cont_utf8 <- function(x) content(x, as = "text", encoding = "UTF-8")
 
 as_log <- function(x){
-  stopifnot(is.logical(x))
-  if (x) 'true' else 'false'
+  if (is.null(x)) {
+    x
+  } else {
+    if (x) 'true' else 'false'
+  }
 }
+
+`%|||%` <- function(x, y) if (x == "false") y else x
 
 cl <- function(x) if (is.null(x)) NULL else paste0(x, collapse = ",")
 

@@ -18,13 +18,26 @@ test_that("search for document type works", {
 
 test_that("search for specific fields works", {
 
-  c <- Search(index="shakespeare", fields=c('play_name','speaker'))
-  expect_equal(sort(unique(lapply(c$hits$hits, function(x) names(x$fields)))[[1]]), c('play_name','speaker'))
+  if (gsub("\\.", "", ping()$version$number) >= 500) {
+    c <- Search(index="shakespeare", body = '{
+      "_source": ["play_name", "speaker"]
+    }')
+    expect_equal(sort(unique(lapply(c$hits$hits, function(x) names(x$`_source`)))[[1]]), c('play_name','speaker'))
+  } else {
+    c <- Search(index="shakespeare", fields=c('play_name','speaker'))
+    expect_equal(sort(unique(lapply(c$hits$hits, function(x) names(x$fields)))[[1]]), c('play_name','speaker'))
+  }
 })
 
 test_that("search paging works", {
 
-  d <- Search(index="shakespeare", size=1, fields='text_entry')$hits$hits
+  if (gsub("\\.", "", ping()$version$number) >= 500) {
+    d <- Search(index = "shakespeare", size = 1, body = '{
+      "_source": ["text_entry"]
+    }')$hits$hits
+  } else {
+    d <- Search(index="shakespeare", size=1, fields='text_entry')$hits$hits
+  }
   expect_equal(length(d), 1)
 })
 
@@ -107,7 +120,12 @@ test_that("Search works with wild card", {
 test_that("Search fails as expected", {
 
   aggs <- list(aggs = list(stats = list(stfff = list(field = "text_entry"))))
-  expect_error(Search(index = "shakespeare", body = aggs), "all shards failed")
+  if (gsub("\\.", "", ping()$version$number) >= 500) {
+    expect_error(Search(index = "shakespeare", body = aggs), 
+                 "Could not find aggregator type \\[stfff\\] in \\[stats\\]")
+  } else {
+    expect_error(Search(index = "shakespeare", body = aggs), "all shards failed")
+  }
 
   expect_error(Search(index = "shakespeare", type = "act", sort = "text_entryasasfd"), "all shards failed")
 

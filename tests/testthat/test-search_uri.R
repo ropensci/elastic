@@ -19,13 +19,22 @@ test_that("search for document type works", {
 
 test_that("search for specific fields works", {
 
-  c <- Search_uri(index="shakespeare", fields=c('play_name','speaker'))
-  expect_equal(sort(unique(lapply(c$hits$hits, function(x) names(x$fields)))[[1]]), c('play_name','speaker'))
+  if (gsub("\\.", "", ping()$version$number) >= 500) {
+    c <- Search_uri(index = "shakespeare", source = c('play_name','speaker'))
+    expect_equal(sort(unique(lapply(c$hits$hits, function(x) names(x$`_source`)))[[1]]), c('play_name','speaker'))
+  } else {
+    c <- Search_uri(index = "shakespeare", fields = c('play_name','speaker'))
+    expect_equal(sort(unique(lapply(c$hits$hits, function(x) names(x$fields)))[[1]]), c('play_name','speaker'))
+  }
 })
 
 test_that("search paging works", {
 
-  d <- Search_uri(index="shakespeare", size=1, fields='text_entry')$hits$hits
+  if (gsub("\\.", "", ping()$version$number) >= 500) {
+    d <- Search_uri(index="shakespeare", size=1, source = 'text_entry')$hits$hits
+  } else {
+    d <- Search_uri(index="shakespeare", size=1, fields='text_entry')$hits$hits
+  }
   expect_equal(length(d), 1)
 })
 

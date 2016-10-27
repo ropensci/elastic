@@ -33,16 +33,23 @@ test_that("alias_create works", {
 
 test_that("alias_exists works", {
 
-  expect_false(alias_exists(index = "plos"))
+  expect_false(alias_exists(index = "farts"))
+  
+  invisible(tryCatch(index_delete("farts", verbose = FALSE), error = function(e) e))
+  invisible(index_create("farts", verbose = FALSE))
+  invisible(alias_create(index = "farts", alias = "tables"))
   expect_true(alias_exists(alias = "tables"))
 })
 
 test_that("alias_delete works", {
-
-  ff <- alias_delete(index = "plos", alias = "tables")
+  invisible(tryCatch(index_delete("farts", verbose = FALSE), error = function(e) e))
+  invisible(index_create("farts", verbose = FALSE))
+  invisible(alias_create(index = "farts", alias = "chairs"))
+  
+  ff <- alias_delete(index = "farts", alias = "chairs")
   expect_is(ff, "list")
   expect_true(ff$acknowledged)
-  expect_false(alias_exists(alias = "tables"))
+  expect_false(alias_exists(alias = "chairs"))
 })
 
 test_that("alias_* functions fail as expected", {

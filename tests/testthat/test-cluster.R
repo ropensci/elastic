@@ -33,10 +33,8 @@ test_that("cluster_state", {
 })
 
 test_that("cluster_stats", {
-
   out4 <- suppressMessages(cluster_stats())
 
-  expect_named(out4, c('timestamp', 'cluster_name', 'status', 'indices', 'nodes'))
   expect_is(out4, "list")
   expect_is(out4$indices, "list")
   expect_is(cluster_stats(raw = TRUE), "elastic_cluster_stats")
@@ -44,7 +42,6 @@ test_that("cluster_stats", {
 })
 
 test_that("cluster_pending_tasks", {
-
   out5 <- suppressMessages(cluster_pending_tasks())
 
   expect_named(out5, 'tasks')

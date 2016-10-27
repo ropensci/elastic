@@ -7,8 +7,8 @@
 explain(index = NULL, type = NULL, id = NULL, source2 = NULL,
   fields = NULL, routing = NULL, parent = NULL, preference = NULL,
   source = NULL, q = NULL, df = NULL, analyzer = NULL,
-  analyze_wildcard = FALSE, lowercase_expanded_terms = TRUE,
-  lenient = FALSE, default_operator = NULL, source_exclude = NULL,
+  analyze_wildcard = NULL, lowercase_expanded_terms = NULL,
+  lenient = NULL, default_operator = NULL, source_exclude = NULL,
   source_include = NULL, body = NULL, raw = FALSE, ...)
 }
 \arguments{

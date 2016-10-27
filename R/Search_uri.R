@@ -20,7 +20,7 @@ Search_uri <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL,
   search_GET(search_path, cl(index), type,
     args = ec(list(df = df, analyzer = analyzer, 
       default_operator = default_operator, explain = explain, 
-      `_source` = source, fields = cl(fields), sort = cl(sort), 
+      `_source` = cl(source), fields = cl(fields), sort = cl(sort), 
       track_scores = track_scores, timeout = cn(timeout), 
       terminate_after = cn(terminate_after), from = cn(from), size = cn(size), 
       search_type = search_type, 
@@ -35,6 +35,14 @@ search_GET <- function(path, index=NULL, type=NULL, args, raw, asdf, ...) {
   url <- make_url(conn)
   url <- construct_url(url, path, index, type)
   url <- prune_trailing_slash(url)
+  # in ES >= v5, lenient param droppped
+  if (gsub("\\.", "", ping()$version$number) >= 500) args$lenient <- NULL
+  # in ES >= v5, fields param changed to stored_fields
+  if (gsub("\\.", "", ping()$version$number) >= 500) {
+    if ("fields" %in% names(args)) {
+      stop('"fields" parameter is deprecated in ES >= v5. See help in ?Search_uri', call. = FALSE)
+    }
+  }
   tt <- GET(url, query = args, make_up(), es_env$headers, ...)
   geterror(tt)
   res <- cont_utf8(tt)

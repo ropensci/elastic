@@ -17,7 +17,15 @@
 #' Search(index="shakespeare", type="line")
 #'
 #' ## Return certain fields
-#' Search(index="shakespeare", fields=c('play_name','speaker'))
+#' if (gsub("\\.", "", ping()$version$number) < 500) {
+#'   ### ES < v5
+#'   Search(index="shakespeare", fields=c('play_name','speaker'))
+#' } else {
+#'   ### ES > v5
+#'   Search(index="shakespeare", body = '{
+#'    "_source": ["play_name", "speaker"]
+#'   }')
+#' }
 #'
 #' ## Search multiple indices
 #' Search(index = "gbif")$hits$total
@@ -39,13 +47,18 @@
 #'
 #' ## sorting
 #' Search(index="shakespeare", type="act", sort="text_entry")
-#' Search(index="shakespeare", type="act", sort="speaker:desc", fields='speaker')
-#' Search(index="shakespeare", type="act",
-#'  sort=c("speaker:desc","play_name:asc"), fields=c('speaker','play_name'))
+#' if (gsub("\\.", "", ping()$version$number) < 500) {
+#'   Search(index="shakespeare", type="act", sort="speaker:desc", 
+#'     fields='speaker')
+#'   Search(index="shakespeare", type="act",
+#'     sort=c("speaker:desc","play_name:asc"), fields=c('speaker','play_name'))
+#' }
 #'
 #' ## paging
-#' Search(index="shakespeare", size=1, fields='text_entry')$hits$hits
-#' Search(index="shakespeare", size=1, from=1, fields='text_entry')$hits$hits
+#' if (gsub("\\.", "", ping()$version$number) < 500) {
+#'   Search(index="shakespeare", size=1, fields='text_entry')$hits$hits
+#'   Search(index="shakespeare", size=1, from=1, fields='text_entry')$hits$hits
+#' }
 #'
 #' ## queries
 #' ### Search in all fields
@@ -293,7 +306,7 @@
 #' body <- '{
 #'  "query": {
 #'    "more_like_this": {
-#'      "fields": ["abstract","title"],
+#'      "fields": ["title"],
 #'      "like_text": "and then",
 #'      "min_term_freq": 1,
 #'      "max_query_terms": 12

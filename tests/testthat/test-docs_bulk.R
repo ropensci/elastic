@@ -24,13 +24,18 @@ test_that("docs_bulk - works with data.frame input", {
     index_delete("hello")
   }
   # load bulk
-  a <- docs_bulk(mtcars, index = "hello", type = "world")
+  iris <- stats::setNames(iris, gsub("\\.", "_", names(iris)))
+  a <- docs_bulk(iris[3:NROW(iris),], index = "hello", type = "world")
   
   expect_is(a, "list")
   expect_equal(length(a), 1)
   expect_named(a[[1]], c('took', 'errors', 'items'))
-  expect_equal(length(a[[1]]$items), 32)
-  expect_equal(a[[1]]$items[[1]]$create$`_index`, "hello")
+  expect_equal(length(a[[1]]$items), NROW(iris[3:NROW(iris),]))
+  if (gsub("\\.", "", ping()$version$number) >= 500) {
+    expect_equal(a[[1]]$items[[1]]$index$`_index`, "hello")
+  } else {
+    expect_equal(a[[1]]$items[[1]]$create$`_index`, "hello")
+  }
 })
 
 test_that("docs_bulk - works with list input", {
@@ -45,7 +50,12 @@ test_that("docs_bulk - works with list input", {
   expect_equal(length(a), 1)
   expect_named(a[[1]], c('took', 'errors', 'items'))
   expect_equal(length(a[[1]]$items), 50)
-  expect_equal(a[[1]]$items[[1]]$create$`_index`, "arrests")
+  
+  if (gsub("\\.", "", ping()$version$number) >= 500) {
+    expect_equal(a[[1]]$items[[1]]$index$`_index`, "arrests")
+  } else {
+    expect_equal(a[[1]]$items[[1]]$create$`_index`, "arrests")
+  }
 })
 
 test_that("docs_bulk fails as expected", {

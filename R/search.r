@@ -23,7 +23,7 @@ Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, defaul
 
   search_POST(search_path, cl(index), type,
     args = ec(list(df = df, analyzer = analyzer, default_operator = default_operator, 
-      explain = explain, `_source` = source, fields = cl(fields), sort = cl(sort), 
+      explain = explain, `_source` = cl(source), fields = cl(fields), sort = cl(sort), 
       track_scores = track_scores, timeout = cn(timeout), 
       terminate_after = cn(terminate_after), from = cn(from), size = cn(size), 
       search_type = search_type, lowercase_expanded_terms = lowercase_expanded_terms, 
@@ -44,6 +44,14 @@ search_POST <- function(path, index=NULL, type=NULL, args, body, raw, asdf, ...)
   url <- construct_url(url, path, index, type)
   url <- prune_trailing_slash(url)
   body <- check_inputs(body)
+  # in ES >= v5, lenient param droppped
+  if (gsub("\\.", "", ping()$version$number) >= 500) args$lenient <- NULL
+  # in ES >= v5, fields param changed to stored_fields
+  if (gsub("\\.", "", ping()$version$number) >= 500) {
+    if ("fields" %in% names(args)) {
+      stop('"fields" parameter is deprecated in ES >= v5. Use "_source" in body\nSee also "fields" parameter in ?Search', call. = FALSE)
+    }
+  }
   tt <- POST(url, make_up(), es_env$headers, ..., query = args, body = body)
   geterror(tt)
   res <- cont_utf8(tt)

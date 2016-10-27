@@ -17,8 +17,8 @@
 #' 
 #' @examples \dontrun{
 #' docs_get(index='shakespeare', type='line', id=10)
-#' docs_get(index='shakespeare', type='line', id=3)
-#' docs_get(index='shakespeare', type='line', id=3, source=TRUE)
+#' docs_get(index='shakespeare', type='line', id=12)
+#' docs_get(index='shakespeare', type='line', id=12, source=TRUE)
 #'
 #' # Get certain fields
 #' docs_get(index='shakespeare', type='line', id=10, fields='play_name')
@@ -36,7 +36,9 @@ docs_get <- function(index, type, id, source=FALSE, fields=NULL, exists=FALSE,
   url <- make_url(es_get_auth())
   if (!is.null(fields)) fields <- paste(fields, collapse = ",")
 
-  args <- ec(list(fields = cl(fields), ...))
+  # fields parameter changed to stored_fields in Elasticsearch v5.0
+  field_name <- if (gsub("\\.", "", ping(...)$version$number) >= 500) "stored_fields" else "fields"
+  args <- ec(stats::setNames(list(cl(fields)), field_name), ...)
   if (length(args) == 0) args <- NULL
   
   url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), id)

@@ -89,7 +89,7 @@ test_that("field_mapping_get works", {
     
     # Get field mappings
     # get all indices
-    fmg1 <- field_mapping_get(index = "_all", type = "reference", field = "text")
+    fmg1 <- field_mapping_get(index = "_all", type = "omdb", field = "Country")
     # fuzzy field get
     fmg2 <- field_mapping_get(index = "plos", type = "article", field = "*")
     # get defaults
@@ -105,7 +105,7 @@ test_that("field_mapping_get works", {
     expect_equal(length(fmg1$plos$mappings), 0)
     expect_named(fmg3$plos$mappings$article, "title")
     expect_named(fmg3$plos$mappings$article$title$mapping, "title")
-    expect_named(fmg4$plos$mappings$article, c("id", "title"))
+    expect_equal(sort(names(fmg4$plos$mappings$article)), c("id", "title"))
     
     # fails well
     expect_error(field_mapping_get(index = "_all", field = "text"), "is not TRUE")

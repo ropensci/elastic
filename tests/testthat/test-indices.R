@@ -23,7 +23,11 @@ test_that("index_create", {
   invisible(tryCatch(index_delete(index = ind, verbose = FALSE), error = function(e) e))
   a <- index_create(index = ind, verbose = FALSE)
   expect_true(a[[1]])
-  expect_named(a, expected = "acknowledged")
+  if (gsub("\\.", "", ping()$version$number) >= 500) {
+    expect_named(a, c("acknowledged", "shards_acknowledged"))
+  } else {
+    expect_named(a, "acknowledged")
+  }
   expect_is(a, "list")
   expect_error(index_create("/"), "Invalid index name")
 })
