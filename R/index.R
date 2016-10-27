@@ -78,10 +78,10 @@
 #' \bold{index_status}: The API endpoint for this function was deprecated in
 #' Elasticsearch \code{v1.2.0}, and will likely be removed soon. Use \code{\link{index_recovery}}
 #' instead.
-#' 
-#' \bold{index_settings_update}: There are a lot of options you can change with this 
-#' function. See 
-#' https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html 
+#'
+#' \bold{index_settings_update}: There are a lot of options you can change with this
+#' function. See
+#' https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html
 #' for all the options.
 #'
 #' @examples \dontrun{
@@ -102,7 +102,7 @@
 #' index_create(index='things')
 #' if (index_exists('plos')) index_delete('plos')
 #' index_create(index='plos')
-#' 
+#'
 #' # re-create an index
 #' index_recreate("deer")
 #' index_recreate("deer", verbose = FALSE)
@@ -257,7 +257,7 @@ index_get <- function(index=NULL, features=NULL, raw=FALSE, verbose=TRUE, ...) {
 #' @export
 #' @rdname index
 index_exists <- function(index, ...) {
-  checkconn(...)
+  #checkconn(...)
   url <- file.path(make_url(es_get_auth()), esc(index))
   res <- HEAD(url, ..., make_up())
   if (res$status_code == 200) TRUE else FALSE
@@ -266,7 +266,7 @@ index_exists <- function(index, ...) {
 #' @export
 #' @rdname index
 index_delete <- function(index, raw=FALSE, verbose=TRUE, ...) {
-  checkconn(...)
+  #checkconn(...)
   url <- paste0(make_url(es_get_auth()), "/", esc(index))
   out <- DELETE(url, make_up(), ...)
   if (verbose) message(URLdecode(out$url))
@@ -278,7 +278,7 @@ index_delete <- function(index, raw=FALSE, verbose=TRUE, ...) {
 #' @export
 #' @rdname index
 index_create <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...) {
-  checkconn(...)
+  #checkconn(...)
   url <- make_url(es_get_auth())
   out <- PUT(paste0(url, "/", esc(index)), body = body, make_up(), ...)
   geterror(out)
@@ -333,7 +333,7 @@ index_settings <- function(index="_all", ...) {
 #' @export
 #' @rdname index
 index_settings_update <- function(index=NULL, body, ...) {
-  checkconn(...)
+  #checkconn(...)
   url <- make_url(es_get_auth())
   url <- if (is.null(index)) file.path(url, "_settings") else file.path(url, esc(cl(index)), "_settings")
   body <- check_inputs(body)
@@ -419,7 +419,7 @@ index_clear_cache <- function(index=NULL, filter=FALSE, filter_keys=NULL, fieldd
 }
 
 close_open <- function(index, which, ...){
-  checkconn(...)
+  #checkconn(...)
   url <- make_url(es_get_auth())
   url <- sprintf("%s/%s/%s", url, esc(index), which)
   out <- POST(url, make_up(), ...)
@@ -434,7 +434,7 @@ es_GET_wrap1 <- function(index, which, args=NULL, ...){
 }
 
 es_POST_ <- function(index, which, args=NULL, ...){
-  checkconn(...)
+  #checkconn(...)
   url <- make_url(es_get_auth())
   url <- if (is.null(index)) file.path(url, which) else file.path(url, esc(cl(index)), which)
   tt <- POST(url, query = args, make_up(), es_env$headers, ...)
@@ -443,7 +443,7 @@ es_POST_ <- function(index, which, args=NULL, ...){
 }
 
 analyze_GET <- function(url, args = NULL, ...){
-  checkconn(...)
+  #checkconn(...)
   out <- GET(url, query = args, make_up(), es_env$headers, ...)
   stop_for_status(out)
   tt <- cont_utf8(out)
@@ -451,7 +451,7 @@ analyze_GET <- function(url, args = NULL, ...){
 }
 
 analyze_POST <- function(url, args = NULL, body, ...){
-  checkconn(...)
+  #checkconn(...)
   body <- check_inputs(body)
   out <- POST(url, query = args, body = body, make_up(), es_env$headers, ...)
   stop_for_status(out)
@@ -460,7 +460,7 @@ analyze_POST <- function(url, args = NULL, body, ...){
 }
 
 cc_POST <- function(url, args = NULL, ...){
-  checkconn(...)
+  #checkconn(...)
   tt <- POST(url, body = args, encode = "json", make_up(), es_env$headers, ...)
   if (tt$status_code > 202) geterror(tt)
   res <- cont_utf8(tt)

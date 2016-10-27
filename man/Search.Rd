@@ -37,10 +37,15 @@ the hits was computed. Default: \code{FALSE}}
 
 \item{source}{(logical) Set to \code{FALSE} to disable retrieval of the \code{_source}
 field. You can also retrieve part of the document by using \code{_source_include} &
-\code{_source_exclude} (see the \code{body} documentation for more details)}
+\code{_source_exclude} (see the \code{body} documentation for more details). You
+can also include a comma-delimited string of fields from the source document 
+that you want back. See also the \strong{fields} parameter}
 
 \item{fields}{(character) The selective stored fields of the document to return for
-each hit. Not specifying any value will cause no fields to return.}
+each hit. Not specifying any value will cause no fields to return.
+Note that in Elasticsearch v5 and greater, \strong{fields} parameter has changed 
+to \strong{stored_fields}, which is not on by default. You can however, pass 
+fields to \strong{source} parameter}
 
 \item{sort}{(character) Sorting to perform. Can either be in the form of fieldName, or
 \code{fieldName:asc}/\code{fieldName:desc}. The fieldName can either be an actual
@@ -125,7 +130,15 @@ Search(index="shakespeare", type="scene")
 Search(index="shakespeare", type="line")
 
 ## Return certain fields
-Search(index="shakespeare", fields=c('play_name','speaker'))
+if (gsub("\\\\.", "", ping()$version$number) < 500) {
+  ### ES < v5
+  Search(index="shakespeare", fields=c('play_name','speaker'))
+} else {
+  ### ES > v5
+  Search(index="shakespeare", body = '{
+   "_source": ["play_name", "speaker"]
+  }')
+}
 
 ## Search multiple indices
 Search(index = "gbif")$hits$total
@@ -147,13 +160,18 @@ Search(index="shakespeare", type="act", size = 0, terminate_after = 1)
 
 ## sorting
 Search(index="shakespeare", type="act", sort="text_entry")
-Search(index="shakespeare", type="act", sort="speaker:desc", fields='speaker')
-Search(index="shakespeare", type="act",
- sort=c("speaker:desc","play_name:asc"), fields=c('speaker','play_name'))
+if (gsub("\\\\.", "", ping()$version$number) < 500) {
+  Search(index="shakespeare", type="act", sort="speaker:desc", 
+    fields='speaker')
+  Search(index="shakespeare", type="act",
+    sort=c("speaker:desc","play_name:asc"), fields=c('speaker','play_name'))
+}
 
 ## paging
-Search(index="shakespeare", size=1, fields='text_entry')$hits$hits
-Search(index="shakespeare", size=1, from=1, fields='text_entry')$hits$hits
+if (gsub("\\\\.", "", ping()$version$number) < 500) {
+  Search(index="shakespeare", size=1, fields='text_entry')$hits$hits
+  Search(index="shakespeare", size=1, from=1, fields='text_entry')$hits$hits
+}
 
 ## queries
 ### Search in all fields
@@ -401,7 +419,7 @@ Search('gbif', body=body)$hits$total
 body <- '{
  "query": {
    "more_like_this": {
-     "fields": ["abstract","title"],
+     "fields": ["title"],
      "like_text": "and then",
      "min_term_freq": 1,
      "max_query_terms": 12

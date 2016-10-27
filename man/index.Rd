@@ -171,9 +171,9 @@ required in order to clear memory.
 Elasticsearch \code{v1.2.0}, and will likely be removed soon. Use \code{\link{index_recovery}}
 instead.
 
-\bold{index_settings_update}: There are a lot of options you can change with this 
-function. See 
-https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html 
+\bold{index_settings_update}: There are a lot of options you can change with this
+function. See
+https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html
 for all the options.
 }
 \examples{

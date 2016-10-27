@@ -9,9 +9,9 @@
 #' @param source (logical) If \code{TRUE}, return source.
 #' @param fields Fields to return from the response object.
 #'
-#' @references 
+#' @references
 #' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-multi-get.html}
-#' @details 
+#' @details
 #'
 #' You can pass in one of three combinations of parameters:
 #' \itemize{
@@ -45,7 +45,7 @@
 docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL, index_type_id=NULL,
   source=NULL, fields=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...) {
 
-  checkconn()
+  #checkconn()
   check_params(index, type, ids, type_id, index_type_id)
   base <- make_url(es_get_auth())
 

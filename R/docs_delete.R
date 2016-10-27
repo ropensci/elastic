@@ -18,7 +18,7 @@
 #'  plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 #'  docs_bulk(plosdat)
 #' }
-#' 
+#'
 #' # delete a document
 #' docs_get(index='plos', type='article', id=36)
 #' docs_delete(index='plos', type='article', id=36)
@@ -27,8 +27,8 @@
 
 docs_delete <- function(index, type, id, refresh=NULL, routing=NULL, timeout=NULL, version=NULL,
   version_type=NULL, callopts=list(), ...) {
-  
-  checkconn()
+
+  #checkconn()
   url <- make_url(es_get_auth())
   url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), id)
   args <- ec(list(refresh=refresh, routing=routing, timeout=timeout,

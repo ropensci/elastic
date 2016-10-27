@@ -1,15 +1,15 @@
 #' Tokenizer operations
 #'
 #' @export
-#' 
+#'
 #' @param index (character) A character vector of index names
 #' @param body Query, either a list or json.
 #' @param ... Curl options passed on to \code{\link[httr]{PUT}}
-#' 
+#'
 #' @author Scott Chamberlain <myrmecocystus@@gmail.com>
 #' @examples \dontrun{
 #' # set tokenizer
-#' 
+#'
 #' ## NGram tokenizer
 #' body <- '{
 #'         "settings" : {
@@ -43,7 +43,7 @@ tokenizer_set <- function(index, body, ...) {
 }
 
 tokenizer_PUT <- function(url, body, ...){
-  checkconn(...)
+  #checkconn(...)
   body <- check_inputs(body)
   out <- PUT(url, make_up(), es_env$headers, ..., body = body, encode = "json")
   if (out$status_code > 202) geterror(out)

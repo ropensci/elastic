@@ -3,12 +3,12 @@
 #' @export
 #' @param index (character) The index in which the document resides.
 #' @param type (character) The type of the document.
-#' @param id (character) The id of the document, when not specified a doc 
+#' @param id (character) The id of the document, when not specified a doc
 #' param should be supplied.
-#' @param body (character) Define parameters and or supply a document to get 
+#' @param body (character) Define parameters and or supply a document to get
 #' termvectors for
-#' @param field_statistics (character) Specifies if document count, sum 
-#' of document frequencies and sum of total term frequencies should be 
+#' @param field_statistics (character) Specifies if document count, sum
+#' of document frequencies and sum of total term frequencies should be
 #' returned. Default: \code{TRUE}
 #' @param fields (character) A comma-separated list of fields to return.
 #' @param offsets (character) Specifies if term offsets should be returned.
@@ -18,15 +18,15 @@
 #' Default: \code{TRUE}
 #' @param positions (character) Specifies if term positions should be returned.
 #' Default: \code{TRUE}
-#' @param preference (character) Specify the node or shard the operation 
+#' @param preference (character) Specify the node or shard the operation
 #' should be performed on (Default: \code{random}).
 #' @param realtime (character) Specifies if request is real-time as opposed to
 #' near-real-time (Default: \code{TRUE}).
 #' @param routing (character) Specific routing value.
-#' @param term_statistics (character) Specifies if total term frequency and 
+#' @param term_statistics (character) Specifies if total term frequency and
 #' document frequency should be returned. Default: \code{FALSE}
 #' @param version (character) Explicit version number for concurrency control
-#' @param version_type (character) Specific version type, valid choices are: 
+#' @param version_type (character) Specific version type, valid choices are:
 #' 'internal', 'external', 'external_gte', 'force'
 #' @param pretty (logical) pretty print. Default: \code{TRUE}
 #' @param ... Curl args passed on to \code{\link[httr]{POST}}
@@ -50,7 +50,7 @@
 #'   omdb <- system.file("examples", "omdb.json", package = "elastic")
 #'   docs_bulk(omdb)
 #' }
-#' 
+#'
 #' body <- '{
 #'   "fields" : ["title"],
 #'   "offsets" : true,
@@ -72,7 +72,7 @@
 termvectors <- function(index, type, id = NULL, body = list(), pretty = TRUE,
   field_statistics = TRUE, fields = NULL, offsets = TRUE, parent = NULL,
   payloads = TRUE, positions = TRUE, realtime = TRUE, preference = 'random',
-  routing = NULL, term_statistics = FALSE, version = NULL, 
+  routing = NULL, term_statistics = FALSE, version = NULL,
   version_type = NULL, ...) {
 
   args <- ec(list(pretty = pretty, realtime = realtime, preference = preference,
@@ -83,17 +83,17 @@ termvectors <- function(index, type, id = NULL, body = list(), pretty = TRUE,
                     positions = positions, term_statistics = term_statistics))
   }
   tv_POST(
-    if (gsub("\\.", "", ping(...)$version$number) > 200) "_termvectors" else "_termvector", 
+    if (gsub("\\.", "", ping(...)$version$number) > 200) "_termvectors" else "_termvector",
     index, type, id, args, body, ...
   )
 }
 
 # helpers ------------------------
 tv_POST <- function(path, index, type, id, args, body, ...) {
-  checkconn(...)
+  #checkconn(...)
   url <- make_url(es_get_auth())
   url <- construct_url(url, path, index, type, id)
-  tt <- httr::POST(url, query = args, body = body, 
+  tt <- httr::POST(url, query = args, body = body,
                    encode = "json", make_up(), es_env$headers, ...)
   geterror(tt)
   jsonlite::fromJSON(cont_utf8(tt), FALSE)

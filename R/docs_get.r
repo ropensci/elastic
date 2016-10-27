@@ -11,10 +11,10 @@
 #' @param callopts Curl args passed on to httr::POST.
 #' @param verbose If TRUE (default) the url call used printed to console.
 #' @param ... Further args passed on to elastic search HTTP API as parameters.
-#' 
+#'
 #' @references
 #' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html}
-#' 
+#'
 #' @examples \dontrun{
 #' docs_get(index='shakespeare', type='line', id=10)
 #' docs_get(index='shakespeare', type='line', id=12)
@@ -29,10 +29,10 @@
 #' docs_get(index='plos', type='article', id=123456, exists=TRUE)
 #' }
 
-docs_get <- function(index, type, id, source=FALSE, fields=NULL, exists=FALSE, 
+docs_get <- function(index, type, id, source=FALSE, fields=NULL, exists=FALSE,
   raw=FALSE, callopts=list(), verbose=TRUE, ...) {
-  
-  checkconn(...)
+
+  #checkconn(...)
   url <- make_url(es_get_auth())
   if (!is.null(fields)) fields <- paste(fields, collapse = ",")
 
@@ -40,7 +40,7 @@ docs_get <- function(index, type, id, source=FALSE, fields=NULL, exists=FALSE,
   field_name <- if (gsub("\\.", "", ping(...)$version$number) >= 500) "stored_fields" else "fields"
   args <- ec(stats::setNames(list(cl(fields)), field_name), ...)
   if (length(args) == 0) args <- NULL
-  
+
   url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), id)
   if (source) url <- paste(url, '_source', sep = "/")
 
@@ -51,10 +51,10 @@ docs_get <- function(index, type, id, source=FALSE, fields=NULL, exists=FALSE,
     out <- GET(url, query = args, c(es_env$headers, mc(make_up(), callopts)))
     geterror(out)
     if (verbose) message(URLdecode(out$url))
-    if (raw) { 
-      cont_utf8(out) 
-    } else { 
-      jsonlite::fromJSON(cont_utf8(out), FALSE) 
+    if (raw) {
+      cont_utf8(out)
+    } else {
+      jsonlite::fromJSON(cont_utf8(out), FALSE)
     }
   }
 }

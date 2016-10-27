@@ -55,19 +55,19 @@ operations you want.
 Row names are dropped from data.frame, and top level names for a list are dropped
 as well.
 
-A progress bar gives the progress for data.frames and lists - the progress bar is 
-based around a for loop, where progress indicates progress along the iterations 
-of the for loop, where each iteration is a chunk of data that's converted to 
-bulk format, then pushed into Elasticsearch. The \code{character} method has 
+A progress bar gives the progress for data.frames and lists - the progress bar is
+based around a for loop, where progress indicates progress along the iterations
+of the for loop, where each iteration is a chunk of data that's converted to
+bulk format, then pushed into Elasticsearch. The \code{character} method has
 no for loop, so no progress bar.
 }
 \section{Document IDs}{
 
 Document IDs can be passed in via the \code{doc_ids} paramater when passing in
-data.frame or list, but not with files. If ids not passed to \code{doc_ids}, 
+data.frame or list, but not with files. If ids not passed to \code{doc_ids},
 we assign document IDs from 1 to length of the object (rows of a data.frame,
 or length of a list). In the future we may allow the user to select whether
-they want to assign sequential numeric IDs or to allow Elasticsearch to 
+they want to assign sequential numeric IDs or to allow Elasticsearch to
 assign IDs, which are UUIDs that are actually sequential, so you still can
 determine an order of your documents.
 }

@@ -38,7 +38,7 @@ search_POST <- function(path, index=NULL, type=NULL, args, body, raw, asdf, ...)
   if (!inherits(asdf, "logical")) {
     stop("'asdf' parameter must be `TRUE` or `FALSE`", call. = FALSE)
   }
-  checkconn(...)
+  #checkconn(...)
   conn <- es_get_auth()
   url <- make_url(conn)
   url <- construct_url(url, path, index, type)

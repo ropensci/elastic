@@ -36,10 +36,15 @@ the hits was computed. Default: \code{FALSE}}
 
 \item{source}{(logical) Set to \code{FALSE} to disable retrieval of the \code{_source}
 field. You can also retrieve part of the document by using \code{_source_include} &
-\code{_source_exclude} (see the \code{body} documentation for more details)}
+\code{_source_exclude} (see the \code{body} documentation for more details). You
+can also include a comma-delimited string of fields from the source document 
+that you want back. See also the \strong{fields} parameter}
 
 \item{fields}{(character) The selective stored fields of the document to return for
-each hit. Not specifying any value will cause no fields to return.}
+each hit. Not specifying any value will cause no fields to return.
+Note that in Elasticsearch v5 and greater, \strong{fields} parameter has changed 
+to \strong{stored_fields}, which is not on by default. You can however, pass 
+fields to \strong{source} parameter}
 
 \item{sort}{(character) Sorting to perform. Can either be in the form of fieldName, or
 \code{fieldName:asc}/\code{fieldName:desc}. The fieldName can either be an actual
@@ -89,9 +94,9 @@ If \code{TRUE}, then raw JSON returned}
 \item{asdf}{(logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} to parse JSON
 directly to a data.frame. If \code{FALSE} (Default), list output is given.}
 
-\item{search_path}{(character) The path to use for searching. Default 
-to \code{_search}, but in some cases you may already have that in the base 
-url set using \code{\link{connect}}, in which case you can set this 
+\item{search_path}{(character) The path to use for searching. Default
+to \code{_search}, but in some cases you may already have that in the base
+url set using \code{\link{connect}}, in which case you can set this
 to \code{NULL}}
 
 \item{...}{Curl args passed on to \code{\link[httr]{POST}}}
@@ -195,7 +200,7 @@ out <- Search_uri(index="shakespeare", type="line", config=verbose())
 }
 }
 \seealso{
-\code{\link{Search}} \code{\link{Search_template}} 
+\code{\link{Search}} \code{\link{Search_template}}
 \code{\link{count}}
 }
 

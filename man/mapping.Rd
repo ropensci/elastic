@@ -36,15 +36,15 @@ Mapping management
 \details{
 Find documentation for each function at:
 \itemize{
- \item mapping_create - 
+ \item mapping_create -
  \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-put-mapping.html}
- \item type_exists - 
+ \item type_exists -
  \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-types-exists.html}
- \item mapping_delete - FUNCTION DEFUNCT - instead of deleting mapping, delete 
+ \item mapping_delete - FUNCTION DEFUNCT - instead of deleting mapping, delete
  index and recreate index with new mapping
- \item mapping_get - 
+ \item mapping_get -
  \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-mapping.html}
- \item field_mapping_get - 
+ \item field_mapping_get -
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-field-mapping.html}
 }
 }

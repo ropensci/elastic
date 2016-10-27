@@ -15,7 +15,7 @@ as_log <- function(x){
 cl <- function(x) if (is.null(x)) NULL else paste0(x, collapse = ",")
 
 scroll_POST <- function(path, args, body, raw, ...) {
-  checkconn(...)
+  #checkconn(...)
   url <- make_url(es_get_auth())
   tt <- POST(file.path(url, path), make_up(), es_env$headers, ..., query = args, body = body)
   geterror(tt)
@@ -24,7 +24,7 @@ scroll_POST <- function(path, args, body, raw, ...) {
 }
 
 scroll_DELETE <- function(path, body, ...) {
-  checkconn(...)
+  #checkconn(...)
   url <- make_url(es_get_auth())
   tt <- DELETE(file.path(url, path), make_up(), es_env$headers, ..., body = body, encode = "json")
   geterror(tt)
@@ -102,5 +102,5 @@ construct_url <- function(url, path, index, type = NULL, id = NULL) {
     } else if (!is.null(type) && is.null(index) && !is.null(id)) {
       stop("If a document ID is given, an index type must be given", call. = FALSE)
     }
-  } 
+  }
 }

@@ -1,36 +1,36 @@
 # GET wrapper
-es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL, 
+es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL,
                         clazz=NULL, raw, callopts=list(), ...){
-  checkconn(...)
+  #checkconn(...)
   url <- make_url(es_get_auth())
   index <- esc(index)
   type <- esc(type)
-  if (is.null(index) && is.null(type)) { 
-    url <- paste(url, path, sep = "/") 
+  if (is.null(index) && is.null(type)) {
+    url <- paste(url, path, sep = "/")
   } else {
-    if (is.null(type) && !is.null(index)) { 
-      url <- paste(url, index, path, sep = "/") 
+    if (is.null(type) && !is.null(index)) {
+      url <- paste(url, index, path, sep = "/")
     } else {
-      url <- paste(url, index, type, path, sep = "/")    
+      url <- paste(url, index, type, path, sep = "/")
     }
   }
-  
+
   if (!is.null(node)) {
     url <- paste(url, paste(node, collapse = ","), sep = "/")
   }
   if (!is.null(metric)) {
     url <- paste(url, paste(metric, collapse = ","), sep = "/")
-  }  
-  
+  }
+
   args <- ec(list(...))
   if (length(args) == 0) args <- NULL
   tt <- GET(url, query = args, c(es_env$headers, mc(make_up(), callopts)))
   geterror(tt)
   res <- cont_utf8(tt)
-  if (!is.null(clazz)) { 
+  if (!is.null(clazz)) {
     class(res) <- clazz
     if (raw) res else es_parse(res)
-  } else { 
+  } else {
     res
   }
 }
@@ -46,7 +46,7 @@ mc <- function(...) {
 }
 
 index_GET <- function(index, features, raw, ...) {
-  checkconn(...)
+  #checkconn(...)
   url <- make_url(es_get_auth())
   url <- paste0(url, "/", paste0(esc(index), collapse = ","))
   if (!is.null(features)) features <- paste0(paste0("_", features), collapse = ",")
@@ -57,44 +57,44 @@ index_GET <- function(index, features, raw, ...) {
 }
 
 es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, query, ...) {
-  checkconn(...)
+  #checkconn(...)
   url <- make_url(es_get_auth())
   index <- esc(index)
   type <- esc(type)
-  if (is.null(index) && is.null(type)) { 
-    url <- paste(url, path, sep = "/") 
+  if (is.null(index) && is.null(type)) {
+    url <- paste(url, path, sep = "/")
   } else {
-    if (is.null(type) && !is.null(index)) { 
-      url <- paste(url, index, path, sep = "/") 
+    if (is.null(type) && !is.null(index)) {
+      url <- paste(url, index, path, sep = "/")
     } else {
       url <- paste(url, index, type, path, sep = "/")
     }
   }
-  
+
   args <- check_inputs(query)
   if (length(args) == 0) args <- NULL
-  
+
   tt <- POST(url, body = args, c(es_env$headers, mc(make_up(), callopts)), encode = "json")
   geterror(tt)
   # if(tt$status_code > 202) geterror(tt)
   res <- cont_utf8(tt)
-  if (!is.null(clazz)) { 
+  if (!is.null(clazz)) {
     class(res) <- clazz
     if (raw) res else es_parse(input = res)
-  } else { 
-    res 
+  } else {
+    res
   }
 }
 
 es_DELETE <- function(url, query = NULL, ...) {
-  checkconn(...)
+  #checkconn(...)
   tt <- DELETE(url, query = query, c(make_up(), es_env$headers, ...))
   geterror(tt)
   jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }
 
 es_PUT <- function(url, body = list(), ...) {
-  checkconn(...)
+  #checkconn(...)
   body <- check_inputs(body)
   tt <- PUT(url, body = body, encode = 'json', c(make_up(), es_env$headers, ...))
   geterror(tt)
@@ -102,15 +102,15 @@ es_PUT <- function(url, body = list(), ...) {
 }
 
 es_GET_ <- function(url, query = NULL, ...) {
-  checkconn(...)
+  #checkconn(...)
   tt <- GET(url, query = query, make_up(), es_env$headers, ...)
   geterror(tt)
   jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }
 
 check_inputs <- function(x) {
-  if (length(x) == 0) { 
-    NULL 
+  if (length(x) == 0) {
+    NULL
   } else {
     if (is.character(x)) {
       # replace newlines

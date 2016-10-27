@@ -18,7 +18,7 @@
 #' Default: \code{TRUE}
 #' @param raw (logical) Get raw JSON back or not.
 #' @param ... Pass on curl options to \code{\link[httr]{POST}}
-#' 
+#'
 #' @details More on the Bulk API:
 #' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html}.
 #'
@@ -34,18 +34,18 @@
 #' Row names are dropped from data.frame, and top level names for a list are dropped
 #' as well.
 #'
-#' A progress bar gives the progress for data.frames and lists - the progress bar is 
-#' based around a for loop, where progress indicates progress along the iterations 
-#' of the for loop, where each iteration is a chunk of data that's converted to 
-#' bulk format, then pushed into Elasticsearch. The \code{character} method has 
+#' A progress bar gives the progress for data.frames and lists - the progress bar is
+#' based around a for loop, where progress indicates progress along the iterations
+#' of the for loop, where each iteration is a chunk of data that's converted to
+#' bulk format, then pushed into Elasticsearch. The \code{character} method has
 #' no for loop, so no progress bar.
 #'
 #' @section Document IDs:
 #' Document IDs can be passed in via the \code{doc_ids} paramater when passing in
-#' data.frame or list, but not with files. If ids not passed to \code{doc_ids}, 
+#' data.frame or list, but not with files. If ids not passed to \code{doc_ids},
 #' we assign document IDs from 1 to length of the object (rows of a data.frame,
 #' or length of a list). In the future we may allow the user to select whether
-#' they want to assign sequential numeric IDs or to allow Elasticsearch to 
+#' they want to assign sequential numeric IDs or to allow Elasticsearch to
 #' assign IDs, which are UUIDs that are actually sequential, so you still can
 #' determine an order of your documents.
 #'
@@ -54,7 +54,7 @@
 #' failed. It should be fixed now. Let us know if not.
 #'
 #' @return A list
-#' 
+#'
 #' @examples \dontrun{
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 #' docs_bulk(plosdat)
@@ -138,7 +138,7 @@
 #' }
 #' count("testes", "docs")
 #' index_delete("testes")
-#' 
+#'
 #' # data.frame's with a single column
 #' ## this didn't use to work, but now should work
 #' db <- paste0(sample(letters, 10), collapse = "")
@@ -157,7 +157,7 @@ docs_bulk <- function(x, index = NULL, type = NULL, chunk_size = 1000,
 #' @export
 docs_bulk.default <- function(x, index = NULL, type = NULL, chunk_size = 1000,
                       doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
-  
+
   stop("no 'docs_bulk' method for class ", class(x), call. = FALSE)
 }
 
@@ -165,7 +165,7 @@ docs_bulk.default <- function(x, index = NULL, type = NULL, chunk_size = 1000,
 docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000,
                                  doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
 
-  checkconn(...)
+  #checkconn(...)
   if (is.null(index)) {
     stop("index can't be NULL when passing a data.frame",
          call. = FALSE)
@@ -199,7 +199,7 @@ docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000
 docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
                            doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
 
-  checkconn(...)
+  #checkconn(...)
   if (is.null(index)) {
     stop("index can't be NULL when passing a list",
          call. = FALSE)
@@ -235,7 +235,7 @@ docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000,
                                 doc_ids = NULL, es_ids = TRUE, raw=FALSE, ...) {
 
   on.exit(close_conns())
-  checkconn(...)
+  #checkconn(...)
   stopifnot(file.exists(x))
   url <- paste0(make_url(es_get_auth()), '/_bulk')
   tt <- POST(url, make_up(), es_env$headers, ..., body = upload_file(x, type = "application/json"), encode = "json")
