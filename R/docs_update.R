@@ -9,9 +9,6 @@
 #' @param version (character) Explicit version number for concurrency control
 #' @param version_type (character) Specific version type. One of internal, 
 #' external, external_gte, or force
-#' @param detect_noop Specifying as true will cause Elasticsearch to check
-#' if there are changes and, if there aren't, turn the update request
-#' into a noop.
 #' @param fields A comma-separated list of fields to return in the response
 #' @param parent ID of the parent document. Is is only used for routing and
 #' when for the upsert request

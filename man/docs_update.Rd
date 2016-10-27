@@ -58,15 +58,11 @@ retried when a conflict occurs (default: 0)}
 active before proceeding with the update operation. 
 See \url{http://bit.ly/2fbqkZ1} for details.}
 
-\item{detect_noop}{Specifying as true will cause Elasticsearch to check
-if there are changes and, if there aren't, turn the update request
-into a noop.}
-
-\item{...}{Further args to query DSL}
-
 \item{detect_noop}{(logical) Specifying \code{TRUE} will cause Elasticsearch 
 to check if there are changes and, if there aren't, turn the update request
 into a noop.}
+
+\item{...}{Further args to query DSL}
 }
 \description{
 Update a document

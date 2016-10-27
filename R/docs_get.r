@@ -38,7 +38,7 @@
 #' docs_get(index='plos', type='article', id=123456, exists=TRUE)
 #' }
 
-docs_get <- function(index, type, id, source=FALSE, fields=NULL, exists=FALSE,
+docs_get <- function(index, type, id, source=NULL, fields=NULL, exists=FALSE,
   raw=FALSE, callopts=list(), verbose=TRUE, ...) {
   
   url <- make_url(es_get_auth())

@@ -30,7 +30,6 @@ test_that("docs_create fails as expected", {
 
   expect_error(docs_get("bbbbbbb"), "argument \"type\" is missing, with no default")
   expect_error(docs_get("bbbbbbb", "stuff"), "argument \"id\" is missing, with no default")
-  expect_error(docs_get("bbbbbbb", "stuff", 1, source = "adf"), "argument is not interpretable as logical")
 })
 
 ## create indices first
