@@ -8,7 +8,8 @@ plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 invisible(docs_bulk(plosdat))
 
 test_that("type_exists works", {
-
+  if (gsub("\\.", "", ping()$version$number) <= 100) skip('feature not in this ES version')
+  
   res <- tryCatch(docs_get("plos", "article", id=39, verbose = FALSE), 
                   error = function(e) e)
   if (!is(res, 'error')) {
