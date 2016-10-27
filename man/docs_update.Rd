@@ -62,6 +62,8 @@ See \url{http://bit.ly/2fbqkZ1} for details.}
 to check if there are changes and, if there aren't, turn the update request
 into a noop.}
 
+\item{callopts}{Curl options passed on to \code{\link[httr]{POST}}}
+
 \item{...}{Further args to query DSL}
 }
 \description{

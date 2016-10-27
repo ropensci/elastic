@@ -17,13 +17,17 @@
 #' @references 
 #' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-scroll.html}
 #' 
-#' @details Scores will be zero for all documents that are returned from a scroll
-#' request. Dems da rules.
+#' @details Scores will be zero for all documents that are returned from a 
+#' scroll request. Dems da rules.
 #' 
 #' @section Clear scroll:
-#' Search context are automatically removed when the scroll timeout has been exceeded. 
-#' Keeping scrolls open has a cost, so scrolls should be explicitly cleared as soon 
-#' as the scroll is not being used anymore using \code{scroll_clear}
+#' Search context are automatically removed when the scroll timeout has 
+#' been exceeded.  Keeping scrolls open has a cost, so scrolls should be 
+#' explicitly cleared as soon  as the scroll is not being used anymore 
+#' using \code{scroll_clear}
+#' 
+#' @section Sliced scrolling:
+#' See the example in this man file.
 #' 
 #' @examples \dontrun{
 #' # Get a scroll_id
@@ -67,6 +71,59 @@
 #' res2 <- Search(index = 'shakespeare', q="g*", scroll="1m", search_type = "scan")
 #' res3 <- Search(index = 'shakespeare', q="k*", scroll="1m", search_type = "scan")
 #' scroll_clear(all = TRUE)
+#' 
+#' ## sliced scrolling
+#' body1 <- '{
+#'   "slice": {
+#'     "id": 0, 
+#'     "max": 2 
+#'   },
+#'   "query": {
+#'     "match" : {
+#'       "text_entry" : "a*"
+#'     }
+#'   }
+#' }'
+#' 
+#' body2 <- '{
+#'   "slice": {
+#'     "id": 1, 
+#'     "max": 2 
+#'   },
+#'   "query": {
+#'     "match" : {
+#'       "text_entry" : "a*"
+#'     }
+#'   }
+#' }'
+#' 
+#' res1 <- Search(index = 'shakespeare', scroll="1m", body = body1)
+#' res2 <- Search(index = 'shakespeare', scroll="1m", body = body2)
+#' scroll(scroll_id = res1$`_scroll_id`)
+#' scroll(scroll_id = res2$`_scroll_id`)
+#' 
+#' out1 <- list()
+#' hits <- 1
+#' while(hits != 0){
+#'   tmp1 <- scroll(scroll_id = res1$`_scroll_id`)
+#'   hits <- length(tmp1$hits$hits)
+#'   if(hits > 0)
+#'     out1 <- c(out1, tmp1$hits$hits)
+#' }
+#' 
+#' out2 <- list()
+#' hits <- 1
+#' while(hits != 0){
+#'   tmp2 <- scroll(scroll_id = res2$`_scroll_id`)
+#'   hits <- length(tmp2$hits$hits)
+#'   if(hits > 0)
+#'     out2 <- c(out2, tmp2$hits$hits)
+#' }
+#'
+#' c(
+#'  lapply(out1, "[[", "_source"),
+#'  lapply(out2, "[[", "_source")
+#' ) 
 #' }
 scroll <- function(scroll_id, scroll="1m", raw=FALSE, ...){
   scroll_POST("_search/scroll", args = list(scroll = scroll), body = scroll_id, raw = raw, ...)

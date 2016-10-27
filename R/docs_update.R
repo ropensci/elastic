@@ -35,7 +35,7 @@
 #' @param detect_noop (logical) Specifying \code{TRUE} will cause Elasticsearch 
 #' to check if there are changes and, if there aren't, turn the update request
 #' into a noop.
-#' @param callopts Curl options passed on to \code{\link[httr]{{POST}}
+#' @param callopts Curl options passed on to \code{\link[httr]{POST}}
 #' @param ... Further args to query DSL
 #' @references \url{http://bit.ly/2eVYqLz}
 #' @examples \dontrun{

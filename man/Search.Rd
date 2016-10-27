@@ -260,6 +260,7 @@ Search(index="shakespeare", body=aggs)
 aggs <- '{"aggs":{"stats":{"terms":{"field":"text_entry"}}}}'
 Search(index="shakespeare", body=aggs)
 
+
 ## Aggregations
 ### Histograms
 aggs <- '{
@@ -473,10 +474,12 @@ Search('shakespeare', 'line', body=body)
 ## Scrolling search - instead of paging
 Search('shakespeare', q="a*")$hits$total
 res <- Search(index = 'shakespeare', q="a*", scroll="1m")
-res <- Search(index = 'shakespeare', q="a*", scroll="1m", search_type = "scan")
+res <- Search(index = 'shakespeare', q="a*", scroll="1m", 
+  search_type = "scan")
 scroll(scroll_id = res$`_scroll_id`)
 
-res <- Search(index = 'shakespeare', q="a*", scroll="5m", search_type = "scan")
+res <- Search(index = 'shakespeare', q="a*", scroll="5m", 
+  search_type = "scan")
 out <- list()
 hits <- 1
 while(hits != 0){
@@ -485,6 +488,61 @@ while(hits != 0){
   if(hits > 0)
     out <- c(out, res$hits$hits)
 }
+
+### Sliced scrolling
+#### For scroll queries that return a lot of documents it is possible to 
+#### split the scroll in multiple slices which can be consumed independently
+body1 <- '{
+  "slice": {
+    "id": 0, 
+    "max": 2 
+  },
+  "query": {
+    "match" : {
+      "text_entry" : "a*"
+    }
+  }
+}'
+
+body2 <- '{
+  "slice": {
+    "id": 1, 
+    "max": 2 
+  },
+  "query": {
+    "match" : {
+      "text_entry" : "a*"
+    }
+  }
+}'
+
+res1 <- Search(index = 'shakespeare', scroll="1m", body = body1)
+res2 <- Search(index = 'shakespeare', scroll="1m", body = body2)
+scroll(scroll_id = res1$`_scroll_id`)
+scroll(scroll_id = res2$`_scroll_id`)
+
+out1 <- list()
+hits <- 1
+while(hits != 0){
+  tmp1 <- scroll(scroll_id = res1$`_scroll_id`)
+  hits <- length(tmp1$hits$hits)
+  if(hits > 0)
+    out1 <- c(out1, tmp1$hits$hits)
+}
+
+out2 <- list()
+hits <- 1
+while(hits != 0){
+  tmp2 <- scroll(scroll_id = res2$`_scroll_id`)
+  hits <- length(tmp2$hits$hits)
+  if(hits > 0)
+    out2 <- c(out2, tmp2$hits$hits)
+}
+
+c(
+ lapply(out1, "[[", "_source"),
+ lapply(out2, "[[", "_source")
+) 
 
 
 
@@ -504,8 +562,8 @@ body <- '{
 Search('gbif', body = body)$hits$total
 
 ## Geo filters - fun!
-### Note that filers have many geospatial filter options, but queries have fewer, and
-### require a geo_shape mapping
+### Note that filers have many geospatial filter options, but queries 
+### have fewer, andrequire a geo_shape mapping
 
 body <- '{
  "mappings": {

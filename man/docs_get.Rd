@@ -4,7 +4,7 @@
 \alias{docs_get}
 \title{Get documents}
 \usage{
-docs_get(index, type, id, source = FALSE, fields = NULL, exists = FALSE,
+docs_get(index, type, id, source = NULL, fields = NULL, exists = FALSE,
   raw = FALSE, callopts = list(), verbose = TRUE, ...)
 }
 \arguments{
