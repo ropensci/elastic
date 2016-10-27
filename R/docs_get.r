@@ -1,4 +1,4 @@
-#' Get documents via the get API.
+#' Get documents
 #'
 #' @export
 #' @param index (character) The name of the index. Required
@@ -21,8 +21,17 @@
 #' docs_get(index='shakespeare', type='line', id=12, source=TRUE)
 #'
 #' # Get certain fields
-#' docs_get(index='shakespeare', type='line', id=10, fields='play_name')
-#' docs_get(index='shakespeare', type='line', id=10, fields=c('play_name','speaker'))
+#' if (gsub("\\.", "", ping()$version$number) < 500) {
+#'   ### ES < v5
+#'   docs_get(index='shakespeare', type='line', id=10, fields='play_name')
+#'   docs_get(index='shakespeare', type='line', id=10, 
+#'     fields=c('play_name','speaker'))
+#' } else {
+#'   ### ES > v5
+#'   docs_get(index='shakespeare', type='line', id=10, source='play_name')
+#'   docs_get(index='shakespeare', type='line', id=10, 
+#'     source=c('play_name','speaker'))
+#' }
 #'
 #' # Just test for existence of the document
 #' docs_get(index='plos', type='article', id=1, exists=TRUE)
@@ -31,18 +40,15 @@
 
 docs_get <- function(index, type, id, source=FALSE, fields=NULL, exists=FALSE,
   raw=FALSE, callopts=list(), verbose=TRUE, ...) {
-
-  #checkconn(...)
+  
   url <- make_url(es_get_auth())
-  if (!is.null(fields)) fields <- paste(fields, collapse = ",")
-
   # fields parameter changed to stored_fields in Elasticsearch v5.0
   field_name <- if (gsub("\\.", "", ping(...)$version$number) >= 500) "stored_fields" else "fields"
   args <- ec(stats::setNames(list(cl(fields)), field_name), ...)
+  args <- c(args, `_source` = cl(source))
   if (length(args) == 0) args <- NULL
 
   url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), id)
-  if (source) url <- paste(url, '_source', sep = "/")
 
   if (exists) {
     out <- HEAD(url, query = args, c(es_env$headers, mc(make_up(), callopts)))

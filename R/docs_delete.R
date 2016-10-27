@@ -1,4 +1,4 @@
-#' Delete a document.
+#' Delete a document
 #'
 #' @export
 #' @param index (character) The name of the index. Required

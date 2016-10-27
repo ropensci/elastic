@@ -2,7 +2,7 @@
 % Please edit documentation in R/docs_create.R
 \name{docs_create}
 \alias{docs_create}
-\title{Create a document in an index.}
+\title{Create a document}
 \usage{
 docs_create(index, type, id, body, version = NULL, version_type = NULL,
   op_type = NULL, routing = NULL, parent = NULL, timestamp = NULL,
@@ -13,14 +13,15 @@ docs_create(index, type, id, body, version = NULL, version_type = NULL,
 
 \item{type}{(character) The type of the document. Required}
 
-\item{id}{(numeric/character) The document ID. Can be numeric or character. Required}
+\item{id}{(numeric/character) The document ID. Can be numeric or character. 
+Required}
 
 \item{body}{The document.}
 
 \item{version}{(character) Explicit version number for concurrency control}
 
-\item{version_type}{(character) Specific version type. One of internal, external,
-external_gte, or force}
+\item{version_type}{(character) Specific version type. One of internal, 
+external, external_gte, or force}
 
 \item{op_type}{(character) Operation type. One of create, or ...}
 
@@ -31,26 +32,37 @@ external_gte, or force}
 \item{timestamp}{(date) Explicit timestamp for the document}
 
 \item{ttl}{(aka \dQuote{time to live}) Expiration time for the document.
-Expired documents will be expunged automatically. The expiration date that will be set for a
-document with a provided ttl is relative to the timestamp of the document, meaning it can be
-based on the time of indexing or on any time provided. The provided ttl must be strictly
-positive and can be a number (in milliseconds) or any valid time value (e.g, 86400000, 1d).}
+Expired documents will be expunged automatically. The expiration date that 
+will be set for a document with a provided ttl is relative to the timestamp 
+of the document,  meaning it can be based on the time of indexing or on 
+any time provided. The provided ttl must be strictly positive and can be 
+a number (in milliseconds) or any valid time value (e.g, 86400000, 1d).}
 
 \item{refresh}{(logical) Refresh the index after performing the operation}
 
-\item{timeout}{(character) Explicit operation timeout, e.g,. 5m (for 5 minutes)}
+\item{timeout}{(character) Explicit operation timeout, e.g,. 5m (for 
+5 minutes)}
 
-\item{callopts}{Curl args passed on to \code{\link[httr]{DELETE}}}
+\item{callopts}{Curl options passed on to \code{\link[httr]{PUT}}}
 
 \item{...}{Further args to query DSL}
 }
 \description{
-Create a document in an index.
+Create a document
 }
 \examples{
 \dontrun{
-docs_create(index='plos', type='article', id=1002, body=list(id="12345", title="New title"))
-docs_get(index='plos', type='article', id=1002) # and the document is there now
+connect()
+if (!index_exists('plos')) {
+  plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+  invisible(docs_bulk(plosdat))
+}
+
+docs_create(index='plos', type='article', id=1002, 
+  body=list(id="12345", title="New title"))
+
+# and the document is there now
+docs_get(index='plos', type='article', id=1002)
 }
 }
 \references{

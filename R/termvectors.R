@@ -44,11 +44,11 @@
 #' connect()
 #' if (!index_exists('plos')) {
 #'   plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-#'   docs_bulk(plosdat)
+#'   invisible(docs_bulk(plosdat))
 #' }
 #' if (!index_exists('omdb')) {
 #'   omdb <- system.file("examples", "omdb.json", package = "elastic")
-#'   docs_bulk(omdb)
+#'   invisible(docs_bulk(omdb))
 #' }
 #'
 #' body <- '{

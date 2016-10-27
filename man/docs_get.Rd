@@ -2,7 +2,7 @@
 % Please edit documentation in R/docs_get.r
 \name{docs_get}
 \alias{docs_get}
-\title{Get documents via the get API.}
+\title{Get documents}
 \usage{
 docs_get(index, type, id, source = FALSE, fields = NULL, exists = FALSE,
   raw = FALSE, callopts = list(), verbose = TRUE, ...)
@@ -29,7 +29,7 @@ docs_get(index, type, id, source = FALSE, fields = NULL, exists = FALSE,
 \item{...}{Further args passed on to elastic search HTTP API as parameters.}
 }
 \description{
-Get documents via the get API.
+Get documents
 }
 \examples{
 \dontrun{
@@ -38,8 +38,17 @@ docs_get(index='shakespeare', type='line', id=12)
 docs_get(index='shakespeare', type='line', id=12, source=TRUE)
 
 # Get certain fields
-docs_get(index='shakespeare', type='line', id=10, fields='play_name')
-docs_get(index='shakespeare', type='line', id=10, fields=c('play_name','speaker'))
+if (gsub("\\\\.", "", ping()$version$number) < 500) {
+  ### ES < v5
+  docs_get(index='shakespeare', type='line', id=10, fields='play_name')
+  docs_get(index='shakespeare', type='line', id=10, 
+    fields=c('play_name','speaker'))
+} else {
+  ### ES > v5
+  docs_get(index='shakespeare', type='line', id=10, source='play_name')
+  docs_get(index='shakespeare', type='line', id=10, 
+    source=c('play_name','speaker'))
+}
 
 # Just test for existence of the document
 docs_get(index='plos', type='article', id=1, exists=TRUE)

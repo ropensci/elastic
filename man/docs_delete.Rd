@@ -2,7 +2,7 @@
 % Please edit documentation in R/docs_delete.R
 \name{docs_delete}
 \alias{docs_delete}
-\title{Delete a document.}
+\title{Delete a document}
 \usage{
 docs_delete(index, type, id, refresh = NULL, routing = NULL,
   timeout = NULL, version = NULL, version_type = NULL,
@@ -30,7 +30,7 @@ docs_delete(index, type, id, refresh = NULL, routing = NULL,
 \item{...}{Further args to query DSL}
 }
 \description{
-Delete a document.
+Delete a document
 }
 \examples{
 \dontrun{
