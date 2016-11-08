@@ -1,7 +1,7 @@
 ## Test environments
 
-* local OS X install, R 3.3.1
-* ubuntu 12.04 (on travis-ci), R 3.3.1
+* local OS X install, R 3.3.2
+* ubuntu 12.04 (on travis-ci), R 3.3.2
 * win-builder (devel and release)
 
 ## R CMD check results
@@ -20,7 +20,8 @@ License components with restrictions and base license permitting such:
 
 -------
 
-This version includes a bug fix.
+This version includes some new features and bug fixes, and now compatible 
+with Elasticsearch v5
 
 Thanks! 
 Scott Chamberlain

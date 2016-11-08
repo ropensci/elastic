@@ -1,3 +1,29 @@
+elastic 0.7.8
+=============
+
+### NEW FEATURES
+
+* New function `docs_update()` to do partial document updates (#152)
+* New function `docs_bulk_prep()` to prepare bulk format files
+that you can use to load into Elasticsearch with this package, on the 
+command line, or in any other context (Python, Ruby, etc.) (#154)
+
+### MINOR IMPROVEMENTS
+
+* We're no longer running a check that your ES server is up before
+every request to the server. This makes request faster, but may lead to 
+less informative errors when your server is down or in some other state
+than fully operational (#149)
+* Tweaks here and there to make sure `elastic` works with Elasticsearch
+v5. Note that not all v5 features are included here yet. (#153)
+
+### BUG FIXES
+
+* `docs_bulk()` was not working on single column data.frame's. now is
+working. (#151) thanks @gustavobio
+* `docs_*` functions now support ids with whitespace in them. (#155)
+* fixes to `docs_mget()` to fix requesting certain fields back.
+
 elastic 0.7.6
 =============
 
