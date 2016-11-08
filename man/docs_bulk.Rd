@@ -178,4 +178,7 @@ count(db)
 index_delete(db)
 }
 }
+\seealso{
+\code{\link{docs_bulk_prep}}
+}
 
