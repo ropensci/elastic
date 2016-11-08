@@ -12,15 +12,18 @@ docs_get(index, type, id, source = NULL, fields = NULL, exists = FALSE,
 
 \item{type}{(character) The type of the document. Required}
 
-\item{id}{(numeric/character) The document ID. Can be numeric or character. Required}
+\item{id}{(numeric/character) The document ID. Can be numeric or character. 
+Required}
 
 \item{source}{(logical) If \code{TRUE}, return source.}
 
 \item{fields}{Fields to return from the response object.}
 
-\item{exists}{(logical) Only return a logical as to whether the document exists or not.}
+\item{exists}{(logical) Only return a logical as to whether the document 
+exists or not.}
 
-\item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
+\item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw 
+JSON.}
 
 \item{callopts}{Curl args passed on to httr::POST.}
 

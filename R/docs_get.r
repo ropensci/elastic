@@ -3,11 +3,14 @@
 #' @export
 #' @param index (character) The name of the index. Required
 #' @param type (character) The type of the document. Required
-#' @param id (numeric/character) The document ID. Can be numeric or character. Required
+#' @param id (numeric/character) The document ID. Can be numeric or character. 
+#' Required
 #' @param source (logical) If \code{TRUE}, return source.
 #' @param fields Fields to return from the response object.
-#' @param exists (logical) Only return a logical as to whether the document exists or not.
-#' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
+#' @param exists (logical) Only return a logical as to whether the document 
+#' exists or not.
+#' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw 
+#' JSON.
 #' @param callopts Curl args passed on to httr::POST.
 #' @param verbose If TRUE (default) the url call used printed to console.
 #' @param ... Further args passed on to elastic search HTTP API as parameters.
@@ -45,10 +48,11 @@ docs_get <- function(index, type, id, source=NULL, fields=NULL, exists=FALSE,
   # fields parameter changed to stored_fields in Elasticsearch v5.0
   field_name <- if (gsub("\\.", "", ping(...)$version$number) >= 500) "stored_fields" else "fields"
   args <- ec(stats::setNames(list(cl(fields)), field_name), ...)
+  if (inherits(source, "logical")) source <- tolower(source)
   args <- c(args, `_source` = cl(source))
   if (length(args) == 0) args <- NULL
 
-  url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), id)
+  url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), esc(id))
 
   if (exists) {
     out <- HEAD(url, query = args, c(es_env$headers, mc(make_up(), callopts)))

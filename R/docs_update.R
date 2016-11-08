@@ -71,7 +71,7 @@ docs_update <- function(index, type, id, body, fields=NULL, source=NULL,
   wait_for_active_shards=NULL, detect_noop=NULL, callopts=list(), ...) {
 
   url <- make_url(es_get_auth())
-  url <- sprintf("%s/%s/%s/%s/_update", url, esc(index), esc(type), id)
+  url <- sprintf("%s/%s/%s/%s/_update", url, esc(index), esc(type), esc(id))
   query <- ec(
     list(
       version=version, version_type=version_type, routing=routing,

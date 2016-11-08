@@ -3,12 +3,15 @@
 #' @export
 #' @param index (character) The name of the index. Required
 #' @param type (character) The type of the document. Required
-#' @param id (numeric/character) The document ID. Can be numeric or character. Required
+#' @param id (numeric/character) The document ID. Can be numeric or character. 
+#' Required
 #' @param refresh (logical) Refresh the index after performing the operation
 #' @param routing (character) Specific routing value
-#' @param timeout (character) Explicit operation timeout, e.g,. 5m (for 5 minutes)
+#' @param timeout (character) Explicit operation timeout, e.g,. 5m (for 5 
+#' minutes)
 #' @param version (character) Explicit version number for concurrency control
-#' @param version_type (character) Specific version type. One of internal or external
+#' @param version_type (character) Specific version type. One of internal 
+#' or external
 #' @param callopts Curl args passed on to \code{\link[httr]{DELETE}}
 #' @param ... Further args to query DSL
 #' @references
@@ -25,12 +28,12 @@
 #' # docs_get(index='plos', type='article', id=36) # and the document is gone
 #' }
 
-docs_delete <- function(index, type, id, refresh=NULL, routing=NULL, timeout=NULL, version=NULL,
-  version_type=NULL, callopts=list(), ...) {
+docs_delete <- function(index, type, id, refresh=NULL, routing=NULL, 
+  timeout=NULL, version=NULL, version_type=NULL, callopts=list(), ...) {
 
   #checkconn()
   url <- make_url(es_get_auth())
-  url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), id)
+  url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), esc(id))
   args <- ec(list(refresh=refresh, routing=routing, timeout=timeout,
                   version=version, version_type=version_type, ...))
   if (length(args) == 0) args <- NULL

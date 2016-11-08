@@ -2,56 +2,60 @@
 #'
 #' @export
 #' @param x A data.frame or path to a file to load in the bulk API
-#' @param index (character) The index name to use. Required for data.frame input, but
-#' optional for file inputs.
-#' @param type (character) The type name to use. If left as NULL, will be same name as index.
+#' @param index (character) The index name to use. Required for data.frame 
+#' input, but optional for file inputs.
+#' @param type (character) The type name to use. If left as NULL, will be 
+#' same name as index.
 #' @param chunk_size (integer) Size of each chunk. If your data.frame is smaller
-#' thank \code{chunk_size}, this parameter is essentially ignored. We write in chunks because
-#' at some point, depending on size of each document, and Elasticsearch setup, writing a very
-#' large number of documents in one go becomes slow, so chunking can help. This parameter
-#' is ignored if you pass a file name. Default: 1000
-#' @param doc_ids An optional vector (character or numeric/integer) of document ids to use.
-#' This vector has to equal the size of the documents you are passing in, and will error
-#' if not. If you pass a factor we convert to character. Default: not passed
-#' @param es_ids (boolean) Let Elasticsearch assign document IDs as UUIDs. These are sequential,
-#' so there is order to the IDs they assign. If \code{TRUE}, \code{doc_ids} is ignored.
-#' Default: \code{TRUE}
+#' thank \code{chunk_size}, this parameter is essentially ignored. We write in 
+#' chunks because at some point, depending on size of each document, and 
+#' Elasticsearch setup, writing a very large number of documents in one go 
+#' becomes slow, so chunking can help. This parameter is ignored if you 
+#' pass a file name. Default: 1000
+#' @param doc_ids An optional vector (character or numeric/integer) of document 
+#' ids to use. This vector has to equal the size of the documents you are 
+#' passing in, and will error if not. If you pass a factor we convert to 
+#' character. Default: not passed
+#' @param es_ids (boolean) Let Elasticsearch assign document IDs as UUIDs. 
+#' These are sequential, so there is order to the IDs they assign. 
+#' If \code{TRUE}, \code{doc_ids} is ignored. Default: \code{TRUE}
 #' @param raw (logical) Get raw JSON back or not.
 #' @param ... Pass on curl options to \code{\link[httr]{POST}}
 #'
 #' @details More on the Bulk API:
 #' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html}.
 #'
-#' This function dispatches on data.frame or character input. Character input has
-#' to be a file name or the function stops with an error message.
+#' This function dispatches on data.frame or character input. Character input 
+#' has to be a file name or the function stops with an error message.
 #'
-#' If you pass a data.frame to this function, we by default to an index operation,
-#' that is, create the record in the index and type given by those parameters to the
-#' function. Down the road perhaps we will try to support other operations on the
-#' bulk API. if you pass a file, of course in that file, you can specify any
-#' operations you want.
+#' If you pass a data.frame to this function, we by default to an index 
+#' operation, that is, create the record in the index and type given by those 
+#' parameters to the function. Down the road perhaps we will try to support 
+#' other operations on the bulk API. if you pass a file, of course in that 
+#' file, you can specify any operations you want.
 #'
-#' Row names are dropped from data.frame, and top level names for a list are dropped
-#' as well.
+#' Row names are dropped from data.frame, and top level names for a list 
+#' are dropped as well.
 #'
-#' A progress bar gives the progress for data.frames and lists - the progress bar is
-#' based around a for loop, where progress indicates progress along the iterations
-#' of the for loop, where each iteration is a chunk of data that's converted to
-#' bulk format, then pushed into Elasticsearch. The \code{character} method has
-#' no for loop, so no progress bar.
+#' A progress bar gives the progress for data.frames and lists - the progress 
+#' bar is based around a for loop, where progress indicates progress along 
+#' the iterations of the for loop, where each iteration is a chunk of data 
+#' that's converted to bulk format, then pushed into Elasticsearch. The 
+#' \code{character} method has no for loop, so no progress bar.
 #'
 #' @section Document IDs:
-#' Document IDs can be passed in via the \code{doc_ids} paramater when passing in
-#' data.frame or list, but not with files. If ids not passed to \code{doc_ids},
-#' we assign document IDs from 1 to length of the object (rows of a data.frame,
-#' or length of a list). In the future we may allow the user to select whether
+#' Document IDs can be passed in via the \code{doc_ids} paramater when passing 
+#' in data.frame or list, but not with files. If ids not passed to 
+#' \code{doc_ids}, we assign document IDs from 1 to length of the object
+#' (rows of a data.frame, or length of a list). In the future we may allow the 
+#' user to select whether
 #' they want to assign sequential numeric IDs or to allow Elasticsearch to
 #' assign IDs, which are UUIDs that are actually sequential, so you still can
 #' determine an order of your documents.
 #'
 #' @section Large numbers for document IDs:
-#' Until recently, if you had very large integers for document IDs, \code{docs_bulk}
-#' failed. It should be fixed now. Let us know if not.
+#' Until recently, if you had very large integers for document IDs, 
+#' \code{docs_bulk} failed. It should be fixed now. Let us know if not.
 #'
 #' @return A list
 #'
@@ -85,8 +89,9 @@
 #' # out <- docs_bulk(dim_list, index="diamfromlist")
 #'
 #' # When using in a loop
-#' ## We internally get last _id counter to know where to start on next bulk insert
-#' ## but you need to sleep in between docs_bulk calls, longer the bigger the data is
+#' ## We internally get last _id counter to know where to start on next bulk 
+#' ## insert but you need to sleep in between docs_bulk calls, longer the 
+#' ## bigger the data is
 #' files <- c(system.file("examples", "test1.csv", package = "elastic"),
 #'            system.file("examples", "test2.csv", package = "elastic"),
 #'            system.file("examples", "test3.csv", package = "elastic"))
@@ -110,7 +115,8 @@
 #'            (tt[1] + tt[2] + 1):sum(tt))
 #' for (i in seq_along(files)) {
 #'   d <- read.csv(files[[i]])
-#'   docs_bulk(d, index = "testes", type = "docs", doc_ids = ids[[i]], es_ids = FALSE)
+#'   docs_bulk(d, index = "testes", type = "docs", doc_ids = ids[[i]], 
+#'     es_ids = FALSE)
 #' }
 #' count("testes", "docs")
 #' index_delete("testes")

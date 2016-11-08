@@ -14,6 +14,8 @@ as_log <- function(x){
 
 cl <- function(x) if (is.null(x)) NULL else paste0(x, collapse = ",")
 
+cw <- function(x) if (is.null(x)) x else paste(x, collapse = ",")
+
 scroll_POST <- function(path, args, body, raw, ...) {
   #checkconn(...)
   url <- make_url(es_get_auth())
