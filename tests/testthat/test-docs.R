@@ -130,7 +130,6 @@ test_that("document ids with spaces work", {
   # update
   i <- docs_update(index = ind4, type = ind4, id = "hello world", body = list(doc = list(a = "an update")))
   expect_is(i, "list")
-  expect_equal(i$result, "updated")
   
   # delete
   j <- docs_delete(index = ind4, type = ind4, id = "hello world")
