@@ -180,6 +180,14 @@ connect(es_port = 9200)
 #> headers (names):  NULL
 ```
 
+For AWS hosted elasticsearch, make sure to specify `es_path = ""` and the correct port - transport schema pair.
+
+```
+connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 80, es_transport_schema  = "http")
+ # or
+connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 443, es_transport_schema  = "https")
+```
+
 ## Search
 
 Search the `plos` index and only return 1 result
