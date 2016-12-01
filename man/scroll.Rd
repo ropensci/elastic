@@ -16,8 +16,8 @@ scroll_clear(scroll_id = NULL, all = FALSE, ...)
 \item{scroll}{(character) Specify how long a consistent view of the index should be maintained 
 for scrolled search, e.g., "30s", "1m". See \code{\link{units-time}}.}
 
-\item{raw}{(logical) If \code{TRUE} (default), data is parsed to list. 
-If \code{FALSE}, then raw JSON.}
+\item{raw}{(logical) If \code{FALSE} (default), data is parsed to list. 
+If \code{TRUE}, then raw JSON.}
 
 \item{...}{Curl args passed on to \code{\link[httr]{POST}}}
 
