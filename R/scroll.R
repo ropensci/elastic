@@ -125,8 +125,11 @@
 #'  lapply(out2, "[[", "_source")
 #' ) 
 #' }
-scroll <- function(scroll_id, scroll="1m", raw=FALSE, ...){
-  scroll_POST("_search/scroll", args = list(scroll = scroll), body = scroll_id, raw = raw, ...)
+scroll <- function(scroll_id, scroll = "1m", raw = FALSE, stream_opts = list(), ...) {
+  scroll_POST(
+    path = "_search/scroll", 
+    args = list(scroll = scroll), 
+    body = scroll_id, raw = raw, ...)
 }
 
 #' @export

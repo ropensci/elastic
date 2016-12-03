@@ -3,37 +3,39 @@
 #' @name connect
 #' @export
 #'
-#' @param es_host (character) The base host, defaults to \code{127.0.0.1}. Synonym
-#' of \code{es_base}
+#' @param es_host (character) The base host, defaults to \code{127.0.0.1}. 
+#' Synonym of \code{es_base}
 #' @param es_base (character) Synonym of \code{es_host}, and will be gone in a 
 #' future version of \pkg{elastic}
-#' @param es_port (character) port to connect to, defaults to \code{9200} (optional)
+#' @param es_port (character) port to connect to, defaults to \code{9200} 
+#' (optional)
 #' @param es_path (character) context path that is appended to the end of the 
 #' url. Default: NULL, ignored
 #' @param es_transport_schema (character) http or https. Default: \code{http}
-#' @param es_user (character) User name, if required for the connection. You can specify, 
-#' but ignored for now.
-#' @param es_pwd (character) Password, if required for the connection. You can specify, but
-#' ignored for now.
+#' @param es_user (character) User name, if required for the connection. You 
+#' can specify,  but ignored for now.
+#' @param es_pwd (character) Password, if required for the connection. You 
+#' can specify, but ignored for now.
 #' @param force (logical) Force re-load of connection details
-#' @param errors (character) One of simple (Default) or complete. Simple gives http code and 
-#' error message on an error, while complete gives both http code and error message, 
-#' and stack trace, if available.
-#' @param headers Either an object of class \code{request} or a list that can be coerced to 
-#' an object of class \code{request} via \code{\link[httr]{add_headers}}. These headers are 
-#' used in all requests. To use headers in individual requests and not others, pass in 
-#' headers using \code{\link[httr]{add_headers}} via \code{...} in a function call.
+#' @param errors (character) One of simple (Default) or complete. Simple gives 
+#' http code and  error message on an error, while complete gives both http 
+#' code and error message,  and stack trace, if available.
+#' @param headers Either an object of class \code{request} or a list that can 
+#' be coerced to an object of class \code{request} via 
+#' \code{\link[httr]{add_headers}}. These headers are  used in all requests. 
+#' To use headers in individual requests and not others, pass in headers 
+#' using \code{\link[httr]{add_headers}} via \code{...} in a function call.
 #' @param ... Further args passed on to print for the es_conn class.
 #' 
-#' @details The default configuration is set up for localhost access on port 9200,
-#' with no username or password.
+#' @details The default configuration is set up for localhost access on port 
+#' 9200, with no username or password.
 #'
-#' \code{\link{connect}} and \code{\link{connection}} no longer ping the Elasticsearch 
-#' server, but only print your connection details.
+#' \code{\link{connect}} and \code{\link{connection}} no longer ping the 
+#' Elasticsearch server, but only print your connection details.
 #'
-#' Internally, we store your connection settings with environment variables. That means you 
-#' can set your env vars permanently in .Renviron file, and use them on a server e.g., 
-#' as private env vars
+#' Internally, we store your connection settings with environment variables. 
+#' That means you  can set your env vars permanently in .Renviron file, and 
+#' use them on a server e.g., as private env vars
 #' 
 #' @seealso \code{\link{ping}} to check your connection
 #'
@@ -63,7 +65,7 @@
 #' # set headers
 #' connect(headers = list(a = 5))
 #' ## or
-#' connect(headers = add_headers(list(a = 5)))
+#' connect(headers = add_headers(a = 5))
 #' }
 connect <- function(es_host = "127.0.0.1", es_port = 9200, es_path = NULL, 
                     es_transport_schema = "http", es_user = NULL,
@@ -74,7 +76,9 @@ connect <- function(es_host = "127.0.0.1", es_port = 9200, es_path = NULL,
   calls_vec <- "es_base" %in% calls
   if (any(calls_vec)) {
     es_host <- es_base
-    warning("'es_base' will be removed in a future version of this pkg.\nuse 'es_host' going forward", call. = FALSE)
+    warning(
+      paste("'es_base' will be removed in a future version of",
+             "this pkg.\nuse 'es_host' going forward"), call. = FALSE)
   }
   
   # strip off transport if found
@@ -99,15 +103,6 @@ connect <- function(es_host = "127.0.0.1", es_port = 9200, es_path = NULL,
   } else {
     NULL
   }
-  # res <- tryCatch(GET(baseurl, c(userpwd, ...)), error = function(e) e)
-  # if ("error" %in% class(res)) {
-  #   stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting", baseurl), call. = FALSE)
-  # }
-  # if (res$status_code > 200) {
-  #   stop(sprintf("Error:", res$headers$statusmessage), call. = FALSE)
-  # }
-  # tt <- cont_utf8(res)
-  # out <- jsonlite::fromJSON(tt, FALSE)
   
   # errors
   errors <- match.arg(errors, c('simple', 'complete'))
@@ -146,15 +141,7 @@ connection <- function() {
   if (!is.null(auth$path)) {
     baseurl <- file.path(baseurl, auth$path)
   }
-  # res <- tryCatch(GET(baseurl, make_up()), error = function(e) e)
-  # if ("error" %in% class(res)) {
-  #   stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting", baseurl), call. = FALSE)
-  # }
-  # if (res$status_code > 200) {
-  #   stop(sprintf("Error:", res$headers$statusmessage), call. = FALSE)
-  # }
-  # tt <- cont_utf8(res)
-  # out <- jsonlite::fromJSON(tt, FALSE)
+
   structure(list(
     transport = auth$transport,
     host = auth$host, 
@@ -179,14 +166,7 @@ print.es_conn <- function(x, ...){
   cat(paste('password:  ', fun(x$pwd)), "\n")
   cat(paste('errors:    ', fun(x$errors)), "\n")
   cat(paste('headers (names): ', ph(x$headers)), "\n")
-  # cat(paste('Elasticsearch (ES) details:  '), "\n")
-  # cat(paste('   name:                   ', fun(x$es_deets$name)), "\n")
-  # cat(paste('   ES version:             ', fun(x$es_deets$version$number)), "\n")
-  # cat(paste('   ES version timestamp:   ', fun(x$es_deets$version$build_timestamp)), "\n")
-  # cat(paste('   ES build hash:          ', fun(x$es_deets$version$build_hash)), "\n")
-  # cat(paste('   lucene version:         ', fun(x$es_deets$version$lucene_version)))
 }
-
 
 #' Set authentication details
 #' @keywords internal
@@ -197,8 +177,9 @@ print.es_conn <- function(x, ...){
 #' @param es_pwd (character) Password
 #' @param force (logical) Force update
 #' @param es_base (character) deprecated, use es_host
-es_auth <- function(es_host = NULL, es_port = NULL, es_path = NULL, es_transport_schema = NULL, 
-                    es_user = NULL, es_pwd = NULL, force = FALSE, es_base = NULL) {
+es_auth <- function(es_host = NULL, es_port = NULL, es_path = NULL, 
+                    es_transport_schema = NULL, es_user = NULL, es_pwd = NULL, 
+                    force = FALSE, es_base = NULL) {
   
   calls <- names(sapply(match.call(), deparse))[-1]
   calls_vec <- "es_base" %in% calls

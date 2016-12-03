@@ -16,17 +16,24 @@ cl <- function(x) if (is.null(x)) NULL else paste0(x, collapse = ",")
 
 cw <- function(x) if (is.null(x)) x else paste(x, collapse = ",")
 
-scroll_POST <- function(path, args, body, raw, ...) {
-  #checkconn(...)
+scroll_POST <- function(path, args, body, raw, stream_opts, ...) {
   url <- make_url(es_get_auth())
   tt <- POST(file.path(url, path), make_up(), es_env$headers, ..., query = args, body = body)
   geterror(tt)
   res <- cont_utf8(tt)
-  if (raw) res else jsonlite::fromJSON(res, FALSE)
+  if (raw) {
+    res 
+  } else {
+    if (length(stream_opts) != 0) {
+      stream_opts$con <- textConnection(tt)
+      do.call(jsonlite::stream_in, stream_opts)
+    } else {
+      jsonlite::fromJSON(res, FALSE)
+    }
+  }
 }
 
 scroll_DELETE <- function(path, body, ...) {
-  #checkconn(...)
   url <- make_url(es_get_auth())
   tt <- DELETE(file.path(url, path), make_up(), es_env$headers, ..., body = body, encode = "json")
   geterror(tt)
