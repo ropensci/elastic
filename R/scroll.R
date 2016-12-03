@@ -7,8 +7,8 @@
 #' \code{scroll_clear}, one or more scroll id's
 #' @param scroll (character) Specify how long a consistent view of the index should be maintained 
 #' for scrolled search, e.g., "30s", "1m". See \code{\link{units-time}}.
-#' @param raw (logical) If \code{TRUE} (default), data is parsed to list. 
-#' If \code{FALSE}, then raw JSON.
+#' @param raw (logical) If \code{FALSE} (default), data is parsed to list. 
+#' If \code{TRUE}, then raw JSON.
 #' @param all (logical) If \code{TRUE} (default) then all search contexts cleared. 
 #' If \code{FALSE}, scroll id's must be passed to \code{scroll_id}
 #' @param ... Curl args passed on to \code{\link[httr]{POST}}
