@@ -5,7 +5,7 @@
 \alias{scroll_clear}
 \title{Scroll search function}
 \usage{
-scroll(scroll_id, scroll = "1m", raw = FALSE, ...)
+scroll(scroll_id, scroll = "1m", raw = FALSE, stream_opts = list(), ...)
 
 scroll_clear(scroll_id = NULL, all = FALSE, ...)
 }
@@ -13,16 +13,17 @@ scroll_clear(scroll_id = NULL, all = FALSE, ...)
 \item{scroll_id}{(character) For \code{scroll}, a single scroll id; for 
 \code{scroll_clear}, one or more scroll id's}
 
-\item{scroll}{(character) Specify how long a consistent view of the index should be maintained 
-for scrolled search, e.g., "30s", "1m". See \code{\link{units-time}}.}
+\item{scroll}{(character) Specify how long a consistent view of the index 
+should be maintained for scrolled search, e.g., "30s", "1m". 
+See \code{\link{units-time}}.}
 
 \item{raw}{(logical) If \code{FALSE} (default), data is parsed to list. 
 If \code{TRUE}, then raw JSON.}
 
 \item{...}{Curl args passed on to \code{\link[httr]{POST}}}
 
-\item{all}{(logical) If \code{TRUE} (default) then all search contexts cleared. 
-If \code{FALSE}, scroll id's must be passed to \code{scroll_id}}
+\item{all}{(logical) If \code{TRUE} (default) then all search contexts 
+cleared.  If \code{FALSE}, scroll id's must be passed to \code{scroll_id}}
 }
 \description{
 Scroll search function
@@ -50,14 +51,16 @@ res <- Search(index = 'shakespeare', q="a*", scroll="1m")
 res$`_scroll_id`
 
 # Setting search_type=scan turns off sorting of results, is faster
-res <- Search(index = 'shakespeare', q="a*", scroll="1m", search_type = "scan")
+res <- Search(index = 'shakespeare', q="a*", scroll="1m", 
+  search_type = "scan")
 res$`_scroll_id`
 
 # Pass scroll_id to scroll function
 scroll(scroll_id = res$`_scroll_id`)
 
 # Get all results - one approach is to use a while loop
-res <- Search(index = 'shakespeare', q="a*", scroll="5m", search_type = "scan")
+res <- Search(index = 'shakespeare', q="a*", scroll="5m", 
+  search_type = "scan")
 out <- list()
 hits <- 1
 while(hits != 0){
@@ -71,20 +74,26 @@ out[[1]]
 
 # clear scroll
 ## individual scroll id
-res <- Search(index = 'shakespeare', q="a*", scroll="5m", search_type = "scan")
+res <- Search(index = 'shakespeare', q="a*", scroll="5m", 
+  search_type = "scan")
 scroll_clear(scroll_id = res$`_scroll_id`)
 
 ## many scroll ids
-res1 <- Search(index = 'shakespeare', q="c*", scroll="5m", search_type = "scan")
-res2 <- Search(index = 'shakespeare', q="d*", scroll="5m", search_type = "scan")
+res1 <- Search(index = 'shakespeare', q="c*", scroll="5m", 
+  search_type = "scan")
+res2 <- Search(index = 'shakespeare', q="d*", scroll="5m", 
+  search_type = "scan")
 nodes_stats(metric = "indices")$nodes[[1]]$indices$search$open_contexts
 scroll_clear(scroll_id = c(res1$`_scroll_id`, res2$`_scroll_id`))
 nodes_stats(metric = "indices")$nodes[[1]]$indices$search$open_contexts
 
 ## all scroll ids
-res1 <- Search(index = 'shakespeare', q="f*", scroll="1m", search_type = "scan")
-res2 <- Search(index = 'shakespeare', q="g*", scroll="1m", search_type = "scan")
-res3 <- Search(index = 'shakespeare', q="k*", scroll="1m", search_type = "scan")
+res1 <- Search(index = 'shakespeare', q="f*", scroll="1m", 
+  search_type = "scan")
+res2 <- Search(index = 'shakespeare', q="g*", scroll="1m", 
+  search_type = "scan")
+res3 <- Search(index = 'shakespeare', q="k*", scroll="1m", 
+  search_type = "scan")
 scroll_clear(all = TRUE)
 
 ## sliced scrolling

@@ -5,12 +5,13 @@
 #' 
 #' @param scroll_id (character) For \code{scroll}, a single scroll id; for 
 #' \code{scroll_clear}, one or more scroll id's
-#' @param scroll (character) Specify how long a consistent view of the index should be maintained 
-#' for scrolled search, e.g., "30s", "1m". See \code{\link{units-time}}.
+#' @param scroll (character) Specify how long a consistent view of the index 
+#' should be maintained for scrolled search, e.g., "30s", "1m". 
+#' See \code{\link{units-time}}.
 #' @param raw (logical) If \code{FALSE} (default), data is parsed to list. 
 #' If \code{TRUE}, then raw JSON.
-#' @param all (logical) If \code{TRUE} (default) then all search contexts cleared. 
-#' If \code{FALSE}, scroll id's must be passed to \code{scroll_id}
+#' @param all (logical) If \code{TRUE} (default) then all search contexts 
+#' cleared.  If \code{FALSE}, scroll id's must be passed to \code{scroll_id}
 #' @param ... Curl args passed on to \code{\link[httr]{POST}}
 #' 
 #' @seealso \code{\link{Search}}
@@ -35,14 +36,16 @@
 #' res$`_scroll_id`
 #' 
 #' # Setting search_type=scan turns off sorting of results, is faster
-#' res <- Search(index = 'shakespeare', q="a*", scroll="1m", search_type = "scan")
+#' res <- Search(index = 'shakespeare', q="a*", scroll="1m", 
+#'   search_type = "scan")
 #' res$`_scroll_id`
 #' 
 #' # Pass scroll_id to scroll function
 #' scroll(scroll_id = res$`_scroll_id`)
 #' 
 #' # Get all results - one approach is to use a while loop
-#' res <- Search(index = 'shakespeare', q="a*", scroll="5m", search_type = "scan")
+#' res <- Search(index = 'shakespeare', q="a*", scroll="5m", 
+#'   search_type = "scan")
 #' out <- list()
 #' hits <- 1
 #' while(hits != 0){
@@ -56,20 +59,26 @@
 #' 
 #' # clear scroll
 #' ## individual scroll id
-#' res <- Search(index = 'shakespeare', q="a*", scroll="5m", search_type = "scan")
+#' res <- Search(index = 'shakespeare', q="a*", scroll="5m", 
+#'   search_type = "scan")
 #' scroll_clear(scroll_id = res$`_scroll_id`)
 #' 
 #' ## many scroll ids
-#' res1 <- Search(index = 'shakespeare', q="c*", scroll="5m", search_type = "scan")
-#' res2 <- Search(index = 'shakespeare', q="d*", scroll="5m", search_type = "scan")
+#' res1 <- Search(index = 'shakespeare', q="c*", scroll="5m", 
+#'   search_type = "scan")
+#' res2 <- Search(index = 'shakespeare', q="d*", scroll="5m", 
+#'   search_type = "scan")
 #' nodes_stats(metric = "indices")$nodes[[1]]$indices$search$open_contexts
 #' scroll_clear(scroll_id = c(res1$`_scroll_id`, res2$`_scroll_id`))
 #' nodes_stats(metric = "indices")$nodes[[1]]$indices$search$open_contexts
 #' 
 #' ## all scroll ids
-#' res1 <- Search(index = 'shakespeare', q="f*", scroll="1m", search_type = "scan")
-#' res2 <- Search(index = 'shakespeare', q="g*", scroll="1m", search_type = "scan")
-#' res3 <- Search(index = 'shakespeare', q="k*", scroll="1m", search_type = "scan")
+#' res1 <- Search(index = 'shakespeare', q="f*", scroll="1m", 
+#'   search_type = "scan")
+#' res2 <- Search(index = 'shakespeare', q="g*", scroll="1m", 
+#'   search_type = "scan")
+#' res3 <- Search(index = 'shakespeare', q="k*", scroll="1m", 
+#'   search_type = "scan")
 #' scroll_clear(all = TRUE)
 #' 
 #' ## sliced scrolling
@@ -125,11 +134,13 @@
 #'  lapply(out2, "[[", "_source")
 #' ) 
 #' }
-scroll <- function(scroll_id, scroll = "1m", raw = FALSE, stream_opts = list(), ...) {
+scroll <- function(scroll_id, scroll = "1m", raw = FALSE, 
+                   stream_opts = list(), ...) {
+  
   scroll_POST(
     path = "_search/scroll", 
     args = list(scroll = scroll), 
-    body = scroll_id, raw = raw, ...)
+    body = scroll_id, raw = raw, stream_opts = stream_opts, ...)
 }
 
 #' @export
@@ -139,7 +150,8 @@ scroll_clear <- function(scroll_id = NULL, all = FALSE, ...) {
     path <- "_search/scroll/_all" 
     body <- NULL
   } else {
-    if (is.null(scroll_id)) stop("if all=FALSE scroll_id must not be NULL", call. = FALSE)
+    if (is.null(scroll_id)) stop("if all=FALSE scroll_id must not be NULL", 
+                                 call. = FALSE)
     path <- "_search/scroll"
     body <- list(scroll_id = scroll_id)
   }
