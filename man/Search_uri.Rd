@@ -10,7 +10,8 @@ Search_uri(index = NULL, type = NULL, q = NULL, df = NULL,
   timeout = NULL, terminate_after = NULL, from = NULL, size = NULL,
   search_type = NULL, lowercase_expanded_terms = NULL,
   analyze_wildcard = NULL, version = FALSE, lenient = FALSE,
-  raw = FALSE, asdf = FALSE, search_path = "_search", ...)
+  raw = FALSE, asdf = FALSE, search_path = "_search",
+  stream_opts = list(), ...)
 }
 \arguments{
 \item{index}{Index name, one or more}
@@ -105,13 +106,13 @@ to \code{_search}, but in some cases you may already have that in the base
 url set using \code{\link{connect}}, in which case you can set this
 to \code{NULL}}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}}}
-
 \item{stream_opts}{(list) A list of options passed to 
-\code{\link[curl]{stream_out}} - Except that you can't pass \code{x} as 
+\code{\link[jsonlite]{stream_out}} - Except that you can't pass \code{x} as 
 that's the data that's streamed out, and pass a file path instead of a 
-connection to \code{con}. \code{pagesize} param doesn’t do much as 
+connection to \code{con}. \code{pagesize} param doesn't do much as 
 that's more or less controlled by paging with ES.}
+
+\item{...}{Curl args passed on to \code{\link[httr]{POST}}}
 }
 \description{
 Full text search of Elasticsearch with URI search
