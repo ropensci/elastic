@@ -697,4 +697,14 @@
 #' }'
 #' x <- Search("shakespeare", body = body)
 #' x$hits$total
+#' 
+#' 
+#' # stream data out using jsonlite::stream_out
+#' connect()
+#' file <- tempfile()
+#' res <- Search("shakespeare", size = 1000, stream_opts = list(file = file))
+#' head(df <- jsonlite::stream_in(file(file)))
+#' NROW(df)
+#' unlink(file)
+#' 
 #' }

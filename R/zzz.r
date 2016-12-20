@@ -16,26 +16,37 @@ cl <- function(x) if (is.null(x)) NULL else paste0(x, collapse = ",")
 
 cw <- function(x) if (is.null(x)) x else paste(x, collapse = ",")
 
-scroll_POST <- function(path, args, body, raw, stream_opts, ...) {
+scroll_POST <- function(path, args, body, raw, asdf, stream_opts, ...) {
   url <- make_url(es_get_auth())
-  tt <- POST(file.path(url, path), make_up(), es_env$headers, ..., query = args, body = body)
+  tt <- POST(file.path(url, path), make_up(), es_env$headers, ..., 
+             query = args, body = body)
   geterror(tt)
   res <- cont_utf8(tt)
   if (raw) {
     res 
   } else {
     if (length(stream_opts) != 0) {
-      stream_opts$con <- textConnection(tt)
-      do.call(jsonlite::stream_in, stream_opts)
+      dat <- jsonlite::fromJSON(res, flatten = TRUE)
+      stream_opts$x <- dat$hits$hits
+      if (length(stream_opts$x) != 0) {
+        stream_opts$con <- file(stream_opts$file, open = "ab")
+        stream_opts$file <- NULL
+        do.call(jsonlite::stream_out, stream_opts)
+        close(stream_opts$con)
+      } else {
+        warning("no scroll results remain", call. = FALSE)
+      }
+      return(list(`_scroll_id` = dat$`_scroll_id`))
     } else {
-      jsonlite::fromJSON(res, FALSE)
+      jsonlite::fromJSON(res, asdf, flatten = TRUE)
     }
   }
 }
 
 scroll_DELETE <- function(path, body, ...) {
   url <- make_url(es_get_auth())
-  tt <- DELETE(file.path(url, path), make_up(), es_env$headers, ..., body = body, encode = "json")
+  tt <- DELETE(file.path(url, path), make_up(), es_env$headers, ..., 
+               body = body, encode = "json")
   geterror(tt)
   tt$status_code == 200
 }

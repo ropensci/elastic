@@ -10,6 +10,14 @@
 #' See \code{\link{units-time}}.
 #' @param raw (logical) If \code{FALSE} (default), data is parsed to list. 
 #' If \code{TRUE}, then raw JSON.
+#' @param asdf (logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} 
+#' to parse JSON directly to a data.frame. If \code{FALSE} (Default), list 
+#' output is given.
+#' @param stream_opts (list) A list of options passed to 
+#' \code{\link[curl]{stream_out}} - Except that you can't pass \code{x} as 
+#' that's the data that's streamed out, and pass a file path instead of a 
+#' connection to \code{con}. \code{pagesize} param doesn’t do much as 
+#' that's more or less controlled by paging with ES.
 #' @param all (logical) If \code{TRUE} (default) then all search contexts 
 #' cleared.  If \code{FALSE}, scroll id's must be passed to \code{scroll_id}
 #' @param ... Curl args passed on to \code{\link[httr]{POST}}
@@ -132,15 +140,45 @@
 #' c(
 #'  lapply(out1, "[[", "_source"),
 #'  lapply(out2, "[[", "_source")
-#' ) 
+#' )
+#' 
+#' 
+#' # using jsonlite::stream_out
+#' connect()
+#' res <- Search(scroll = "1m")
+#' file <- tempfile()
+#' scroll(
+#'   scroll_id = res$`_scroll_id`, 
+#'   stream_opts = list(file = file)
+#' )
+#' jsonlite::stream_in(file(file))
+#' unlink(file)
+#' 
+#' ## stream_out and while loop
+#' connect()
+#' (file <- tempfile())
+#' res <- Search(index = "shakespeare", scroll = "5m", 
+#'   size = 1000, stream_opts = list(file = file))
+#' while(!inherits(res, "warning")) {
+#'   res <- tryCatch(scroll(
+#'     scroll_id = res$`_scroll_id`, 
+#'     scroll = "5m",
+#'     stream_opts = list(file = file)
+#'   ), warning = function(w) w)
 #' }
-scroll <- function(scroll_id, scroll = "1m", raw = FALSE, 
+#' NROW(df <- jsonlite::stream_in(file(file)))
+#' head(df)
+#' }
+scroll <- function(scroll_id, scroll = "1m", raw = FALSE, asdf = FALSE, 
                    stream_opts = list(), ...) {
   
   scroll_POST(
     path = "_search/scroll", 
     args = list(scroll = scroll), 
-    body = scroll_id, raw = raw, stream_opts = stream_opts, ...)
+    body = scroll_id, 
+    raw = raw, 
+    asdf = asdf, 
+    stream_opts = stream_opts, ...)
 }
 
 #' @export

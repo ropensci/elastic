@@ -5,7 +5,8 @@
 \alias{scroll_clear}
 \title{Scroll search function}
 \usage{
-scroll(scroll_id, scroll = "1m", raw = FALSE, stream_opts = list(), ...)
+scroll(scroll_id, scroll = "1m", raw = FALSE, asdf = FALSE,
+  stream_opts = list(), ...)
 
 scroll_clear(scroll_id = NULL, all = FALSE, ...)
 }
@@ -19,6 +20,16 @@ See \code{\link{units-time}}.}
 
 \item{raw}{(logical) If \code{FALSE} (default), data is parsed to list. 
 If \code{TRUE}, then raw JSON.}
+
+\item{asdf}{(logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} 
+to parse JSON directly to a data.frame. If \code{FALSE} (Default), list 
+output is given.}
+
+\item{stream_opts}{(list) A list of options passed to 
+\code{\link[curl]{stream_out}} - Except that you can't pass \code{x} as 
+that's the data that's streamed out, and pass a file path instead of a 
+connection to \code{con}. \code{pagesize} param doesn’t do much as 
+that's more or less controlled by paging with ES.}
 
 \item{...}{Curl args passed on to \code{\link[httr]{POST}}}
 
@@ -147,7 +158,34 @@ while(hits != 0){
 c(
  lapply(out1, "[[", "_source"),
  lapply(out2, "[[", "_source")
-) 
+)
+
+
+# using jsonlite::stream_out
+connect()
+res <- Search(scroll = "1m")
+file <- tempfile()
+scroll(
+  scroll_id = res$`_scroll_id`, 
+  stream_opts = list(file = file)
+)
+jsonlite::stream_in(file(file))
+unlink(file)
+
+## stream_out and while loop
+connect()
+(file <- tempfile())
+res <- Search(index = "shakespeare", scroll = "5m", 
+  size = 1000, stream_opts = list(file = file))
+while(!inherits(res, "warning")) {
+  res <- tryCatch(scroll(
+    scroll_id = res$`_scroll_id`, 
+    scroll = "5m",
+    stream_opts = list(file = file)
+  ), warning = function(w) w)
+}
+NROW(df <- jsonlite::stream_in(file(file)))
+head(df)
 }
 }
 \references{
