@@ -87,7 +87,12 @@
 #' ## Get raw data
 #' Search_uri(index="shakespeare", type="scene", raw=TRUE)
 #'
-#' ## Curl debugging
+#' ## Curl options
 #' library('httr')
+#' 
+#' ### verbose
 #' out <- Search_uri(index="shakespeare", type="line", config=verbose())
+#' 
+#' ### print progress
+#' res <- Search_uri(config = progress(), size = 5000)
 #' }

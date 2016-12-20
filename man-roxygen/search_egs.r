@@ -119,9 +119,14 @@
 #' ## Get raw data
 #' Search(index="shakespeare", type="scene", raw=TRUE)
 #'
-#' ## Curl debugging
+#' ## Curl options
 #' library('httr')
-#' out <- Search(index="shakespeare", type="line", config=verbose())
+#' 
+#' ### verbose 
+#' out <- Search(index="shakespeare", type="line", config = verbose())
+#' 
+#' ### print progress
+#' res <- Search(config = progress(), size = 5000)
 #'
 #'
 #'
