@@ -8,7 +8,7 @@
 \alias{type_exists}
 \title{Mapping management}
 \usage{
-mapping_create(index, type, body, ...)
+mapping_create(index, type, body, update_all_types = FALSE, ...)
 
 mapping_get(index = NULL, type = NULL, ...)
 
@@ -24,7 +24,10 @@ type_exists(index, type, ...)
 
 \item{body}{(list) Either a list or json, representing the query.}
 
-\item{...}{Curl options passed on to \code{\link[httr]{HEAD}} or other http verbs}
+\item{update_all_types}{(logical) update all types. default: \code{FALSE}}
+
+\item{...}{Curl options passed on to \code{\link[httr]{HEAD}} or other 
+http verbs}
 
 \item{field}{(character) One or more field names}
 
@@ -106,6 +109,16 @@ body <- '{
  }
 }'
 mapping_create("gbifgeopoint", "record", body = body)
+
+# update_all_fields, see also ?fielddata
+mapping_create("shakespeare", update_all_types=TRUE, body = '{
+  "properties": {
+    "speaker": { 
+      "type":     "text",
+      "fielddata": true
+    }
+  }
+}')
 }
 }
 

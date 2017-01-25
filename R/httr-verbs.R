@@ -93,10 +93,11 @@ es_DELETE <- function(url, query = NULL, ...) {
   jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }
 
-es_PUT <- function(url, body = list(), ...) {
+es_PUT <- function(url, body = list(), args = list(), ...) {
   #checkconn(...)
   body <- check_inputs(body)
-  tt <- PUT(url, body = body, encode = 'json', c(make_up(), es_env$headers, ...))
+  tt <- PUT(url, body = body, query = args, 
+            encode = 'json', c(make_up(), es_env$headers, ...))
   geterror(tt)
   jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }

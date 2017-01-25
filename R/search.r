@@ -14,6 +14,7 @@
 #' to \code{NULL}
 #' @seealso  \code{\link{Search_uri}} \code{\link{Search_template}} 
 #' \code{\link{scroll}} \code{\link{count}} \code{\link{validate}}
+#' \code{\link{fielddata}}
 
 Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, 
   default_operator=NULL, explain=NULL, source=NULL, fields=NULL, sort=NULL, 

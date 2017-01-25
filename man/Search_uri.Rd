@@ -126,7 +126,13 @@ Search_uri(index="shakespeare", type="scene")
 Search_uri(index="shakespeare", type="line")
 
 ## Return certain fields
-Search_uri(index="shakespeare", fields=c('play_name','speaker'))
+if (gsub("\\\\.", "", ping()$version$number) < 500) {
+  ### ES < v5
+  Search_uri(index="shakespeare", fields=c('play_name','speaker'))
+} else {
+  ### ES > v5
+  Search_uri(index="shakespeare", source=c('play_name','speaker'))
+}
 
 ## Search many indices
 Search_uri(index = "gbif")$hits$total
@@ -134,6 +140,7 @@ Search_uri(index = "shakespeare")$hits$total
 Search_uri(index = c("gbif", "shakespeare"))$hits$total
 
 ## search_type
+## NOTE: If you're in ES V5 or greater, see \\code{?fielddata}
 Search_uri(index="shakespeare", search_type = "query_then_fetch")
 Search_uri(index="shakespeare", search_type = "dfs_query_then_fetch")
 # Search_uri(index="shakespeare", search_type = "scan") # only when scrolling
@@ -218,7 +225,9 @@ res <- Search_uri(config = progress(), size = 5000)
 }
 }
 \seealso{
+\code{\link{fielddata}}
+
 \code{\link{Search}} \code{\link{Search_template}}
-\code{\link{count}}
+\code{\link{count}} \code{\link{fielddata}}
 }
 

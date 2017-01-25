@@ -846,5 +846,6 @@ unlink(file)
 \seealso{
 \code{\link{Search_uri}} \code{\link{Search_template}} 
 \code{\link{scroll}} \code{\link{count}} \code{\link{validate}}
+\code{\link{fielddata}}
 }
 
