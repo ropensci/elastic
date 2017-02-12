@@ -6,7 +6,7 @@ elastic
 [![Build Status](https://api.travis-ci.org/ropensci/elastic.svg)](https://travis-ci.org/ropensci/elastic)
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/elastic?color=E664A4)](https://github.com/metacran/cranlogs.app)
 [![cran version](http://www.r-pkg.org/badges/version/elastic)](https://cran.r-project.org/package=elastic)
-<!-- [![codecov.io](https://codecov.io/github/ropensci/elastic/coverage.svg?branch=master)](https://codecov.io/github/ropensci/elastic?branch=master) -->
+[![codecov.io](https://codecov.io/github/ropensci/elastic/coverage.svg?branch=master)](https://codecov.io/github/ropensci/elastic?branch=master)
 <!-- [![Build status](https://ci.appveyor.com/api/projects/status/swmmw758mf1heoj2/branch/master)](https://ci.appveyor.com/project/sckott/elastic/branch/master) -->
 
 **A general purpose R interface to [Elasticsearch](https://www.elastic.co/products/elasticsearch)**
