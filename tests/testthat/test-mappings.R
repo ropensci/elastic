@@ -12,7 +12,7 @@ test_that("type_exists works", {
   
   res <- tryCatch(docs_get("plos", "article", id=39, verbose = FALSE), 
                   error = function(e) e)
-  if (!is(res, 'error')) {
+  if (!inherits(res, 'error')) {
     docs_create("plos", "article", id=39, body=list(id="12345", title="New title"))
   }
   te1 <- type_exists(index = "plos", type = "article")

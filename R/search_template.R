@@ -105,19 +105,22 @@ Search_template <- function(body = list(), raw = FALSE, ...) {
   if (gsub("\\.", "", ping(...)$version$number) < 110) {
     stop("search template not available in this ES version", call. = FALSE)
   }
-  search_POST("_search/template", args = list(), body = body, raw = raw, asdf = FALSE, ...)
+  search_POST("_search/template", args = list(), body = body, raw = raw, 
+              asdf = FALSE, stream_opt = list(), ...)
 }
 
 #' @export
 #' @rdname Search_template
-Search_template_register <- function(template, body = list(), raw = FALSE, ...) {
+Search_template_register <- function(template, body = list(), raw = FALSE, 
+                                     ...) {
   # search template render added in Elasticsearch v1.1, stop if version pre that
   if (gsub("\\.", "", ping(...)$version$number) < 110) {
     stop("search template not available in this ES version", call. = FALSE)
   }
   search_POST(
     paste0("_search/template/", template),
-    args = list(), body = body, raw = raw, asdf = FALSE, ...
+    args = list(), body = body, raw = raw, asdf = FALSE, 
+    stream_opt = list(), ...
   )
 }
 
@@ -152,5 +155,6 @@ Search_template_render <- function(body = list(), raw = FALSE, ...) {
   if (gsub("\\.", "", ping(...)$version$number) < 200) {
     stop("render template not available in this ES version", call. = FALSE)
   }
-  search_POST("_render/template", args = list(), body = body, raw = raw, asdf = FALSE, ...)
+  search_POST("_render/template", args = list(), body = body, raw = raw, 
+              asdf = FALSE, stream_opt = list(), ...)
 }

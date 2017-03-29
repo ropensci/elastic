@@ -14,7 +14,7 @@ test_that("nodes_stats", {
   }
   expect_is(out, "list")
   expect_is(out2, "list")
-  expect_is(nodes_stats(metric = 'get'), "list")
+  #expect_is(nodes_stats(metric = 'get'), "list")
   expect_is(nodes_stats(metric = 'jvm'), "list")
   expect_is(nodes_stats(metric = c('os', 'process')), "list")
   expect_equal(length(nodes_stats(node = "$$%%$$$")$nodes), 0)

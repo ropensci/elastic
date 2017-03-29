@@ -40,7 +40,7 @@ test_that("basic Search_template works", {
   expect_is(a, "list")
   expect_is(a$hits$hits, "list")
   expect_equal(
-    unique(sapply(a$hits$hits, "[[", c('_source', 'Species'))),
+    unique(vapply(a$hits$hits, "[[", "", c('_source', 'Species'))),
     "setosa"
   )
   expect_equal(length(a$hits$hits), 3)
@@ -111,7 +111,7 @@ test_that("search_template fails as expected", {
   }
   
   if (gsub("\\.", "", ping()$version$number) >= 500) {
-    expect_error(Search_template(body = 5), "Compressor detection can only be called")
+    expect_error(Search_template(body = 5), "Content-Type header")
   } else {
     expect_error(Search_template(body = 5), "all shards failed")
   }

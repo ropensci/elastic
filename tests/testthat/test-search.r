@@ -121,8 +121,13 @@ test_that("Search fails as expected", {
 
   aggs <- list(aggs = list(stats = list(stfff = list(field = "text_entry"))))
   if (gsub("\\.", "", ping()$version$number) >= 500) {
-    expect_error(Search(index = "shakespeare", body = aggs), 
-                 "Could not find aggregator type \\[stfff\\] in \\[stats\\]")
+    if (gsub("\\.", "", ping()$version$number) >= 530) {
+      expect_error(Search(index = "shakespeare", body = aggs), 
+                   "Unknown BaseAggregationBuilder \\[stfff\\]")
+    } else {
+      expect_error(Search(index = "shakespeare", body = aggs), 
+                   "Could not find aggregator type \\[stfff\\] in \\[stats\\]")
+    }
   } else {
     expect_error(Search(index = "shakespeare", body = aggs), "all shards failed")
   }
