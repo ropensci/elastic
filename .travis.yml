@@ -10,7 +10,8 @@ env:
   - ES_VERSION=2.1.0
   - ES_VERSION=2.2.0
   - ES_VERSION=2.3.0
-  - ES_VERSION=2.3.5
+  - ES_VERSION=5.0.0
+  - ES_VERSION=5.3.0
 
 before_install:
   - case "$ES_VERSION" in
@@ -51,13 +52,13 @@ before_install:
       curl -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/$ES_VERSION/elasticsearch-$ES_VERSION.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION.deb && sudo service elasticsearch start
       ;;
 
-    "2.3.5")
-      export ES_VERSION=2.3.5 ;
-      curl -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/$ES_VERSION/elasticsearch-$ES_VERSION.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION.deb && sudo service elasticsearch start
-      ;;
-
     "5.0.0")
       export ES_VERSION=5.0.0 ;
+      curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ES_VERSION.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION.deb && sudo service elasticsearch start
+      ;;
+
+    "5.3.0")
+      export ES_VERSION=5.3.0 ;
       curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ES_VERSION.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION.deb && sudo service elasticsearch start
       ;;
    esac
