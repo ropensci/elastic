@@ -2,11 +2,11 @@
 % Please edit documentation in R/alias.R
 \name{alias}
 \alias{alias}
-\alias{alias_create}
-\alias{alias_delete}
-\alias{alias_exists}
 \alias{alias_get}
 \alias{aliases_get}
+\alias{alias_exists}
+\alias{alias_create}
+\alias{alias_delete}
 \title{Elasticsearch alias APIs}
 \usage{
 alias_get(index = NULL, alias = NULL, ignore_unavailable = FALSE, ...)
@@ -61,10 +61,9 @@ alias_create(index = "plos", alias = "tables")
 aliases_get(alias = "tables", config=verbose())
 }
 }
-\author{
-Scott Chamberlain <myrmecocystus@gmail.com>
-}
 \references{
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-aliases.html}
 }
-
+\author{
+Scott Chamberlain <myrmecocystus@gmail.com>
+}

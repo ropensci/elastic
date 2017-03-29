@@ -123,4 +123,3 @@ unlist(paths)
 \seealso{
 \code{\link{docs_bulk}}
 }
-

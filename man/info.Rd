@@ -18,4 +18,3 @@ connect()
 info()
 }
 }
-

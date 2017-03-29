@@ -48,4 +48,3 @@ validate("twitter", body = body)
 \seealso{
 \code{\link{Search}}
 }
-

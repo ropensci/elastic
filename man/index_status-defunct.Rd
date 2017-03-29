@@ -10,4 +10,3 @@ index_status(...)
 This function is defunct
 }
 \keyword{internal}
-

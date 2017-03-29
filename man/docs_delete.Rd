@@ -51,4 +51,3 @@ docs_delete(index='plos', type='article', id=36)
 \references{
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html}
 }
-

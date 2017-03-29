@@ -10,4 +10,3 @@ mapping_delete(...)
 Mapping delete
 }
 \keyword{internal}
-

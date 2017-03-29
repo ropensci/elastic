@@ -2,20 +2,21 @@
 % Please edit documentation in R/parsers.r
 \name{es_parse}
 \alias{es_parse}
-\alias{es_parse.bulk_make}
-\alias{es_parse.elastic_cluster_health}
-\alias{es_parse.elastic_cluster_pending_tasks}
-\alias{es_parse.elastic_cluster_settings}
-\alias{es_parse.elastic_cluster_state}
-\alias{es_parse.elastic_cluster_stats}
-\alias{es_parse.elastic_mget}
-\alias{es_parse.elastic_nodes_info}
-\alias{es_parse.elastic_nodes_stats}
-\alias{es_parse.elastic_search}
-\alias{es_parse.elastic_stats}
-\alias{es_parse.elastic_status}
 \alias{es_parse.es_GET}
 \alias{es_parse.index_delete}
+\alias{es_parse.bulk_make}
+\alias{es_parse.elastic_mget}
+\alias{es_parse.elastic_search}
+\alias{es_parse.elastic_status}
+\alias{es_parse.elastic_stats}
+\alias{es_parse.elastic_cluster_health}
+\alias{es_parse.elastic_cluster_health}
+\alias{es_parse.elastic_cluster_state}
+\alias{es_parse.elastic_cluster_settings}
+\alias{es_parse.elastic_cluster_stats}
+\alias{es_parse.elastic_cluster_pending_tasks}
+\alias{es_parse.elastic_nodes_stats}
+\alias{es_parse.elastic_nodes_info}
 \title{Parse raw data from es_get, es_mget, or es_search.}
 \usage{
 es_parse(input, parsetype, verbose)
@@ -77,4 +78,3 @@ function to parse that data (a es_* S3 object) after the fact to a list of
 data.frame's for easier consumption.
 }
 \keyword{internal}
-

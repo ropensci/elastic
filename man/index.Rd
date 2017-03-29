@@ -2,23 +2,23 @@
 % Please edit documentation in R/index.R
 \name{index}
 \alias{index}
-\alias{index_analyze}
-\alias{index_clear_cache}
-\alias{index_close}
-\alias{index_create}
-\alias{index_delete}
-\alias{index_exists}
-\alias{index_flush}
 \alias{index_get}
-\alias{index_open}
-\alias{index_optimize}
-\alias{index_recovery}
+\alias{index_exists}
+\alias{index_delete}
+\alias{index_create}
 \alias{index_recreate}
-\alias{index_segments}
+\alias{index_close}
+\alias{index_open}
+\alias{index_stats}
 \alias{index_settings}
 \alias{index_settings_update}
-\alias{index_stats}
+\alias{index_segments}
+\alias{index_recovery}
+\alias{index_optimize}
 \alias{index_upgrade}
+\alias{index_analyze}
+\alias{index_flush}
+\alias{index_clear_cache}
 \title{Index API operations}
 \usage{
 index_get(index = NULL, features = NULL, raw = FALSE, verbose = TRUE,
@@ -339,10 +339,9 @@ index_settings_update("foobar", body = settings)
 index_get("foobar")$foobar$settings
 }
 }
-\author{
-Scott Chamberlain <myrmecocystus@gmail.com>
-}
 \references{
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices.html}
 }
-
+\author{
+Scott Chamberlain <myrmecocystus@gmail.com>
+}

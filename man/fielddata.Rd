@@ -55,4 +55,3 @@ You may get an error about \code{update_all_types}, in which case set
 See \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/fielddata.html#_enabling_fielddata_on_literal_text_literal_fields}
 for more information.
 }
-

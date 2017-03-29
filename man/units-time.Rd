@@ -22,4 +22,3 @@ s \tab Second \cr
 \seealso{
 \code{\link{units-distance}}
 }
-

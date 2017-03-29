@@ -2,11 +2,11 @@
 % Please edit documentation in R/percolater.R
 \name{percolate}
 \alias{percolate}
+\alias{percolate_register}
+\alias{percolate_match}
+\alias{percolate_list}
 \alias{percolate_count}
 \alias{percolate_delete}
-\alias{percolate_list}
-\alias{percolate_match}
-\alias{percolate_register}
 \title{Percolater}
 \usage{
 percolate_register(index, type = NULL, id, body = list(), routing = NULL,
@@ -157,4 +157,3 @@ percolate_delete(index = "myindex", id = 2)
 \references{
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-percolate.html}
 }
-

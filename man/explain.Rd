@@ -80,4 +80,3 @@ explain(index = "plos", type = "article", id = 14, body=body)
 \references{
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-explain.html}
 }
-

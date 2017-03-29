@@ -35,4 +35,3 @@ There are five functions to work directly with documents.
 # docs_bulk(plosdat)
 }
 }
-

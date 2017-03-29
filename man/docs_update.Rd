@@ -100,4 +100,3 @@ docs_update(index='stuffthings', type='thing', id=1,
 \references{
 \url{http://bit.ly/2eVYqLz}
 }
-

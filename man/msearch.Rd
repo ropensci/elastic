@@ -39,4 +39,3 @@ msearch("~/mysearch.json")
 \seealso{
 \code{\link{Search_uri}} \code{\link{Search}}
 }
-

@@ -60,4 +60,3 @@ field_stats(body = body, level = "indices", index = "gbif")
 \seealso{
 \code{\link{Search_uri}} \code{\link{Search}} \code{\link{msearch}}
 }
-

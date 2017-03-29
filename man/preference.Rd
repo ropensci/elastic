@@ -25,4 +25,3 @@ Preferences.
  session id, or the user name.
 }
 }
-

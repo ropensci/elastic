@@ -27,4 +27,3 @@ es_auth(es_host = NULL, es_port = NULL, es_path = NULL,
 Set authentication details
 }
 \keyword{internal}
-

@@ -19,4 +19,3 @@
  of deleting a mapping, delete the index and recreate with a new mapping.
 }
 }
-

@@ -2,9 +2,9 @@
 % Please edit documentation in R/nodes.R
 \name{nodes}
 \alias{nodes}
-\alias{nodes_hot_threads}
-\alias{nodes_info}
 \alias{nodes_stats}
+\alias{nodes_info}
+\alias{nodes_hot_threads}
 \title{Elasticsearch nodes endpoints.}
 \usage{
 nodes_stats(node = NULL, metric = NULL, raw = FALSE, fields = NULL,
@@ -86,4 +86,3 @@ nodes_info(metric='network')
 nodes_hot_threads()
 }
 }
-

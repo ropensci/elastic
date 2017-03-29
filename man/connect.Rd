@@ -93,4 +93,3 @@ connect(headers = add_headers(a = 5))
 \seealso{
 \code{\link{ping}} to check your connection
 }
-

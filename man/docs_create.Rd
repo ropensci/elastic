@@ -68,4 +68,3 @@ docs_get(index='plos', type='article', id=1002)
 \references{
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html}
 }
-

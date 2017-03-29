@@ -10,4 +10,3 @@ nodes_shutdown(...)
 This function is defunct
 }
 \keyword{internal}
-

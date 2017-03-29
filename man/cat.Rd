@@ -6,18 +6,18 @@
 \alias{cat_aliases}
 \alias{cat_allocation}
 \alias{cat_count}
-\alias{cat_fielddata}
+\alias{cat_segments}
 \alias{cat_health}
 \alias{cat_indices}
 \alias{cat_master}
-\alias{cat_nodeattrs}
 \alias{cat_nodes}
+\alias{cat_nodeattrs}
 \alias{cat_pending_tasks}
 \alias{cat_plugins}
 \alias{cat_recovery}
-\alias{cat_segments}
-\alias{cat_shards}
 \alias{cat_thread_pool}
+\alias{cat_shards}
+\alias{cat_fielddata}
 \title{Use the cat Elasticsearch api.}
 \usage{
 cat_(parse = FALSE, ...)
@@ -153,4 +153,3 @@ library("httr")
 cat_count(config=verbose())
 }
 }
-

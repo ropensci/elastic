@@ -20,4 +20,3 @@ ping()
 \seealso{
 \code{\link{connect}}
 }
-

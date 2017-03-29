@@ -81,6 +81,7 @@ determine an order of your documents.
 Until recently, if you had very large integers for document IDs, 
 \code{docs_bulk} failed. It should be fixed now. Let us know if not.
 }
+
 \examples{
 \dontrun{
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
@@ -181,4 +182,3 @@ index_delete(db)
 \seealso{
 \code{\link{docs_bulk_prep}}
 }
-

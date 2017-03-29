@@ -48,4 +48,3 @@ index_analyze(text = "hello world", index = "test1", analyzer='my_ngram_analyzer
 \author{
 Scott Chamberlain <myrmecocystus@gmail.com>
 }
-

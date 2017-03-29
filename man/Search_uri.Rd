@@ -230,4 +230,3 @@ res <- Search_uri(config = progress(), size = 5000)
 \code{\link{Search}} \code{\link{Search_template}}
 \code{\link{count}} \code{\link{fielddata}}
 }
-

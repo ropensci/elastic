@@ -102,4 +102,3 @@ termvectors('omdb', 'omdb', 'AVXdx8Eqg_0Z_tpMDyP_', body = body)
 \references{
 \url{http://www.elastic.co/guide/en/elasticsearch/reference/current/docs-termvectors.html}
 }
-

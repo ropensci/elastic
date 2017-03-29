@@ -28,4 +28,3 @@ of the geohash.
 \seealso{
 \code{\link{units-time}}
 }
-

@@ -55,6 +55,7 @@ using \code{scroll_clear}
 
 See the example in this man file.
 }
+
 \examples{
 \dontrun{
 # Get a scroll_id
@@ -194,4 +195,3 @@ head(df)
 \seealso{
 \code{\link{Search}}
 }
-

@@ -2,12 +2,12 @@
 % Please edit documentation in R/cluster.R
 \name{cluster}
 \alias{cluster}
-\alias{cluster_health}
-\alias{cluster_pending_tasks}
-\alias{cluster_reroute}
 \alias{cluster_settings}
+\alias{cluster_health}
 \alias{cluster_state}
 \alias{cluster_stats}
+\alias{cluster_reroute}
+\alias{cluster_pending_tasks}
 \title{Elasticsearch cluster endpoints}
 \usage{
 cluster_settings(index = NULL, raw = FALSE, callopts = list(),
@@ -147,4 +147,3 @@ cluster_health()
 # cluster_health(wait_for_status = "yellow", timeout = "3s")
 }
 }
-

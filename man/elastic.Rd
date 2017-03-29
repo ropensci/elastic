@@ -4,6 +4,7 @@
 \name{elastic}
 \alias{elastic}
 \alias{elastic-package}
+\alias{elastic-package}
 \title{elastic: An Elasticsearch R client.}
 \description{
 elastic: An Elasticsearch R client.
@@ -92,7 +93,7 @@ The following are illegal characters, and can not be used in index names or type
 \code{\\}, \code{/}, \code{*}, \code{?}, \code{<}, 
 \code{>}, \code{|}, \code{,} (comma). double quote and whitespace are also illegal.
 }
+
 \author{
 Scott Chamberlain \email{myrmecocystus@gmail.com}
 }
-
