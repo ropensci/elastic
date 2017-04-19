@@ -1,7 +1,7 @@
 #' Use the bulk API to create, index, update, or delete documents.
 #'
 #' @export
-#' @param x A data.frame or path to a file to load in the bulk API
+#' @param x A list, data.frame, or character path to a file. required.
 #' @param index (character) The index name to use. Required for data.frame 
 #' input, but optional for file inputs.
 #' @param type (character) The type name to use. If left as NULL, will be 

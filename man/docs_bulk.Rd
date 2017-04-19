@@ -8,7 +8,7 @@ docs_bulk(x, index = NULL, type = NULL, chunk_size = 1000,
   doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...)
 }
 \arguments{
-\item{x}{A data.frame or path to a file to load in the bulk API}
+\item{x}{A list, data.frame, or character path to a file. required.}
 
 \item{index}{(character) The index name to use. Required for data.frame 
 input, but optional for file inputs.}
