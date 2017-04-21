@@ -90,6 +90,9 @@ had an \code{NA} were dropped - but when you read data back from
 Elasticsearch into R, you retain those missing values as \pkg{jsonlite}
 fills those in for you. Now, fields with \code{NA}'s are made into 
 \code{null}, and are not dropped in Elasticsearch.
+
+Note also that null values can not be indexed or searched 
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/5.3/null-value.html}
 }
 
 \section{Tips}{

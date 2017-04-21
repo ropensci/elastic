@@ -106,7 +106,7 @@ Search_template <- function(body = list(), raw = FALSE, ...) {
     stop("search template not available in this ES version", call. = FALSE)
   }
   search_POST("_search/template", args = list(), body = body, raw = raw, 
-              asdf = FALSE, stream_opt = list(), ...)
+              asdf = FALSE, stream_opts = list(), ...)
 }
 
 #' @export
@@ -120,7 +120,7 @@ Search_template_register <- function(template, body = list(), raw = FALSE,
   search_POST(
     paste0("_search/template/", template),
     args = list(), body = body, raw = raw, asdf = FALSE, 
-    stream_opt = list(), ...
+    stream_opts = list(), ...
   )
 }
 
@@ -156,5 +156,5 @@ Search_template_render <- function(body = list(), raw = FALSE, ...) {
     stop("render template not available in this ES version", call. = FALSE)
   }
   search_POST("_render/template", args = list(), body = body, raw = raw, 
-              asdf = FALSE, stream_opt = list(), ...)
+              asdf = FALSE, stream_opts = list(), ...)
 }
