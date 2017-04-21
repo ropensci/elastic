@@ -54,3 +54,45 @@ test_that("docs_bulk_prep fails as expected", {
   expect_error(docs_bulk_prep(TRUE), "no 'docs_bulk_prep' method for class logical")
   expect_error(docs_bulk_prep("adfadf"), "no 'docs_bulk_prep' method for class character")
 })
+
+test_that("dataset with NA's", {
+  # data.frame
+  test4 <- mtcars
+  row.names(test4) <- NULL
+  test4$mpg[1] <- NA
+  test4$disp[1] <- NA
+  test4$wt[1] <- NA
+  res <- invisible(docs_bulk_prep(test4, "mtcars", "mtcars.json"))
+  
+  expect_is(res, "character")
+  expect_equal(res, "mtcars.json")
+  
+  lns <- readLines(res)
+  expect_is(lns, "character")
+  expect_gt(length(lns), 20)
+  expect_identical(
+    jsonlite::fromJSON(lns[2]),
+    structure(
+      list(mpg = NULL, cyl = 6L, disp = NULL, hp = 110L, drat = 3.9, 
+           wt = NULL, qsec = 16.46, vs = 0L, am = 1L, gear = 4L, carb = 4L), 
+      .Names = c('mpg', 'cyl', 'disp', 'hp', 'drat', 'wt', 'qsec', 'vs', 'am', 'gear', 'carb'))
+  )
+  
+  # list
+  mtcarslist <- apply(test4, 1, as.list)
+  res <- invisible(docs_bulk_prep(mtcarslist, "mtcars", "mtcarslist.json"))
+  
+  expect_is(res, "character")
+  expect_equal(res, "mtcarslist.json")
+  
+  lns <- readLines(res)
+  expect_is(lns, "character")
+  expect_gt(length(lns), 20)
+  expect_identical(
+    jsonlite::fromJSON(lns[2]),
+    structure(
+      list(mpg = NULL, cyl = 6L, disp = NULL, hp = 110L, drat = 3.9, 
+           wt = NULL, qsec = 16.46, vs = 0L, am = 1L, gear = 4L, carb = 4L),  
+      .Names = c('mpg', 'cyl', 'disp', 'hp', 'drat', 'wt', 'qsec', 'vs', 'am', 'gear', 'carb'))
+  )
+})

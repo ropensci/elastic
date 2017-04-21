@@ -58,6 +58,23 @@
 #' @section Large numbers for document IDs:
 #' Until recently, if you had very large integers for document IDs, 
 #' \code{docs_bulk} failed. It should be fixed now. Let us know if not.
+#' 
+#' @section Missing data:
+#' As of \pkg{elastic} version \code{0.7.8.9515} we convert \code{NA} to 
+#' \code{null} before loading into Elasticsearch. Previously, fields that
+#' had an \code{NA} were dropped - but when you read data back from 
+#' Elasticsearch into R, you retain those missing values as \pkg{jsonlite}
+#' fills those in for you. Now, fields with \code{NA}'s are made into 
+#' \code{null}, and are not dropped in Elasticsearch.
+#' 
+#' Note also that null values can not be indexed or searched 
+#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/5.3/null-value.html}
+#' 
+#' @section Tips:
+#' This function returns the response from Elasticsearch, but you'll likely
+#' not be that interested in the response. If not, wrap your call to 
+#' \code{docs_bulk} in \code{\link{invisible}}, like so: 
+#' \code{invisible(docs_bulk(...))}
 #'
 #' @return A list
 #'

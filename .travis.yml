@@ -13,6 +13,9 @@ env:
   - ES_VERSION=5.0.0
   - ES_VERSION=5.3.0
 
+r_github_packages:
+  - jimhester/covr
+
 before_install:
   - case "$ES_VERSION" in
     "") ;;
