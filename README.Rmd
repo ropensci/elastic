@@ -123,7 +123,7 @@ shakespeare <- system.file("examples", "shakespeare_data.json", package = "elast
 Then load the data into Elasticsearch:
 
 ```{r eval=FALSE}
-docs_bulk(shakespeare)
+invisible(docs_bulk(shakespeare))
 ```
 
 If you need some big data to play with, the shakespeare dataset is a good one to start with. You can get the whole thing and pop it into Elasticsearch (beware, may take up to 10 minutes or so.):
@@ -139,7 +139,7 @@ A dataset inluded in the `elastic` package is metadata for PLOS scholarly articl
 
 ```{r eval=FALSE}
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-docs_bulk(plosdat)
+invisible(docs_bulk(plosdat))
 ```
 
 ### Global Biodiversity Information Facility (GBIF) data
@@ -148,14 +148,14 @@ A dataset inluded in the `elastic` package is data for GBIF species occurrence r
 
 ```{r eval=FALSE}
 gbifdat <- system.file("examples", "gbif_data.json", package = "elastic")
-docs_bulk(gbifdat)
+invisible(docs_bulk(gbifdat))
 ```
 
 GBIF geo data with a coordinates element to allow `geo_shape` queries
 
 ```{r eval=FALSE}
 gbifgeo <- system.file("examples", "gbif_geo.json", package = "elastic")
-docs_bulk(gbifgeo)
+invisible(docs_bulk(gbifgeo))
 ```
 
 ### More data sets
@@ -172,7 +172,7 @@ connect(es_port = 9200)
 
 For AWS hosted elasticsearch, make sure to specify es_path = "" and the correct port - transport schema pair.
 
-```{r}
+```{r eval=FALSE}
 connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 80, es_transport_schema  = "http")
   # or
 connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 443, es_transport_schema  = "https")
@@ -186,10 +186,10 @@ Search the `plos` index and only return 1 result
 Search(index = "plos", size = 1)$hits$hits
 ```
 
-Search the `plos` index, and the `article` document type, sort by title, and query for _antibody_, limit to 1 result
+Search the `plos` index, and the `article` document type, and query for _antibody_, limit to 1 result
 
 ```{r}
-Search(index = "plos", type = "article", sort = "title", q = "antibody", size = 1)$hits$hits
+Search(index = "plos", type = "article", q = "antibody", size = 1)$hits$hits
 ```
 
 ## Get documents
@@ -254,4 +254,4 @@ jsonlite::fromJSON(out)
 * Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md).
 By participating in this project you agree to abide by its terms.
 
-[![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
+[![rofooter](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)

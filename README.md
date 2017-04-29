@@ -80,7 +80,7 @@ __on OSX__
 
 + Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.3.0.tar.gz`
 + Extract: `tar -zxvf elasticsearch-5.3.0.tar.gz`
-+ Move it: `sudo mv elasticsearch-5.3.0 /usr/local` (replace version with your version)
++ Move it: `sudo mv elasticsearch-5.3.0 /usr/local`
 + Navigate to /usr/local: `cd /usr/local`
 + Delete symlinked `elasticsearch` directory: `rm -rf elasticsearch`
 + Add shortcut: `sudo ln -s elasticsearch-5.3.0 elasticsearch` (replace version with your version)
@@ -121,7 +121,7 @@ Then load the data into Elasticsearch:
 
 
 ```r
-docs_bulk(shakespeare)
+invisible(docs_bulk(shakespeare))
 ```
 
 If you need some big data to play with, the shakespeare dataset is a good one to start with. You can get the whole thing and pop it into Elasticsearch (beware, may take up to 10 minutes or so.):
@@ -138,7 +138,7 @@ A dataset inluded in the `elastic` package is metadata for PLOS scholarly articl
 
 ```r
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-docs_bulk(plosdat)
+invisible(docs_bulk(plosdat))
 ```
 
 ### Global Biodiversity Information Facility (GBIF) data
@@ -148,7 +148,7 @@ A dataset inluded in the `elastic` package is data for GBIF species occurrence r
 
 ```r
 gbifdat <- system.file("examples", "gbif_data.json", package = "elastic")
-docs_bulk(gbifdat)
+invisible(docs_bulk(gbifdat))
 ```
 
 GBIF geo data with a coordinates element to allow `geo_shape` queries
@@ -156,7 +156,7 @@ GBIF geo data with a coordinates element to allow `geo_shape` queries
 
 ```r
 gbifgeo <- system.file("examples", "gbif_geo.json", package = "elastic")
-docs_bulk(gbifgeo)
+invisible(docs_bulk(gbifgeo))
 ```
 
 ### More data sets
@@ -170,21 +170,22 @@ The function `connect()` is used before doing anything else to set the connectio
 
 ```r
 connect(es_port = 9200)
-#> transport:  http
-#> host:       127.0.0.1
-#> port:       9200
-#> path:       NULL
-#> username:   NULL
-#> password:   <secret>
-#> errors:     simple
+#> transport:  http 
+#> host:       127.0.0.1 
+#> port:       9200 
+#> path:       NULL 
+#> username:   NULL 
+#> password:   <secret> 
+#> errors:     simple 
 #> headers (names):  NULL
 ```
 
-For AWS hosted elasticsearch, make sure to specify `es_path = ""` and the correct port - transport schema pair.
+For AWS hosted elasticsearch, make sure to specify es_path = "" and the correct port - transport schema pair.
 
-```
+
+```r
 connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 80, es_transport_schema  = "http")
- # or
+  # or
 connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 443, es_transport_schema  = "https")
 ```
 
@@ -198,53 +199,48 @@ Search(index = "plos", size = 1)$hits$hits
 #> [[1]]
 #> [[1]]$`_index`
 #> [1] "plos"
-#>
+#> 
 #> [[1]]$`_type`
 #> [1] "article"
-#>
+#> 
 #> [[1]]$`_id`
 #> [1] "0"
-#>
+#> 
 #> [[1]]$`_score`
 #> [1] 1
-#>
+#> 
 #> [[1]]$`_source`
 #> [[1]]$`_source`$id
 #> [1] "10.1371/journal.pone.0007737"
-#>
+#> 
 #> [[1]]$`_source`$title
 #> [1] "Phospholipase C-β4 Is Essential for the Progression of the Normal Sleep Sequence and Ultradian Body Temperature Rhythms in Mice"
 ```
 
-Search the `plos` index, and the `article` document type, sort by title, and query for _antibody_, limit to 1 result
+Search the `plos` index, and the `article` document type, and query for _antibody_, limit to 1 result
 
 
 ```r
-Search(index = "plos", type = "article", sort = "title", q = "antibody", size = 1)$hits$hits
+Search(index = "plos", type = "article", q = "antibody", size = 1)$hits$hits
 #> [[1]]
 #> [[1]]$`_index`
 #> [1] "plos"
-#>
+#> 
 #> [[1]]$`_type`
 #> [1] "article"
-#>
+#> 
 #> [[1]]$`_id`
 #> [1] "568"
-#>
+#> 
 #> [[1]]$`_score`
-#> NULL
-#>
+#> [1] 4.165291
+#> 
 #> [[1]]$`_source`
 #> [[1]]$`_source`$id
 #> [1] "10.1371/journal.pone.0085002"
-#>
+#> 
 #> [[1]]$`_source`$title
 #> [1] "Evaluation of 131I-Anti-Angiotensin II Type 1 Receptor Monoclonal Antibody as a Reporter for Hepatocellular Carcinoma"
-#>
-#>
-#> [[1]]$sort
-#> [[1]]$sort[[1]]
-#> [1] "1"
 ```
 
 ## Get documents
@@ -256,23 +252,23 @@ Get document with id=1
 docs_get(index = 'plos', type = 'article', id = 4)
 #> $`_index`
 #> [1] "plos"
-#>
+#> 
 #> $`_type`
 #> [1] "article"
-#>
+#> 
 #> $`_id`
 #> [1] "4"
-#>
+#> 
 #> $`_version`
 #> [1] 1
-#>
+#> 
 #> $found
 #> [1] TRUE
-#>
+#> 
 #> $`_source`
 #> $`_source`$id
 #> [1] "10.1371/journal.pone.0107758"
-#>
+#> 
 #> $`_source`$title
 #> [1] "Lactobacilli Inactivate Chlamydia trachomatis through Lactic Acid but Not H2O2"
 ```
@@ -284,23 +280,18 @@ Get certain fields
 docs_get(index = 'plos', type = 'article', id = 4, fields = 'id')
 #> $`_index`
 #> [1] "plos"
-#>
+#> 
 #> $`_type`
 #> [1] "article"
-#>
+#> 
 #> $`_id`
 #> [1] "4"
-#>
+#> 
 #> $`_version`
 #> [1] 1
-#>
+#> 
 #> $found
 #> [1] TRUE
-#>
-#> $fields
-#> $fields$id
-#> $fields$id[[1]]
-#> [1] "10.1371/journal.pone.0107758"
 ```
 
 
@@ -315,48 +306,48 @@ docs_mget(index = "plos", type = "article", id = 1:2)
 #> $docs[[1]]
 #> $docs[[1]]$`_index`
 #> [1] "plos"
-#>
+#> 
 #> $docs[[1]]$`_type`
 #> [1] "article"
-#>
+#> 
 #> $docs[[1]]$`_id`
 #> [1] "1"
-#>
+#> 
 #> $docs[[1]]$`_version`
 #> [1] 1
-#>
+#> 
 #> $docs[[1]]$found
 #> [1] TRUE
-#>
+#> 
 #> $docs[[1]]$`_source`
 #> $docs[[1]]$`_source`$id
 #> [1] "10.1371/journal.pone.0098602"
-#>
+#> 
 #> $docs[[1]]$`_source`$title
 #> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
-#>
-#>
-#>
+#> 
+#> 
+#> 
 #> $docs[[2]]
 #> $docs[[2]]$`_index`
 #> [1] "plos"
-#>
+#> 
 #> $docs[[2]]$`_type`
 #> [1] "article"
-#>
+#> 
 #> $docs[[2]]$`_id`
 #> [1] "2"
-#>
+#> 
 #> $docs[[2]]$`_version`
 #> [1] 1
-#>
+#> 
 #> $docs[[2]]$found
 #> [1] TRUE
-#>
+#> 
 #> $docs[[2]]$`_source`
 #> $docs[[2]]$`_source`$id
 #> [1] "10.1371/journal.pone.0107757"
-#>
+#> 
 #> $docs[[2]]$`_source`$title
 #> [1] "Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition"
 ```
@@ -368,23 +359,23 @@ Different indeces, types, and ids
 docs_mget(index_type_id = list(c("plos", "article", 1), c("gbif", "record", 1)))$docs[[1]]
 #> $`_index`
 #> [1] "plos"
-#>
+#> 
 #> $`_type`
 #> [1] "article"
-#>
+#> 
 #> $`_id`
 #> [1] "1"
-#>
+#> 
 #> $`_version`
 #> [1] 1
-#>
+#> 
 #> $found
 #> [1] TRUE
-#>
+#> 
 #> $`_source`
 #> $`_source`$id
 #> [1] "10.1371/journal.pone.0098602"
-#>
+#> 
 #> $`_source`$title
 #> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
 ```
@@ -434,4 +425,4 @@ jsonlite::fromJSON(out)
 * Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md).
 By participating in this project you agree to abide by its terms.
 
-[![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
+[![rofooter](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)

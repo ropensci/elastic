@@ -794,6 +794,26 @@
 #'   x$hits$total
 #' }
 #' 
+#' # Suggestions
+#' sugg <- '{
+#'  "query" : {
+#'     "match" : {
+#'       "text_entry" : "late"
+#'      }
+#'  },  
+#'  "suggest" : {
+#'    "sugg" : {
+#'      "text" : "late",
+#'      "term" : {
+#'          "field" : "text_entry"
+#'       }
+#'     }
+#'   }
+#' }'
+#' Search(index = "shakespeare", "line", body = sugg, 
+#'   asdf = TRUE, size = 0)$suggest$sugg$options
+#'
+#' 
 #' 
 #' # stream data out using jsonlite::stream_out
 #' file <- tempfile()

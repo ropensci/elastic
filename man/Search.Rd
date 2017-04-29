@@ -39,7 +39,7 @@ scoring of the hits was computed. Default: \code{FALSE}}
 \code{_source} field. You can also retrieve part of the document by 
 using \code{_source_include} & \code{_source_exclude} (see the \code{body} 
 documentation for more details). You can also include a comma-delimited 
-string of fields from the source document  that you want back. See also 
+string of fields from the source document that you want back. See also 
 the \strong{fields} parameter}
 
 \item{fields}{(character) The selective stored fields of the document to 
@@ -918,6 +918,26 @@ if (gsub("\\\\.", "", ping()$version$number) < 500) {
   x <- Search("shakespeare", body = body)
   x$hits$total
 }
+
+# Suggestions
+sugg <- '{
+ "query" : {
+    "match" : {
+      "text_entry" : "late"
+     }
+ },  
+ "suggest" : {
+   "sugg" : {
+     "text" : "late",
+     "term" : {
+         "field" : "text_entry"
+      }
+    }
+  }
+}'
+Search(index = "shakespeare", "line", body = sugg, 
+  asdf = TRUE, size = 0)$suggest$sugg$options
+
 
 
 # stream data out using jsonlite::stream_out
