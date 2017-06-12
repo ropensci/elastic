@@ -64,7 +64,7 @@
 #'
 #' # Get field mappings
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-#' docs_bulk(plosdat)
+#' invisible(docs_bulk(plosdat))
 #' field_mapping_get(index = "_all", type=c('article', 'line'), field = "text")
 #' field_mapping_get(index = "plos", type = "article", field = "title")
 #' field_mapping_get(index = "plos", type = "article", field = "*")
@@ -74,7 +74,7 @@
 #'
 #' # Create geospatial mapping
 #' file <- system.file("examples", "gbif_geopoint.json", package = "elastic")
-#' docs_bulk(file)
+#' invisible(docs_bulk(file))
 #' body <- '{
 #'  "properties" : {
 #'    "location" : { "type" : "geo_point" }
@@ -83,7 +83,7 @@
 #' mapping_create("gbifgeopoint", "record", body = body)
 #' 
 #' # update_all_fields, see also ?fielddata
-#' mapping_create("shakespeare", update_all_types=TRUE, body = '{
+#' mapping_create("shakespeare", "record", update_all_types=TRUE, body = '{
 #'   "properties": {
 #'     "speaker": { 
 #'       "type":     "text",

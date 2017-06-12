@@ -87,6 +87,14 @@ connect <- function(es_host = "127.0.0.1", es_port = 9200, es_path = NULL,
     es_host <- sub("^http[s]?://", "", es_host)
   }
   
+  # normalize es_path
+  if (!is.null(es_path)) {
+    if (grepl("/$", es_path)) {
+      message("Normalizing path: stripping trailing slash")
+      es_path <- sub("/$", "", es_path)
+    }
+  }
+  
   auth <- es_auth(es_host = es_host, es_port = es_port, es_path = es_path,
                   es_transport_schema = es_transport_schema, es_user = es_user,
                   es_pwd = es_pwd, force = force)

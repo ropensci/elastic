@@ -23,7 +23,7 @@ Also check out `elasticdsl` - an R DSL for Elasticsearch - [https://github.com/r
 
 ## Compatibility
 
-This client is developed following the latest stable releases, currently `v5.3.0`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
+This client is developed following the latest stable releases, currently `v5.4.0`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
 
 ## Security
 
@@ -78,12 +78,12 @@ If you're using boot2docker, you'll need to use the IP address in place of local
 
 __on OSX__
 
-+ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.3.0.tar.gz`
-+ Extract: `tar -zxvf elasticsearch-5.3.0.tar.gz`
-+ Move it: `sudo mv elasticsearch-5.3.0 /usr/local`
++ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.4.0.tar.gz`
++ Extract: `tar -zxvf elasticsearch-5.4.0.tar.gz`
++ Move it: `sudo mv elasticsearch-5.4.0 /usr/local`
 + Navigate to /usr/local: `cd /usr/local`
 + Delete symlinked `elasticsearch` directory: `rm -rf elasticsearch`
-+ Add shortcut: `sudo ln -s elasticsearch-5.3.0 elasticsearch` (replace version with your version)
++ Add shortcut: `sudo ln -s elasticsearch-5.4.0 elasticsearch` (replace version with your version)
 
 You can also install via Homebrew: `brew install elasticsearch`
 
@@ -196,25 +196,7 @@ Search the `plos` index and only return 1 result
 
 ```r
 Search(index = "plos", size = 1)$hits$hits
-#> [[1]]
-#> [[1]]$`_index`
-#> [1] "plos"
-#> 
-#> [[1]]$`_type`
-#> [1] "article"
-#> 
-#> [[1]]$`_id`
-#> [1] "0"
-#> 
-#> [[1]]$`_score`
-#> [1] 1
-#> 
-#> [[1]]$`_source`
-#> [[1]]$`_source`$id
-#> [1] "10.1371/journal.pone.0007737"
-#> 
-#> [[1]]$`_source`$title
-#> [1] "Phospholipase C-β4 Is Essential for the Progression of the Normal Sleep Sequence and Ultradian Body Temperature Rhythms in Mice"
+#> Error: 404 - no such index
 ```
 
 Search the `plos` index, and the `article` document type, and query for _antibody_, limit to 1 result
@@ -222,25 +204,7 @@ Search the `plos` index, and the `article` document type, and query for _antibod
 
 ```r
 Search(index = "plos", type = "article", q = "antibody", size = 1)$hits$hits
-#> [[1]]
-#> [[1]]$`_index`
-#> [1] "plos"
-#> 
-#> [[1]]$`_type`
-#> [1] "article"
-#> 
-#> [[1]]$`_id`
-#> [1] "568"
-#> 
-#> [[1]]$`_score`
-#> [1] 4.165291
-#> 
-#> [[1]]$`_source`
-#> [[1]]$`_source`$id
-#> [1] "10.1371/journal.pone.0085002"
-#> 
-#> [[1]]$`_source`$title
-#> [1] "Evaluation of 131I-Anti-Angiotensin II Type 1 Receptor Monoclonal Antibody as a Reporter for Hepatocellular Carcinoma"
+#> Error: 404 - no such index
 ```
 
 ## Get documents
@@ -250,27 +214,7 @@ Get document with id=1
 
 ```r
 docs_get(index = 'plos', type = 'article', id = 4)
-#> $`_index`
-#> [1] "plos"
-#> 
-#> $`_type`
-#> [1] "article"
-#> 
-#> $`_id`
-#> [1] "4"
-#> 
-#> $`_version`
-#> [1] 1
-#> 
-#> $found
-#> [1] TRUE
-#> 
-#> $`_source`
-#> $`_source`$id
-#> [1] "10.1371/journal.pone.0107758"
-#> 
-#> $`_source`$title
-#> [1] "Lactobacilli Inactivate Chlamydia trachomatis through Lactic Acid but Not H2O2"
+#> Error: 404 - no such index
 ```
 
 Get certain fields
@@ -278,20 +222,7 @@ Get certain fields
 
 ```r
 docs_get(index = 'plos', type = 'article', id = 4, fields = 'id')
-#> $`_index`
-#> [1] "plos"
-#> 
-#> $`_type`
-#> [1] "article"
-#> 
-#> $`_id`
-#> [1] "4"
-#> 
-#> $`_version`
-#> [1] 1
-#> 
-#> $found
-#> [1] TRUE
+#> Error: 404 - no such index
 ```
 
 
@@ -313,18 +244,46 @@ docs_mget(index = "plos", type = "article", id = 1:2)
 #> $docs[[1]]$`_id`
 #> [1] "1"
 #> 
-#> $docs[[1]]$`_version`
-#> [1] 1
+#> $docs[[1]]$error
+#> $docs[[1]]$error$root_cause
+#> $docs[[1]]$error$root_cause[[1]]
+#> $docs[[1]]$error$root_cause[[1]]$type
+#> [1] "index_not_found_exception"
 #> 
-#> $docs[[1]]$found
-#> [1] TRUE
+#> $docs[[1]]$error$root_cause[[1]]$reason
+#> [1] "no such index"
 #> 
-#> $docs[[1]]$`_source`
-#> $docs[[1]]$`_source`$id
-#> [1] "10.1371/journal.pone.0098602"
+#> $docs[[1]]$error$root_cause[[1]]$resource.type
+#> [1] "index_expression"
 #> 
-#> $docs[[1]]$`_source`$title
-#> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
+#> $docs[[1]]$error$root_cause[[1]]$resource.id
+#> [1] "plos"
+#> 
+#> $docs[[1]]$error$root_cause[[1]]$index_uuid
+#> [1] "_na_"
+#> 
+#> $docs[[1]]$error$root_cause[[1]]$index
+#> [1] "plos"
+#> 
+#> 
+#> 
+#> $docs[[1]]$error$type
+#> [1] "index_not_found_exception"
+#> 
+#> $docs[[1]]$error$reason
+#> [1] "no such index"
+#> 
+#> $docs[[1]]$error$resource.type
+#> [1] "index_expression"
+#> 
+#> $docs[[1]]$error$resource.id
+#> [1] "plos"
+#> 
+#> $docs[[1]]$error$index_uuid
+#> [1] "_na_"
+#> 
+#> $docs[[1]]$error$index
+#> [1] "plos"
 #> 
 #> 
 #> 
@@ -338,18 +297,46 @@ docs_mget(index = "plos", type = "article", id = 1:2)
 #> $docs[[2]]$`_id`
 #> [1] "2"
 #> 
-#> $docs[[2]]$`_version`
-#> [1] 1
+#> $docs[[2]]$error
+#> $docs[[2]]$error$root_cause
+#> $docs[[2]]$error$root_cause[[1]]
+#> $docs[[2]]$error$root_cause[[1]]$type
+#> [1] "index_not_found_exception"
 #> 
-#> $docs[[2]]$found
-#> [1] TRUE
+#> $docs[[2]]$error$root_cause[[1]]$reason
+#> [1] "no such index"
 #> 
-#> $docs[[2]]$`_source`
-#> $docs[[2]]$`_source`$id
-#> [1] "10.1371/journal.pone.0107757"
+#> $docs[[2]]$error$root_cause[[1]]$resource.type
+#> [1] "index_expression"
 #> 
-#> $docs[[2]]$`_source`$title
-#> [1] "Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition"
+#> $docs[[2]]$error$root_cause[[1]]$resource.id
+#> [1] "plos"
+#> 
+#> $docs[[2]]$error$root_cause[[1]]$index_uuid
+#> [1] "_na_"
+#> 
+#> $docs[[2]]$error$root_cause[[1]]$index
+#> [1] "plos"
+#> 
+#> 
+#> 
+#> $docs[[2]]$error$type
+#> [1] "index_not_found_exception"
+#> 
+#> $docs[[2]]$error$reason
+#> [1] "no such index"
+#> 
+#> $docs[[2]]$error$resource.type
+#> [1] "index_expression"
+#> 
+#> $docs[[2]]$error$resource.id
+#> [1] "plos"
+#> 
+#> $docs[[2]]$error$index_uuid
+#> [1] "_na_"
+#> 
+#> $docs[[2]]$error$index
+#> [1] "plos"
 ```
 
 Different indeces, types, and ids
@@ -366,18 +353,46 @@ docs_mget(index_type_id = list(c("plos", "article", 1), c("gbif", "record", 1)))
 #> $`_id`
 #> [1] "1"
 #> 
-#> $`_version`
-#> [1] 1
+#> $error
+#> $error$root_cause
+#> $error$root_cause[[1]]
+#> $error$root_cause[[1]]$type
+#> [1] "index_not_found_exception"
 #> 
-#> $found
-#> [1] TRUE
+#> $error$root_cause[[1]]$reason
+#> [1] "no such index"
 #> 
-#> $`_source`
-#> $`_source`$id
-#> [1] "10.1371/journal.pone.0098602"
+#> $error$root_cause[[1]]$resource.type
+#> [1] "index_expression"
 #> 
-#> $`_source`$title
-#> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
+#> $error$root_cause[[1]]$resource.id
+#> [1] "plos"
+#> 
+#> $error$root_cause[[1]]$index_uuid
+#> [1] "_na_"
+#> 
+#> $error$root_cause[[1]]$index
+#> [1] "plos"
+#> 
+#> 
+#> 
+#> $error$type
+#> [1] "index_not_found_exception"
+#> 
+#> $error$reason
+#> [1] "no such index"
+#> 
+#> $error$resource.type
+#> [1] "index_expression"
+#> 
+#> $error$resource.id
+#> [1] "plos"
+#> 
+#> $error$index_uuid
+#> [1] "_na_"
+#> 
+#> $error$index
+#> [1] "plos"
 ```
 
 ## Parsing
@@ -389,7 +404,7 @@ For example:
 
 ```r
 (out <- docs_mget(index = "plos", type = "article", id = 1:2, raw = TRUE))
-#> [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"1\",\"_version\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098602\",\"title\":\"Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar\"}},{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"2\",\"_version\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0107757\",\"title\":\"Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition\"}}]}"
+#> [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"1\",\"error\":{\"root_cause\":[{\"type\":\"index_not_found_exception\",\"reason\":\"no such index\",\"resource.type\":\"index_expression\",\"resource.id\":\"plos\",\"index_uuid\":\"_na_\",\"index\":\"plos\"}],\"type\":\"index_not_found_exception\",\"reason\":\"no such index\",\"resource.type\":\"index_expression\",\"resource.id\":\"plos\",\"index_uuid\":\"_na_\",\"index\":\"plos\"}},{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"2\",\"error\":{\"root_cause\":[{\"type\":\"index_not_found_exception\",\"reason\":\"no such index\",\"resource.type\":\"index_expression\",\"resource.id\":\"plos\",\"index_uuid\":\"_na_\",\"index\":\"plos\"}],\"type\":\"index_not_found_exception\",\"reason\":\"no such index\",\"resource.type\":\"index_expression\",\"resource.id\":\"plos\",\"index_uuid\":\"_na_\",\"index\":\"plos\"}}]}"
 #> attr(,"class")
 #> [1] "elastic_mget"
 ```
@@ -400,12 +415,18 @@ Then parse
 ```r
 jsonlite::fromJSON(out)
 #> $docs
-#>   _index   _type _id _version found                   _source.id
-#> 1   plos article   1        1  TRUE 10.1371/journal.pone.0098602
-#> 2   plos article   2        1  TRUE 10.1371/journal.pone.0107757
-#>                                                                                                                                                _source.title
-#> 1 Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar
-#> 2                                     Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition
+#>   _index   _type _id
+#> 1   plos article   1
+#> 2   plos article   2
+#>                                                               error.root_cause
+#> 1 index_not_found_exception, no such index, index_expression, plos, _na_, plos
+#> 2 index_not_found_exception, no such index, index_expression, plos, _na_, plos
+#>                  error.type  error.reason error.resource.type
+#> 1 index_not_found_exception no such index    index_expression
+#> 2 index_not_found_exception no such index    index_expression
+#>   error.resource.id error.index_uuid error.index
+#> 1              plos             _na_        plos
+#> 2              plos             _na_        plos
 ```
 
 ## Known pain points
