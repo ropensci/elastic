@@ -189,6 +189,13 @@ connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 80, es_transport_sc
 connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 443, es_transport_schema  = "https")
 ```
 
+If you are using Elastic Cloud or an installation with authentication (X-pack), make sure to specify es_path = "", es_user = "", es_pwd = "" and the correct port - transport schema pair.
+
+
+```r
+connect(es_host = <ec_endpoint>, es_path = "", es_user="test", es_pwd = "1234", es_port = 9243, es_transport_schema  = "https")
+```
+
 ## Search
 
 Search the `plos` index and only return 1 result
