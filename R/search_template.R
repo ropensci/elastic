@@ -102,7 +102,7 @@
 #' }
 Search_template <- function(body = list(), raw = FALSE, ...) {
   # search template render added in Elasticsearch v1.1, stop if version pre that
-  if (gsub("\\.", "", ping(...)$version$number) < 110) {
+  if (es_ver() < 110) {
     stop("search template not available in this ES version", call. = FALSE)
   }
   search_POST("_search/template", args = list(), body = body, raw = raw, 
@@ -114,7 +114,7 @@ Search_template <- function(body = list(), raw = FALSE, ...) {
 Search_template_register <- function(template, body = list(), raw = FALSE, 
                                      ...) {
   # search template render added in Elasticsearch v1.1, stop if version pre that
-  if (gsub("\\.", "", ping(...)$version$number) < 110) {
+  if (es_ver() < 110) {
     stop("search template not available in this ES version", call. = FALSE)
   }
   search_POST(
@@ -128,7 +128,7 @@ Search_template_register <- function(template, body = list(), raw = FALSE,
 #' @rdname Search_template
 Search_template_get <- function(template, ...) {
   # search template render added in Elasticsearch v1.1, stop if version pre that
-  if (gsub("\\.", "", ping(...)$version$number) < 110) {
+  if (es_ver() < 110) {
     stop("search template not available in this ES version", call. = FALSE)
   }
   url <- make_url(es_get_auth())
@@ -140,7 +140,7 @@ Search_template_get <- function(template, ...) {
 #' @rdname Search_template
 Search_template_delete <- function(template, ...) {
   # search template render added in Elasticsearch v1.1, stop if version pre that
-  if (gsub("\\.", "", ping(...)$version$number) < 110) {
+  if (es_ver() < 110) {
     stop("search template not available in this ES version", call. = FALSE)
   }
   url <- make_url(es_get_auth())
@@ -152,7 +152,7 @@ Search_template_delete <- function(template, ...) {
 #' @rdname Search_template
 Search_template_render <- function(body = list(), raw = FALSE, ...) {
   # search template render added in Elasticsearch v2.0, stop if version pre that
-  if (gsub("\\.", "", ping(...)$version$number) < 200) {
+  if (es_ver() < 200) {
     stop("render template not available in this ES version", call. = FALSE)
   }
   search_POST("_render/template", args = list(), body = body, raw = raw, 

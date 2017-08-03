@@ -51,9 +51,9 @@ search_POST <- function(path, index=NULL, type=NULL, args, body, raw,
   url <- prune_trailing_slash(url)
   body <- check_inputs(body)
   # in ES >= v5, lenient param droppped
-  if (gsub("\\.", "", ping()$version$number) >= 500) args$lenient <- NULL
+  if (es_ver() >= 500) args$lenient <- NULL
   # in ES >= v5, fields param changed to stored_fields
-  if (gsub("\\.", "", ping()$version$number) >= 500) {
+  if (es_ver() >= 500) {
     if ("fields" %in% names(args)) {
       stop('"fields" parameter is deprecated in ES >= v5. Use "_source" in body\nSee also "fields" parameter in ?Search', call. = FALSE)
     }

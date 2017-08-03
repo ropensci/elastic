@@ -83,7 +83,7 @@ termvectors <- function(index, type, id = NULL, body = list(), pretty = TRUE,
                     positions = positions, term_statistics = term_statistics))
   }
   tv_POST(
-    if (gsub("\\.", "", ping(...)$version$number) > 200) "_termvectors" else "_termvector",
+    if (es_ver() > 200) "_termvectors" else "_termvector",
     index, type, id, args, body, ...
   )
 }

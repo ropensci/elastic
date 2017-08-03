@@ -111,7 +111,7 @@ test_that("search_template fails as expected", {
   }
   
   if (gsub("\\.", "", ping()$version$number) >= 500) {
-    expect_error(Search_template(body = 5), "Content-Type header")
+    expect_error(Search_template(body = 5))
   } else {
     expect_error(Search_template(body = 5), "all shards failed")
   }

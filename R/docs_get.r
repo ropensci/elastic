@@ -46,7 +46,7 @@ docs_get <- function(index, type, id, source=NULL, fields=NULL, exists=FALSE,
   
   url <- make_url(es_get_auth())
   # fields parameter changed to stored_fields in Elasticsearch v5.0
-  field_name <- if (gsub("\\.", "", ping(...)$version$number) >= 500) "stored_fields" else "fields"
+  field_name <- if (es_ver() >= 500) "stored_fields" else "fields"
   args <- ec(stats::setNames(list(cl(fields)), field_name), ...)
   if (inherits(source, "logical")) source <- tolower(source)
   args <- c(args, `_source` = cl(source))

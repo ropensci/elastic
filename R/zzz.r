@@ -120,7 +120,24 @@ construct_url <- function(url, path, index, type = NULL, id = NULL) {
     } else if (!is.null(type) && !is.null(index) && !is.null(id)) {
       paste(url, index, type, id, path, sep = "/")
     } else if (!is.null(type) && is.null(index) && !is.null(id)) {
-      stop("If a document ID is given, an index type must be given", call. = FALSE)
+      stop("If a document ID is given, an index type must be given", 
+           call. = FALSE)
     }
   }
+}
+
+extractr <- function(x, y) regmatches(x, gregexpr(y, x))
+
+es_ver <- function() {
+  x <- ping()
+  ver <- x$version$number
+  # get only 1st 3 digits, so major:minor:patch
+  as.numeric(
+    paste(
+      stats::na.omit(
+        extractr(ver, "[[:digit:]]+")[[1]][1:3]
+      ), 
+      collapse = ""
+    )
+  )
 }

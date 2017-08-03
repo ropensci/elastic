@@ -147,11 +147,19 @@ field_mapping_get <- function(index = NULL, type = NULL, field, include_defaults
 #' @rdname mapping
 type_exists <- function(index, type, ...){
   # seems to not work in v1, so don't try cause would give false result
-  if (gsub("\\.", "", ping(...)$version$number) <= 100) {
+  if (es_ver() <= 100) {
     stop("type exists not available in this ES version", call. = FALSE)
   }
-  #checkconn(...)
   url <- make_url(es_get_auth())
-  res <- HEAD(file.path(url, esc(index), esc(type)), make_up(), es_env$headers, ...)
+  
+  if (es_ver() >= 500) {
+    # in ES >= v5, new URL format
+    url <- file.path(url, esc(index), "_mapping", esc(type))
+  } else {
+    # in ES < v5, old URL format
+    url <- file.path(url, esc(index), esc(type))
+  }
+  
+  res <- HEAD(url, make_up(), es_env$headers, ...)
   if (res$status_code == 200) TRUE else FALSE
 }
