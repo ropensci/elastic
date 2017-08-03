@@ -136,7 +136,15 @@ geterror <- function(z) {
         if (nchar(cont_utf8(z)) == 0) {
           stop(http_status(z)$message, call. = FALSE)
         }
-        err <- jsonlite::fromJSON(err, simplifyVector = FALSE, simplifyDataFrame = FALSE)
+        err <- tryCatch(
+          jsonlite::fromJSON(err, 
+                             simplifyVector = FALSE, 
+                             simplifyDataFrame = FALSE), error = function(e) e)
+        if (inherits(err, "error")) {
+          msg <- httr::http_status(z)$message
+          stop(msg, call. = FALSE)
+        }
+        
         erropt <- Sys.getenv("ELASTIC_RCLIENT_ERRORS")
         if (erropt == "complete") {
           stop(z$status_code, " - ", pluck_reason(err),
