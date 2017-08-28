@@ -20,6 +20,10 @@
 #' These are sequential, so there is order to the IDs they assign. 
 #' If \code{TRUE}, \code{doc_ids} is ignored. Default: \code{TRUE}
 #' @param raw (logical) Get raw JSON back or not.
+#' @param response (logical) return the Elasticsearch response from bulk
+#' API. If \code{FALSE}, returns \code{NULL} - this option should save 
+#' memory in that we aren't spending time parsing Elasticsearch response
+#' and aren't using up memory storing the output. Default: \code{FALSE}
 #' @param ... Pass on curl options to \code{\link[httr]{POST}}
 #' 
 #' @seealso \code{\link{docs_bulk_prep}}
@@ -76,7 +80,7 @@
 #' \code{docs_bulk} in \code{\link{invisible}}, like so: 
 #' \code{invisible(docs_bulk(...))}
 #'
-#' @return A list
+#' @return NULL if x or a list if y
 #'
 #' @examples \dontrun{
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
@@ -174,21 +178,24 @@
 #' index_delete(db)
 #' }
 docs_bulk <- function(x, index = NULL, type = NULL, chunk_size = 1000,
-                      doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
+                      doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
+                      response = FALSE, ...) {
 
   UseMethod("docs_bulk")
 }
 
 #' @export
 docs_bulk.default <- function(x, index = NULL, type = NULL, chunk_size = 1000,
-                      doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
+                      doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
+                      response = FALSE, ...) {
 
   stop("no 'docs_bulk' method for class ", class(x), call. = FALSE)
 }
 
 #' @export
 docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000,
-                                 doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
+                                 doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
+                                 response = FALSE, ...) {
 
   #checkconn(...)
   if (is.null(index)) {
@@ -217,12 +224,13 @@ docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000
     setTxtProgressBar(pb, i)
     resl[[i]] <- docs_bulk(make_bulk(x[data_chks[[i]], , drop = FALSE], index, type, id_chks[[i]], es_ids), ...)
   }
-  return(resl)
+  return(ec(resl))
 }
 
 #' @export
 docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
-                           doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
+                           doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
+                           response = FALSE, ...) {
 
   #checkconn(...)
   if (is.null(index)) {
@@ -252,19 +260,22 @@ docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
     setTxtProgressBar(pb, i)
     resl[[i]] <- docs_bulk(make_bulk(x[data_chks[[i]]], index, type, id_chks[[i]], es_ids), ...)
   }
-  return(resl)
+  return(ec(resl))
 }
 
 #' @export
 docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000,
-                                doc_ids = NULL, es_ids = TRUE, raw=FALSE, ...) {
+                                doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
+                                response = FALSE, ...) {
 
   on.exit(close_conns())
+  on.exit(unlink(x), add = TRUE)
   #checkconn(...)
   stopifnot(file.exists(x))
   url <- paste0(make_url(es_get_auth()), '/_bulk')
   tt <- POST(url, make_up(), es_env$headers, ..., body = upload_file(x, type = "application/json"), encode = "json")
   geterror(tt)
+  if (!response) return(NULL)
   res <- cont_utf8(tt)
   res <- structure(res, class = "bulk_make")
   if (raw) res else es_parse(res)

@@ -5,7 +5,7 @@
 \title{Use the bulk API to create, index, update, or delete documents.}
 \usage{
 docs_bulk(x, index = NULL, type = NULL, chunk_size = 1000,
-  doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...)
+  doc_ids = NULL, es_ids = TRUE, raw = FALSE, response = FALSE, ...)
 }
 \arguments{
 \item{x}{A list, data.frame, or character path to a file. required.}
@@ -34,10 +34,15 @@ If \code{TRUE}, \code{doc_ids} is ignored. Default: \code{TRUE}}
 
 \item{raw}{(logical) Get raw JSON back or not.}
 
+\item{response}{(logical) return the Elasticsearch response from bulk
+API. If \code{FALSE}, returns \code{NULL} - this option should save 
+memory in that we aren't spending time parsing Elasticsearch response
+and aren't using up memory storing the output. Default: \code{FALSE}}
+
 \item{...}{Pass on curl options to \code{\link[httr]{POST}}}
 }
 \value{
-A list
+NULL if x or a list if y
 }
 \description{
 Use the bulk API to create, index, update, or delete documents.
