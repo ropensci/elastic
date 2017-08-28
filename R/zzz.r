@@ -76,13 +76,6 @@ make_up <- function() {
   }
 }
 
-stop_es_version <- function(ver_check, fxn) {
-  ver <- as.numeric(gsub("\\.", "", info()$version$number))
-  if (ver < ver_check) {
-    stop(fxn, " is not available for this Elasticsearch version", call. = FALSE)
-  }
-}
-
 # Make sure variable is a numeric or integer --------------
 cn <- function(x) {
   name <- substitute(x)
@@ -128,9 +121,15 @@ construct_url <- function(url, path, index, type = NULL, id = NULL) {
 
 extractr <- function(x, y) regmatches(x, gregexpr(y, x))
 
+elastic_env <- new.env()
+
 es_ver <- function() {
-  x <- ping()
-  ver <- x$version$number
+  pinged <- elastic_env$ping_result
+  if (is.null(pinged)) {
+    elastic_env$ping_result <- pinged <- ping()
+  }
+  ver <- pinged$version$number
+  
   # get only 1st 3 digits, so major:minor:patch
   as.numeric(
     paste(
@@ -140,4 +139,11 @@ es_ver <- function() {
       collapse = ""
     )
   )
+}
+
+stop_es_version <- function(ver_check, fxn) {
+  if (es_ver() < ver_check) {
+    stop(fxn, " is not available for this Elasticsearch version", 
+         call. = FALSE)
+  }
 }
