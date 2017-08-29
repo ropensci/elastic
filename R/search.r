@@ -44,7 +44,7 @@ search_POST <- function(path, index=NULL, type=NULL, args, body, raw,
   if (!inherits(asdf, "logical")) {
     stop("'asdf' parameter must be `TRUE` or `FALSE`", call. = FALSE)
   }
-  #checkconn(...)
+  
   conn <- es_get_auth()
   url <- make_url(conn)
   url <- construct_url(url, path, index, type)
@@ -58,10 +58,11 @@ search_POST <- function(path, index=NULL, type=NULL, args, body, raw,
       stop('"fields" parameter is deprecated in ES >= v5. Use "_source" in body\nSee also "fields" parameter in ?Search', call. = FALSE)
     }
   }
-  tt <- POST(url, make_up(), es_env$headers, ..., query = args, body = body)
+  tt <- POST(url, make_up(), es_env$headers, 
+             add_headers(`Content-Type` = "application/json"), ..., 
+             query = args, body = body)
   geterror(tt)
   res <- cont_utf8(tt)
-  #if (raw) res else jsonlite::fromJSON(res, asdf, flatten = TRUE)
   
   if (raw) {
     res 
