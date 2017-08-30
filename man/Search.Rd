@@ -10,7 +10,7 @@ Search(index = NULL, type = NULL, q = NULL, df = NULL,
   timeout = NULL, terminate_after = NULL, from = NULL, size = NULL,
   search_type = NULL, lowercase_expanded_terms = NULL,
   analyze_wildcard = NULL, version = FALSE, lenient = FALSE,
-  body = list(), raw = FALSE, asdf = FALSE, scroll = NULL,
+  body = list(), raw = FALSE, asdf = FALSE, time_scroll = NULL,
   search_path = "_search", stream_opts = list(), ...)
 }
 \arguments{
@@ -103,8 +103,8 @@ If \code{TRUE}, then raw JSON returned}
 to parse JSON directly to a data.frame. If \code{FALSE} (Default), list 
 output is given.}
 
-\item{scroll}{(character) Specify how long a consistent view of the index 
-should be maintained for scrolled search, e.g., "30s", "1m". See 
+\item{time_scroll}{(character) Specify how long a consistent view of the 
+index should be maintained for scrolled search, e.g., "30s", "1m". See 
 \code{\link{units-time}}.}
 
 \item{search_path}{(character) The path to use for searching. Default 
