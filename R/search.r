@@ -61,8 +61,7 @@ search_POST <- function(path, index=NULL, type=NULL, args, body, raw,
     }
   }
   tt <- POST(url, make_up(), es_env$headers, 
-             add_headers(`Content-Type` = "application/json"), ..., 
-             query = args, body = body)
+             content_type_json(), ..., query = args, body = body)
   geterror(tt)
   res <- cont_utf8(tt)
   

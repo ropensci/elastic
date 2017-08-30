@@ -45,7 +45,8 @@ search_GET <- function(path, index=NULL, type=NULL, args, raw, asdf,
       stop('"fields" parameter is deprecated in ES >= v5. See help in ?Search_uri', call. = FALSE)
     }
   }
-  tt <- GET(url, query = args, make_up(), es_env$headers, ...)
+  tt <- GET(url, query = args, make_up(), content_type_json(), 
+            es_env$headers, ...)
   geterror(tt)
   res <- cont_utf8(tt)
   #if (raw) res else jsonlite::fromJSON(res, asdf)

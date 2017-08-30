@@ -19,9 +19,7 @@ cw <- function(x) if (is.null(x)) x else paste(x, collapse = ",")
 scroll_POST <- function(path, args = list(), body, raw, asdf, stream_opts, ...) {
   url <- make_url(es_get_auth())
   tt <- POST(file.path(url, path), make_up(), 
-             es_env$headers, 
-             add_headers(`Content-Type` = "application/json"), ..., 
-             encode = "json",
+             es_env$headers, content_type_json(), ..., encode = "json",
              query = args, body = body)
   geterror(tt)
   res <- cont_utf8(tt)
