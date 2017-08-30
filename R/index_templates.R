@@ -15,6 +15,8 @@
 #' @param order (integer) The order for this template when merging 
 #' multiple matching ones (higher numbers are merged later, overriding the 
 #' lower numbers)
+#' @param filter_path (character) a regex for filtering output path, 
+#' see example
 #' @param timeout (integer) Explicit operation timeout
 #' @param ... Curl options. Or in \code{percolate_list} function, further 
 #' args passed on to \code{\link{Search}}

@@ -38,6 +38,9 @@ lower numbers)}
 
 \item{...}{Curl options. Or in \code{percolate_list} function, further 
 args passed on to \code{\link{Search}}}
+
+\item{filter_path}{(character) a regex for filtering output path, 
+see example}
 }
 \description{
 Index templates allow you to define templates that 
