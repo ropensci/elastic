@@ -4,9 +4,11 @@
 #' @param index (character) The index in which the document resides.
 #' @param type (character) The type of the document.
 #' @param ids (character) One or more document ids
-#' @param body (character) Define parameters and or supply a document to get termvectors for
-#' @param field_statistics (character) Specifies if document count, sum of document
-#' frequencies and sum of total term frequencies should be returned. Default: \code{TRUE}
+#' @param body (character) Define parameters and or supply a document to get 
+#' termvectors for
+#' @param field_statistics (character) Specifies if document count, sum of 
+#' document frequencies and sum of total term frequencies should be returned. 
+#' Default: \code{TRUE}
 #' @param fields (character) A comma-separated list of fields to return.
 #' @param offsets (character) Specifies if term offsets should be returned.
 #' Default: \code{TRUE}
@@ -15,16 +17,16 @@
 #' Default: \code{TRUE}
 #' @param positions (character) Specifies if term positions should be returned.
 #' Default: \code{TRUE}
-#' @param preference (character) Specify the node or shard the operation should be
-#' performed on (Default: \code{random}).
+#' @param preference (character) Specify the node or shard the operation 
+#' should be performed on (Default: \code{random}).
 #' @param realtime (character) Specifies if request is real-time as opposed to
 #' near-real-time (Default: \code{TRUE}).
 #' @param routing (character) Specific routing value.
-#' @param term_statistics (character) Specifies if total term frequency and document
-#' frequency should be returned. Default: \code{FALSE}
+#' @param term_statistics (character) Specifies if total term frequency and 
+#' document frequency should be returned. Default: \code{FALSE}
 #' @param version (character) Explicit version number for concurrency control
-#' @param version_type (character) Specific version type, valid choices are: 'internal',
-#' 'external', 'external_gte', 'force'
+#' @param version_type (character) Specific version type, valid choices are: 
+#' 'internal', 'external', 'external_gte', 'force'
 #' @param pretty (logical) pretty print. Default: \code{TRUE}
 #' @param ... Curl args passed on to \code{\link[httr]{POST}}
 #'
@@ -114,7 +116,8 @@
 #' mtermvectors('omdb', 'omdb', body = body)
 #' 
 #' # you can give user provided documents via the 'docs' parameter
-#' ## though you have to give index and type that exist in your Elasticsearch instance
+#' ## though you have to give index and type that exist in your Elasticsearch 
+#' ## instance
 #' body <- '{
 #'    "docs": [
 #'       {
@@ -137,17 +140,21 @@
 #' }'
 #' mtermvectors(body = body)
 #' }
-mtermvectors <- function(index = NULL, type = NULL, ids = NULL, body = list(), pretty = TRUE,
-                        field_statistics = TRUE, fields = NULL, offsets = TRUE, parent = NULL,
-                        payloads = TRUE, positions = TRUE, preference = 'random', realtime = TRUE,
-                        routing = NULL, term_statistics = FALSE, version = NULL, version_type = NULL, ...) {
+mtermvectors <- function(
+  index = NULL, type = NULL, ids = NULL, body = list(), pretty = TRUE,
+  field_statistics = TRUE, fields = NULL, offsets = TRUE, parent = NULL,
+  payloads = TRUE, positions = TRUE, preference = 'random', realtime = TRUE,
+  routing = NULL, term_statistics = FALSE, version = NULL, version_type = NULL, 
+  ...) {
   
-  args <- ec(list(pretty = pretty, realtime = realtime, preference = preference,
-                  routing = routing, version = version, version_type = version_type))
+  args <- ec(list(pretty = as_log(pretty), realtime = as_log(realtime), 
+                  preference = preference, routing = routing, version = version, 
+                  version_type = version_type))
   if (length(body) == 0) {
     body <- ec(list(fields = fields, field_statistics = field_statistics,
                     offsets = offsets, parent = parent, payloads = payloads,
-                    positions = positions, term_statistics = term_statistics, ids = ids))
+                    positions = as_log(positions), 
+                    term_statistics = as_log(term_statistics), ids = ids))
   }
   tv_POST("_mtermvectors", index, type, id = NULL, args, body, ...)
 }

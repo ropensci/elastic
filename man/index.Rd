@@ -15,6 +15,7 @@
 \alias{index_segments}
 \alias{index_recovery}
 \alias{index_optimize}
+\alias{index_forcemerge}
 \alias{index_upgrade}
 \alias{index_analyze}
 \alias{index_flush}
@@ -53,6 +54,9 @@ index_recovery(index = NULL, detailed = FALSE, active_only = FALSE, ...)
 index_optimize(index = NULL, max_num_segments = NULL,
   only_expunge_deletes = FALSE, flush = TRUE, wait_for_merge = TRUE, ...)
 
+index_forcemerge(index = NULL, max_num_segments = NULL,
+  only_expunge_deletes = FALSE, flush = TRUE, ...)
+
 index_upgrade(index = NULL, wait_for_completion = FALSE, ...)
 
 index_analyze(text = NULL, field = NULL, index = NULL, analyzer = NULL,
@@ -68,8 +72,8 @@ index_clear_cache(index = NULL, filter = FALSE, filter_keys = NULL,
 \arguments{
 \item{index}{(character) A character vector of index names}
 
-\item{features}{(character) A character vector of features. One or more of settings, mappings,
-warmers or aliases}
+\item{features}{(character) A character vector of features. One or more of 
+settings, mappings, or aliases}
 
 \item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
 
@@ -80,9 +84,10 @@ warmers or aliases}
 
 \item{body}{Query, either a list or json.}
 
-\item{metric}{(character) A character vector of metrics to display. Possible values: "_all",
-"completion", "docs", "fielddata", "filter_cache", "flush", "get", "id_cache", "indexing",
-"merge", "percolate", "refresh", "search", "segments", "store", "warmer".}
+\item{metric}{(character) A character vector of metrics to display. Possible 
+values: "_all", "completion", "docs", "fielddata", "filter_cache", "flush", 
+"get", "id_cache", "indexing", "merge", "percolate", "refresh", "search", 
+"segments", "store", "warmer".}
 
 \item{completion_fields}{(character) A character vector of fields for completion metric
 (supports wildcards)}
@@ -182,7 +187,6 @@ for all the options.
 index_get(index='shakespeare')
 index_get(index='shakespeare', features=c('settings','mappings'))
 index_get(index='shakespeare', features='aliases')
-index_get(index='shakespeare', features='warmers')
 
 # check for index existence
 index_exists(index='shakespeare')
@@ -240,7 +244,7 @@ index_open('plos')
 index_stats('plos')
 index_stats(c('plos','gbif'))
 index_stats(c('plos','gbif'), metric='refresh')
-index_stats(metric = "indices")
+index_stats(metric = "indexing")
 index_stats('shakespeare', metric='completion')
 index_stats('shakespeare', metric='completion', completion_fields = "completion")
 index_stats('shakespeare', metric='fielddata')
@@ -262,24 +266,36 @@ index_recovery("plos", detailed = TRUE)
 index_recovery("plos", active_only = TRUE)
 
 # Optimize an index, or many indices
-index_optimize('plos')
-index_optimize(c('plos','gbif'))
+if (gsub("\\\\.", "", ping()$version$number) < 500) {
+  ### ES < v5 - use optimize
+  index_optimize('plos')
+  index_optimize(c('plos','gbif'))
+  index_optimize('plos')
+} else {
+  ### ES > v5 - use forcemerge
+  index_forcemerge('plos')
+}
 
 # Upgrade one or more indices to the latest format. The upgrade process converts any
 # segments written with previous formats.
-index_upgrade('plos')
-index_upgrade(c('plos','gbif'))
+if (gsub("\\\\.", "", ping()$version$number) < 500) {
+  index_upgrade('plos')
+  index_upgrade(c('plos','gbif'))
+}
 
-# Performs the analysis process on a text and return the tokens breakdown of the text.
+# Performs the analysis process on a text and return the tokens breakdown 
+# of the text
 index_analyze(text = 'this is a test', analyzer='standard')
 index_analyze(text = 'this is a test', analyzer='whitespace')
 index_analyze(text = 'this is a test', analyzer='stop')
-index_analyze(text = 'this is a test', tokenizer='keyword', filters='lowercase')
+index_analyze(text = 'this is a test', tokenizer='keyword', 
+  filters='lowercase')
 index_analyze(text = 'this is a test', tokenizer='keyword', filters='lowercase',
    char_filters='html_strip')
 index_analyze(text = 'this is a test', index = 'plos')
 index_analyze(text = 'this is a test', index = 'shakespeare')
-index_analyze(text = 'this is a test', index = 'shakespeare', config=verbose())
+index_analyze(text = 'this is a test', index = 'shakespeare', 
+  config=verbose())
 
 ## NGram tokenizer
 body <- '{
@@ -301,11 +317,12 @@ body <- '{
              }
       }
 }'
-if(index_exists("shakespeare2")) {
+if (index_exists("shakespeare2")) {
    index_delete("shakespeare2")
 }
 tokenizer_set(index = "shakespeare2", body=body)
-index_analyze(text = "art thouh", index = "shakespeare2", analyzer='my_ngram_analyzer')
+index_analyze(text = "art thouh", index = "shakespeare2", 
+  analyzer='my_ngram_analyzer')
 
 # Explicitly flush one or more indices.
 index_flush(index = "plos")

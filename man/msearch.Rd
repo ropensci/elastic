@@ -11,8 +11,9 @@ msearch(x, raw = FALSE, asdf = FALSE, ...)
 
 \item{raw}{(logical) Get raw JSON back or not.}
 
-\item{asdf}{(logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} to parse JSON
-directly to a data.frame. If \code{FALSE} (Default), list output is given.}
+\item{asdf}{(logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} 
+to parse JSON directly to a data.frame. If \code{FALSE} (Default), list 
+output is given.}
 
 \item{...}{Curl args passed on to \code{\link[httr]{POST}}}
 }
@@ -20,8 +21,8 @@ directly to a data.frame. If \code{FALSE} (Default), list output is given.}
 Performs multiple searches, defined in a file
 }
 \details{
-This function behaves similarly to \code{\link{docs_bulk}} - performs
-searches based on queries defined in a file.
+This function behaves similarly to \code{\link{docs_bulk}} - 
+performs searches based on queries defined in a file.
 }
 \examples{
 \dontrun{

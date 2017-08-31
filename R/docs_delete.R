@@ -23,6 +23,11 @@
 #' }
 #'
 #' # delete a document
+#' if (!docs_get(index='plos', type='article', id=36, exists=TRUE)) {
+#'   docs_create(index='plos', type='article', id=36, 
+#'     body = list(id="12345", title="New title")
+#'   )
+#' }
 #' docs_get(index='plos', type='article', id=36)
 #' docs_delete(index='plos', type='article', id=36)
 #' # docs_get(index='plos', type='article', id=36) # and the document is gone
@@ -30,8 +35,7 @@
 
 docs_delete <- function(index, type, id, refresh=NULL, routing=NULL, 
   timeout=NULL, version=NULL, version_type=NULL, callopts=list(), ...) {
-
-  #checkconn()
+  
   url <- make_url(es_get_auth())
   url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), esc(id))
   args <- ec(list(refresh=refresh, routing=routing, timeout=timeout,

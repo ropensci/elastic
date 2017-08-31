@@ -20,7 +20,7 @@ Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL,
   default_operator=NULL, explain=NULL, source=NULL, fields=NULL, sort=NULL, 
   track_scores=NULL, timeout=NULL, terminate_after=NULL, from=NULL, size=NULL, 
   search_type=NULL, lowercase_expanded_terms=NULL, analyze_wildcard=NULL, 
-  version=FALSE, lenient=FALSE, body=list(), raw=FALSE, asdf=FALSE, 
+  version=NULL, lenient=FALSE, body=list(), raw=FALSE, asdf=FALSE, 
   time_scroll=NULL, search_path="_search", stream_opts=list(), ...) {
 
   tmp <- search_POST(search_path, cl(index), type,

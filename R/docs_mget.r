@@ -70,7 +70,6 @@ docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL,
   index_type_id=NULL, source=NULL, fields=NULL, raw=FALSE, callopts=list(), 
   verbose=TRUE, ...) {
 
-  #checkconn()
   check_params(index, type, ids, type_id, index_type_id)
   base <- make_url(es_get_auth())
 
@@ -91,7 +90,9 @@ docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL,
 
     body <- jsonlite::toJSON(list("ids" = ids))
     url <- paste(base, esc(index), esc(type), '_mget', sep = "/")
-    out <- POST(url, c(es_env$headers, mc(make_up(), callopts)), body = body, encode = 'json', query = args)
+    out <- POST(url, c(es_env$headers, mc(make_up(), callopts)), 
+                content_type_json(), body = body, encode = 'json', 
+                query = args)
 
   }
   # One index, many types, one to many ids
@@ -102,10 +103,10 @@ docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL,
     docs <- lapply(type_id, function(x){
       list(`_type` = esc(x[[1]]), `_id` = x[[2]])
     })
-    #docs <- lapply(docs, function(y) modifyList(y, list(`_source` = source, fields = fields)))
     tt <- jsonlite::toJSON(list("docs" = docs))
     url <- paste(base, esc(index), '_mget', sep = "/")
-    out <- POST(url, c(es_env$headers, mc(make_up(), callopts)), body = tt, encode = 'json', query = args)
+    out <- POST(url, c(es_env$headers, mc(make_up(), callopts)), body = tt, 
+                content_type_json(), encode = 'json', query = args)
 
   }
   # Many indeces, many types, one to many ids
@@ -113,12 +114,12 @@ docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL,
     # check for 3 elements in each element
     stopifnot(all(sapply(index_type_id, function(x) length(x) == 3)))
     docs <- lapply(index_type_id, function(x){
-      #modifyList(list(`_index` = esc(x[[1]]), `_type` = esc(x[[2]]), `_id` = esc(x[[3]])), list(fields = fields))
       list(`_index` = esc(x[[1]]), `_type` = esc(x[[2]]), `_id` = x[[3]])
     })
     tt <- jsonlite::toJSON(list("docs" = docs))
     url <- paste(base, '_mget', sep = "/")
-    out <- POST(url, c(es_env$headers, mc(make_up(), callopts)), body = tt, encode = 'json', query = args)
+    out <- POST(url, c(es_env$headers, mc(make_up(), callopts)), 
+                content_type_json(), body = tt, encode = 'json', query = args)
   }
 
   stop_for_status(out)

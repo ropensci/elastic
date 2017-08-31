@@ -40,7 +40,7 @@ tasks <- function(task_id = NULL, nodes = NULL, actions = NULL,
   args <- ec(list(
     actions = actions, nodes = nodes, parent_task_id = parent_task_id,
     detailed = if (detailed) "" else NULL, group_by = group_by,
-    wait_for_completion = wait_for_completion, timeout = timeout
+    wait_for_completion = as_log(wait_for_completion), timeout = timeout
   ))
   task_GET(task_id, raw, args, ...)
 }

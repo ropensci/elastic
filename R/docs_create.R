@@ -55,7 +55,8 @@ docs_create <- function(index, type, id, body, version=NULL, version_type=NULL,
 }
 
 create_PUT <- function(url, query=NULL, body=NULL, callopts) {
-  tt <- PUT(url, es_env$headers, mc(make_up(), callopts), query = query, 
+  tt <- PUT(url, es_env$headers, content_type_json(),
+            mc(make_up(), callopts), query = query, 
             body = body, encode = "json")
   geterror(tt)
   jsonlite::fromJSON(cont_utf8(tt), FALSE)

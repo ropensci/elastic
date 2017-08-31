@@ -15,7 +15,7 @@ Search_uri <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL,
   default_operator=NULL, explain=NULL, source=NULL, fields=NULL, sort=NULL,
   track_scores=NULL, timeout=NULL, terminate_after=NULL, from=NULL, size=NULL,
   search_type=NULL, lowercase_expanded_terms=NULL, analyze_wildcard=NULL,
-  version=FALSE, lenient=FALSE, raw=FALSE, asdf=FALSE,
+  version=NULL, lenient=FALSE, raw=FALSE, asdf=FALSE,
   search_path="_search", stream_opts=list(), ...) {
 
   search_GET(search_path, cl(index), type,
@@ -32,7 +32,6 @@ Search_uri <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL,
 
 search_GET <- function(path, index=NULL, type=NULL, args, raw, asdf, 
                        stream_opts, ...) {
-  #checkconn(...)
   conn <- es_get_auth()
   url <- make_url(conn)
   url <- construct_url(url, path, index, type)
@@ -42,14 +41,15 @@ search_GET <- function(path, index=NULL, type=NULL, args, raw, asdf,
   # in ES >= v5, fields param changed to stored_fields
   if (es_ver() >= 500) {
     if ("fields" %in% names(args)) {
-      stop('"fields" parameter is deprecated in ES >= v5. See help in ?Search_uri', call. = FALSE)
+      stop(
+        '"fields" parameter is deprecated in ES >= v5. See help in ?Search_uri', 
+        call. = FALSE)
     }
   }
   tt <- GET(url, query = args, make_up(), content_type_json(), 
             es_env$headers, ...)
   geterror(tt)
   res <- cont_utf8(tt)
-  #if (raw) res else jsonlite::fromJSON(res, asdf)
   
   if (raw) {
     res 

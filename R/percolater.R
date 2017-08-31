@@ -25,10 +25,15 @@
 #' the client. Obviously if there are two percolator queries with same id from different
 #' indices there is no way to find out which percolator query belongs to what index. Any
 #' other value to percolate_format will be ignored.
-#' @param ... Curl options. Or in \code{percolate_list} function, further args passed on
-#' to \code{\link{Search}}
+#' @param refresh If \code{TRUE} then refresh the affected shards to make this 
+#' operation visible to search, if "wait_for" then wait for a refresh to 
+#' make this operation visible to search, if \code{FALSE} (default) then do 
+#' nothing with refreshes. Valid choices: \code{TRUE}, \code{FALSE}, "wait_for"
+#' @param ... Curl options. Or in \code{percolate_list} function, further args
+#' passed on to \code{\link{Search}}
 #'
 #' @references
+#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-percolate-query.html}
 #' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-percolate.html}
 #'
 #' @details Additional body options, pass those in the body. These aren't query string
@@ -62,20 +67,28 @@
 #'  performance of highlighting in the percolate API depends of how many matches are
 #'  being highlighted.
 #' }
+#' 
+#' @section The Elasticsearch v5 split:
+#' In Elasticsearch < v5, there's a certain set of percolate APIs available, 
+#' while in Elasticsearch >= v5, there's a different set of APIs available.
+#' 
+#' Internally within these percolate functions we detect your Elasticsearch
+#' version, then use the appropriate APIs
 #'
 #' @examples \dontrun{
+#' ##### Elasticsearch < v5
 #' # typical usage
 #' ## create an index first
-#' index_delete("myindex")
+#' if (index_exists("myindex")) index_delete("myindex")
 #' mapping <- '{
 #'   "mappings": {
 #'     "mytype": {
 #'       "properties": {
 #'         "message": {
-#'            "type": "string"
+#'            "type": "text"
 #'         },
 #'         "name": {
-#'            "type": "string"
+#'            "type": "text"
 #'         }
 #'       }
 #'     }
@@ -122,16 +135,82 @@
 #'
 #' # multi percolate
 #' ## not working yet
+#' 
+#' 
+#' 
+#' ##### Elasticsearch >= v5
+#' if (index_exists("myindex")) index_delete("myindex")
+#' body <- '{
+#'   "mappings": {
+#'     "doctype": {
+#'       "properties": {
+#'         "message": {
+#'           "type": "text"
+#'         }
+#'       }
+#'     },
+#'     "queries": {
+#'       "properties": {
+#'         "query": {
+#'           "type": "percolator"
+#'         }
+#'       }
+#'     }
+#'   }
+#' }'
+#' 
+#' # create the index with mapping
+#' index_create("myindex", body = body)
+#'
+#' ## register a percolator
+#' x <- '{
+#'   "query" : {
+#'      "match" : {
+#'        "message" : "bonsai tree"
+#'      }
+#'   }
+#' }'
+#' percolate_register(index = "myindex", type = "queries", id = 1, body = x)
+#'
+#' ## register another
+#' x2 <- '{
+#'   "query" : {
+#'     "match" : {
+#'       "message" : "the office"
+#'     }
+#'   }
+#' }'
+#' percolate_register(index = "myindex", type = "queries", id = 2, body = x2)
+#'
+#' ## match a document to a percolator
+#' query <- '{
+#'   "query" : {
+#'     "percolate" : {
+#'       "field": "query",
+#'       "document_type": "doctype",
+#'       "document": {
+#'         "message": "A new bonsai tree in the office"
+#'       }
+#'     }
+#'   }
+#' }'
+#' percolate_match(index = "myindex", body = query)
 #' }
 percolate_register <- function(index, type=NULL, id, body=list(),
   routing = NULL, preference = NULL, ignore_unavailable = NULL,
-  percolate_format = NULL, ...) {
+  percolate_format = NULL, refresh = NULL, ...) {
 
+  #percolate_check_ver()
   url <- make_url(es_get_auth())
-  url <- sprintf("%s/%s/.percolator/%s", url, esc(index), id)
+  if (es_ver() >= 500) {
+    url <- file.path(url, esc(index), esc(type), id)
+  } else {
+    url <- sprintf("%s/%s/.percolator/%s", url, esc(index), id)
+  }
   args <- ec(list(routing = routing, preference = preference,
-                  ignore_unavailable = ignore_unavailable,
-                  percolate_format = percolate_format))
+                  ignore_unavailable = as_log(ignore_unavailable),
+                  percolate_format = percolate_format, 
+                  refresh = as_log(refresh)))
   percolate_PUT(url, args, body, ...)
 }
 
@@ -141,8 +220,16 @@ percolate_match <- function(index, type=NULL, body,
   routing = NULL, preference = NULL, ignore_unavailable = NULL,
   percolate_format = NULL, ...) {
 
+  #percolate_check_ver()
   url <- make_url(es_get_auth())
-  url <- sprintf("%s/%s/%s/_percolate", url, esc(index), esc(type))
+  if (es_ver() >= 500) {
+    url <- file.path(
+      url, 
+      if (is.null(type)) esc(index) else file.path(esc(index), esc(type)), 
+      "_search")
+  } else {
+    url <- sprintf("%s/%s/%s/_percolate", url, esc(index), esc(type))
+  }
   args <- ec(list(routing = routing, preference = preference,
                   ignore_unavailable = ignore_unavailable,
                   percolate_format = percolate_format))
@@ -153,12 +240,14 @@ percolate_match <- function(index, type=NULL, body,
 #' @export
 #' @rdname percolate
 percolate_list <- function(index, ...) {
+  percolate_check_ver()
   Search(index, search_path = ".percolator/_search", ...)
 }
 
 #' @export
 #' @rdname percolate
 percolate_count <- function(index, type, body, ...) {
+  percolate_check_ver()
   url <- make_url(es_get_auth())
   url <- sprintf("%s/%s/%s/_percolate/count", url, esc(index), esc(type))
   percolate_POST(url, body = body, ...)
@@ -167,6 +256,7 @@ percolate_count <- function(index, type, body, ...) {
 #' @export
 #' @rdname percolate
 percolate_delete <- function(index, id) {
+  percolate_check_ver()
   url <- make_url(es_get_auth())
   url <- sprintf("%s/%s/.percolator/%s", url, esc(index), id)
   es_DELETE(url)
@@ -174,17 +264,24 @@ percolate_delete <- function(index, id) {
 
 # helpers ------------
 percolate_PUT <- function(url, args, body = list(), ...) {
-  #checkconn(...)
   body <- check_inputs(body)
-  tt <- PUT(url, body = body, query = args, encode = 'json', make_up(), es_env$headers, ...)
+  tt <- PUT(url, body = body, query = args, encode = 'json', 
+            content_type_json(), make_up(), es_env$headers, ...)
   geterror(tt)
   jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }
 
 percolate_POST <- function(url, args = NULL, body = list(), ...) {
-  #checkconn(...)
   body <- check_inputs(body)
-  tt <- POST(url, body = body, query = args, encode = 'json', make_up(), es_env$headers, ...)
+  tt <- POST(url, body = body, query = args, encode = 'json', 
+             content_type_json(), make_up(), es_env$headers, ...)
   geterror(tt)
   jsonlite::fromJSON(cont_utf8(tt), FALSE)
+}
+
+percolate_check_ver <- function() {
+  if (es_ver() >= 500) {
+    stop("this percolate functionality defunct in ES >= v5
+  For ES >= v5 see percolate examples in ?Search")
+  }  
 }

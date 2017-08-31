@@ -9,9 +9,8 @@ Search_uri(index = NULL, type = NULL, q = NULL, df = NULL,
   source = NULL, fields = NULL, sort = NULL, track_scores = NULL,
   timeout = NULL, terminate_after = NULL, from = NULL, size = NULL,
   search_type = NULL, lowercase_expanded_terms = NULL,
-  analyze_wildcard = NULL, version = FALSE, lenient = FALSE,
-  raw = FALSE, asdf = FALSE, search_path = "_search",
-  stream_opts = list(), ...)
+  analyze_wildcard = NULL, version = NULL, lenient = FALSE, raw = FALSE,
+  asdf = FALSE, search_path = "_search", stream_opts = list(), ...)
 }
 \arguments{
 \item{index}{Index name, one or more}

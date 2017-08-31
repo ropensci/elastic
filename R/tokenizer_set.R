@@ -32,7 +32,8 @@
 #' }'
 #' if (index_exists('test1')) index_delete('test1')
 #' tokenizer_set(index = "test1", body=body)
-#' index_analyze(text = "hello world", index = "test1", analyzer='my_ngram_analyzer')
+#' index_analyze(text = "hello world", index = "test1", 
+#'   analyzer='my_ngram_analyzer')
 #' }
 
 tokenizer_set <- function(index, body, ...) {
@@ -43,9 +44,9 @@ tokenizer_set <- function(index, body, ...) {
 }
 
 tokenizer_PUT <- function(url, body, ...){
-  #checkconn(...)
   body <- check_inputs(body)
-  out <- PUT(url, make_up(), es_env$headers, ..., body = body, encode = "json")
+  out <- PUT(url, make_up(), es_env$headers, content_type_json(), 
+             ..., body = body, encode = "json")
   if (out$status_code > 202) geterror(out)
   tt <- cont_utf8(out)
   jsonlite::fromJSON(tt)

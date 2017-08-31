@@ -48,16 +48,6 @@
 #'   }'
 #'   field_stats(body = body, level = "indices", index = "gbif")
 #' }
-#' 
-#' if (gsub("\\.", "", ping()$version$number) >= 500) {
-#'   mapping_create("shakespeare", "act", update_all_types = TRUE, body = '{
-#'     "properties": {
-#'       "speaker": { 
-#'       "type":     "text",
-#'       "fielddata": true
-#'   }}}')
-#'   field_stats(body = '{ "fields": ["speaker"] }', index = "shakespeare")
-#' }
 #' }
 field_stats <- function(fields = NULL, index = NULL, level = "cluster", 
                         body = list(), raw = FALSE, asdf = FALSE, ...) {

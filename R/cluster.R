@@ -123,7 +123,7 @@ cluster_health <- function(index=NULL, level = NULL, wait_for_status = NULL,
                   wait_for_relocating_shards = wait_for_relocating_shards, 
                   wait_for_active_shards = wait_for_active_shards, 
                   wait_for_nodes = wait_for_nodes, timeout = timeout))
-  es_GET_(url, args, ...)
+  es_GET_(url, args, callopts, ...)
 }
 
 #' @export

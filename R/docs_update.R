@@ -90,7 +90,7 @@ docs_update <- function(index, type, id, body, fields=NULL, source=NULL,
 
 update_POST <- function(url, query=NULL, body=NULL, callopts) {
   tt <- POST(url, es_env$headers, make_up(), callopts, query = query, 
-             body = body, encode = "json")
+             content_type_json(), body = body, encode = "json")
   geterror(tt)
   jsonlite::fromJSON(cont_utf8(tt), FALSE)
 }

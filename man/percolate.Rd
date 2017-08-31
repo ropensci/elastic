@@ -11,7 +11,7 @@
 \usage{
 percolate_register(index, type = NULL, id, body = list(), routing = NULL,
   preference = NULL, ignore_unavailable = NULL, percolate_format = NULL,
-  ...)
+  refresh = NULL, ...)
 
 percolate_match(index, type = NULL, body, routing = NULL,
   preference = NULL, ignore_unavailable = NULL, percolate_format = NULL,
@@ -52,8 +52,13 @@ the client. Obviously if there are two percolator queries with same id from diff
 indices there is no way to find out which percolator query belongs to what index. Any
 other value to percolate_format will be ignored.}
 
-\item{...}{Curl options. Or in \code{percolate_list} function, further args passed on
-to \code{\link{Search}}}
+\item{refresh}{If \code{TRUE} then refresh the affected shards to make this 
+operation visible to search, if "wait_for" then wait for a refresh to 
+make this operation visible to search, if \code{FALSE} (default) then do 
+nothing with refreshes. Valid choices: \code{TRUE}, \code{FALSE}, "wait_for"}
+
+\item{...}{Curl options. Or in \code{percolate_list} function, further args
+passed on to \code{\link{Search}}}
 }
 \description{
 Store queries into an index then, via the percolate API, define
@@ -92,20 +97,30 @@ parameters:
  being highlighted.
 }
 }
+\section{The Elasticsearch v5 split}{
+
+In Elasticsearch < v5, there's a certain set of percolate APIs available, 
+while in Elasticsearch >= v5, there's a different set of APIs available.
+
+Internally within these percolate functions we detect your Elasticsearch
+version, then use the appropriate APIs
+}
+
 \examples{
 \dontrun{
+##### Elasticsearch < v5
 # typical usage
 ## create an index first
-index_delete("myindex")
+if (index_exists("myindex")) index_delete("myindex")
 mapping <- '{
   "mappings": {
     "mytype": {
       "properties": {
         "message": {
-           "type": "string"
+           "type": "text"
         },
         "name": {
-           "type": "string"
+           "type": "text"
         }
       }
     }
@@ -152,8 +167,69 @@ percolate_delete(index = "myindex", id = 2)
 
 # multi percolate
 ## not working yet
+
+
+
+##### Elasticsearch >= v5
+if (index_exists("myindex")) index_delete("myindex")
+body <- '{
+  "mappings": {
+    "doctype": {
+      "properties": {
+        "message": {
+          "type": "text"
+        }
+      }
+    },
+    "queries": {
+      "properties": {
+        "query": {
+          "type": "percolator"
+        }
+      }
+    }
+  }
+}'
+
+# create the index with mapping
+index_create("myindex", body = body)
+
+## register a percolator
+x <- '{
+  "query" : {
+     "match" : {
+       "message" : "bonsai tree"
+     }
+  }
+}'
+percolate_register(index = "myindex", type = "queries", id = 1, body = x)
+
+## register another
+x2 <- '{
+  "query" : {
+    "match" : {
+      "message" : "the office"
+    }
+  }
+}'
+percolate_register(index = "myindex", type = "queries", id = 2, body = x2)
+
+## match a document to a percolator
+query <- '{
+  "query" : {
+    "percolate" : {
+      "field": "query",
+      "document_type": "doctype",
+      "document": {
+        "message": "A new bonsai tree in the office"
+      }
+    }
+  }
+}'
+percolate_match(index = "myindex", body = query)
 }
 }
 \references{
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-percolate-query.html}
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-percolate.html}
 }

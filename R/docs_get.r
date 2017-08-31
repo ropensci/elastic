@@ -55,10 +55,10 @@ docs_get <- function(index, type, id, source=NULL, fields=NULL, exists=FALSE,
   url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), esc(id))
 
   if (exists) {
-    out <- HEAD(url, query = args, c(es_env$headers, mc(make_up(), callopts)))
+    out <- HEAD(url, query = args, es_env$headers, make_up(), callopts)
     if (out$status_code == 200) TRUE else FALSE
   } else {
-    out <- GET(url, query = args, c(es_env$headers, mc(make_up(), callopts)))
+    out <- GET(url, query = args, es_env$headers, make_up(), callopts)
     geterror(out)
     if (verbose) message(URLdecode(out$url))
     if (raw) {

@@ -33,7 +33,7 @@
 #' # The put mapping API allows to register specific mapping definition for a specific type.
 #' ## a good mapping body
 #' body <- list(citation = list(properties = list(
-#'  journal = list(type="string"),
+#'  journal = list(type="text"),
 #'  year = list(type="long")
 #' )))
 #' if (!index_exists("plos")) index_create("plos")
@@ -43,7 +43,7 @@
 #' body <- '{
 #'   "citation": {
 #'     "properties": {
-#'       "journal": { "type": "string" },
+#'       "journal": { "type": "text" },
 #'       "year": { "type": "long" }
 #' }}}'
 #' mapping_create(index = "plos", type = "citation", body=body)
@@ -51,7 +51,7 @@
 #'
 #' ## A bad mapping body
 #' body <- list(things = list(properties = list(
-#'   journal = list("string")
+#'   journal = list("text")
 #' )))
 #' # mapping_create(index = "plos", type = "things", body=body)
 #'

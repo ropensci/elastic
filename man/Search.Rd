@@ -9,7 +9,7 @@ Search(index = NULL, type = NULL, q = NULL, df = NULL,
   source = NULL, fields = NULL, sort = NULL, track_scores = NULL,
   timeout = NULL, terminate_after = NULL, from = NULL, size = NULL,
   search_type = NULL, lowercase_expanded_terms = NULL,
-  analyze_wildcard = NULL, version = FALSE, lenient = FALSE,
+  analyze_wildcard = NULL, version = NULL, lenient = FALSE,
   body = list(), raw = FALSE, asdf = FALSE, time_scroll = NULL,
   search_path = "_search", stream_opts = list(), ...)
 }
@@ -160,8 +160,8 @@ Search(index = c("gbif", "shakespeare"))$hits$total
 ## search_type
 Search(index="shakespeare", search_type = "query_then_fetch")
 Search(index="shakespeare", search_type = "dfs_query_then_fetch")
-### search type "scan" is gone - use scroll instead
-Search(index="shakespeare", scroll = "2m")
+### search type "scan" is gone - use time_scroll instead
+Search(index="shakespeare", time_scroll = "2m")
 ### search type "count" is gone - use size=0 instead
 Search(index="shakespeare", size = 0)$hits$total
 
@@ -530,14 +530,14 @@ body <- '{
 Search('shakespeare', 'line', body=body)
 
 ## Scrolling search - instead of paging
-res <- Search(index = 'shakespeare', q="a*", scroll="1m")
-scroll(scroll_id = res$`_scroll_id`)
+res <- Search(index = 'shakespeare', q="a*", time_scroll="1m")
+scroll(res$`_scroll_id`)
 
-res <- Search(index = 'shakespeare', q="a*", scroll="5m")
+res <- Search(index = 'shakespeare', q="a*", time_scroll="5m")
 out <- list()
 hits <- 1
 while(hits != 0){
-  res <- scroll(scroll_id = res$`_scroll_id`)
+  res <- scroll(res$`_scroll_id`)
   hits <- length(res$hits$hits)
   if(hits > 0)
     out <- c(out, res$hits$hits)
@@ -570,15 +570,15 @@ body2 <- '{
   }
 }'
 
-res1 <- Search(index = 'shakespeare', scroll="1m", body = body1)
-res2 <- Search(index = 'shakespeare', scroll="1m", body = body2)
-scroll(scroll_id = res1$`_scroll_id`)
-scroll(scroll_id = res2$`_scroll_id`)
+res1 <- Search(index = 'shakespeare', time_scroll="1m", body = body1)
+res2 <- Search(index = 'shakespeare', time_scroll="1m", body = body2)
+scroll(res1$`_scroll_id`)
+scroll(res2$`_scroll_id`)
 
 out1 <- list()
 hits <- 1
 while(hits != 0){
-  tmp1 <- scroll(scroll_id = res1$`_scroll_id`)
+  tmp1 <- scroll(res1$`_scroll_id`)
   hits <- length(tmp1$hits$hits)
   if(hits > 0)
     out1 <- c(out1, tmp1$hits$hits)
@@ -587,7 +587,7 @@ while(hits != 0){
 out2 <- list()
 hits <- 1
 while(hits != 0){
-  tmp2 <- scroll(scroll_id = res2$`_scroll_id`)
+  tmp2 <- scroll(res2$`_scroll_id`)
   hits <- length(tmp2$hits$hits)
   if(hits > 0)
     out2 <- c(out2, tmp2$hits$hits)
