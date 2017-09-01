@@ -66,7 +66,10 @@ test_that("scroll fails well", {
     expect_error(scroll("asdf"), "Malformed scrollId")
   }
   
-  tt <- Search(time_scroll = "1m", size = 0)
-  expect_error(scroll(tt$`_scroll_id`, time_scroll = "5"), 
-               "parse setting \\[scroll\\] with value \\[5\\]")
+  # skip if ES version < 2
+  if (es_ver() >= 200) {
+    tt <- Search(time_scroll = "1m", size = 0)
+    expect_error(scroll(tt$`_scroll_id`, time_scroll = "5"), 
+                 "parse setting \\[scroll\\] with value \\[5\\]")
+  }
 })

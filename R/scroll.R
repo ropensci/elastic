@@ -243,14 +243,21 @@ scroll.list <- function(x, time_scroll = "1m", raw = FALSE, asdf = FALSE,
 scroll.character <- function(x, time_scroll = "1m", raw = FALSE, asdf = FALSE,
                              stream_opts = list(), ...) {
 
-  #calls <- names(sapply(match.call(), deparse))[-1]
   calls <- names(list(...))
   if ("scroll" %in% calls) {
     stop("The parameter `scroll` has been removed - use `time_scroll`")
   }
+  if (es_ver() < 200) {
+    body <- x
+    args <- list(scroll = time_scroll)
+  } else {
+    body <- list(scroll = time_scroll, scroll_id = x)
+    args <- list()
+  }
   tmp <- scroll_POST(
     path = "_search/scroll",
-    body = list(scroll = time_scroll, scroll_id = x),
+    args = args,
+    body = body,
     raw = raw,
     asdf = asdf,
     stream_opts = stream_opts, ...)
