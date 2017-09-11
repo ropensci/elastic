@@ -16,19 +16,19 @@ docs_bulk_prep(x, index, path, type = NULL, chunk_size = 1000,
 we'll use this path as the prefix, and suffix each file path with a number.
 required.}
 
-\item{type}{(character) The type name to use. If left as NULL, will be 
+\item{type}{(character) The type name to use. If left as NULL, will be
 same name as index.}
 
 \item{chunk_size}{(integer) Size of each chunk. If your data.frame is smaller
-thank \code{chunk_size}, this parameter is essentially ignored. We write in 
-chunks because at some point, depending on size of each document, and 
-Elasticsearch setup, writing a very large number of documents in one go 
-becomes slow, so chunking can help. This parameter is ignored if you 
+thank \code{chunk_size}, this parameter is essentially ignored. We write in
+chunks because at some point, depending on size of each document, and
+Elasticsearch setup, writing a very large number of documents in one go
+becomes slow, so chunking can help. This parameter is ignored if you
 pass a file name. Default: 1000}
 
-\item{doc_ids}{An optional vector (character or numeric/integer) of document 
-ids to use. This vector has to equal the size of the documents you are 
-passing in, and will error if not. If you pass a factor we convert to 
+\item{doc_ids}{An optional vector (character or numeric/integer) of document
+ids to use. This vector has to equal the size of the documents you are
+passing in, and will error if not. If you pass a factor we convert to
 character. Default: not passed}
 }
 \value{
