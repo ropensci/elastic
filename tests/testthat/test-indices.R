@@ -24,7 +24,11 @@ test_that("index_create", {
   a <- index_create(index = ind, verbose = FALSE)
   expect_true(a[[1]])
   if (gsub("\\.", "", ping()$version$number) >= 500) {
-    expect_named(a, c("acknowledged", "shards_acknowledged"))
+    if (gsub("\\.", "", ping()$version$number) >= 560) {
+      expect_named(a, c("acknowledged", "shards_acknowledged", "index"))
+    } else {
+      expect_named(a, c("acknowledged", "shards_acknowledged"))
+    }
   } else {
     expect_named(a, "acknowledged")
   }
