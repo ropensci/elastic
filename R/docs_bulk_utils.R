@@ -40,7 +40,8 @@ check_doc_ids <- function(x, ids) {
   if (!is.null(ids)) {
     # check class type
     if (!class(ids) %in% c('character', 'factor', 'numeric', 'integer')) {
-      stop("doc_ids must be of class character, numeric or integer", call. = FALSE)
+      stop("doc_ids must be of class character, numeric or integer", 
+           call. = FALSE)
     }
     
     # check appropriate length
@@ -68,7 +69,8 @@ has_ids <- function(x) {
 
 close_conns <- function() {
   cons <- showConnections()
-  ours <- as.integer(rownames(cons)[grepl("/elastic__", cons[, "description"], fixed = TRUE)])
+  ours <- as.integer(rownames(cons)[grepl("/elastic__", cons[, "description"], 
+                                          fixed = TRUE)])
   for (i in ours) {
     close(getConnection(i))
   }
