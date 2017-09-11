@@ -37,7 +37,7 @@ es_GET <- function(path, index=NULL, type=NULL, metric=NULL, node=NULL,
 mc <- function(...) {
   tmp <- ec(list(...))
   tmp <- tmp[sapply(tmp, length) != 0]
-  if (length(tmp) == 1 && is(tmp, "list")) {
+  if (length(tmp) == 1 && inherits(tmp, "list")) {
     tmp[[1]]
   } else if (all(vapply(tmp, class, "") == "config")) {
     do.call("c", tmp)
@@ -123,12 +123,12 @@ check_inputs <- function(x) {
 }
 
 geterror <- function(z) {
-  if (!is(z, "response")) stop("Input to error parser must be a httr response object")
+  if (!inherits(z, "response")) stop("Input to error parser must be a httr response object")
   if (z$status_code > 202) {
     if (is.null(z$headers$statusmessage)) {
       err <- tryCatch(cont_utf8(z), error = function(e) e)
-      err <- if (is(err, "simpleError")) jsonlite::fromJSON(cont_utf8(z), FALSE) else err
-      if (!is(err, "simpleError")) {
+      err <- if (inherits(err, "simpleError")) jsonlite::fromJSON(cont_utf8(z), FALSE) else err
+      if (!inherits(err, "simpleError")) {
         if (nchar(cont_utf8(z)) == 0) {
           stop(http_status(z)$message, call. = FALSE)
         }
@@ -148,9 +148,9 @@ geterror <- function(z) {
                pluck_trace(err), call. = FALSE)
         } else {
           msg <- tryCatch(err$error$reason, error = function(e) e)
-          if (is(msg, "simpleError") || is.null(msg)) {
+          if (inherits(msg, "simpleError") || is.null(msg)) {
             msg <- tryCatch(err$error, error = function(e) e)
-            if (is(msg, "simpleError") || is.null(msg)) {
+            if (inherits(msg, "simpleError") || is.null(msg)) {
               msg <- httr::http_status(z)$message
             }
           }
@@ -170,7 +170,7 @@ pluck_trace <- function(x) {
     " - no stack trace"
   } else {
     te <- tryCatch(x$error$root_cause, error = function(e) e)
-    if (!is(te, "error") || !"error" %in% names(x)) {
+    if (!inherits(te, "error") || !"error" %in% names(x)) {
       if (!"error" %in% names(x)) {
         te <- x
       }
@@ -184,9 +184,9 @@ pluck_trace <- function(x) {
 
 pluck_reason <- function(x) {
   tryerr <- tryCatch(x$error$reason, error = function(e) e)
-  if (is(tryerr, "error") || is.null(tryerr)) {
+  if (inherits(tryerr, "error") || is.null(tryerr)) {
     tryerr <- tryCatch(x$error, error = function(e) e)
-    if (is(tryerr, "error") || is.null(tryerr)) {
+    if (inherits(tryerr, "error") || is.null(tryerr)) {
       "error"
     } else {
       x

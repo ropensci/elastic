@@ -85,7 +85,7 @@ cn <- function(x) {
     if ("warning" %in% class(tryx)) {
       stop(name, " should be a numeric or integer class value", call. = FALSE)
     }
-    if (!is(tryx, "numeric") | is.na(tryx))
+    if (!inherits(tryx, "numeric") | is.na(tryx))
       stop(name, " should be a numeric or integer class value", call. = FALSE)
     return( format(x, digits = 22, scientific = FALSE) )
   } else {
