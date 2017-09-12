@@ -28,6 +28,8 @@
 #' extension. In order to execute the stored template, reference it 
 #' by it's name under the template key, like 
 #' \code{"file": "templateName", ...}
+#' 
+#' @references \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-template.html}
 #'
 #' @examples \dontrun{
 #' if (!index_exists("iris")) {
