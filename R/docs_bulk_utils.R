@@ -29,7 +29,7 @@ make_bulk <- function(df, index, type, counter, es_ids, path = NULL) {
 
 shift_start <- function(vals, index, type = NULL) {
   num <- tryCatch(count(index, type), error = function(e) e)
-  if (is(num, "error")) {
+  if (inherits(num, "error")) {
     vals
   } else {
     vals + num
@@ -52,9 +52,9 @@ check_doc_ids <- function(x, ids) {
 }
 
 has_ids <- function(x) {
-  if (is(x, "data.frame")) {
+  if (inherits(x, "data.frame")) {
     "id" %in% names(x)
-  } else if (is(x, "list")) {
+  } else if (inherits(x, "list")) {
     ids <- ec(sapply(x, "[[", "id"))
     if (length(ids) > 0) {
       tmp <- length(ids) == length(x)
@@ -78,7 +78,7 @@ close_conns <- function() {
 
 check_named_vectors <- function(x) {
   lapply(x, function(z) {
-    if (!is(z, "list")) {
+    if (!inherits(z, "list")) {
       as.list(z)
     } else {
       z
