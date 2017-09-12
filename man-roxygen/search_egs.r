@@ -295,26 +295,10 @@
 #'
 #' # Fuzzy query
 #' ## fuzzy query on numerics
-#' fuzzy <- list(query = list(fuzzy = list(speech_number = 7)))
+#' fuzzy <- list(query = list(fuzzy = list(text_entry = "arms")))
 #' Search(index="shakespeare", body=fuzzy)$hits$total
-#' fuzzy <- list(query = list(fuzzy = list(speech_number = list(value = 7, fuzziness = 4))))
+#' fuzzy <- list(query = list(fuzzy = list(text_entry = list(value = "arms", fuzziness = 4))))
 #' Search(index="shakespeare", body=fuzzy)$hits$total
-#'
-#' ### fuzzy query on date/time
-#' fuzzy <- list(
-#'   query = list(
-#'     fuzzy = list(
-#'      eventDate = 
-#'       list(
-#'        value = "2014-01-29T23:00:00.000",
-#'        fuzziness = "1d"
-#'       )
-#'     )
-#'   )
-#' )
-#' out <- Search(index="gbif", body=fuzzy)
-#' out$hits$total
-#' sapply(out$hits$hits, function(x) x$fields$eventDate) ## sweet!!!
 #'
 #' # geoshape query
 #' ## not working yets
