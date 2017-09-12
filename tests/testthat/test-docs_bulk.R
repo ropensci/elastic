@@ -14,11 +14,7 @@ test_that("docs_bulk - works with bulk format file", {
   
   expect_is(a, "list")
   expect_named(a, c('took', 'errors', 'items'))
-  if (es_version() < 600) {
-    expect_equal(length(a$items), 2)
-  } else {
-    expect_equal(length(a$items), 3)
-  }
+  expect_equal(length(a$items), 3)
   expect_equal(a$items[[1]]$index$`_index`, "gbifnewgeo")
 })
 
