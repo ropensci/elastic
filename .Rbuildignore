@@ -14,3 +14,4 @@ notes-v2.md
 ^\.httr-oauth$
 ^CONDUCT\.md$
 .github
+tests/test-all.R
