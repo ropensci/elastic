@@ -644,11 +644,11 @@ body <- '{
           "location" : {
             "top_left" : {
               "lat" : 60,
-              "lon" : 14
+              "lon" : 1
             },
             "bottom_right" : {
               "lat" : 40,
-              "lon" : 1
+              "lon" : 14
             }
           }
        }
@@ -656,7 +656,7 @@ body <- '{
    }
  }
 }'
-out <- Search('gbifgeopoint', body = body)
+out <- Search('gbifgeopoint', body = body, size = 300)
 out$hits$total
 do.call(rbind, lapply(out$hits$hits, function(x) x$`_source`$location))
 
