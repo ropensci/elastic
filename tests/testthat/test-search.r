@@ -139,8 +139,12 @@ test_that("Search fails as expected", {
   expect_error(Search(index = "shakespeare", from = "asdf"), "from should be a numeric or integer class value")
 
   expect_error(Search(index="shakespeare", q="~text_entry:ma~"), "all shards failed")
+  
+  if (es_version() < 600) {
+    expect_error(Search(index="shakespeare", q="line_id:[10 TO x]"), 
+                 "all shards failed||SearchPhaseExecutionException")
+  }
 
-  expect_error(Search(index="shakespeare", q="line_id:[10 TO x]"), "all shards failed||SearchPhaseExecutionException")
-
-  expect_error(Search(index="shakespeare", terminate_after="Afd"), "terminate_after should be a numeric")
+  expect_error(Search(index="shakespeare", terminate_after="Afd"), 
+               "terminate_after should be a numeric")
 })

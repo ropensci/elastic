@@ -2,6 +2,9 @@ context("cat")
 
 invisible(connect())
 
+shakespeare <- system.file("examples", "shakespeare_data.json", package = "elastic")
+if (!index_exists('shakespeare')) invisible(elastic::docs_bulk(shakespeare))
+
 test_that("cat_", {
   if (!es_version() < 110) {
     a <- cat_(parse = TRUE)
