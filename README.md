@@ -170,13 +170,13 @@ The function `connect()` is used before doing anything else to set the connectio
 
 ```r
 connect(es_port = 9200)
-#> transport:  http
-#> host:       127.0.0.1
-#> port:       9200
-#> path:       NULL
-#> username:   NULL
-#> password:   <secret>
-#> errors:     simple
+#> transport:  http 
+#> host:       127.0.0.1 
+#> port:       9200 
+#> path:       NULL 
+#> username:   NULL 
+#> password:   <secret> 
+#> errors:     simple 
 #> headers (names):  NULL
 ```
 
@@ -206,20 +206,20 @@ Search(index = "plos", size = 1)$hits$hits
 #> [[1]]
 #> [[1]]$`_index`
 #> [1] "plos"
-#>
+#> 
 #> [[1]]$`_type`
 #> [1] "article"
-#>
+#> 
 #> [[1]]$`_id`
 #> [1] "0"
-#>
+#> 
 #> [[1]]$`_score`
 #> [1] 1
-#>
+#> 
 #> [[1]]$`_source`
 #> [[1]]$`_source`$id
 #> [1] "10.1371/journal.pone.0007737"
-#>
+#> 
 #> [[1]]$`_source`$title
 #> [1] "Phospholipase C-β4 Is Essential for the Progression of the Normal Sleep Sequence and Ultradian Body Temperature Rhythms in Mice"
 ```
@@ -232,20 +232,20 @@ Search(index = "plos", type = "article", q = "antibody", size = 1)$hits$hits
 #> [[1]]
 #> [[1]]$`_index`
 #> [1] "plos"
-#>
+#> 
 #> [[1]]$`_type`
 #> [1] "article"
-#>
+#> 
 #> [[1]]$`_id`
 #> [1] "568"
-#>
+#> 
 #> [[1]]$`_score`
 #> [1] 4.165291
-#>
+#> 
 #> [[1]]$`_source`
 #> [[1]]$`_source`$id
 #> [1] "10.1371/journal.pone.0085002"
-#>
+#> 
 #> [[1]]$`_source`$title
 #> [1] "Evaluation of 131I-Anti-Angiotensin II Type 1 Receptor Monoclonal Antibody as a Reporter for Hepatocellular Carcinoma"
 ```
@@ -259,23 +259,23 @@ Get document with id=1
 docs_get(index = 'plos', type = 'article', id = 4)
 #> $`_index`
 #> [1] "plos"
-#>
+#> 
 #> $`_type`
 #> [1] "article"
-#>
+#> 
 #> $`_id`
 #> [1] "4"
-#>
+#> 
 #> $`_version`
 #> [1] 1
-#>
+#> 
 #> $found
 #> [1] TRUE
-#>
+#> 
 #> $`_source`
 #> $`_source`$id
 #> [1] "10.1371/journal.pone.0107758"
-#>
+#> 
 #> $`_source`$title
 #> [1] "Lactobacilli Inactivate Chlamydia trachomatis through Lactic Acid but Not H2O2"
 ```
@@ -287,16 +287,16 @@ Get certain fields
 docs_get(index = 'plos', type = 'article', id = 4, fields = 'id')
 #> $`_index`
 #> [1] "plos"
-#>
+#> 
 #> $`_type`
 #> [1] "article"
-#>
+#> 
 #> $`_id`
 #> [1] "4"
-#>
+#> 
 #> $`_version`
 #> [1] 1
-#>
+#> 
 #> $found
 #> [1] TRUE
 ```
@@ -313,48 +313,48 @@ docs_mget(index = "plos", type = "article", id = 1:2)
 #> $docs[[1]]
 #> $docs[[1]]$`_index`
 #> [1] "plos"
-#>
+#> 
 #> $docs[[1]]$`_type`
 #> [1] "article"
-#>
+#> 
 #> $docs[[1]]$`_id`
 #> [1] "1"
-#>
+#> 
 #> $docs[[1]]$`_version`
 #> [1] 1
-#>
+#> 
 #> $docs[[1]]$found
 #> [1] TRUE
-#>
+#> 
 #> $docs[[1]]$`_source`
 #> $docs[[1]]$`_source`$id
 #> [1] "10.1371/journal.pone.0098602"
-#>
+#> 
 #> $docs[[1]]$`_source`$title
 #> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
-#>
-#>
-#>
+#> 
+#> 
+#> 
 #> $docs[[2]]
 #> $docs[[2]]$`_index`
 #> [1] "plos"
-#>
+#> 
 #> $docs[[2]]$`_type`
 #> [1] "article"
-#>
+#> 
 #> $docs[[2]]$`_id`
 #> [1] "2"
-#>
+#> 
 #> $docs[[2]]$`_version`
 #> [1] 1
-#>
+#> 
 #> $docs[[2]]$found
 #> [1] TRUE
-#>
+#> 
 #> $docs[[2]]$`_source`
 #> $docs[[2]]$`_source`$id
 #> [1] "10.1371/journal.pone.0107757"
-#>
+#> 
 #> $docs[[2]]$`_source`$title
 #> [1] "Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition"
 ```
@@ -366,23 +366,23 @@ Different indeces, types, and ids
 docs_mget(index_type_id = list(c("plos", "article", 1), c("gbif", "record", 1)))$docs[[1]]
 #> $`_index`
 #> [1] "plos"
-#>
+#> 
 #> $`_type`
 #> [1] "article"
-#>
+#> 
 #> $`_id`
 #> [1] "1"
-#>
+#> 
 #> $`_version`
 #> [1] 1
-#>
+#> 
 #> $found
 #> [1] TRUE
-#>
+#> 
 #> $`_source`
 #> $`_source`$id
 #> [1] "10.1371/journal.pone.0098602"
-#>
+#> 
 #> $`_source`$title
 #> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
 ```
