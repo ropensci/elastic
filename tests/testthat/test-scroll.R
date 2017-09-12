@@ -63,7 +63,11 @@ test_that("scroll fails well", {
   if (es_ver() >= 500) {
     expect_error(scroll("asdf"), "Cannot parse scroll id")
   } else {
-    expect_error(scroll("asdf"), "Malformed scrollId")
+    if (es_ver() > 100) {
+      expect_error(scroll("asdf"), "Malformed scrollId")
+    } else {
+      expect_error(scroll("asdf"), "ArrayIndexOutOfBoundsException")
+    }
   }
   
   # skip if ES version < 2
