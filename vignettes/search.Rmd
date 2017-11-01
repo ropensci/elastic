@@ -75,7 +75,7 @@ out$hits$hits[[1]]
 
 
 ```r
-Search(index="shakespeare", type="act")$hits$hits[[1]]
+Search(index = "shakespeare", type = "act")$hits$hits[[1]]
 ```
 
 ```
@@ -112,7 +112,7 @@ Search(index="shakespeare", type="act")$hits$hits[[1]]
 
 
 ```r
-Search(index="shakespeare", , body = '{
+Search(index = "shakespeare", body = '{
   "_source": ["play_name", "speaker"]
 }')$hits$hits[[1]]
 ```
@@ -223,7 +223,7 @@ sapply(Search(index="shakespeare", version=TRUE, size=2)$hits$hits, "[[", "_vers
 ```
 
 ```
-#> [1] 4 4
+#> [1] 1 1
 ```
 
 ### Get raw data
@@ -234,7 +234,7 @@ Search(index="shakespeare", type="scene", raw=TRUE)
 ```
 
 ```
-#> [1] "{\"took\":1,\"timed_out\":false,\"_shards\":{\"total\":5,\"successful\":5,\"skipped\":0,\"failed\":0},\"hits\":{\"total\":34,\"max_score\":1.0,\"hits\":[{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"646\",\"_score\":1.0,\"_source\":{\"line_id\":647,\"play_name\":\"Henry IV\",\"speech_number\":54,\"line_number\":\"\",\"speaker\":\"HOTSPUR\",\"text_entry\":\"SCENE I. Rochester. An inn yard.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"1829\",\"_score\":1.0,\"_source\":{\"line_id\":1830,\"play_name\":\"Henry IV\",\"speech_number\":74,\"line_number\":\"\",\"speaker\":\"MORTIMER\",\"text_entry\":\"SCENE II. London. The palace.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2588\",\"_score\":1.0,\"_source\":{\"line_id\":2589,\"play_name\":\"Henry IV\",\"speech_number\":28,\"line_number\":\"\",\"speaker\":\"SIR WALTER BLUNT\",\"text_entry\":\"SCENE IV. York. The ARCHBISHOPS palace.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"3156\",\"_score\":1.0,\"_source\":{\"line_id\":3157,\"play_name\":\"Henry IV\",\"speech_number\":37,\"line_number\":\"\",\"speaker\":\"FALSTAFF\",\"text_entry\":\"SCENE V. Another part of the field.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"3870\",\"_score\":1.0,\"_source\":{\"line_id\":3871,\"play_name\":\"Henry VI Part 1\",\"speech_number\":5,\"line_number\":\"\",\"speaker\":\"CHARLES\",\"text_entry\":\"SCENE I. Before Orleans.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4031\",\"_score\":1.0,\"_source\":{\"line_id\":4032,\"play_name\":\"Henry VI Part 1\",\"speech_number\":12,\"line_number\":\"\",\"speaker\":\"Captain\",\"text_entry\":\"SCENE III. Auvergne. The COUNTESSs castle.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4294\",\"_score\":1.0,\"_source\":{\"line_id\":4295,\"play_name\":\"Henry VI Part 1\",\"speech_number\":47,\"line_number\":\"\",\"speaker\":\"PLANTAGENET\",\"text_entry\":\"SCENE V. The Tower of London.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4923\",\"_score\":1.0,\"_source\":{\"line_id\":4924,\"play_name\":\"Henry VI Part 1\",\"speech_number\":24,\"line_number\":\"\",\"speaker\":\"CHARLES\",\"text_entry\":\"SCENE IV. Paris. The palace.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4975\",\"_score\":1.0,\"_source\":{\"line_id\":4976,\"play_name\":\"Henry VI Part 1\",\"speech_number\":11,\"line_number\":\"\",\"speaker\":\"VERNON\",\"text_entry\":\"SCENE I. Paris. A hall of state.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"324\",\"_score\":1.0,\"_source\":{\"line_id\":325,\"play_name\":\"Henry IV\",\"speech_number\":62,\"line_number\":\"\",\"speaker\":\"PRINCE HENRY\",\"text_entry\":\"SCENE III. London. The palace.\"}}]}}"
+#> [1] "{\"took\":2,\"timed_out\":false,\"_shards\":{\"total\":5,\"successful\":5,\"skipped\":0,\"failed\":0},\"hits\":{\"total\":34,\"max_score\":1.0,\"hits\":[{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"646\",\"_score\":1.0,\"_source\":{\"line_id\":647,\"play_name\":\"Henry IV\",\"speech_number\":54,\"line_number\":\"\",\"speaker\":\"HOTSPUR\",\"text_entry\":\"SCENE I. Rochester. An inn yard.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"1829\",\"_score\":1.0,\"_source\":{\"line_id\":1830,\"play_name\":\"Henry IV\",\"speech_number\":74,\"line_number\":\"\",\"speaker\":\"MORTIMER\",\"text_entry\":\"SCENE II. London. The palace.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2588\",\"_score\":1.0,\"_source\":{\"line_id\":2589,\"play_name\":\"Henry IV\",\"speech_number\":28,\"line_number\":\"\",\"speaker\":\"SIR WALTER BLUNT\",\"text_entry\":\"SCENE IV. York. The ARCHBISHOPS palace.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"3156\",\"_score\":1.0,\"_source\":{\"line_id\":3157,\"play_name\":\"Henry IV\",\"speech_number\":37,\"line_number\":\"\",\"speaker\":\"FALSTAFF\",\"text_entry\":\"SCENE V. Another part of the field.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"3870\",\"_score\":1.0,\"_source\":{\"line_id\":3871,\"play_name\":\"Henry VI Part 1\",\"speech_number\":5,\"line_number\":\"\",\"speaker\":\"CHARLES\",\"text_entry\":\"SCENE I. Before Orleans.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4031\",\"_score\":1.0,\"_source\":{\"line_id\":4032,\"play_name\":\"Henry VI Part 1\",\"speech_number\":12,\"line_number\":\"\",\"speaker\":\"Captain\",\"text_entry\":\"SCENE III. Auvergne. The COUNTESSs castle.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4294\",\"_score\":1.0,\"_source\":{\"line_id\":4295,\"play_name\":\"Henry VI Part 1\",\"speech_number\":47,\"line_number\":\"\",\"speaker\":\"PLANTAGENET\",\"text_entry\":\"SCENE V. The Tower of London.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4923\",\"_score\":1.0,\"_source\":{\"line_id\":4924,\"play_name\":\"Henry VI Part 1\",\"speech_number\":24,\"line_number\":\"\",\"speaker\":\"CHARLES\",\"text_entry\":\"SCENE IV. Paris. The palace.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4975\",\"_score\":1.0,\"_source\":{\"line_id\":4976,\"play_name\":\"Henry VI Part 1\",\"speech_number\":11,\"line_number\":\"\",\"speaker\":\"VERNON\",\"text_entry\":\"SCENE I. Paris. A hall of state.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"324\",\"_score\":1.0,\"_source\":{\"line_id\":325,\"play_name\":\"Henry IV\",\"speech_number\":62,\"line_number\":\"\",\"speaker\":\"PRINCE HENRY\",\"text_entry\":\"SCENE III. London. The palace.\"}}]}}"
 ```
 
 ### Curl debugging
@@ -523,7 +523,7 @@ Search('gbif', body=body)$hits$total
 ```
 
 ```
-#> [1] 166
+#> [1] 126
 ```
 
 With dates
@@ -535,7 +535,7 @@ Search('gbif', body=body)$hits$total
 ```
 
 ```
-#> [1] 899
+#> [1] 300
 ```
 
 
@@ -545,7 +545,7 @@ Search('gbif', body=body)$hits$total
 ```
 
 ```
-#> [1] 685
+#> [1] 291
 ```
 
 ### More-like-this query (more_like_this can be shortened to mlt)
