@@ -113,8 +113,22 @@ I have prepare a non-exported function useful for preparing the weird format tha
 Elasticsearch provides some data on Shakespeare plays. I've provided a subset of this data in this package. Get the path for the file specific to your machine:
 
 
+```
+#> transport:  http 
+#> host:       127.0.0.1 
+#> port:       9200 
+#> path:       NULL 
+#> username:   NULL 
+#> password:   <secret> 
+#> errors:     simple 
+#> headers (names):  NULL
+```
+
+
 ```r
 shakespeare <- system.file("examples", "shakespeare_data.json", package = "elastic")
+# If you're on Elastic v6 or greater, use this one with 1 type instead of 3:
+shakespeare <- system.file("examples", "shakespeare_data_.json", package = "elastic")
 ```
 
 Then load the data into Elasticsearch:
@@ -127,7 +141,7 @@ invisible(docs_bulk(shakespeare))
 If you need some big data to play with, the shakespeare dataset is a good one to start with. You can get the whole thing and pop it into Elasticsearch (beware, may take up to 10 minutes or so.):
 
 ```sh
-curl -XGET https://www.elastic.co/guide/en/kibana/3.0/snippets/shakespeare.json > shakespeare.json
+curl -XGET https://download.elastic.co/demos/kibana/gettingstarted/shakespeare_6.0.json > shakespeare.json
 curl -XPUT localhost:9200/_bulk --data-binary @shakespeare.json
 ```
 
@@ -161,7 +175,7 @@ invisible(docs_bulk(gbifgeo))
 
 ### More data sets
 
-There are more datasets formatted for bulk loading in the `ropensci/elastic_data` GitHub repository. Find it at [https://github.com/ropensci/elastic_data](https://github.com/ropensci/elastic_data)
+There are more datasets formatted for bulk loading in the `ropensci/elastic_data` GitHub repository. Find it at <https://github.com/ropensci/elastic_data>
 
 ## Initialization
 
@@ -237,17 +251,17 @@ Search(index = "plos", type = "article", q = "antibody", size = 1)$hits$hits
 #> [1] "article"
 #> 
 #> [[1]]$`_id`
-#> [1] "568"
+#> [1] "216"
 #> 
 #> [[1]]$`_score`
-#> [1] 4.165291
+#> [1] 4.423327
 #> 
 #> [[1]]$`_source`
 #> [[1]]$`_source`$id
-#> [1] "10.1371/journal.pone.0085002"
+#> [1] "10.1371/journal.pone.0107664"
 #> 
 #> [[1]]$`_source`$title
-#> [1] "Evaluation of 131I-Anti-Angiotensin II Type 1 Receptor Monoclonal Antibody as a Reporter for Hepatocellular Carcinoma"
+#> [1] "Antibody-Validated Proteins in Inflamed Islets of Fulminant Type 1 Diabetes Profiled by Laser-Capture Microdissection Followed by Mass Spectrometry"
 ```
 
 ## Get documents
