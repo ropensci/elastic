@@ -103,6 +103,20 @@ not be that interested in the response. If not, wrap your call to
 \code{invisible(docs_bulk(...))}
 }
 
+\section{Connections/Files}{
+
+We create temporary files, and connections to those files, when data.frame's 
+and lists are passed in to \code{docs_bulk()} (not when a file is passed in 
+since we don't need to create a file). After inserting data into your 
+Elasticsearch instance, we close the connections and delete the temporary files.
+
+There are some exceptions though. When you pass in your own file, whether a 
+tempfile or not, we don't delete those files after using them - in case 
+you need those files again. Your own tempfile's will be cleaned up/delete 
+when the R session ends. Non-tempfile's won't be cleaned up/deleted after
+the R session ends.
+}
+
 \examples{
 \dontrun{
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")

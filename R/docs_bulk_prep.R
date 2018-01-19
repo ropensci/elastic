@@ -9,6 +9,14 @@
 #' required.
 #' @return File path(s). By default we use temporary files; these are cleaned
 #' up at the end of a session
+#' 
+#' @section Tempfiles:
+#' In \code{docs_bulk} we create temporary files in some cases, and delete 
+#' those before the function exits. However, we don't clean up those files
+#' in this function because the point of the function is to create the 
+#' newline delimited JSON files that you need. Tempfiles are cleaned up
+#' when you R session ends though - be aware of that. If you want to 
+#' keep the files make sure to move them outside of the temp directory.
 #'
 #' @seealso \code{\link{docs_bulk}}
 #'

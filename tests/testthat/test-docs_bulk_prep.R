@@ -11,6 +11,9 @@ test_that("docs_bulk_prep - works with data.frame input", {
   expect_gt(length(a_res), 50)
   expect_match(a_res[1], "hello")
   expect_match(a_res[2], "disp")
+
+  # cleanup
+  unlink(ff, force = TRUE)
 })
 
 test_that("docs_bulk_prep - works with list input", {
@@ -24,6 +27,9 @@ test_that("docs_bulk_prep - works with list input", {
   expect_gt(length(a_res), 200)
   expect_match(a_res[1], "iris")
   expect_match(a_res[2], "Sepal")
+
+  # cleanup
+  unlink(ff, force = TRUE)
 })
 
 test_that("docs_bulk_prep - chunks gives many file paths, with indexed suffix", {
@@ -46,6 +52,9 @@ test_that("docs_bulk_prep - chunks gives many file paths, with indexed suffix", 
   expect_equal(length(a_res), 2000)
   expect_match(a_res[1], "big")
   expect_match(a_res[2], "Petal")
+
+  # cleanup
+  unlink(ff, force = TRUE)
 })
 
 test_that("docs_bulk_prep fails as expected", {

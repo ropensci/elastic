@@ -38,6 +38,16 @@ up at the end of a session
 \description{
 Use the bulk API to prepare bulk format data
 }
+\section{Tempfiles}{
+
+In \code{docs_bulk} we create temporary files in some cases, and delete 
+those before the function exits. However, we don't clean up those files
+in this function because the point of the function is to create the 
+newline delimited JSON files that you need. Tempfiles are cleaned up
+when you R session ends though - be aware of that. If you want to 
+keep the files make sure to move them outside of the temp directory.
+}
+
 \examples{
 \dontrun{
 # From a data.frame

@@ -75,6 +75,18 @@
 #' not be that interested in the response. If not, wrap your call to
 #' \code{docs_bulk} in \code{\link{invisible}}, like so:
 #' \code{invisible(docs_bulk(...))}
+#' 
+#' @section Connections/Files:
+#' We create temporary files, and connections to those files, when data.frame's 
+#' and lists are passed in to \code{docs_bulk()} (not when a file is passed in 
+#' since we don't need to create a file). After inserting data into your 
+#' Elasticsearch instance, we close the connections and delete the temporary files.
+#' 
+#' There are some exceptions though. When you pass in your own file, whether a 
+#' tempfile or not, we don't delete those files after using them - in case 
+#' you need those files again. Your own tempfile's will be cleaned up/delete 
+#' when the R session ends. Non-tempfile's won't be cleaned up/deleted after
+#' the R session ends. 
 #'
 #' @return A list
 #'
@@ -260,8 +272,9 @@ docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
 docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000,
                                 doc_ids = NULL, es_ids = TRUE, raw=FALSE, ...) {
 
-  on.exit(close_conns())
   stopifnot(file.exists(x))
+  on.exit(close_conns())
+  on.exit(cleanup_file(x), add = TRUE)
   url <- paste0(make_url(es_get_auth()), '/_bulk')
   tt <- POST(url, make_up(), es_env$headers, ..., 
              body = upload_file(x, type = "application/x-ndjson"), 

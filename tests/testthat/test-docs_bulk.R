@@ -8,14 +8,14 @@ test_that("docs_bulk - works with bulk format file", {
     index_delete("gbifnewgeo")
   }
   # file
-  gsmall <- system.file("examples", "gbif_geosmall.json", package = "elastic")
+  gsmall <- system.file("examples", "gbif_geo.json", package = "elastic")
   # load bulk
   a <- docs_bulk(x = gsmall)
   
   expect_is(a, "list")
   expect_named(a, c('took', 'errors', 'items'))
-  expect_equal(length(a$items), 3)
-  expect_equal(a$items[[1]]$index$`_index`, "gbifnewgeo")
+  expect_equal(length(a$items), 301)
+  expect_equal(a$items[[1]]$index$`_index`, "gbifgeo")
 })
 
 test_that("docs_bulk - works with data.frame input", {
@@ -138,4 +138,15 @@ test_that("dataset with NA's", {
   out <- Search("mtcars", asdf = TRUE)$hits$hits
   expect_is(out, "data.frame")
   expect_true(any(is.na(out)))
+})
+
+
+test_that("docs_bulk cleans up temp files", {
+  curr_tempdir <- tempdir()
+  if (index_exists("iris")) {
+    index_delete("iris")
+  }
+  aa <- docs_bulk(apply(iris, 1, as.list), index="iris", type="flowers")
+
+  expect_equal(length(list.files(curr_tempdir, pattern = "elastic__")), 0)
 })
