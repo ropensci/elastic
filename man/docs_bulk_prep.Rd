@@ -5,7 +5,7 @@
 \title{Use the bulk API to prepare bulk format data}
 \usage{
 docs_bulk_prep(x, index, path, type = NULL, chunk_size = 1000,
-  doc_ids = NULL)
+  doc_ids = NULL, quiet = FALSE)
 }
 \arguments{
 \item{x}{A data.frame or a list. required.}
@@ -30,6 +30,8 @@ pass a file name. Default: 1000}
 ids to use. This vector has to equal the size of the documents you are
 passing in, and will error if not. If you pass a factor we convert to
 character. Default: not passed}
+
+\item{quiet}{(logical) Suppress progress bar. Default: \code{FALSE}}
 }
 \value{
 File path(s). By default we use temporary files; these are cleaned
@@ -128,6 +130,13 @@ for (i in seq_along(files)) {
 }
 unlist(paths)
 
+
+# suppress progress bar
+docs_bulk_prep(mtcars, index = "hello", type = "world", 
+  path = tempfile(fileext = ".json"), quiet = TRUE)
+## vs. 
+docs_bulk_prep(mtcars, index = "hello", type = "world", 
+  path = tempfile(fileext = ".json"), quiet = FALSE)
 }
 }
 \seealso{

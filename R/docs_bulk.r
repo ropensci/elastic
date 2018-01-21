@@ -19,10 +19,13 @@
 #' @param es_ids (boolean) Let Elasticsearch assign document IDs as UUIDs.
 #' These are sequential, so there is order to the IDs they assign.
 #' If \code{TRUE}, \code{doc_ids} is ignored. Default: \code{TRUE}
-#' @param raw (logical) Get raw JSON back or not.
+#' @param raw (logical) Get raw JSON back or not. If \code{TRUE} 
+#' you get JSON; if \code{FALSE} you get a list. Default: \code{FALSE}
+#' @param quiet (logical) Suppress progress bar. Default: \code{FALSE}
 #' @param ... Pass on curl options to \code{\link[httr]{POST}}
 #'
-#' @seealso \code{\link{docs_bulk_prep}}
+#' @seealso \code{\link{docs_bulk_prep}} for prepping a newline delimited 
+#' JSON file that you can load into Elasticsearch yourself
 #'
 #' @details More on the Bulk API:
 #' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html}.
@@ -91,16 +94,12 @@
 #' @return A list
 #'
 #' @examples \dontrun{
+#' # From a file already in newline delimited JSON format
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 #' docs_bulk(plosdat)
 #' aliases_get()
 #' index_delete(index='plos')
 #' aliases_get()
-#'
-#' # Curl options
-#' library("httr")
-#' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-#' docs_bulk(plosdat, config=verbose())
 #'
 #' # From a data.frame
 #' docs_bulk(mtcars, index = "hello", type = "world")
@@ -184,16 +183,31 @@
 #' out <- docs_bulk(x = res, index = db)
 #' count(db)
 #' index_delete(db)
+#' 
+#' 
+#' 
+#' # Curl options
+#' library("httr")
+#' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+#' docs_bulk(plosdat, config=verbose())
+#' 
+#' 
+#' # suppress progress bar
+#' x <- docs_bulk(mtcars, index = "hello", type = "world", quiet = TRUE)
+#' ## vs. 
+#' x <- docs_bulk(mtcars, index = "hello", type = "world", quiet = FALSE)
 #' }
 docs_bulk <- function(x, index = NULL, type = NULL, chunk_size = 1000,
-                      doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
+                      doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
+                      quiet = FALSE, ...) {
 
   UseMethod("docs_bulk")
 }
 
 #' @export
 docs_bulk.default <- function(x, index = NULL, type = NULL, chunk_size = 1000,
-                      doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
+                      doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
+                      quiet = FALSE, ...) {
 
   stop("no 'docs_bulk' method for class ", class(x), call. = FALSE)
 }
@@ -201,8 +215,9 @@ docs_bulk.default <- function(x, index = NULL, type = NULL, chunk_size = 1000,
 #' @export
 docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000,
                                  doc_ids = NULL, 
-                                 es_ids = TRUE, raw = FALSE, ...) {
+                                 es_ids = TRUE, raw = FALSE, quiet = FALSE, ...) {
 
+  assert(quiet, "logical")
   if (is.null(index)) {
     stop("index can't be NULL when passing a data.frame",
          call. = FALSE)
@@ -222,11 +237,14 @@ docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000
     rws <- shift_start(rws, index, type)
     id_chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
   }
-  pb <- txtProgressBar(min = 0, max = length(data_chks), initial = 0, style = 3)
-  on.exit(close(pb))
+  
+  if (!quiet) {
+    pb <- txtProgressBar(min = 0, max = length(data_chks), initial = 0, style = 3)
+    on.exit(close(pb))
+  }
   resl <- vector(mode = "list", length = length(data_chks))
   for (i in seq_along(data_chks)) {
-    setTxtProgressBar(pb, i)
+    if (!quiet) setTxtProgressBar(pb, i)
     resl[[i]] <- docs_bulk(make_bulk(x[data_chks[[i]], , drop = FALSE], 
                                      index, type, id_chks[[i]], es_ids), ...)
   }
@@ -235,8 +253,10 @@ docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000
 
 #' @export
 docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
-                           doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...) {
+                           doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
+                           quiet = FALSE, ...) {
 
+  assert(quiet, "logical")
   if (is.null(index)) {
     stop("index can't be NULL when passing a list",
          call. = FALSE)
@@ -257,11 +277,14 @@ docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
     rws <- shift_start(rws, index, type)
     id_chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
   }
-  pb <- txtProgressBar(min = 0, max = length(data_chks), initial = 0, style = 3)
-  on.exit(close(pb))
+
+  if (!quiet) {
+    pb <- txtProgressBar(min = 0, max = length(data_chks), initial = 0, style = 3)
+    on.exit(close(pb))
+  }
   resl <- vector(mode = "list", length = length(data_chks))
   for (i in seq_along(data_chks)) {
-    setTxtProgressBar(pb, i)
+    if (!quiet) setTxtProgressBar(pb, i)
     resl[[i]] <- docs_bulk(make_bulk(x[data_chks[[i]]], index, 
                                      type, id_chks[[i]], es_ids), ...)
   }
@@ -270,7 +293,8 @@ docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
 
 #' @export
 docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000,
-                                doc_ids = NULL, es_ids = TRUE, raw=FALSE, ...) {
+                                doc_ids = NULL, es_ids = TRUE, raw=FALSE, 
+                                quiet = FALSE, ...) {
 
   stopifnot(file.exists(x))
   on.exit(close_conns())
