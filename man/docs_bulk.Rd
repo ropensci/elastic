@@ -5,7 +5,7 @@
 \title{Use the bulk API to create, index, update, or delete documents.}
 \usage{
 docs_bulk(x, index = NULL, type = NULL, chunk_size = 1000,
-  doc_ids = NULL, es_ids = TRUE, raw = FALSE, ...)
+  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, ...)
 }
 \arguments{
 \item{x}{A list, data.frame, or character path to a file. required.}
@@ -32,7 +32,10 @@ character. Default: not passed}
 These are sequential, so there is order to the IDs they assign.
 If \code{TRUE}, \code{doc_ids} is ignored. Default: \code{TRUE}}
 
-\item{raw}{(logical) Get raw JSON back or not.}
+\item{raw}{(logical) Get raw JSON back or not. If \code{TRUE} 
+you get JSON; if \code{FALSE} you get a list. Default: \code{FALSE}}
+
+\item{quiet}{(logical) Suppress progress bar. Default: \code{FALSE}}
 
 \item{...}{Pass on curl options to \code{\link[httr]{POST}}}
 }
@@ -103,18 +106,28 @@ not be that interested in the response. If not, wrap your call to
 \code{invisible(docs_bulk(...))}
 }
 
+\section{Connections/Files}{
+
+We create temporary files, and connections to those files, when data.frame's 
+and lists are passed in to \code{docs_bulk()} (not when a file is passed in 
+since we don't need to create a file). After inserting data into your 
+Elasticsearch instance, we close the connections and delete the temporary files.
+
+There are some exceptions though. When you pass in your own file, whether a 
+tempfile or not, we don't delete those files after using them - in case 
+you need those files again. Your own tempfile's will be cleaned up/delete 
+when the R session ends. Non-tempfile's won't be cleaned up/deleted after
+the R session ends.
+}
+
 \examples{
 \dontrun{
+# From a file already in newline delimited JSON format
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 docs_bulk(plosdat)
 aliases_get()
 index_delete(index='plos')
 aliases_get()
-
-# Curl options
-library("httr")
-plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-docs_bulk(plosdat, config=verbose())
 
 # From a data.frame
 docs_bulk(mtcars, index = "hello", type = "world")
@@ -198,8 +211,22 @@ res <- data.frame(foo = 1:10)
 out <- docs_bulk(x = res, index = db)
 count(db)
 index_delete(db)
+
+
+
+# Curl options
+library("httr")
+plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+docs_bulk(plosdat, config=verbose())
+
+
+# suppress progress bar
+x <- docs_bulk(mtcars, index = "hello", type = "world", quiet = TRUE)
+## vs. 
+x <- docs_bulk(mtcars, index = "hello", type = "world", quiet = FALSE)
 }
 }
 \seealso{
-\code{\link{docs_bulk_prep}}
+\code{\link{docs_bulk_prep}} for prepping a newline delimited 
+JSON file that you can load into Elasticsearch yourself
 }

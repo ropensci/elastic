@@ -75,7 +75,12 @@ test_that("docs_delete works", {
 
   f <- docs_delete(index = ind3, type = "holla", id = 3)
   expect_is(f, "list")
-  expect_true(f$found)
+  if (es_version() < 600) {
+    expect_true(f$found)
+  } else {
+    expect_true("_seq_no" %in% names(f))
+    expect_true("_primary_term" %in% names(f))
+  }
   # error if try again to delete since document is gone
   expect_error(docs_delete(index = ind3, type = "holla", id = 3), "Not Found")
 })
@@ -95,7 +100,9 @@ test_that("document ids with spaces work", {
   # create
   f <- docs_create(index = ind4, type = ind4, id = "hello world", body = list(a = "asdfasdf"))
   invisible(docs_create(index = ind4, type = ind4, id = "foo bar", body = list(a = "asdfadfadfasdfasdfsdf")))
-  invisible(docs_create(index = ind4, type = "dattype", id = "what the", body = list(a = "cars")))
+  if (es_version() < 600) {
+    invisible(docs_create(index = ind4, type = "dattype", id = "what the", body = list(a = "cars")))
+  }
   expect_is(f, "list")
   expect_equal(f$`_id`, "hello world")
   
@@ -114,27 +121,34 @@ test_that("document ids with spaces work", {
   hh <- docs_mget(index = ind4, type_id = list(c(ind4, "hello world"), c("dattype", "what the")), verbose = FALSE)
   expect_is(hh, "list")
   expect_equal(length(hh$docs), 2)
-  expect_true(all(vapply(hh$docs, "[[", logical(1), "found")))
+  if (es_version() < 600) {
+    expect_true(all(vapply(hh$docs, "[[", logical(1), "found")))
+  } else {
+    expect_equal(vapply(hh$docs, "[[", logical(1), "found"), c(TRUE, FALSE))
+  }
   
   # mget - index_type_id param
   invisible(docs_create(index = ind5, type = ind5, id = "hello mars", body = list(radius = 1000000L)))
   
-  hhh <- docs_mget(index_type_id = list(
-    c(ind4, ind4, "hello world"), 
-    c(ind5, ind5, "hello mars")
-  ), verbose = FALSE)
-  expect_is(hhh, "list")
-  expect_equal(length(hhh$docs), 2)
-  expect_true(all(vapply(hhh$docs, "[[", logical(1), "found")))
-  
-  # update
-  i <- docs_update(index = ind4, type = ind4, id = "hello world", body = list(doc = list(a = "an update")))
-  expect_is(i, "list")
-  
-  # delete
-  j <- docs_delete(index = ind4, type = ind4, id = "hello world")
-  expect_is(j, "list")
-  expect_true(j$found)
+  if (es_version() < 600) {
+    
+    hhh <- docs_mget(index_type_id = list(
+      c(ind4, ind4, "hello world"), 
+      c(ind5, ind5, "hello mars")
+    ), verbose = FALSE)
+    expect_is(hhh, "list")
+    expect_equal(length(hhh$docs), 2)
+    expect_true(all(vapply(hhh$docs, "[[", logical(1), "found")))
+    
+    # update
+    i <- docs_update(index = ind4, type = ind4, id = "hello world", body = list(doc = list(a = "an update")))
+    expect_is(i, "list")
+    
+    # delete
+    j <- docs_delete(index = ind4, type = ind4, id = "hello world")
+    expect_is(j, "list")
+    expect_true(j$found)
+  }
 })
 
 ## cleanup -----------------------------------

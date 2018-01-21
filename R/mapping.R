@@ -73,14 +73,16 @@
 #' field_mapping_get(type = "a*", field = "t*")
 #'
 #' # Create geospatial mapping
+#' if (index_exists("gbifgeopoint")) index_delete("gbifgeopoint")
 #' file <- system.file("examples", "gbif_geopoint.json", package = "elastic")
-#' invisible(docs_bulk(file))
+#' index_create("gbifgeopoint")
 #' body <- '{
 #'  "properties" : {
 #'    "location" : { "type" : "geo_point" }
 #'  }
 #' }'
 #' mapping_create("gbifgeopoint", "record", body = body)
+#' invisible(docs_bulk(file))
 #' 
 #' # update_all_fields, see also ?fielddata
 #' mapping_create("shakespeare", "record", update_all_types=TRUE, body = '{

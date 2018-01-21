@@ -1,3 +1,73 @@
+elastic 0.8.0
+=============
+
+### Scroll changes
+
+* changed to S3 setup, with methods for `character` and 
+`list`.
+* first parameter of `scroll()` and `scroll_clear()` is now `x`, should 
+only matter if you specified the parameter name for the first parameter
+* `scroll` parameter in `scroll()` function is now `time_scroll`
+* Added `asdf` (for "as data.frame") to `scroll()` to give back a
+data.frame (#163)
+* streaming option added to `scroll()`, see parameter `stream_opts` in the
+docs and examples (#160)
+* general docs improvements (#182)
+
+
+### NEW FEATURES
+
+* New functions `tasks` and `tasks_cancel` for the tasks API (#145)
+* streaming option added to `Search()`, see parameter `stream_opts` in the
+docs and examples. `scroll` parameter in `Search()` is now `time_scroll` 
+(#160)
+* New function `field_caps` (for field capabilities) - in ES v5.4 and 
+greater
+* New function `reindex` for the reindex ES API (#134)
+* New functions `index_template_get`, `index_template_put`, 
+`index_template_exists`, and `index_template_delete` for the indices 
+templates ES API (#133)
+* New function `index_forcemerge` for the ES index `_forcemerge`
+route (#176)
+
+### MINOR IMPROVEMENTS
+
+* Added examples to docs for `Search` and `Search_uri` for how 
+to show progress bar (#162)
+* Small docs fix to `docs_bulk` to clarify what's allowed as first 
+parameter input (#173)
+* `docs_bulk` change to internal JSON preparation to use 
+`na = "null"` and `auto_unbox = TRUE` in the `jsonlite::toJSON` 
+call. This means that `NA`'s in R become `null` in the JSON 
+and atomic vectors are unboxed (#174) thanks @pieterprovoost
+* `mapping_create` gains `update_all_types` parameter; and new man 
+file to explain how to enable fielddata if sorting needed (#164)
+* `suggest` is used through query DSL instead of a route, added
+example to `Search` (#102)
+* Now caching internal `ping()` calls - so that after the first one
+we used the cached version if called again within the same R session. 
+Should help speed up some code with respect to http calls (#184) 
+thanks @henfiber
+* Fixes to percolate functions and docs for differences in percolate 
+functionality pre v5 and post v5 (#176)
+* All http requests now contain `content-type` headers, for the most part
+`application/json` (#197), though functions that work with the bulk API
+use `application/x-ndjson` (#186)
+* docs fix to `mapping_create` egs (#199)
+* README now includes example of how to connect when your ES is using X-pack 
+(#185) thanks @ugosan
+
+### BUG FIXES
+
+* fixes for normalizing url paths (#181)
+* fix to `type_exists` to work on ES versions less to and greater than 
+v5 (#189)
+* fix to `field_stats` to indicate that its no longer avail. in 
+ES v5.4 and above - and that the `fields` parameter in ES >= v5 is 
+gone (#190)
+
+
+
 elastic 0.7.8
 =============
 
@@ -24,6 +94,7 @@ working. (#151) thanks @gustavobio
 * `docs_*` functions now support ids with whitespace in them. (#155)
 * fixes to `docs_mget()` to fix requesting certain fields back.
 
+
 elastic 0.7.6
 =============
 
@@ -33,6 +104,7 @@ elastic 0.7.6
 `stop()` on `es_base` usage, we use its value for `es_host`. Only 
 pass in one or the other of `es_base` and `es_host`, not both. 
 (#146) thanks @MarcinKosinski
+
 
 elastic 0.7.4
 =============

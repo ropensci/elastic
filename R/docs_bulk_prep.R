@@ -9,6 +9,14 @@
 #' required.
 #' @return File path(s). By default we use temporary files; these are cleaned
 #' up at the end of a session
+#' 
+#' @section Tempfiles:
+#' In \code{docs_bulk} we create temporary files in some cases, and delete 
+#' those before the function exits. However, we don't clean up those files
+#' in this function because the point of the function is to create the 
+#' newline delimited JSON files that you need. Tempfiles are cleaned up
+#' when you R session ends though - be aware of that. If you want to 
+#' keep the files make sure to move them outside of the temp directory.
 #'
 #' @seealso \code{\link{docs_bulk}}
 #'
@@ -91,23 +99,32 @@
 #' }
 #' unlist(paths)
 #'
+#' 
+#' # suppress progress bar
+#' docs_bulk_prep(mtcars, index = "hello", type = "world", 
+#'   path = tempfile(fileext = ".json"), quiet = TRUE)
+#' ## vs. 
+#' docs_bulk_prep(mtcars, index = "hello", type = "world", 
+#'   path = tempfile(fileext = ".json"), quiet = FALSE)
 #' }
 docs_bulk_prep <- function(x, index, path, type = NULL, chunk_size = 1000,
-  doc_ids = NULL) {
+  doc_ids = NULL, quiet = FALSE) {
+
   UseMethod("docs_bulk_prep")
 }
 
 #' @export
 docs_bulk_prep.default <- function(x, index, path, type = NULL,
-  chunk_size = 1000, doc_ids = NULL) {
+  chunk_size = 1000, doc_ids = NULL, quiet = FALSE) {
 
   stop("no 'docs_bulk_prep' method for class ", class(x), call. = FALSE)
 }
 
 #' @export
 docs_bulk_prep.data.frame <- function(x, index, path, type = NULL,
-  chunk_size = 1000, doc_ids = NULL) {
+  chunk_size = 1000, doc_ids = NULL, quiet = FALSE) {
 
+  assert(quiet, "logical")
   if (is.null(type)) type <- index
   check_doc_ids(x, doc_ids)
   es_ids <- if (!is.null(doc_ids)) FALSE else TRUE
@@ -124,11 +141,14 @@ docs_bulk_prep.data.frame <- function(x, index, path, type = NULL,
     rws <- shift_start(rws, index, type)
     id_chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
   }
-  pb <- txtProgressBar(min = 0, max = length(data_chks), initial = 0, style = 3)
-  on.exit(close(pb))
+
+  if (!quiet) {
+    pb <- txtProgressBar(min = 0, max = length(data_chks), initial = 0, style = 3)
+    on.exit(close(pb))
+  }
   resl <- vector(mode = "list", length = length(data_chks))
   for (i in seq_along(data_chks)) {
-    setTxtProgressBar(pb, i)
+    if (!quiet) setTxtProgressBar(pb, i)
     resl[[i]] <- make_bulk(
       x[data_chks[[i]], , drop = FALSE], index, type, id_chks[[i]], es_ids,
       path = if (length(data_chks) > 1) adjust_path(path, i) else path
@@ -139,8 +159,9 @@ docs_bulk_prep.data.frame <- function(x, index, path, type = NULL,
 
 #' @export
 docs_bulk_prep.list <- function(x, index, path, type = NULL,
-  chunk_size = 1000, doc_ids = NULL) {
+  chunk_size = 1000, doc_ids = NULL, quiet = FALSE) {
 
+  assert(quiet, "logical")
   if (is.null(type)) type <- index
   check_doc_ids(x, doc_ids)
   es_ids <- if (!is.null(doc_ids)) TRUE else FALSE
@@ -158,11 +179,14 @@ docs_bulk_prep.list <- function(x, index, path, type = NULL,
     rws <- shift_start(rws, index, type)
     id_chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
   }
-  pb <- txtProgressBar(min = 0, max = length(data_chks), initial = 0, style = 3)
-  on.exit(close(pb))
+
+  if (!quiet) {
+    pb <- txtProgressBar(min = 0, max = length(data_chks), initial = 0, style = 3)
+    on.exit(close(pb))
+  }
   resl <- vector(mode = "list", length = length(data_chks))
   for (i in seq_along(data_chks)) {
-    setTxtProgressBar(pb, i)
+    if (!quiet) setTxtProgressBar(pb, i)
     resl[[i]] <- make_bulk(
       x[data_chks[[i]]], index, type, id_chks[[i]], es_ids,
       path = if (length(data_chks) > 1) adjust_path(path, i) else path

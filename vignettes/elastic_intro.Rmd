@@ -46,14 +46,14 @@ library("elastic")
 
 __Unix (linux/osx)__
 
-Replace `2.1.1` with the version you are working with.
+Replace `5.6.3` with the version you are working with.
 
-+ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.1.1/elasticsearch-2.1.1.tar.gz`
-+ Extract: `tar -zxvf elasticsearch-2.1.1.tar.gz`
-+ Move it: `sudo mv /path/to/elasticsearch-2.1.1 /usr/local` (replace version with your version)
++ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.3.tar.gz`
++ Extract: `tar -zxvf elasticsearch-5.6.3.tar.gz`
++ Move it: `sudo mv elasticsearch-5.6.3 /usr/local`
 + Navigate to /usr/local: `cd /usr/local`
 + Delete symlinked `elasticsearch` directory: `rm -rf elasticsearch`
-+ Add shortcut: `sudo ln -s elasticsearch-2.1.1 elasticsearch` (replace version with your version)
++ Add shortcut: `sudo ln -s elasticsearch-5.6.3 elasticsearch` (replace version with your version)
 
 On OSX, you can install via Homebrew: `brew install elasticsearch`
 
@@ -80,17 +80,14 @@ connect()
 ```
 
 ```
-#> url:       http://127.0.0.1 
-#> port:      9200 
-#> username:  NULL 
-#> password:  NULL 
-#> errors:    simple 
-#> Elasticsearch (ES) details:   
-#>    name:                    Desmond Pitt 
-#>    ES version:              2.1.1 
-#>    ES version timestamp:    2015-12-15T13:05:55Z 
-#>    ES build hash:           40e2c53a6b6c2972b3d13846e450e66f4375bd71 
-#>    lucene version:          5.3.1
+#> transport:  http 
+#> host:       127.0.0.1 
+#> port:       9200 
+#> path:       NULL 
+#> username:   NULL 
+#> password:   <secret> 
+#> errors:     simple 
+#> headers (names):  NULL
 ```
 
 On package load, your base url and port are set to `http://127.0.0.1` and `9200`, respectively. You can of course override these settings per session or for all sessions.
@@ -187,11 +184,11 @@ Search(index="plos", size=1)$hits$hits
 #> [1] "Phospholipase C-β4 Is Essential for the Progression of the Normal Sleep Sequence and Ultradian Body Temperature Rhythms in Mice"
 ```
 
-Search the `plos` index, and the `article` document type, sort by title, and query for _antibody_, limit to 1 result
+Search the `plos` index, and the `article` document type, and query for _antibody_, limit to 1 result
 
 
 ```r
-Search(index="plos", type="article", sort="title", q="antibody", size=1)$hits$hits
+Search(index="plos", type="article", q="antibody", size=1)$hits$hits
 ```
 
 ```
@@ -206,7 +203,7 @@ Search(index="plos", type="article", sort="title", q="antibody", size=1)$hits$hi
 #> [1] "568"
 #> 
 #> [[1]]$`_score`
-#> NULL
+#> [1] 4.165291
 #> 
 #> [[1]]$`_source`
 #> [[1]]$`_source`$id
@@ -214,11 +211,6 @@ Search(index="plos", type="article", sort="title", q="antibody", size=1)$hits$hi
 #> 
 #> [[1]]$`_source`$title
 #> [1] "Evaluation of 131I-Anti-Angiotensin II Type 1 Receptor Monoclonal Antibody as a Reporter for Hepatocellular Carcinoma"
-#> 
-#> 
-#> [[1]]$sort
-#> [[1]]$sort[[1]]
-#> [1] "1"
 ```
 
 ## Get documents
@@ -276,11 +268,6 @@ docs_get(index='plos', type='article', id=1, fields='id')
 #> 
 #> $found
 #> [1] TRUE
-#> 
-#> $fields
-#> $fields$id
-#> $fields$id[[1]]
-#> [1] "10.1371/journal.pone.0098602"
 ```
 
 ## Get multiple documents at once

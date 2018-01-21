@@ -2,7 +2,8 @@ context("docs_bulk_prep")
 
 test_that("docs_bulk_prep - works with data.frame input", {
   ff <- tempfile(fileext = ".json")
-  a <- docs_bulk_prep(mtcars, index = "hello", type = "world", path = ff)
+  a <- docs_bulk_prep(mtcars, index = "hello", type = "world", 
+    path = ff, quiet = TRUE)
   a_res <- readLines(ff)
   
   expect_is(a, "character")
@@ -11,11 +12,15 @@ test_that("docs_bulk_prep - works with data.frame input", {
   expect_gt(length(a_res), 50)
   expect_match(a_res[1], "hello")
   expect_match(a_res[2], "disp")
+
+  # cleanup
+  unlink(ff, force = TRUE)
 })
 
 test_that("docs_bulk_prep - works with list input", {
   ff <- tempfile(fileext = ".json")
-  a <- docs_bulk_prep(apply(iris, 1, as.list), index="iris", type="flowers", path = ff)
+  a <- docs_bulk_prep(apply(iris, 1, as.list), index="iris", type="flowers", 
+    path = ff, quiet = TRUE)
   a_res <- readLines(ff)
   
   expect_is(a, "character")
@@ -24,12 +29,15 @@ test_that("docs_bulk_prep - works with list input", {
   expect_gt(length(a_res), 200)
   expect_match(a_res[1], "iris")
   expect_match(a_res[2], "Sepal")
+
+  # cleanup
+  unlink(ff, force = TRUE)
 })
 
 test_that("docs_bulk_prep - chunks gives many file paths, with indexed suffix", {
   ff <- tempfile(fileext = ".json")
   bigiris <- do.call("rbind", replicate(30, iris, FALSE))
-  a <- docs_bulk_prep(bigiris, index = "big", path = ff)
+  a <- docs_bulk_prep(bigiris, index = "big", path = ff, quiet = TRUE)
   a_res <- readLines(a[1])
   
   indices <- as.numeric(vapply(a, function(x) {
@@ -46,6 +54,9 @@ test_that("docs_bulk_prep - chunks gives many file paths, with indexed suffix", 
   expect_equal(length(a_res), 2000)
   expect_match(a_res[1], "big")
   expect_match(a_res[2], "Petal")
+
+  # cleanup
+  unlink(ff, force = TRUE)
 })
 
 test_that("docs_bulk_prep fails as expected", {
@@ -62,7 +73,7 @@ test_that("dataset with NA's", {
   test4$mpg[1] <- NA
   test4$disp[1] <- NA
   test4$wt[1] <- NA
-  res <- invisible(docs_bulk_prep(test4, "mtcars", "mtcars.json"))
+  res <- invisible(docs_bulk_prep(test4, "mtcars", "mtcars.json", quiet = TRUE))
   
   expect_is(res, "character")
   expect_equal(res, "mtcars.json")
@@ -80,7 +91,8 @@ test_that("dataset with NA's", {
   
   # list
   mtcarslist <- apply(test4, 1, as.list)
-  res <- invisible(docs_bulk_prep(mtcarslist, "mtcars", "mtcarslist.json"))
+  res <- invisible(docs_bulk_prep(mtcarslist, "mtcars", "mtcarslist.json", 
+    quiet = TRUE))
   
   expect_is(res, "character")
   expect_equal(res, "mtcarslist.json")
@@ -96,3 +108,17 @@ test_that("dataset with NA's", {
       .Names = c('mpg', 'cyl', 'disp', 'hp', 'drat', 'wt', 'qsec', 'vs', 'am', 'gear', 'carb'))
   )
 })
+
+
+test_that("docs_bulk_prep: suppressing progress bar works", {
+  quiet_true <- capture.output(invisible(
+    docs_bulk_prep(mtcars, index="asdfdafasdf", type="asdfadfsdfsdfdf", 
+      path = tempfile(fileext = ".json"), quiet = TRUE)))
+  quiet_false <- capture.output(invisible(
+    docs_bulk_prep(mtcars, index="asdfdafasdf", type="asdfadfsdfsdfdf", 
+      path = tempfile(fileext = ".json"), quiet = FALSE)))
+  expect_equal(length(quiet_true), 0)
+  expect_match(quiet_false, "=====")
+})
+
+

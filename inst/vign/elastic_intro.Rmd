@@ -49,14 +49,14 @@ library("elastic")
 
 __Unix (linux/osx)__
 
-Replace `2.1.1` with the version you are working with.
+Replace `5.6.3` with the version you are working with.
 
-+ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.1.1/elasticsearch-2.1.1.tar.gz`
-+ Extract: `tar -zxvf elasticsearch-2.1.1.tar.gz`
-+ Move it: `sudo mv /path/to/elasticsearch-2.1.1 /usr/local` (replace version with your version)
++ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.3.tar.gz`
++ Extract: `tar -zxvf elasticsearch-5.6.3.tar.gz`
++ Move it: `sudo mv elasticsearch-5.6.3 /usr/local`
 + Navigate to /usr/local: `cd /usr/local`
 + Delete symlinked `elasticsearch` directory: `rm -rf elasticsearch`
-+ Add shortcut: `sudo ln -s elasticsearch-2.1.1 elasticsearch` (replace version with your version)
++ Add shortcut: `sudo ln -s elasticsearch-5.6.3 elasticsearch` (replace version with your version)
 
 On OSX, you can install via Homebrew: `brew install elasticsearch`
 
@@ -147,10 +147,10 @@ Search the `plos` index and only return 1 result
 Search(index="plos", size=1)$hits$hits
 ```
 
-Search the `plos` index, and the `article` document type, sort by title, and query for _antibody_, limit to 1 result
+Search the `plos` index, and the `article` document type, and query for _antibody_, limit to 1 result
 
 ```{r}
-Search(index="plos", type="article", sort="title", q="antibody", size=1)$hits$hits
+Search(index="plos", type="article", q="antibody", size=1)$hits$hits
 ```
 
 ## Get documents

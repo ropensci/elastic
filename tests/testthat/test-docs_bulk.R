@@ -8,14 +8,14 @@ test_that("docs_bulk - works with bulk format file", {
     index_delete("gbifnewgeo")
   }
   # file
-  gsmall <- system.file("examples", "gbif_geosmall.json", package = "elastic")
+  gsmall <- system.file("examples", "gbif_geo.json", package = "elastic")
   # load bulk
-  a <- docs_bulk(x = gsmall)
+  a <- docs_bulk(x = gsmall, quiet = TRUE)
   
   expect_is(a, "list")
   expect_named(a, c('took', 'errors', 'items'))
-  expect_equal(length(a$items), 2)
-  expect_equal(a$items[[1]]$index$`_index`, "gbifnewgeo")
+  expect_equal(length(a$items), 301)
+  expect_equal(a$items[[1]]$index$`_index`, "gbifgeo")
 })
 
 test_that("docs_bulk - works with data.frame input", {
@@ -25,7 +25,8 @@ test_that("docs_bulk - works with data.frame input", {
   }
   # load bulk
   iris <- stats::setNames(iris, gsub("\\.", "_", names(iris)))
-  a <- docs_bulk(iris[3:NROW(iris),], index = "hello", type = "world")
+  a <- docs_bulk(iris[3:NROW(iris),], index = "hello", type = "world", 
+    quiet = TRUE)
   
   expect_is(a, "list")
   expect_equal(length(a), 1)
@@ -44,7 +45,8 @@ test_that("docs_bulk - works with list input", {
     index_delete("arrests")
   }
   # load bulk
-  a <- docs_bulk(apply(USArrests, 1, as.list), index = "arrests")
+  a <- docs_bulk(apply(USArrests, 1, as.list), index = "arrests", 
+    quiet = TRUE)
   
   expect_is(a, "list")
   expect_equal(length(a), 1)
@@ -60,12 +62,16 @@ test_that("docs_bulk - works with list input", {
 
 test_that("docs_bulk fails as expected", {
   # certain classes not supported
-  expect_error(docs_bulk(5), "no 'docs_bulk' method for class numeric")
-  expect_error(docs_bulk(matrix(1)), "no 'docs_bulk' method for class matrix")
-  expect_error(docs_bulk(TRUE), "no 'docs_bulk' method for class logical")
+  expect_error(docs_bulk(5, quiet = TRUE), 
+    "no 'docs_bulk' method for class numeric")
+  expect_error(docs_bulk(matrix(1), quiet = TRUE), 
+    "no 'docs_bulk' method for class matrix")
+  expect_error(docs_bulk(TRUE, quiet = TRUE), 
+    "no 'docs_bulk' method for class logical")
   
   # character string has to be a file that exists on disk
-  expect_error(docs_bulk("adfadf"), "file.exists\\(x\\) is not TRUE")
+  expect_error(docs_bulk("adfadf", quiet = TRUE), 
+    "file.exists\\(x\\) is not TRUE")
 })
 
 
@@ -82,7 +88,7 @@ test_that("dataset with NA's", {
     x[n] <- NA
     x
   })
-  res <- invisible(docs_bulk(test1, "mtcars", "mtcars"))
+  res <- invisible(docs_bulk(test1, "mtcars", "mtcars", quiet = TRUE))
   
   expect_is(res, "list")
   expect_is(res[[1]]$items[[1]], "list")
@@ -105,7 +111,7 @@ test_that("dataset with NA's", {
     x
   })
   mtcarslist <- apply(test2, 1, as.list)
-  res <- invisible(docs_bulk(mtcarslist, "mtcars", "mtcars"))
+  res <- invisible(docs_bulk(mtcarslist, "mtcars", "mtcars", quiet = TRUE))
   
   expect_is(res, "list")
   expect_is(res[[1]]$items[[1]], "list")
@@ -128,8 +134,8 @@ test_that("dataset with NA's", {
     x
   })
   tfile <- tempfile(pattern = "mtcars_file", fileext = ".json")
-  res <- invisible(docs_bulk_prep(test3, "mtcars", path = tfile))
-  res <- invisible(docs_bulk(res))
+  res <- invisible(docs_bulk_prep(test3, "mtcars", path = tfile, quiet = TRUE))
+  res <- invisible(docs_bulk(res, quiet = TRUE))
   
   expect_is(res, "list")
   expect_is(res$items[[1]], "list")
@@ -139,3 +145,33 @@ test_that("dataset with NA's", {
   expect_is(out, "data.frame")
   expect_true(any(is.na(out)))
 })
+
+
+test_that("docs_bulk cleans up temp files", {
+  curr_tempdir <- tempdir()
+  if (index_exists("iris")) {
+    index_delete("iris")
+  }
+  aa <- docs_bulk(apply(iris, 1, as.list), index="iris", type="flowers", 
+    quiet = TRUE)
+
+  expect_equal(length(list.files(curr_tempdir, pattern = "elastic__")), 0)
+})
+
+
+
+test_that("docs_bulk: suppressing progress bar works", {
+  if (index_exists("asdfdafasdf")) {
+    index_delete("asdfdafasdf")
+  }
+
+  quiet_true <- capture.output(invisible(
+    docs_bulk(mtcars, index="asdfdafasdf", type="asdfadfsdfsdfdf", 
+      quiet = TRUE)))
+  quiet_false <- capture.output(invisible(
+    docs_bulk(mtcars, index="asdfdafasdf", type="asdfadfsdfsdfdf", 
+      quiet = FALSE)))
+  expect_equal(length(quiet_true), 0)
+  expect_match(quiet_false, "=====")
+})
+

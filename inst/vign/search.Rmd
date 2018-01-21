@@ -43,29 +43,22 @@ out$hits$hits[[1]]
 ### Search an index by type
 
 ```{r}
-Search(index="shakespeare", type="act")$hits$hits[[1]]
+Search(index = "shakespeare", type = "act")$hits$hits[[1]]
 ```
 
 ### Return certain fields
 
 ```{r}
-Search(index="shakespeare", fields=c('play_name','speaker'))$hits$hits[[1]]
+Search(index = "shakespeare", body = '{
+  "_source": ["play_name", "speaker"]
+}')$hits$hits[[1]]
 ```
 
-### Sorting
-
-```{r}
-Search(index="shakespeare", type="act", sort="text_entry")$hits$hits[1:2]
-```
-
-```{r}
-Search(index="shakespeare", type="act", sort="speaker:desc", fields='speaker')$hits$hits[1:2]
-```
 
 ### Paging
 
 ```{r}
-Search(index="shakespeare", size=1, from=1, fields='text_entry')$hits
+Search(index="shakespeare", size=1, from=1)$hits
 ```
 
 ### Queries
@@ -112,6 +105,14 @@ out <- Search(index="shakespeare", type="line", config=verbose())
 Pass in as an R list
 
 ```{r}
+mapping_create("shakespeare", "act", update_all_types = TRUE, body = '{
+   "properties": {
+     "text_entry": {
+       "type":     "text",
+       "fielddata": true
+    }
+  }
+}')
 aggs <- list(aggs = list(stats = list(terms = list(field = "text_entry"))))
 Search(index="shakespeare", body=aggs)$hits$hits[[1]]
 ```
@@ -175,12 +176,12 @@ sapply(Search(index="shakespeare", body=mmatch)$hits$hits, function(x) x$`_sourc
 Fuzzy query on numerics
 
 ```{r}
-fuzzy <- list(query = list(fuzzy = list(speech_number = 7)))
-Search(index="shakespeare", body=fuzzy)$hits$total
+fuzzy <- list(query = list(fuzzy = list(text_entry = "arms")))
+Search(index="shakespeare", body = fuzzy)$hits$total
 ```
 
 ```{r}
-fuzzy <- list(query = list(fuzzy = list(speech_number = list(value = 7, fuzziness = 4))))
+fuzzy <- list(query = list(fuzzy = list(text_entry = list(value = "arms", fuzziness = 4))))
 Search(index="shakespeare", body=fuzzy)$hits$total
 ```
 
@@ -268,19 +269,18 @@ sapply(out$hits$hits, function(x) x$highlight$title[[1]])[8:10]
 
 ```{r}
 Search('shakespeare', q="a*")$hits$total
-res <- Search(index = 'shakespeare', q="a*", scroll="1m")
-res <- Search(index = 'shakespeare', q="a*", scroll="1m", search_type = "scan")
-length(scroll(scroll_id = res$`_scroll_id`)$hits$hits)
+res <- Search(index = 'shakespeare', q="a*", time_scroll = "1m")
+length(scroll(res$`_scroll_id`)$hits$hits)
 ```
 
 ```{r}
-res <- Search(index = 'shakespeare', q="a*", scroll="5m", search_type = "scan")
+res <- Search(index = 'shakespeare', q = "a*", time_scroll = "5m")
 out <- list()
 hits <- 1
-while(hits != 0){
-  res <- scroll(scroll_id = res$`_scroll_id`)
+while (hits != 0) {
+  res <- scroll(res$`_scroll_id`)
   hits <- length(res$hits$hits)
-  if(hits > 0)
+  if (hits > 0)
     out <- c(out, res$hits$hits)
 }
 length(out)

@@ -76,6 +76,11 @@ close_conns <- function() {
   }
 }
 
+cleanup_file <- function(x) {
+  # don't unlink file if it is not a tempfile
+  if (grepl("elastic__", x)) unlink(x, force = TRUE)
+}
+
 check_named_vectors <- function(x) {
   lapply(x, function(z) {
     if (!inherits(z, "list")) {

@@ -23,55 +23,59 @@ test_that("type_exists works", {
 })
 
 test_that("mapping_create works", {
-
-  ## listvbody works
-  body <- list(reference = list(properties = list(
-   journal = list(type="string"),
-   year = list(type="long")
-  )))
-  invisible(mapping_create(index = "plos", type = "reference", body=body))
-  mc2 <- mapping_get("plos", "reference")
-
-  expect_is(mc2, "list")
-  expect_named(mc2, "plos")
-  expect_named(mc2$plos$mappings, "reference")
-
-  ### json body works
-  body <- '{
+  if (es_version() < 600) {
+    ## listvbody works
+    body <- list(reference = list(properties = list(
+      journal = list(type="string"),
+      year = list(type="long")
+    )))
+    invisible(mapping_create(index = "plos", type = "reference", body=body))
+    mc2 <- mapping_get("plos", "reference")
+    
+    expect_is(mc2, "list")
+    expect_named(mc2, "plos")
+    expect_named(mc2$plos$mappings, "reference")
+    
+    ### json body works
+    body <- '{
     "citation": {
       "properties": {
         "journal": { "type": "string" },
         "year": { "type": "long" }
-  }}}'
-  invisible(mapping_create(index = "plos", type = "citation", body=body))
-  mc1 <- mapping_get("plos", "citation")
-
-  expect_is(mc1, "list")
-  expect_named(mc1, "plos")
-  expect_named(mc1$plos$mappings, "citation")
-
-  ## fails well
-  ### A bad mapping body
-  body <- list(things = list(properties = list(
-    journal = list("string")
-  )))
-  if (es_version() < 120) {
-    expect_error(mapping_create(index = "plos", type = "things", body = body),
-                 "ClassCastException")
-  } else {
-    expect_error(mapping_create(index = "plos", type = "things", body = body),
-                 "Expected map for property")
+    }}}'
+    invisible(mapping_create(index = "plos", type = "citation", body=body))
+    mc1 <- mapping_get("plos", "citation")
+    
+    expect_is(mc1, "list")
+    expect_named(mc1, "plos")
+    expect_named(mc1$plos$mappings, "citation")
+    
+    ## fails well
+    ### A bad mapping body
+    body <- list(things = list(properties = list(
+      journal = list("string")
+    )))
+    if (es_version() < 120) {
+      expect_error(mapping_create(index = "plos", type = "things", body = body),
+                   "ClassCastException")
+    } else {
+      expect_error(mapping_create(index = "plos", type = "things", body = body),
+                   "Expected map for property")
+    }
   }
 })
 
 test_that("mapping_get works", {
-
-  expect_is(mapping_get('_all'), "list")
-  mapping_get(index = "plos")
-  expect_named(mapping_get(index = "plos", type = "citation")$plos$mappings, "citation")
-
-  maps <- mapping_get(index = "plos", type = c("article", "citation", "reference"))$plos$mappings
-  expect_is(maps, "list")
+  if (es_version() < 600) {
+    
+    expect_is(mapping_get('_all'), "list")
+    mapping_get(index = "plos")
+    expect_named(mapping_get(index = "plos", type = "citation")$plos$mappings, "citation")
+    
+    maps <- mapping_get(index = "plos", type = c("article", "citation", "reference"))$plos$mappings
+    expect_is(maps, "list")
+    
+  }
 })
 
 # test_that("mapping_delete works", {

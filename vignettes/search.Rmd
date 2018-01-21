@@ -46,39 +46,36 @@ out$hits$hits[[1]]
 #> [1] "shakespeare"
 #> 
 #> $`_type`
-#> [1] "line"
+#> [1] "act"
 #> 
 #> $`_id`
-#> [1] "4"
+#> [1] "0"
 #> 
 #> $`_score`
 #> [1] 1
 #> 
 #> $`_source`
 #> $`_source`$line_id
-#> [1] 5
+#> [1] 1
 #> 
 #> $`_source`$play_name
 #> [1] "Henry IV"
 #> 
-#> $`_source`$speech_number
-#> [1] 1
-#> 
 #> $`_source`$line_number
-#> [1] "1.1.2"
+#> [1] ""
 #> 
 #> $`_source`$speaker
-#> [1] "KING HENRY IV"
+#> [1] ""
 #> 
 #> $`_source`$text_entry
-#> [1] "Find we a time for frighted peace to pant,"
+#> [1] "ACT I"
 ```
 
 ### Search an index by type
 
 
 ```r
-Search(index="shakespeare", type="act")$hits$hits[[1]]
+Search(index = "shakespeare", type = "act")$hits$hits[[1]]
 ```
 
 ```
@@ -89,36 +86,35 @@ Search(index="shakespeare", type="act")$hits$hits[[1]]
 #> [1] "act"
 #> 
 #> $`_id`
-#> [1] "2227"
+#> [1] "0"
 #> 
 #> $`_score`
 #> [1] 1
 #> 
 #> $`_source`
 #> $`_source`$line_id
-#> [1] 2228
+#> [1] 1
 #> 
 #> $`_source`$play_name
 #> [1] "Henry IV"
-#> 
-#> $`_source`$speech_number
-#> [1] 81
 #> 
 #> $`_source`$line_number
 #> [1] ""
 #> 
 #> $`_source`$speaker
-#> [1] "FALSTAFF"
+#> [1] ""
 #> 
 #> $`_source`$text_entry
-#> [1] "ACT IV"
+#> [1] "ACT I"
 ```
 
 ### Return certain fields
 
 
 ```r
-Search(index="shakespeare", fields=c('play_name','speaker'))$hits$hits[[1]]
+Search(index = "shakespeare", body = '{
+  "_source": ["play_name", "speaker"]
+}')$hits$hits[[1]]
 ```
 
 ```
@@ -126,172 +122,28 @@ Search(index="shakespeare", fields=c('play_name','speaker'))$hits$hits[[1]]
 #> [1] "shakespeare"
 #> 
 #> $`_type`
-#> [1] "line"
+#> [1] "act"
 #> 
 #> $`_id`
-#> [1] "4"
+#> [1] "0"
 #> 
 #> $`_score`
 #> [1] 1
 #> 
-#> $fields
-#> $fields$play_name
-#> $fields$play_name[[1]]
+#> $`_source`
+#> $`_source`$play_name
 #> [1] "Henry IV"
 #> 
-#> 
-#> $fields$speaker
-#> $fields$speaker[[1]]
-#> [1] "KING HENRY IV"
-```
-
-### Sorting
-
-
-```r
-Search(index="shakespeare", type="act", sort="text_entry")$hits$hits[1:2]
-```
-
-```
-#> [[1]]
-#> [[1]]$`_index`
-#> [1] "shakespeare"
-#> 
-#> [[1]]$`_type`
-#> [1] "act"
-#> 
-#> [[1]]$`_id`
-#> [1] "2227"
-#> 
-#> [[1]]$`_score`
-#> NULL
-#> 
-#> [[1]]$`_source`
-#> [[1]]$`_source`$line_id
-#> [1] 2228
-#> 
-#> [[1]]$`_source`$play_name
-#> [1] "Henry IV"
-#> 
-#> [[1]]$`_source`$speech_number
-#> [1] 81
-#> 
-#> [[1]]$`_source`$line_number
+#> $`_source`$speaker
 #> [1] ""
-#> 
-#> [[1]]$`_source`$speaker
-#> [1] "FALSTAFF"
-#> 
-#> [[1]]$`_source`$text_entry
-#> [1] "ACT IV"
-#> 
-#> 
-#> [[1]]$sort
-#> [[1]]$sort[[1]]
-#> [1] "act"
-#> 
-#> 
-#> 
-#> [[2]]
-#> [[2]]$`_index`
-#> [1] "shakespeare"
-#> 
-#> [[2]]$`_type`
-#> [1] "act"
-#> 
-#> [[2]]$`_id`
-#> [1] "2633"
-#> 
-#> [[2]]$`_score`
-#> NULL
-#> 
-#> [[2]]$`_source`
-#> [[2]]$`_source`$line_id
-#> [1] 2634
-#> 
-#> [[2]]$`_source`$play_name
-#> [1] "Henry IV"
-#> 
-#> [[2]]$`_source`$speech_number
-#> [1] 9
-#> 
-#> [[2]]$`_source`$line_number
-#> [1] ""
-#> 
-#> [[2]]$`_source`$speaker
-#> [1] "ARCHBISHOP OF YORK"
-#> 
-#> [[2]]$`_source`$text_entry
-#> [1] "ACT V"
-#> 
-#> 
-#> [[2]]$sort
-#> [[2]]$sort[[1]]
-#> [1] "act"
 ```
 
-
-```r
-Search(index="shakespeare", type="act", sort="speaker:desc", fields='speaker')$hits$hits[1:2]
-```
-
-```
-#> [[1]]
-#> [[1]]$`_index`
-#> [1] "shakespeare"
-#> 
-#> [[1]]$`_type`
-#> [1] "act"
-#> 
-#> [[1]]$`_id`
-#> [1] "2633"
-#> 
-#> [[1]]$`_score`
-#> NULL
-#> 
-#> [[1]]$fields
-#> [[1]]$fields$speaker
-#> [[1]]$fields$speaker[[1]]
-#> [1] "ARCHBISHOP OF YORK"
-#> 
-#> 
-#> 
-#> [[1]]$sort
-#> [[1]]$sort[[1]]
-#> [1] "york"
-#> 
-#> 
-#> 
-#> [[2]]
-#> [[2]]$`_index`
-#> [1] "shakespeare"
-#> 
-#> [[2]]$`_type`
-#> [1] "act"
-#> 
-#> [[2]]$`_id`
-#> [1] "4974"
-#> 
-#> [[2]]$`_score`
-#> NULL
-#> 
-#> [[2]]$fields
-#> [[2]]$fields$speaker
-#> [[2]]$fields$speaker[[1]]
-#> [1] "VERNON"
-#> 
-#> 
-#> 
-#> [[2]]$sort
-#> [[2]]$sort[[1]]
-#> [1] "vernon"
-```
 
 ### Paging
 
 
 ```r
-Search(index="shakespeare", size=1, from=1, fields='text_entry')$hits
+Search(index="shakespeare", size=1, from=1)$hits
 ```
 
 ```
@@ -310,15 +162,29 @@ Search(index="shakespeare", size=1, from=1, fields='text_entry')$hits
 #> [1] "line"
 #> 
 #> $hits[[1]]$`_id`
-#> [1] "9"
+#> [1] "14"
 #> 
 #> $hits[[1]]$`_score`
 #> [1] 1
 #> 
-#> $hits[[1]]$fields
-#> $hits[[1]]$fields$text_entry
-#> $hits[[1]]$fields$text_entry[[1]]
-#> [1] "Nor more shall trenching war channel her fields,"
+#> $hits[[1]]$`_source`
+#> $hits[[1]]$`_source`$line_id
+#> [1] 15
+#> 
+#> $hits[[1]]$`_source`$play_name
+#> [1] "Henry IV"
+#> 
+#> $hits[[1]]$`_source`$speech_number
+#> [1] 1
+#> 
+#> $hits[[1]]$`_source`$line_number
+#> [1] "1.1.12"
+#> 
+#> $hits[[1]]$`_source`$speaker
+#> [1] "KING HENRY IV"
+#> 
+#> $hits[[1]]$`_source`$text_entry
+#> [1] "Did lately meet in the intestine shock"
 ```
 
 ### Queries
@@ -357,7 +223,7 @@ sapply(Search(index="shakespeare", version=TRUE, size=2)$hits$hits, "[[", "_vers
 ```
 
 ```
-#> [1] 43 43
+#> [1] 1 1
 ```
 
 ### Get raw data
@@ -368,7 +234,7 @@ Search(index="shakespeare", type="scene", raw=TRUE)
 ```
 
 ```
-#> [1] "{\"took\":3,\"timed_out\":false,\"_shards\":{\"total\":5,\"successful\":5,\"failed\":0},\"hits\":{\"total\":34,\"max_score\":1.0,\"hits\":[{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"112\",\"_score\":1.0,\"_source\":{\"line_id\":113,\"play_name\":\"Henry IV\",\"speech_number\":10,\"line_number\":\"\",\"speaker\":\"WESTMORELAND\",\"text_entry\":\"SCENE II. London. An apartment of the Princes.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"989\",\"_score\":1.0,\"_source\":{\"line_id\":990,\"play_name\":\"Henry IV\",\"speech_number\":22,\"line_number\":\"\",\"speaker\":\"LADY PERCY\",\"text_entry\":\"SCENE IV. The Boars-Head Tavern, Eastcheap.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2462\",\"_score\":1.0,\"_source\":{\"line_id\":2463,\"play_name\":\"Henry IV\",\"speech_number\":21,\"line_number\":\"\",\"speaker\":\"FALSTAFF\",\"text_entry\":\"SCENE III. The rebel camp near Shrewsbury.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2784\",\"_score\":1.0,\"_source\":{\"line_id\":2785,\"play_name\":\"Henry IV\",\"speech_number\":18,\"line_number\":\"\",\"speaker\":\"FALSTAFF\",\"text_entry\":\"SCENE II. The rebel camp.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"3206\",\"_score\":1.0,\"_source\":{\"line_id\":3207,\"play_name\":\"Henry VI Part 1\",\"speech_number\":8,\"line_number\":\"\",\"speaker\":\"KING HENRY IV\",\"text_entry\":\"SCENE I. Westminster Abbey.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4437\",\"_score\":1.0,\"_source\":{\"line_id\":4438,\"play_name\":\"Henry VI Part 1\",\"speech_number\":18,\"line_number\":\"\",\"speaker\":\"PLANTAGENET\",\"text_entry\":\"SCENE I. London. The Parliament-house.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4975\",\"_score\":1.0,\"_source\":{\"line_id\":4976,\"play_name\":\"Henry VI Part 1\",\"speech_number\":11,\"line_number\":\"\",\"speaker\":\"VERNON\",\"text_entry\":\"SCENE I. Paris. A hall of state.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"745\",\"_score\":1.0,\"_source\":{\"line_id\":746,\"play_name\":\"Henry IV\",\"speech_number\":32,\"line_number\":\"\",\"speaker\":\"GADSHILL\",\"text_entry\":\"SCENE II. The highway, near Gadshill.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2228\",\"_score\":1.0,\"_source\":{\"line_id\":2229,\"play_name\":\"Henry IV\",\"speech_number\":81,\"line_number\":\"\",\"speaker\":\"FALSTAFF\",\"text_entry\":\"SCENE I. The rebel camp near Shrewsbury.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2588\",\"_score\":1.0,\"_source\":{\"line_id\":2589,\"play_name\":\"Henry IV\",\"speech_number\":28,\"line_number\":\"\",\"speaker\":\"SIR WALTER BLUNT\",\"text_entry\":\"SCENE IV. York. The ARCHBISHOPS palace.\"}}]}}"
+#> [1] "{\"took\":2,\"timed_out\":false,\"_shards\":{\"total\":5,\"successful\":5,\"skipped\":0,\"failed\":0},\"hits\":{\"total\":34,\"max_score\":1.0,\"hits\":[{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"646\",\"_score\":1.0,\"_source\":{\"line_id\":647,\"play_name\":\"Henry IV\",\"speech_number\":54,\"line_number\":\"\",\"speaker\":\"HOTSPUR\",\"text_entry\":\"SCENE I. Rochester. An inn yard.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"1829\",\"_score\":1.0,\"_source\":{\"line_id\":1830,\"play_name\":\"Henry IV\",\"speech_number\":74,\"line_number\":\"\",\"speaker\":\"MORTIMER\",\"text_entry\":\"SCENE II. London. The palace.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"2588\",\"_score\":1.0,\"_source\":{\"line_id\":2589,\"play_name\":\"Henry IV\",\"speech_number\":28,\"line_number\":\"\",\"speaker\":\"SIR WALTER BLUNT\",\"text_entry\":\"SCENE IV. York. The ARCHBISHOPS palace.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"3156\",\"_score\":1.0,\"_source\":{\"line_id\":3157,\"play_name\":\"Henry IV\",\"speech_number\":37,\"line_number\":\"\",\"speaker\":\"FALSTAFF\",\"text_entry\":\"SCENE V. Another part of the field.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"3870\",\"_score\":1.0,\"_source\":{\"line_id\":3871,\"play_name\":\"Henry VI Part 1\",\"speech_number\":5,\"line_number\":\"\",\"speaker\":\"CHARLES\",\"text_entry\":\"SCENE I. Before Orleans.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4031\",\"_score\":1.0,\"_source\":{\"line_id\":4032,\"play_name\":\"Henry VI Part 1\",\"speech_number\":12,\"line_number\":\"\",\"speaker\":\"Captain\",\"text_entry\":\"SCENE III. Auvergne. The COUNTESSs castle.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4294\",\"_score\":1.0,\"_source\":{\"line_id\":4295,\"play_name\":\"Henry VI Part 1\",\"speech_number\":47,\"line_number\":\"\",\"speaker\":\"PLANTAGENET\",\"text_entry\":\"SCENE V. The Tower of London.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4923\",\"_score\":1.0,\"_source\":{\"line_id\":4924,\"play_name\":\"Henry VI Part 1\",\"speech_number\":24,\"line_number\":\"\",\"speaker\":\"CHARLES\",\"text_entry\":\"SCENE IV. Paris. The palace.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"4975\",\"_score\":1.0,\"_source\":{\"line_id\":4976,\"play_name\":\"Henry VI Part 1\",\"speech_number\":11,\"line_number\":\"\",\"speaker\":\"VERNON\",\"text_entry\":\"SCENE I. Paris. A hall of state.\"}},{\"_index\":\"shakespeare\",\"_type\":\"scene\",\"_id\":\"324\",\"_score\":1.0,\"_source\":{\"line_id\":325,\"play_name\":\"Henry IV\",\"speech_number\":62,\"line_number\":\"\",\"speaker\":\"PRINCE HENRY\",\"text_entry\":\"SCENE III. London. The palace.\"}}]}}"
 ```
 
 ### Curl debugging
@@ -387,6 +253,22 @@ Pass in as an R list
 
 
 ```r
+mapping_create("shakespeare", "act", update_all_types = TRUE, body = '{
+   "properties": {
+     "text_entry": {
+       "type":     "text",
+       "fielddata": true
+    }
+  }
+}')
+```
+
+```
+#> $acknowledged
+#> [1] TRUE
+```
+
+```r
 aggs <- list(aggs = list(stats = list(terms = list(field = "text_entry"))))
 Search(index="shakespeare", body=aggs)$hits$hits[[1]]
 ```
@@ -396,32 +278,29 @@ Search(index="shakespeare", body=aggs)$hits$hits[[1]]
 #> [1] "shakespeare"
 #> 
 #> $`_type`
-#> [1] "line"
+#> [1] "act"
 #> 
 #> $`_id`
-#> [1] "4"
+#> [1] "0"
 #> 
 #> $`_score`
 #> [1] 1
 #> 
 #> $`_source`
 #> $`_source`$line_id
-#> [1] 5
+#> [1] 1
 #> 
 #> $`_source`$play_name
 #> [1] "Henry IV"
 #> 
-#> $`_source`$speech_number
-#> [1] 1
-#> 
 #> $`_source`$line_number
-#> [1] "1.1.2"
+#> [1] ""
 #> 
 #> $`_source`$speaker
-#> [1] "KING HENRY IV"
+#> [1] ""
 #> 
 #> $`_source`$text_entry
-#> [1] "Find we a time for frighted peace to pant,"
+#> [1] "ACT I"
 ```
 
 Or pass in as json query with newlines, easy to read
@@ -445,32 +324,29 @@ Search(index="shakespeare", body=aggs)$hits$hits[[1]]
 #> [1] "shakespeare"
 #> 
 #> $`_type`
-#> [1] "line"
+#> [1] "act"
 #> 
 #> $`_id`
-#> [1] "4"
+#> [1] "0"
 #> 
 #> $`_score`
 #> [1] 1
 #> 
 #> $`_source`
 #> $`_source`$line_id
-#> [1] 5
+#> [1] 1
 #> 
 #> $`_source`$play_name
 #> [1] "Henry IV"
 #> 
-#> $`_source`$speech_number
-#> [1] 1
-#> 
 #> $`_source`$line_number
-#> [1] "1.1.2"
+#> [1] ""
 #> 
 #> $`_source`$speaker
-#> [1] "KING HENRY IV"
+#> [1] ""
 #> 
 #> $`_source`$text_entry
-#> [1] "Find we a time for frighted peace to pant,"
+#> [1] "ACT I"
 ```
 
 Or pass in collapsed json string
@@ -486,32 +362,29 @@ Search(index="shakespeare", body=aggs)$hits$hits[[1]]
 #> [1] "shakespeare"
 #> 
 #> $`_type`
-#> [1] "line"
+#> [1] "act"
 #> 
 #> $`_id`
-#> [1] "4"
+#> [1] "0"
 #> 
 #> $`_score`
 #> [1] 1
 #> 
 #> $`_source`
 #> $`_source`$line_id
-#> [1] 5
+#> [1] 1
 #> 
 #> $`_source`$play_name
 #> [1] "Henry IV"
 #> 
-#> $`_source`$speech_number
-#> [1] 1
-#> 
 #> $`_source`$line_number
-#> [1] "1.1.2"
+#> [1] ""
 #> 
 #> $`_source`$speaker
-#> [1] "KING HENRY IV"
+#> [1] ""
 #> 
 #> $`_source`$text_entry
-#> [1] "Find we a time for frighted peace to pant,"
+#> [1] "ACT I"
 ```
 
 ### Aggregations
@@ -574,7 +447,35 @@ sapply(Search(index="shakespeare", body=mmatch)$hits$hits, function(x) x$`_sourc
 ```
 
 ```
-#>  [1]  6  7  7  7  7  8  9 10  7  8
+#> [[1]]
+#> NULL
+#> 
+#> [[2]]
+#> [1] 6
+#> 
+#> [[3]]
+#> [1] 7
+#> 
+#> [[4]]
+#> [1] 7
+#> 
+#> [[5]]
+#> [1] 7
+#> 
+#> [[6]]
+#> [1] 8
+#> 
+#> [[7]]
+#> [1] 8
+#> 
+#> [[8]]
+#> [1] 9
+#> 
+#> [[9]]
+#> [1] 9
+#> 
+#> [[10]]
+#> [1] 10
 ```
 
 ### Fuzzy query
@@ -583,22 +484,22 @@ Fuzzy query on numerics
 
 
 ```r
-fuzzy <- list(query = list(fuzzy = list(speech_number = 7)))
-Search(index="shakespeare", body=fuzzy)$hits$total
+fuzzy <- list(query = list(fuzzy = list(text_entry = "arms")))
+Search(index="shakespeare", body = fuzzy)$hits$total
 ```
 
 ```
-#> [1] 523
+#> [1] 49
 ```
 
 
 ```r
-fuzzy <- list(query = list(fuzzy = list(speech_number = list(value = 7, fuzziness = 4))))
+fuzzy <- list(query = list(fuzzy = list(text_entry = list(value = "arms", fuzziness = 4))))
 Search(index="shakespeare", body=fuzzy)$hits$total
 ```
 
 ```
-#> [1] 1499
+#> [1] 617
 ```
 
 ### Range query
@@ -622,7 +523,7 @@ Search('gbif', body=body)$hits$total
 ```
 
 ```
-#> [1] 166
+#> [1] 126
 ```
 
 With dates
@@ -634,7 +535,7 @@ Search('gbif', body=body)$hits$total
 ```
 
 ```
-#> [1] 899
+#> [1] 300
 ```
 
 
@@ -644,7 +545,7 @@ Search('gbif', body=body)$hits$total
 ```
 
 ```
-#> [1] 685
+#> [1] 291
 ```
 
 ### More-like-this query (more_like_this can be shortened to mlt)
@@ -740,31 +641,30 @@ Search('shakespeare', q="a*")$hits$total
 ```
 
 ```r
-res <- Search(index = 'shakespeare', q="a*", scroll="1m")
-res <- Search(index = 'shakespeare', q="a*", scroll="1m", search_type = "scan")
-length(scroll(scroll_id = res$`_scroll_id`)$hits$hits)
+res <- Search(index = 'shakespeare', q="a*", time_scroll = "1m")
+length(scroll(res$`_scroll_id`)$hits$hits)
 ```
 
 ```
-#> [1] 50
+#> [1] 10
 ```
 
 
 ```r
-res <- Search(index = 'shakespeare', q="a*", scroll="5m", search_type = "scan")
+res <- Search(index = 'shakespeare', q = "a*", time_scroll = "5m")
 out <- list()
 hits <- 1
-while(hits != 0){
-  res <- scroll(scroll_id = res$`_scroll_id`)
+while (hits != 0) {
+  res <- scroll(res$`_scroll_id`)
   hits <- length(res$hits$hits)
-  if(hits > 0)
+  if (hits > 0)
     out <- c(out, res$hits$hits)
 }
 length(out)
 ```
 
 ```
-#> [1] 2747
+#> [1] 2737
 ```
 
-Woohoo! Collected all 2747 documents in very little time.
+Woohoo! Collected all 2737 documents in very little time.
