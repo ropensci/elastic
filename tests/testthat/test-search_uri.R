@@ -13,8 +13,8 @@ test_that("basic search_uri works", {
 
 test_that("search for document type works", {
 
-  b <- Search_uri(index="shakespeare", type="line")
-  expect_match(vapply(b$hits$hits, "[[", "", "_type"), "line")
+  b <- Search_uri(index="shakespeare", type="scene")
+  expect_match(vapply(b$hits$hits, "[[", "", "_type"), "scene")
 })
 
 test_that("search for specific fields works", {
