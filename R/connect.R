@@ -3,15 +3,15 @@
 #' @name connect
 #' @export
 #'
-#' @param es_host (character) The base host, defaults to \code{127.0.0.1}. 
-#' Synonym of \code{es_base}
+#' @param es_host (character) The base host, defaults to `127.0.0.1` 
+#' Synonym of `es_base`
 #' @param es_base (character) Synonym of \code{es_host}, and will be gone in a 
 #' future version of \pkg{elastic}
-#' @param es_port (character) port to connect to, defaults to \code{9200} 
+#' @param es_port (character) port to connect to, defaults to `9200`
 #' (optional)
 #' @param es_path (character) context path that is appended to the end of the 
-#' url. Default: NULL, ignored
-#' @param es_transport_schema (character) http or https. Default: \code{http}
+#' url. Default: `NULL`, ignored
+#' @param es_transport_schema (character) http or https. Default: `http`
 #' @param es_user (character) User name, if required for the connection. You 
 #' can specify,  but ignored for now.
 #' @param es_pwd (character) Password, if required for the connection. You 
@@ -20,24 +20,24 @@
 #' @param errors (character) One of simple (Default) or complete. Simple gives 
 #' http code and  error message on an error, while complete gives both http 
 #' code and error message,  and stack trace, if available.
-#' @param headers Either an object of class \code{request} or a list that can 
-#' be coerced to an object of class \code{request} via 
-#' \code{\link[httr]{add_headers}}. These headers are  used in all requests. 
+#' @param headers Either an object of class `request` or a list that can 
+#' be coerced to an object of class `request` via 
+#' [httr::add_headers()]. These headers are  used in all requests. 
 #' To use headers in individual requests and not others, pass in headers 
-#' using \code{\link[httr]{add_headers}} via \code{...} in a function call.
+#' using [httr::add_headers()] via `...` in a function call.
 #' @param ... Further args passed on to print for the es_conn class.
 #' 
 #' @details The default configuration is set up for localhost access on port 
 #' 9200, with no username or password.
 #'
-#' \code{\link{connect}} and \code{\link{connection}} no longer ping the 
+#' [connect()] and [connection()] no longer ping the 
 #' Elasticsearch server, but only print your connection details.
 #'
 #' Internally, we store your connection settings with environment variables. 
 #' That means you  can set your env vars permanently in .Renviron file, and 
 #' use them on a server e.g., as private env vars
 #' 
-#' @seealso \code{\link{ping}} to check your connection
+#' @seealso [ping()] to check your connection
 #'
 #' @examples \dontrun{
 #' # the default is set to 127.0.0.1 (i.e., localhost) and port 9200

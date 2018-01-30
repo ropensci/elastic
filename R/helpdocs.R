@@ -15,7 +15,7 @@
 #' }
 #' 
 #' @name units-time
-#' @seealso \code{\link{units-distance}}
+#' @seealso [units-distance]
 NULL
 
 #' Distance units
@@ -41,5 +41,5 @@ NULL
 #' of the geohash.
 #' 
 #' @name units-distance
-#' @seealso \code{\link{units-time}}
+#' @seealso [units-time]
 NULL

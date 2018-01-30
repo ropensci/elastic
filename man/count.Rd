@@ -13,7 +13,7 @@ count(index = NULL, type = NULL, callopts = list(), verbose = TRUE, ...)
 
 \item{callopts}{Curl args passed on to httr::GET.}
 
-\item{verbose}{If TRUE (default) the url call used printed to console.}
+\item{verbose}{If \code{TRUE} (default) the url call used printed to console.}
 
 \item{...}{Further args passed on to elastic search HTTP API as parameters.}
 }
@@ -24,8 +24,8 @@ Get counts of the number of records per index.
 See docs for the count API here
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-count.html}
 
-You can also get a count of documents using \code{\link{Search}} or 
-\code{\link{Search_uri}} and setting \code{size = 0}
+You can also get a count of documents using \code{\link[=Search]{Search()}} or
+\code{\link[=Search_uri]{Search_uri()}} and setting \code{size = 0}
 }
 \examples{
 \dontrun{

@@ -7,7 +7,7 @@
 ping(...)
 }
 \arguments{
-\item{...}{Curl args passed on to \code{\link[httr]{GET}}}
+\item{...}{Curl args passed on to \code{\link[httr:GET]{httr::GET()}}}
 }
 \description{
 Ping an Elasticsearch server.
@@ -18,5 +18,5 @@ ping()
 }
 }
 \seealso{
-\code{\link{connect}}
+\code{\link[=connect]{connect()}}
 }

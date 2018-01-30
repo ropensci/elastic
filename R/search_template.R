@@ -4,32 +4,33 @@
 #' @name Search_template
 #' @param template (character) a template name
 #' @param body Query, either a list or json.
-#' @param raw (logical) If \code{FALSE} (default), data is parsed to list.
-#' If \code{TRUE}, then raw JSON returned
-#' @param ... Curl args passed on to \code{\link[httr]{POST}}
+#' @param raw (logical) If `FALSE` (default), data is parsed to list.
+#' If `TRUE`, then raw JSON returned
+#' @param ... Curl args passed on to [httr::POST()]
 #'
-#' @seealso \code{\link{Search}}, \code{\link{Search_uri}}
+#' @seealso [Search()], [Search_uri()]
 #'
 #' @section Template search:
-#' With \code{Search_template} you can search with a template, using
+#' With `Search_template` you can search with a template, using
 #' mustache templating. Added in Elasticsearch v1.1
 #'
 #' @section Template render:
-#' With \code{Search_template_render} you validate a template without
+#' With `Search_template_render` you validate a template without
 #' conducting the search. Added in Elasticsearch v2.0
 #'
 #' @section Pre-registered templates:
-#' Register a template with \code{Search_template_register}. You can get 
-#' the template with \code{Search_template_get} and delete the template 
-#' with \code{Search_template_delete}
+#' Register a template with `Search_template_register`. You can get 
+#' the template with `Search_template_get` and delete the template 
+#' with `Search_template_delete`
 #' 
 #' You can also pre-register search templates by storing them in the 
-#' \code{config/scripts} directory, in a file using the .mustache 
+#' `config/scripts` directory, in a file using the .mustache 
 #' extension. In order to execute the stored template, reference it 
 #' by it's name under the template key, like 
-#' \code{"file": "templateName", ...}
+#' `"file": "templateName", ...`
 #' 
-#' @references \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-template.html}
+#' @references 
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-template.html>
 #'
 #' @examples \dontrun{
 #' if (!index_exists("iris")) {

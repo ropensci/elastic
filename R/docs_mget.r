@@ -7,24 +7,24 @@
 #' type and id.
 #' @param index_type_id List of vectors of length 3, each with an element for 
 #' index, type, and id.
-#' @param source (logical) If \code{TRUE}, return source.
+#' @param source (logical) If `TRUE`, return source.
 #' @param fields Fields to return from the response object.
 #'
 #' @references
-#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-multi-get.html}
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-multi-get.html>
 #' 
 #' @details
 #'
 #' You can pass in one of three combinations of parameters:
-#' \itemize{
-#'  \item Pass in something for \code{index}, \code{type}, and \code{id}. 
+#' 
+#' - Pass in something for `index`, `type`, and `id`. 
 #'  This is the simplest, allowing retrieval from the same index, same type, 
 #'  and many ids.
-#'  \item Pass in only \code{index} and \code{type_id} - this allows you to 
+#' - Pass in only `index` and `type_id` - this allows you to 
 #'  get multiple documents from the same index, but from different types.
-#'  \item Pass in only \code{index_type_id} - this is so that you can get 
+#' - Pass in only `index_type_id` - this is so that you can get 
 #'  multiple documents from different indexes and different types.
-#' }
+#' 
 #' @examples \dontrun{
 #' connect()
 #' 

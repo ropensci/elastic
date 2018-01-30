@@ -13,14 +13,14 @@ docs_create(index, type, id, body, version = NULL, version_type = NULL,
 
 \item{type}{(character) The type of the document. Required}
 
-\item{id}{(numeric/character) The document ID. Can be numeric or character. 
+\item{id}{(numeric/character) The document ID. Can be numeric or character.
 Required}
 
 \item{body}{The document.}
 
 \item{version}{(character) Explicit version number for concurrency control}
 
-\item{version_type}{(character) Specific version type. One of internal, 
+\item{version_type}{(character) Specific version type. One of internal,
 external, external_gte, or force}
 
 \item{op_type}{(character) Operation type. One of create, or ...}
@@ -32,18 +32,18 @@ external, external_gte, or force}
 \item{timestamp}{(date) Explicit timestamp for the document}
 
 \item{ttl}{(aka \dQuote{time to live}) Expiration time for the document.
-Expired documents will be expunged automatically. The expiration date that 
-will be set for a document with a provided ttl is relative to the timestamp 
-of the document,  meaning it can be based on the time of indexing or on 
-any time provided. The provided ttl must be strictly positive and can be 
+Expired documents will be expunged automatically. The expiration date that
+will be set for a document with a provided ttl is relative to the timestamp
+of the document,  meaning it can be based on the time of indexing or on
+any time provided. The provided ttl must be strictly positive and can be
 a number (in milliseconds) or any valid time value (e.g, 86400000, 1d).}
 
 \item{refresh}{(logical) Refresh the index after performing the operation}
 
-\item{timeout}{(character) Explicit operation timeout, e.g,. 5m (for 
+\item{timeout}{(character) Explicit operation timeout, e.g,. 5m (for
 5 minutes)}
 
-\item{callopts}{Curl options passed on to \code{\link[httr]{PUT}}}
+\item{callopts}{Curl options passed on to \code{\link[httr:PUT]{httr::PUT()}}}
 
 \item{...}{Further args to query DSL}
 }

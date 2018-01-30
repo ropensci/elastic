@@ -6,7 +6,7 @@
 #' @param id Document id, only one
 #' @param source2 (logical) Set to TRUE to retrieve the _source of the document explained. You can
 #' also retrieve part of the document by using source_include & source_exclude (see Get API
-#' for more details). This matches the \code{_source} term, but we want to avoid the leading
+#' for more details). This matches the `_source` term, but we want to avoid the leading
 #' underscore.
 #' @param source_exclude A vector of fields to exclude from the returned source2 field
 #' @param source_include A vector of fields to extract and return from the source2 field
@@ -21,17 +21,18 @@
 #' @param analyzer The analyzer name to be used when analyzing the query string. Defaults to the
 #' analyzer of the _all field.
 #' @param analyze_wildcard (logical) Should wildcard and prefix queries be analyzed or not.
-#' Default: FALSE
-#' @param lowercase_expanded_terms Should terms be automatically lowercased or not. Default: TRUE
+#' Default: `FALSE`
+#' @param lowercase_expanded_terms Should terms be automatically lowercased or not. 
+#' Default: `TRUE`
 #' @param lenient If set to true will cause format based failures (like providing text to a
-#' numeric field) to be ignored. Default: FALSE
+#' numeric field) to be ignored. Default: `FALSE`
 #' @param default_operator The default operator to be used, can be AND or OR. Defaults to OR.
 #' @param body The query definition using the Query DSL. This is passed in the body of the
 #' request.
-#' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw JSON.
-#' @param ... Curl args passed on to \code{\link[httr]{GET}}
+#' @param raw If `TRUE` (default), data is parsed to list. If `FALSE`, then raw JSON.
+#' @param ... Curl args passed on to [httr::GET()]
 #' @references
-#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-explain.html}
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-explain.html>
 #' @examples \dontrun{
 #' explain(index = "plos", type = "article", id = 14, q = "abstract:used")
 #'

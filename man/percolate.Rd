@@ -52,13 +52,13 @@ the client. Obviously if there are two percolator queries with same id from diff
 indices there is no way to find out which percolator query belongs to what index. Any
 other value to percolate_format will be ignored.}
 
-\item{refresh}{If \code{TRUE} then refresh the affected shards to make this 
-operation visible to search, if "wait_for" then wait for a refresh to 
-make this operation visible to search, if \code{FALSE} (default) then do 
+\item{refresh}{If \code{TRUE} then refresh the affected shards to make this
+operation visible to search, if "wait_for" then wait for a refresh to
+make this operation visible to search, if \code{FALSE} (default) then do
 nothing with refreshes. Valid choices: \code{TRUE}, \code{FALSE}, "wait_for"}
 
 \item{...}{Curl options. Or in \code{percolate_list} function, further args
-passed on to \code{\link{Search}}}
+passed on to \code{\link[=Search]{Search()}}}
 }
 \description{
 Store queries into an index then, via the percolate API, define
@@ -68,38 +68,38 @@ documents to retrieve these queries.
 Additional body options, pass those in the body. These aren't query string
 parameters:
 \itemize{
- \item filter - Reduces the number queries to execute during percolating. Only the
- percolator queries that match with the filter will be included in the percolate
- execution. The filter option works in near realtime, so a refresh needs to have
- occurred for the filter to included the latest percolate queries.
- \item query - Same as the filter option, but also the score is computed. The
- computed scores can then be used by the track_scores and sort option.
- \item size - Defines to maximum number of matches (percolate queries) to be returned.
- Defaults to unlimited.
- \item track_scores - Whether the _score is included for each match. The _score is
- based on the query and represents how the query matched the percolate query's
- metadata, not how the document (that is being percolated) matched the query. The query
- option is required for this option. Defaults to false.
- \item sort - Define a sort specification like in the search API. Currently only
- sorting _score reverse (default relevancy) is supported. Other sort fields will
- throw an exception. The size and query option are required for this setting. Like
- track_score the score is based on the query and represents how the query matched
- to the percolate query's metadata and not how the document being percolated matched
- to the query.
- \item aggs - Allows aggregation definitions to be included. The aggregations are
- based on the matching percolator queries, look at the aggregation documentation on
- how to define aggregations.
- \item highlight - Allows highlight definitions to be included. The document being
- percolated is being highlight for each matching query. This allows you to see how
- each match is highlighting the document being percolated. See highlight documentation
- on how to define highlights. The size option is required for highlighting, the
- performance of highlighting in the percolate API depends of how many matches are
- being highlighted.
+\item filter - Reduces the number queries to execute during percolating. Only the
+percolator queries that match with the filter will be included in the percolate
+execution. The filter option works in near realtime, so a refresh needs to have
+occurred for the filter to included the latest percolate queries.
+\item query - Same as the filter option, but also the score is computed. The
+computed scores can then be used by the track_scores and sort option.
+\item size - Defines to maximum number of matches (percolate queries) to be returned.
+Defaults to unlimited.
+\item track_scores - Whether the _score is included for each match. The _score is
+based on the query and represents how the query matched the percolate query's
+metadata, not how the document (that is being percolated) matched the query. The query
+option is required for this option. Defaults to false.
+\item sort - Define a sort specification like in the search API. Currently only
+sorting _score reverse (default relevancy) is supported. Other sort fields will
+throw an exception. The size and query option are required for this setting. Like
+track_score the score is based on the query and represents how the query matched
+to the percolate query's metadata and not how the document being percolated matched
+to the query.
+\item aggs - Allows aggregation definitions to be included. The aggregations are
+based on the matching percolator queries, look at the aggregation documentation on
+how to define aggregations.
+\item highlight - Allows highlight definitions to be included. The document being
+percolated is being highlight for each matching query. This allows you to see how
+each match is highlighting the document being percolated. See highlight documentation
+on how to define highlights. The size option is required for highlighting, the
+performance of highlighting in the percolate API depends of how many matches are
+being highlighted.
 }
 }
 \section{The Elasticsearch v5 split}{
 
-In Elasticsearch < v5, there's a certain set of percolate APIs available, 
+In Elasticsearch < v5, there's a certain set of percolate APIs available,
 while in Elasticsearch >= v5, there's a different set of APIs available.
 
 Internally within these percolate functions we detect your Elasticsearch

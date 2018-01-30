@@ -24,7 +24,7 @@ Search_template_render(body = list(), raw = FALSE, ...)
 \item{raw}{(logical) If \code{FALSE} (default), data is parsed to list.
 If \code{TRUE}, then raw JSON returned}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}}}
+\item{...}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}}
 
 \item{template}{(character) a template name}
 }
@@ -45,14 +45,14 @@ conducting the search. Added in Elasticsearch v2.0
 
 \section{Pre-registered templates}{
 
-Register a template with \code{Search_template_register}. You can get 
-the template with \code{Search_template_get} and delete the template 
+Register a template with \code{Search_template_register}. You can get
+the template with \code{Search_template_get} and delete the template
 with \code{Search_template_delete}
 
-You can also pre-register search templates by storing them in the 
-\code{config/scripts} directory, in a file using the .mustache 
-extension. In order to execute the stored template, reference it 
-by it's name under the template key, like 
+You can also pre-register search templates by storing them in the
+\code{config/scripts} directory, in a file using the .mustache
+extension. In order to execute the stored template, reference it
+by it's name under the template key, like
 \code{"file": "templateName", ...}
 }
 
@@ -133,5 +133,5 @@ Search_template_delete('foobar')
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-template.html}
 }
 \seealso{
-\code{\link{Search}}, \code{\link{Search_uri}}
+\code{\link[=Search]{Search()}}, \code{\link[=Search_uri]{Search_uri()}}
 }

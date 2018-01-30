@@ -10,22 +10,22 @@ search_shards(index = NULL, raw = FALSE, routing = NULL,
 \arguments{
 \item{index}{One or more indeces}
 
-\item{raw}{If \code{TRUE} (default), data is parsed to list. If FALSE, then 
+\item{raw}{If \code{TRUE} (default), data is parsed to list. If \code{FALSE}, then
 raw JSON}
 
-\item{routing}{A character vector of routing values to take into account 
+\item{routing}{A character vector of routing values to take into account
 when determining which shards a request would be executed against.}
 
-\item{preference}{Controls a preference of which shard replicas to execute 
-the search request on. By default, the operation is randomized between the 
-shard replicas. See \code{\link{preference}} for a list of all acceptable 
+\item{preference}{Controls a preference of which shard replicas to execute
+the search request on. By default, the operation is randomized between the
+shard replicas. See \link{preference} for a list of all acceptable
 values.}
 
-\item{local}{(logical) Whether to read the cluster state locally in order 
-to determine where shards are allocated instead of using the Master node's 
+\item{local}{(logical) Whether to read the cluster state locally in order
+to determine where shards are allocated instead of using the Master node's
 cluster state.}
 
-\item{...}{Curl args passed on to \code{\link[httr]{GET}}}
+\item{...}{Curl args passed on to \code{\link[httr:GET]{httr::GET()}}}
 }
 \description{
 Search shards.

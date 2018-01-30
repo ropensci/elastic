@@ -9,30 +9,30 @@
 #' termvectors for
 #' @param field_statistics (character) Specifies if document count, sum
 #' of document frequencies and sum of total term frequencies should be
-#' returned. Default: \code{TRUE}
+#' returned. Default: `TRUE`
 #' @param fields (character) A comma-separated list of fields to return.
 #' @param offsets (character) Specifies if term offsets should be returned.
-#' Default: \code{TRUE}
+#' Default: `TRUE`
 #' @param parent (character) Parent id of documents.
 #' @param payloads (character) Specifies if term payloads should be returned.
-#' Default: \code{TRUE}
+#' Default: `TRUE`
 #' @param positions (character) Specifies if term positions should be returned.
-#' Default: \code{TRUE}
+#' Default: `TRUE`
 #' @param preference (character) Specify the node or shard the operation
-#' should be performed on (Default: \code{random}).
+#' should be performed on (Default: `random`).
 #' @param realtime (character) Specifies if request is real-time as opposed to
-#' near-real-time (Default: \code{TRUE}).
+#' near-real-time (Default: `TRUE`).
 #' @param routing (character) Specific routing value.
 #' @param term_statistics (character) Specifies if total term frequency and
-#' document frequency should be returned. Default: \code{FALSE}
+#' document frequency should be returned. Default: `FALSE`
 #' @param version (character) Explicit version number for concurrency control
 #' @param version_type (character) Specific version type, valid choices are:
 #' 'internal', 'external', 'external_gte', 'force'
-#' @param pretty (logical) pretty print. Default: \code{TRUE}
-#' @param ... Curl args passed on to \code{\link[httr]{POST}}
+#' @param pretty (logical) pretty print. Default: `TRUE`
+#' @param ... Curl args passed on to [httr::POST()]
 #'
 #' @references
-#' \url{http://www.elastic.co/guide/en/elasticsearch/reference/current/docs-termvectors.html}
+#' <http://www.elastic.co/guide/en/elasticsearch/reference/current/docs-termvectors.html>
 #'
 #' @details Returns information and statistics on terms in the fields of a
 #' particular document. The document could be stored in the index or

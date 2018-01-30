@@ -6,42 +6,39 @@
 #'
 #' @section Quick start:
 #'
-#' If you're connecting to a Elasticsearch server already running, skip ahead to \bold{Search}.
+#' If you're connecting to a Elasticsearch server already running, skip ahead to **Search**
 #'
 #' Install Elasticsearch (on OSX)
-#' \itemize{
-#'  \item Download zip or tar file from Elasticsearch see here for download:
-#'  \url{https://www.elastic.co/downloads/elasticsearch}
-#'  \item Unzip it: \code{untar elasticsearch-2.3.5.tar.gz}
-#'  \item Move it: \code{sudo mv elasticsearch-2.3.5 /usr/local}
+#' 
+#' - Download zip or tar file from Elasticsearch see here for download:
+#'  <https://www.elastic.co/downloads/elasticsearch>
+#' - Unzip it: `untar elasticsearch-2.3.5.tar.gz`
+#' - Move it: `sudo mv elasticsearch-2.3.5 /usr/local`
 #'  (replace version with your version)
-#'  \item Navigate to /usr/local: \code{cd /usr/local}
-#'  \item Add shortcut: \code{sudo ln -s elasticsearch-2.3.5 elasticsearch}
+#' - Navigate to /usr/local: `cd /usr/local`
+#' - Add shortcut: `sudo ln -s elasticsearch-2.3.5 elasticsearch`
 #'  (replace version with your version)
-#' }
 #'
 #' For help on other platforms, see
-#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/_installation.html}
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/_installation.html>
 #'
-#' \bold{Start Elasticsearch}
+#' **Start Elasticsearch**
 #'
-#' \itemize{
-#'  \item Navigate to elasticsearch: \code{cd /usr/local/elasticsearch}
-#'  \item Start elasticsearch: \code{bin/elasticsearch}
-#' }
+#' - Navigate to elasticsearch: `cd /usr/local/elasticsearch`
+#' - Start elasticsearch: `bin/elasticsearch`
 #'
-#' \bold{Initialization:}
+#' **Initialization**
 #'
-#' The function \code{\link{connect}} is used before doing anything else to set
+#' The function [connect()] is used before doing anything else to set
 #' the connection details to your remote or local elasticsearch store. The
-#' details created by \code{\link{connect}} are written to your options for the
-#' current session, and are used by \code{elastic} functions.
+#' details created by [connect()] are written to your options for the
+#' current session, and are used by `elastic` functions.
 #'
-#' \bold{Search:}
+#' **Search**
 #'
-#' The main way to search Elasticsearch is via the \code{\link{Search}} function. E.g.:
+#' The main way to search Elasticsearch is via the [Search()] function. E.g.:
 #'
-#' \code{Search()}
+#' `Search()`
 #'
 #' @section Security:
 #'
@@ -50,30 +47,27 @@
 #' worries, but if you install on a server with a public IP address, take the
 #' necessary precautions. There are a few options:
 #'
-#' \itemize{
-#'  \item Shield \url{https://www.elastic.co/products/shield} - This is a paid
+#' - Shield <https://www.elastic.co/products/shield` - This is a paid
 #'  product - so probably only applicable to enterprise users
-#'  \item DIY security - there are a variety of techniques for securing your
+#' - DIY security - there are a variety of techniques for securing your
 #'  Elasticsearch. I collected a number of resources in a blog post at
-#'  \url{http://recology.info/2015/02/secure-elasticsearch/}
-#' }
+#'  <http://recology.info/2015/02/secure-elasticsearch/>
 #'
 #' @section Elasticsearch changes:
 #' As of Elasticsearch v2:
-#' \itemize{
-#'  \item You can no longer create fields with dots in the name.
-#'  \item Type names may not start with a dot (other than the special \code{.percolator} type)
-#'  \item Type names may not be longer than 255 characters
-#'  \item Types may no longer be deleted
-#'  \item Queries and filters have been merged - all filter clauses are now query clauses.
+#'
+#' - You can no longer create fields with dots in the name.
+#' - Type names may not start with a dot (other than the special `.percolator` type)
+#' - Type names may not be longer than 255 characters
+#' - Types may no longer be deleted
+#' - Queries and filters have been merged - all filter clauses are now query clauses.
 #'     Instead, query clauses can now be used in query context or in filter context. See
-#'     examples in \code{\link{Search}} or \code{\link{Search_uri}}
-#' }
+#'     examples in [Search()] or [Search_uri()]
 #' 
 #' @section index names:
 #' The following are illegal characters, and can not be used in index names or types: 
-#' \code{\\}, \code{/}, \code{*}, \code{?}, \code{<}, 
-#' \code{>}, \code{|}, \code{,} (comma). double quote and whitespace are also illegal.
+#' `\\`, `/`, `*`, `?`, `<`, `>`, `|`, `,` (comma). double quote and whitespace are 
+#' also illegal.
 #'
 #' @importFrom utils read.table read.delim txtProgressBar 
 #' setTxtProgressBar URLdecode modifyList

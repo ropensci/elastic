@@ -3,9 +3,9 @@
 #' @keywords internal
 #' @param index Index name
 #' @param type Document type
-#' @param raw If TRUE (default), data is parsed to list. If \code{FALSE}, then 
+#' @param raw If `TRUE` (default), data is parsed to list. If `FALSE`, then 
 #' raw JSON.
-#' @param callopts Curl args passed on to \code{httr::POST}
+#' @param callopts Curl args passed on to [httr::POST()]
 #' @param query Query, either a list or json.
 #' @param ... Further args passed on to elastic search HTTP API as parameters. 
 #' Not used right now.

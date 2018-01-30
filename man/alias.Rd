@@ -27,7 +27,7 @@ alias_delete(index = NULL, alias, ...)
 \item{ignore_unavailable}{(logical) What to do if an specified index name
 doesn't exist. If set to \code{TRUE} then those indices are ignored.}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}}}
+\item{...}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}}
 
 \item{routing}{Ignored for now}
 
@@ -65,5 +65,5 @@ aliases_get(alias = "tables", config=verbose())
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-aliases.html}
 }
 \author{
-Scott Chamberlain <myrmecocystus@gmail.com>
+Scott Chamberlain \href{mailto:myrmecocystus@gmail.com}{myrmecocystus@gmail.com}
 }

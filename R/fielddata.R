@@ -24,7 +24,7 @@
 #' from a script on a text field, you will see this exception:
 #' 
 #' "Fielddata is disabled on text fields by default. Set fielddata=true on 
-#' [your_field_name] in order to load fielddata in memory by uninverting 
+#' `your_field_name` in order to load fielddata in memory by uninverting 
 #' the inverted index. Note that this can however use significant memory."
 #' 
 #' To enable fielddata on a text field use the PUT mapping API, for example

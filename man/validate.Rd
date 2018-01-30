@@ -11,7 +11,7 @@ validate(index, type = NULL, ...)
 
 \item{type}{Document type. Optional.}
 
-\item{...}{Additional args passed on to \code{\link{Search}}}
+\item{...}{Additional args passed on to \code{\link[=Search]{Search()}}}
 }
 \description{
 Validate a search
@@ -46,5 +46,5 @@ validate("twitter", body = body)
 }
 }
 \seealso{
-\code{\link{Search}}
+\code{\link[=Search]{Search()}}
 }

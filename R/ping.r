@@ -1,8 +1,8 @@
 #' Ping an Elasticsearch server.
 #'
 #' @export
-#' @param ... Curl args passed on to \code{\link[httr]{GET}}
-#' @seealso \code{\link{connect}}
+#' @param ... Curl args passed on to [httr::GET()]
+#' @seealso [connect()]
 #' @examples \dontrun{
 #' ping()
 #' }

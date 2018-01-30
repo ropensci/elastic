@@ -22,10 +22,10 @@
 #' @param refresh (logical) Refresh the index after performing the operation
 #' @param timeout (character) Explicit operation timeout, e.g,. 5m (for 
 #' 5 minutes)
-#' @param callopts Curl options passed on to \code{\link[httr]{PUT}}
+#' @param callopts Curl options passed on to [httr::PUT()]
 #' @param ... Further args to query DSL
 #' @references
-#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html}
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html>
 #' @examples \dontrun{
 #' connect()
 #' if (!index_exists('plos')) {

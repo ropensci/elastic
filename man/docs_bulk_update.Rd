@@ -28,21 +28,21 @@ ids to use. This vector has to equal the size of the documents you are
 passing in, and will error if not. If you pass a factor we convert to
 character. Default: not passed}
 
-\item{raw}{(logical) Get raw JSON back or not. If \code{TRUE} 
+\item{raw}{(logical) Get raw JSON back or not. If \code{TRUE}
 you get JSON; if \code{FALSE} you get a list. Default: \code{FALSE}}
 
-\item{...}{Pass on curl options to \code{\link[httr]{POST}}}
+\item{...}{Pass on curl options to \code{\link[httr:POST]{httr::POST()}}}
 }
 \description{
 Use the bulk API to update documents
 }
 \details{
 \itemize{
- \item \code{doc_as_upsert} - is set to \code{TRUE} for all records 
+\item \code{doc_as_upsert} - is set to \code{TRUE} for all records
 }
 
-For doing updates with a file already prepared for the bulk API, 
-see \code{\link{docs_bulk}}
+For doing updates with a file already prepared for the bulk API,
+see \code{\link[=docs_bulk]{docs_bulk()}}
 
 Only data.frame's are supported for now.
 }
@@ -68,5 +68,5 @@ Search("foobar", asdf = TRUE)$hits$hits
 }
 }
 \seealso{
-\code{\link{docs_bulk}} \code{\link{docs_bulk_prep}}
+\code{\link[=docs_bulk]{docs_bulk()}} \code{\link[=docs_bulk_prep]{docs_bulk_prep()}}
 }

@@ -4,7 +4,7 @@
 #'
 #' @param index (character) A character vector of index names
 #' @param body Query, either a list or json.
-#' @param ... Curl options passed on to \code{\link[httr]{PUT}}
+#' @param ... Curl options passed on to [httr::PUT()]
 #'
 #' @author Scott Chamberlain <myrmecocystus@@gmail.com>
 #' @examples \dontrun{

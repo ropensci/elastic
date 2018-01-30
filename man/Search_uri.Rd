@@ -102,7 +102,7 @@ output is given.}
 
 \item{search_path}{(character) The path to use for searching. Default
 to \code{_search}, but in some cases you may already have that in the base
-url set using \code{\link{connect}}, in which case you can set this
+url set using \code{\link[=connect]{connect()}}, in which case you can set this
 to \code{NULL}}
 
 \item{stream_opts}{(list) A list of options passed to 
@@ -224,8 +224,7 @@ res <- Search_uri(config = progress(), size = 5000)
 }
 }
 \seealso{
-\code{\link{fielddata}}
+\code{\link[=fielddata]{fielddata()}}
 
-\code{\link{Search}} \code{\link{Search_template}}
-\code{\link{count}} \code{\link{fielddata}}
+\code{\link[=Search]{Search()}} \code{\link[=Search_template]{Search_template()}} \code{\link[=count]{count()}} \code{\link[=fielddata]{fielddata()}}
 }

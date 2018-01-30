@@ -4,12 +4,12 @@
 \alias{units-time}
 \title{Time units}
 \description{
-Whenever durations need to be specified, eg for a timeout parameter, the duration can 
-be specified as a whole number representing time in milliseconds, or as a time value 
+Whenever durations need to be specified, eg for a timeout parameter, the duration can
+be specified as a whole number representing time in milliseconds, or as a time value
 like 2d for 2 days. The supported units are:
 }
 \details{
-\tabular{ll}{ 
+\tabular{ll}{
 y \tab Year \cr
 M \tab Month \cr
 w \tab Week \cr
@@ -20,5 +20,5 @@ s \tab Second \cr
 }
 }
 \seealso{
-\code{\link{units-distance}}
+\link{units-distance}
 }

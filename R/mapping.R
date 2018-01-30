@@ -6,23 +6,22 @@
 #' @param body (list) Either a list or json, representing the query.
 #' @param field (character) One or more field names
 #' @param include_defaults (logical) Whether to return default values
-#' @param update_all_types (logical) update all types. default: \code{FALSE}
-#' @param ... Curl options passed on to \code{\link[httr]{HEAD}} or other 
+#' @param update_all_types (logical) update all types. default: `FALSE`
+#' @param ... Curl options passed on to [httr::HEAD()] or other 
 #' http verbs
 #' @details
 #' Find documentation for each function at:
-#' \itemize{
-#'  \item mapping_create -
-#'  \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-put-mapping.html}
-#'  \item type_exists -
-#'  \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-types-exists.html}
-#'  \item mapping_delete - FUNCTION DEFUNCT - instead of deleting mapping, delete
+#' 
+#' - `mapping_create` -
+#'  <https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-put-mapping.html>
+#' - `type_exists` -
+#'  <https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-types-exists.html>
+#' - `mapping_delete` - FUNCTION DEFUNCT - instead of deleting mapping, delete
 #'  index and recreate index with new mapping
-#'  \item mapping_get -
-#'  \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-mapping.html}
-#'  \item field_mapping_get -
-#'\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-field-mapping.html}
-#' }
+#' - `mapping_get` -
+#'  <https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-mapping.html>
+#' - `field_mapping_get` -
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-field-mapping.html>
 #'
 #' @examples \dontrun{
 #' # Used to check if a type/types exists in an index/indices

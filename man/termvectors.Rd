@@ -56,7 +56,7 @@ document frequency should be returned. Default: \code{FALSE}}
 \item{version_type}{(character) Specific version type, valid choices are:
 'internal', 'external', 'external_gte', 'force'}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}}}
+\item{...}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}}
 }
 \description{
 Termvectors

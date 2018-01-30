@@ -5,18 +5,18 @@
 #' @param type (character) The type of the document. Required
 #' @param id (numeric/character) The document ID. Can be numeric or character. 
 #' Required
-#' @param source (logical) If \code{TRUE}, return source.
+#' @param source (logical) If `TRUE`, return source.
 #' @param fields Fields to return from the response object.
 #' @param exists (logical) Only return a logical as to whether the document 
 #' exists or not.
-#' @param raw If TRUE (default), data is parsed to list. If FALSE, then raw 
+#' @param raw If `TRUE` (default), data is parsed to list. If `FALSE`, then raw 
 #' JSON.
-#' @param callopts Curl args passed on to httr::POST.
+#' @param callopts Curl args passed on to [httr::POST()]
 #' @param verbose If TRUE (default) the url call used printed to console.
 #' @param ... Further args passed on to elastic search HTTP API as parameters.
 #'
 #' @references
-#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html}
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html>
 #'
 #' @examples \dontrun{
 #' docs_get(index='shakespeare', type='line', id=10)

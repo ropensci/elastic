@@ -6,16 +6,16 @@
 #' when determining which shards a request would be executed against.
 #' @param preference Controls a preference of which shard replicas to execute 
 #' the search request on. By default, the operation is randomized between the 
-#' shard replicas. See \code{\link{preference}} for a list of all acceptable 
+#' shard replicas. See [preference] for a list of all acceptable 
 #' values.
 #' @param local (logical) Whether to read the cluster state locally in order 
 #' to determine where shards are allocated instead of using the Master node's 
 #' cluster state.
-#' @param raw If \code{TRUE} (default), data is parsed to list. If FALSE, then 
+#' @param raw If `TRUE` (default), data is parsed to list. If `FALSE`, then 
 #' raw JSON
-#' @param ... Curl args passed on to \code{\link[httr]{GET}}
+#' @param ... Curl args passed on to [httr::GET()]
 #' @references
-#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-shards.html}
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-shards.html>
 #' @examples \dontrun{
 #' search_shards(index = "plos")
 #' search_shards(index = c("plos","gbif"))

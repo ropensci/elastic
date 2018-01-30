@@ -8,14 +8,15 @@
 #' @param index Index name, one or more
 #' @param body Query, either a list or json
 #' @param raw (logical) Get raw JSON back or not
-#' @param asdf (logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} 
-#' to parse JSON directly to a data.frame if possible. If \code{FALSE} 
+#' @param asdf (logical) If `TRUE`, use [jsonlite::fromJSON()] 
+#' to parse JSON directly to a data.frame if possible. If `FALSE`
 #' (default), list output is given.
-#' @param ... Curl args passed on to \code{\link[httr]{POST}}
+#' @param ... Curl args passed on to [httr::POST()]
 #' 
-#' @references \url{https://github.com/elastic/elasticsearch/blob/master/docs/reference/search/field-caps.asciidoc}
+#' @references 
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-field-caps.html>
 #' 
-#' @seealso \code{\link{field_stats}}
+#' @seealso [field_stats()]
 #' @examples \dontrun{
 #' connect()
 #' 

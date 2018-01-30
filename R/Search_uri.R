@@ -3,13 +3,12 @@
 #' @export
 #' @template search_par
 #' @template search_uri_egs
-#' @seealso \code{\link{fielddata}}
+#' @seealso [fielddata()]
 #' @param search_path (character) The path to use for searching. Default
-#' to \code{_search}, but in some cases you may already have that in the base
-#' url set using \code{\link{connect}}, in which case you can set this
-#' to \code{NULL}
-#' @seealso \code{\link{Search}} \code{\link{Search_template}}
-#' \code{\link{count}} \code{\link{fielddata}}
+#' to `_search`, but in some cases you may already have that in the base
+#' url set using [connect()], in which case you can set this
+#' to `NULL`
+#' @seealso [Search()] [Search_template()] [count()] [fielddata()]
 
 Search_uri <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL,
   default_operator=NULL, explain=NULL, source=NULL, fields=NULL, sort=NULL,

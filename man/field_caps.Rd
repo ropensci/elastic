@@ -16,14 +16,14 @@ field_caps(fields = NULL, index = NULL, body = list(), raw = FALSE,
 
 \item{raw}{(logical) Get raw JSON back or not}
 
-\item{asdf}{(logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} 
-to parse JSON directly to a data.frame if possible. If \code{FALSE} 
+\item{asdf}{(logical) If \code{TRUE}, use \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}}
+to parse JSON directly to a data.frame if possible. If \code{FALSE}
 (default), list output is given.}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}}}
+\item{...}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}}
 }
 \description{
-The field capabilities API allows to retrieve the capabilities of fields 
+The field capabilities API allows to retrieve the capabilities of fields
 among multiple indices.
 }
 \examples{
@@ -42,8 +42,8 @@ if (gsub("\\\\.", "", ping()$version$number) >= 500) {
 }
 }
 \references{
-\url{https://github.com/elastic/elasticsearch/blob/master/docs/reference/search/field-caps.asciidoc}
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-field-caps.html}
 }
 \seealso{
-\code{\link{field_stats}}
+\code{\link[=field_stats]{field_stats()}}
 }

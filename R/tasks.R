@@ -6,17 +6,17 @@
 #' @param nodes (character) The nodes
 #' @param actions (character) Actions
 #' @param parent_task_id (character) A parent task ID
-#' @param detailed (character) get detailed results. Default: FALSE
+#' @param detailed (character) get detailed results. Default: `FALSE`
 #' @param group_by (character) "nodes" (default, i.e., NULL) or "parents"
-#' @param wait_for_completion (logical) wait for completion. Default: FALSE
+#' @param wait_for_completion (logical) wait for completion. Default: `FALSE`
 #' @param timeout (integer) timeout time
-#' @param raw If TRUE (default), data is parsed to list. If FALSE, then
+#' @param raw If `TRUE` (default), data is parsed to list. If `FALSE`, then
 #' raw JSON.
-#' @param ... Curl args passed on to \code{\link[httr]{GET}} or 
-#' \code{\link[httr]{POST}}
+#' @param ... Curl args passed on to [httr::GET()] or 
+#' [httr::POST()]
 #'
 #' @references 
-#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/tasks.html}
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/tasks.html>
 #'
 #' @examples \dontrun{
 #' connect()

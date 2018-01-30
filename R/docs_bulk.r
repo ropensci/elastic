@@ -7,7 +7,7 @@
 #' @param type (character) The type name to use. If left as NULL, will be
 #' same name as index.
 #' @param chunk_size (integer) Size of each chunk. If your data.frame is smaller
-#' thank \code{chunk_size}, this parameter is essentially ignored. We write in
+#' thank `chunk_size`, this parameter is essentially ignored. We write in
 #' chunks because at some point, depending on size of each document, and
 #' Elasticsearch setup, writing a very large number of documents in one go
 #' becomes slow, so chunking can help. This parameter is ignored if you
@@ -18,19 +18,19 @@
 #' character. Default: not passed
 #' @param es_ids (boolean) Let Elasticsearch assign document IDs as UUIDs.
 #' These are sequential, so there is order to the IDs they assign.
-#' If \code{TRUE}, \code{doc_ids} is ignored. Default: \code{TRUE}
-#' @param raw (logical) Get raw JSON back or not. If \code{TRUE} 
-#' you get JSON; if \code{FALSE} you get a list. Default: \code{FALSE}
-#' @param quiet (logical) Suppress progress bar. Default: \code{FALSE}
-#' @param ... Pass on curl options to \code{\link[httr]{POST}}
+#' If `TRUE`, \code{doc_ids} is ignored. Default: `TRUE`
+#' @param raw (logical) Get raw JSON back or not. If `TRUE` 
+#' you get JSON; if `FALSE` you get a list. Default: `FALSE`
+#' @param quiet (logical) Suppress progress bar. Default: `FALSE`
+#' @param ... Pass on curl options to [httr::POST()]
 #'
-#' @seealso \code{\link{docs_bulk_prep}} for prepping a newline delimited 
+#' @seealso [docs_bulk_prep()] for prepping a newline delimited 
 #' JSON file that you can load into Elasticsearch yourself. See 
-#' \code{\link{docs_bulk_update}} for updating documents from an R data.frame
+#' [docs_bulk_update()] for updating documents from an R data.frame
 #' or list.
 #'
 #' @details More on the Bulk API:
-#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html}.
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html>
 #'
 #' This function dispatches on data.frame or character input. Character input
 #' has to be a file name or the function stops with an error message.
@@ -48,12 +48,12 @@
 #' bar is based around a for loop, where progress indicates progress along
 #' the iterations of the for loop, where each iteration is a chunk of data
 #' that's converted to bulk format, then pushed into Elasticsearch. The
-#' \code{character} method has no for loop, so no progress bar.
+#' `character` method has no for loop, so no progress bar.
 #'
 #' @section Document IDs:
-#' Document IDs can be passed in via the \code{doc_ids} paramater when passing
+#' Document IDs can be passed in via the `doc_ids` paramater when passing
 #' in data.frame or list, but not with files. If ids not passed to
-#' \code{doc_ids}, we assign document IDs from 1 to length of the object
+#' `doc_ids`, we assign document IDs from 1 to length of the object
 #' (rows of a data.frame, or length of a list). In the future we may allow the
 #' user to select whether
 #' they want to assign sequential numeric IDs or to allow Elasticsearch to
@@ -62,28 +62,28 @@
 #'
 #' @section Large numbers for document IDs:
 #' Until recently, if you had very large integers for document IDs,
-#' \code{docs_bulk} failed. It should be fixed now. Let us know if not.
+#' `docs_bulk` failed. It should be fixed now. Let us know if not.
 #'
 #' @section Missing data:
-#' As of \pkg{elastic} version \code{0.7.8.9515} we convert \code{NA} to
-#' \code{null} before loading into Elasticsearch. Previously, fields that
-#' had an \code{NA} were dropped - but when you read data back from
+#' As of \pkg{elastic} version `0.7.8.9515` we convert `NA` to
+#' `null` before loading into Elasticsearch. Previously, fields that
+#' had an `NA` were dropped - but when you read data back from
 #' Elasticsearch into R, you retain those missing values as \pkg{jsonlite}
-#' fills those in for you. Now, fields with \code{NA}'s are made into
-#' \code{null}, and are not dropped in Elasticsearch.
+#' fills those in for you. Now, fields with `NA`'s are made into
+#' `null`, and are not dropped in Elasticsearch.
 #'
 #' Note also that null values can not be indexed or searched
-#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/5.3/null-value.html}
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/5.3/null-value.html>
 #'
 #' @section Tips:
 #' This function returns the response from Elasticsearch, but you'll likely
 #' not be that interested in the response. If not, wrap your call to
-#' \code{docs_bulk} in \code{\link{invisible}}, like so:
-#' \code{invisible(docs_bulk(...))}
+#' `docs_bulk` in [invisible()], like so:
+#' `invisible(docs_bulk(...))`
 #' 
 #' @section Connections/Files:
 #' We create temporary files, and connections to those files, when data.frame's 
-#' and lists are passed in to \code{docs_bulk()} (not when a file is passed in 
+#' and lists are passed in to `docs_bulk()` (not when a file is passed in 
 #' since we don't need to create a file). After inserting data into your 
 #' Elasticsearch instance, we close the connections and delete the temporary files.
 #' 

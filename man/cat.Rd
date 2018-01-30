@@ -70,7 +70,7 @@ cat_fielddata(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
 \arguments{
 \item{parse}{(logical) Parse to a data.frame or not. Default: \code{FALSE}}
 
-\item{...}{Curl args passed on to \code{\link[httr]{GET}}}
+\item{...}{Curl args passed on to \code{\link[httr:GET]{httr::GET()}}}
 
 \item{verbose}{(logical) If \code{TRUE} (default) the url call used printed to console}
 
@@ -91,8 +91,8 @@ Use the cat Elasticsearch api.
 See \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/cat.html}
 for the cat API documentation.
 
-Note how \code{\link{cat_}} has an underscore at the end to avoid conflict with the function
-\code{\link{cat}} in base R.
+Note how \code{\link[=cat_]{cat_()}} has an underscore at the end to avoid conflict with the function
+\code{\link[base:cat]{base::cat()}} in base R.
 }
 \examples{
 \dontrun{

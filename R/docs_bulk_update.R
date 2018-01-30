@@ -3,15 +3,14 @@
 #' @export
 #' @inheritParams docs_bulk
 #' @details 
-#' \itemize{
-#'  \item \code{doc_as_upsert} - is set to \code{TRUE} for all records 
-#' }
+#' 
+#' - `doc_as_upsert` - is set to `TRUE` for all records 
 #' 
 #' For doing updates with a file already prepared for the bulk API, 
-#' see \code{\link{docs_bulk}}
+#' see [docs_bulk()]
 #' 
 #' Only data.frame's are supported for now.
-#' @seealso \code{\link{docs_bulk}} \code{\link{docs_bulk_prep}}
+#' @seealso [docs_bulk()] [docs_bulk_prep()]
 #' @examples \dontrun{
 #' connect()
 #' if (index_exists("foobar")) index_delete("foobar")

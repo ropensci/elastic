@@ -42,11 +42,11 @@ Use the bulk API to prepare bulk format data
 }
 \section{Tempfiles}{
 
-In \code{docs_bulk} we create temporary files in some cases, and delete 
+In \code{docs_bulk} we create temporary files in some cases, and delete
 those before the function exits. However, we don't clean up those files
-in this function because the point of the function is to create the 
+in this function because the point of the function is to create the
 newline delimited JSON files that you need. Tempfiles are cleaned up
-when you R session ends though - be aware of that. If you want to 
+when you R session ends though - be aware of that. If you want to
 keep the files make sure to move them outside of the temp directory.
 }
 
@@ -140,5 +140,5 @@ docs_bulk_prep(mtcars, index = "hello", type = "world",
 }
 }
 \seealso{
-\code{\link{docs_bulk}}
+\code{\link[=docs_bulk]{docs_bulk()}}
 }

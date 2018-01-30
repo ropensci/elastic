@@ -23,19 +23,19 @@ tasks_cancel(node_id = NULL, task_id = NULL, nodes = NULL,
 
 \item{parent_task_id}{(character) A parent task ID}
 
-\item{detailed}{(character) get detailed results. Default: FALSE}
+\item{detailed}{(character) get detailed results. Default: \code{FALSE}}
 
 \item{group_by}{(character) "nodes" (default, i.e., NULL) or "parents"}
 
-\item{wait_for_completion}{(logical) wait for completion. Default: FALSE}
+\item{wait_for_completion}{(logical) wait for completion. Default: \code{FALSE}}
 
 \item{timeout}{(integer) timeout time}
 
-\item{raw}{If TRUE (default), data is parsed to list. If FALSE, then
+\item{raw}{If \code{TRUE} (default), data is parsed to list. If \code{FALSE}, then
 raw JSON.}
 
-\item{...}{Curl args passed on to \code{\link[httr]{GET}} or 
-\code{\link[httr]{POST}}}
+\item{...}{Curl args passed on to \code{\link[httr:GET]{httr::GET()}} or
+\code{\link[httr:POST]{httr::POST()}}}
 
 \item{node_id}{a node id}
 }

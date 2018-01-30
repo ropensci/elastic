@@ -9,11 +9,11 @@ Elasticsearch documents functions.
 \details{
 There are five functions to work directly with documents.
 \itemize{
- \item \code{\link{docs_get}}
- \item \code{\link{docs_mget}}
- \item \code{\link{docs_create}}
- \item \code{\link{docs_delete}}
- \item \code{\link{docs_bulk}}
+\item \code{\link[=docs_get]{docs_get()}}
+\item \code{\link[=docs_mget]{docs_mget()}}
+\item \code{\link[=docs_create]{docs_create()}}
+\item \code{\link[=docs_delete]{docs_delete()}}
+\item \code{\link[=docs_bulk]{docs_bulk()}}
 }
 }
 \examples{

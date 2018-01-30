@@ -1,20 +1,20 @@
 #' Use the cat Elasticsearch api.
 #'
 #' @name cat
-#' @param verbose (logical) If \code{TRUE} (default) the url call used printed to console
+#' @param verbose (logical) If `TRUE` (default) the url call used printed to console
 #' @param index (character) Index name
-#' @param fields (character) Fields to return, only used with \code{fielddata}
+#' @param fields (character) Fields to return, only used with `fielddata`
 #' @param h (character) Fields to return
 #' @param help (logical) Output available columns, and their meanings
-#' @param bytes (logical) Give numbers back machine friendly. Default: \code{FALSE}
-#' @param parse (logical) Parse to a data.frame or not. Default: \code{FALSE}
-#' @param ... Curl args passed on to \code{\link[httr]{GET}}
+#' @param bytes (logical) Give numbers back machine friendly. Default: `FALSE`
+#' @param parse (logical) Parse to a data.frame or not. Default: `FALSE`
+#' @param ... Curl args passed on to [httr::GET()]
 #'
-#' @details See \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/cat.html}
+#' @details See <https://www.elastic.co/guide/en/elasticsearch/reference/current/cat.html>
 #' for the cat API documentation.
 #'
-#' Note how \code{\link{cat_}} has an underscore at the end to avoid conflict with the function
-#' \code{\link{cat}} in base R.
+#' Note how [cat_()] has an underscore at the end to avoid conflict with the function
+#' [base::cat()] in base R.
 #'
 #' @examples \dontrun{
 #' # list Elasticsearch cat endpoints

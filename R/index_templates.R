@@ -8,9 +8,9 @@
 #' @param name (character) The name of the template
 #' @param body (character/list) The template definition
 #' @param create (logical) Whether the index template should only be added 
-#' if new or can also replace an existing one. Default: \code{FALSE}
+#' if new or can also replace an existing one. Default: `FALSE`
 #' @param flat_settings (logical) Return settings in flat format. 
-#' Default: \code{FALSE}
+#' Default: `FALSE`
 #' @param master_timeout (integer) Specify timeout for connection to master
 #' @param order (integer) The order for this template when merging 
 #' multiple matching ones (higher numbers are merged later, overriding the 
@@ -18,11 +18,11 @@
 #' @param filter_path (character) a regex for filtering output path, 
 #' see example
 #' @param timeout (integer) Explicit operation timeout
-#' @param ... Curl options. Or in \code{percolate_list} function, further 
-#' args passed on to \code{\link{Search}}
+#' @param ... Curl options. Or in `percolate_list` function, further 
+#' args passed on to [Search()]
 #'
 #' @references
-#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html}
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html>
 #'
 #' @examples \dontrun{
 #' body <- '{

@@ -32,33 +32,33 @@ cluster_pending_tasks(index = NULL, raw = FALSE, callopts = list(),
 \arguments{
 \item{index}{Index}
 
-\item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
+\item{raw}{If \code{TRUE} (default), data is parsed to list. If \code{FALSE}, then raw JSON.}
 
-\item{callopts}{Curl args passed on to httr::POST.}
+\item{callopts}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}}
 
-\item{verbose}{If TRUE (default) the url call used printed to console.}
+\item{verbose}{If \code{TRUE} (default) the url call used printed to console.}
 
 \item{...}{Further args passed on to elastic search HTTP API as parameters.}
 
 \item{level}{Can be one of cluster, indices or shards. Controls the details level of the
 health information returned. Defaults to cluster.}
 
-\item{wait_for_status}{One of green, yellow or red. Will wait (until the timeout 
-provided) until the status of the cluster changes to the one provided or better, i.e. 
+\item{wait_for_status}{One of green, yellow or red. Will wait (until the timeout
+provided) until the status of the cluster changes to the one provided or better, i.e.
 green > yellow > red. By default, will not wait for any status.}
 
-\item{wait_for_relocating_shards}{A number controlling to how many relocating shards 
-to wait for. Usually will be 0 to indicate to wait till all relocations have happened. 
+\item{wait_for_relocating_shards}{A number controlling to how many relocating shards
+to wait for. Usually will be 0 to indicate to wait till all relocations have happened.
 Defaults to not wait.}
 
-\item{wait_for_active_shards}{A number controlling to how many active shards to wait for. 
+\item{wait_for_active_shards}{A number controlling to how many active shards to wait for.
 Defaults to not wait.}
 
-\item{wait_for_nodes}{The request waits until the specified number N of nodes is 
-available. It also accepts >=N, <=N, >N and <N. Alternatively, it is possible to use 
+\item{wait_for_nodes}{The request waits until the specified number N of nodes is
+available. It also accepts >=N, <=N, >N and <N. Alternatively, it is possible to use
 ge(N), le(N), gt(N) and lt(N) notation.}
 
-\item{timeout}{A time based parameter controlling how long to wait if one of the 
+\item{timeout}{A time based parameter controlling how long to wait if one of the
 wait_for_XXX are provided. Defaults to 30s.}
 
 \item{metrics}{One or more of version, master_node, nodes, routing_table,
@@ -72,42 +72,42 @@ Elasticsearch cluster endpoints
 \details{
 metrics param options:
 \itemize{
- \item version Shows the cluster state version.
- \item master_node Shows the elected master_node part of the response
- \item nodes Shows the nodes part of the response
- \item routing_table Shows the routing_table part of the response. If you supply
- a comma separated list of indices, the returned output will only contain the
- indices listed.
- \item metadata Shows the metadata part of the response. If you supply a comma
- separated list of indices, the returned output will only contain the indices
- listed.
- \item blocks Shows the blocks part of the response
+\item version Shows the cluster state version.
+\item master_node Shows the elected master_node part of the response
+\item nodes Shows the nodes part of the response
+\item routing_table Shows the routing_table part of the response. If you supply
+a comma separated list of indices, the returned output will only contain the
+indices listed.
+\item metadata Shows the metadata part of the response. If you supply a comma
+separated list of indices, the returned output will only contain the indices
+listed.
+\item blocks Shows the blocks part of the response
 }
 
 Additional parameters that can be passed in:
 \itemize{
-  \item metric A comma-separated list of metrics to display. Possible values: '_all',
+\item metric A comma-separated list of metrics to display. Possible values: '_all',
 'completion', 'docs', 'fielddata', 'filter_cache', 'flush', 'get', 'id_cache', 'indexing',
 'merge', 'percolate', 'refresh', 'search', 'segments', 'store', 'warmer'
-  \item completion_fields A comma-separated list of fields for completion metric (supports
+\item completion_fields A comma-separated list of fields for completion metric (supports
 wildcards)
-  \item fielddata_fields A comma-separated list of fields for fielddata metric (supports
+\item fielddata_fields A comma-separated list of fields for fielddata metric (supports
 wildcards)
-  \item fields A comma-separated list of fields for fielddata and completion metric (supports
+\item fields A comma-separated list of fields for fielddata and completion metric (supports
 wildcards)
-  \item groups A comma-separated list of search groups for search statistics
-  \item allow_no_indices Whether to ignore if a wildcard indices expression resolves into no
+\item groups A comma-separated list of search groups for search statistics
+\item allow_no_indices Whether to ignore if a wildcard indices expression resolves into no
 concrete indices. (This includes _all string or when no indices have been specified)
-  \item expand_wildcards Whether to expand wildcard expression to concrete indices that are
+\item expand_wildcards Whether to expand wildcard expression to concrete indices that are
 open, closed or both.
-  \item ignore_indices When performed on multiple indices, allows to ignore missing ones
+\item ignore_indices When performed on multiple indices, allows to ignore missing ones
 (default: none)
-  \item ignore_unavailable Whether specified concrete indices should be ignored when unavailable
+\item ignore_unavailable Whether specified concrete indices should be ignored when unavailable
 (missing or closed)
-  \item human Whether to return time and byte values in human-readable format.
-  \item level Return stats aggregated at cluster, index or shard level. ('cluster', 'indices'
+\item human Whether to return time and byte values in human-readable format.
+\item level Return stats aggregated at cluster, index or shard level. ('cluster', 'indices'
 or 'shards', default: 'indices')
-  \item types A comma-separated list of document types for the indexing index metric
+\item types A comma-separated list of document types for the indexing index metric
 }
 }
 \examples{

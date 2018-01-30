@@ -32,12 +32,12 @@ character. Default: not passed}
 These are sequential, so there is order to the IDs they assign.
 If \code{TRUE}, \code{doc_ids} is ignored. Default: \code{TRUE}}
 
-\item{raw}{(logical) Get raw JSON back or not. If \code{TRUE} 
+\item{raw}{(logical) Get raw JSON back or not. If \code{TRUE}
 you get JSON; if \code{FALSE} you get a list. Default: \code{FALSE}}
 
 \item{quiet}{(logical) Suppress progress bar. Default: \code{FALSE}}
 
-\item{...}{Pass on curl options to \code{\link[httr]{POST}}}
+\item{...}{Pass on curl options to \code{\link[httr:POST]{httr::POST()}}}
 }
 \value{
 A list
@@ -47,7 +47,7 @@ Use the bulk API to create, index, update, or delete documents.
 }
 \details{
 More on the Bulk API:
-\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html}.
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html}
 
 This function dispatches on data.frame or character input. Character input
 has to be a file name or the function stops with an error message.
@@ -102,20 +102,20 @@ Note also that null values can not be indexed or searched
 
 This function returns the response from Elasticsearch, but you'll likely
 not be that interested in the response. If not, wrap your call to
-\code{docs_bulk} in \code{\link{invisible}}, like so:
+\code{docs_bulk} in \code{\link[=invisible]{invisible()}}, like so:
 \code{invisible(docs_bulk(...))}
 }
 
 \section{Connections/Files}{
 
-We create temporary files, and connections to those files, when data.frame's 
-and lists are passed in to \code{docs_bulk()} (not when a file is passed in 
-since we don't need to create a file). After inserting data into your 
+We create temporary files, and connections to those files, when data.frame's
+and lists are passed in to \code{docs_bulk()} (not when a file is passed in
+since we don't need to create a file). After inserting data into your
 Elasticsearch instance, we close the connections and delete the temporary files.
 
-There are some exceptions though. When you pass in your own file, whether a 
-tempfile or not, we don't delete those files after using them - in case 
-you need those files again. Your own tempfile's will be cleaned up/delete 
+There are some exceptions though. When you pass in your own file, whether a
+tempfile or not, we don't delete those files after using them - in case
+you need those files again. Your own tempfile's will be cleaned up/delete
 when the R session ends. Non-tempfile's won't be cleaned up/deleted after
 the R session ends.
 }
@@ -227,8 +227,8 @@ x <- docs_bulk(mtcars, index = "hello", type = "world", quiet = FALSE)
 }
 }
 \seealso{
-\code{\link{docs_bulk_prep}} for prepping a newline delimited 
-JSON file that you can load into Elasticsearch yourself. See 
-\code{\link{docs_bulk_update}} for updating documents from an R data.frame
+\code{\link[=docs_bulk_prep]{docs_bulk_prep()}} for prepping a newline delimited
+JSON file that you can load into Elasticsearch yourself. See
+\code{\link[=docs_bulk_update]{docs_bulk_update()}} for updating documents from an R data.frame
 or list.
 }

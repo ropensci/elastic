@@ -26,7 +26,7 @@ type_exists(index, type, ...)
 
 \item{update_all_types}{(logical) update all types. default: \code{FALSE}}
 
-\item{...}{Curl options passed on to \code{\link[httr]{HEAD}} or other 
+\item{...}{Curl options passed on to \code{\link[httr:HEAD]{httr::HEAD()}} or other
 http verbs}
 
 \item{field}{(character) One or more field names}
@@ -39,15 +39,15 @@ Mapping management
 \details{
 Find documentation for each function at:
 \itemize{
- \item mapping_create -
- \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-put-mapping.html}
- \item type_exists -
- \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-types-exists.html}
- \item mapping_delete - FUNCTION DEFUNCT - instead of deleting mapping, delete
- index and recreate index with new mapping
- \item mapping_get -
- \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-mapping.html}
- \item field_mapping_get -
+\item \code{mapping_create} -
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-put-mapping.html}
+\item \code{type_exists} -
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-types-exists.html}
+\item \code{mapping_delete} - FUNCTION DEFUNCT - instead of deleting mapping, delete
+index and recreate index with new mapping
+\item \code{mapping_get} -
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-mapping.html}
+\item \code{field_mapping_get} -
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-field-mapping.html}
 }
 }

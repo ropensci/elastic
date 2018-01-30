@@ -12,37 +12,37 @@ connect(es_host = "127.0.0.1", es_port = 9200, es_path = NULL,
 connection()
 }
 \arguments{
-\item{es_host}{(character) The base host, defaults to \code{127.0.0.1}. 
+\item{es_host}{(character) The base host, defaults to \code{127.0.0.1}
 Synonym of \code{es_base}}
 
-\item{es_port}{(character) port to connect to, defaults to \code{9200} 
+\item{es_port}{(character) port to connect to, defaults to \code{9200}
 (optional)}
 
-\item{es_path}{(character) context path that is appended to the end of the 
-url. Default: NULL, ignored}
+\item{es_path}{(character) context path that is appended to the end of the
+url. Default: \code{NULL}, ignored}
 
 \item{es_transport_schema}{(character) http or https. Default: \code{http}}
 
-\item{es_user}{(character) User name, if required for the connection. You 
+\item{es_user}{(character) User name, if required for the connection. You
 can specify,  but ignored for now.}
 
-\item{es_pwd}{(character) Password, if required for the connection. You 
+\item{es_pwd}{(character) Password, if required for the connection. You
 can specify, but ignored for now.}
 
 \item{force}{(logical) Force re-load of connection details}
 
-\item{errors}{(character) One of simple (Default) or complete. Simple gives 
-http code and  error message on an error, while complete gives both http 
+\item{errors}{(character) One of simple (Default) or complete. Simple gives
+http code and  error message on an error, while complete gives both http
 code and error message,  and stack trace, if available.}
 
-\item{es_base}{(character) Synonym of \code{es_host}, and will be gone in a 
+\item{es_base}{(character) Synonym of \code{es_host}, and will be gone in a
 future version of \pkg{elastic}}
 
-\item{headers}{Either an object of class \code{request} or a list that can 
-be coerced to an object of class \code{request} via 
-\code{\link[httr]{add_headers}}. These headers are  used in all requests. 
-To use headers in individual requests and not others, pass in headers 
-using \code{\link[httr]{add_headers}} via \code{...} in a function call.}
+\item{headers}{Either an object of class \code{request} or a list that can
+be coerced to an object of class \code{request} via
+\code{\link[httr:add_headers]{httr::add_headers()}}. These headers are  used in all requests.
+To use headers in individual requests and not others, pass in headers
+using \code{\link[httr:add_headers]{httr::add_headers()}} via \code{...} in a function call.}
 
 \item{...}{Further args passed on to print for the es_conn class.}
 }
@@ -50,14 +50,14 @@ using \code{\link[httr]{add_headers}} via \code{...} in a function call.}
 Set connection details to an Elasticsearch engine.
 }
 \details{
-The default configuration is set up for localhost access on port 
+The default configuration is set up for localhost access on port
 9200, with no username or password.
 
-\code{\link{connect}} and \code{\link{connection}} no longer ping the 
+\code{\link[=connect]{connect()}} and \code{\link[=connection]{connection()}} no longer ping the
 Elasticsearch server, but only print your connection details.
 
-Internally, we store your connection settings with environment variables. 
-That means you  can set your env vars permanently in .Renviron file, and 
+Internally, we store your connection settings with environment variables.
+That means you  can set your env vars permanently in .Renviron file, and
 use them on a server e.g., as private env vars
 }
 \examples{
@@ -91,5 +91,5 @@ connect(headers = add_headers(a = 5))
 }
 }
 \seealso{
-\code{\link{ping}} to check your connection
+\code{\link[=ping]{ping()}} to check your connection
 }

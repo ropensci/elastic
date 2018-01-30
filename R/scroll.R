@@ -2,67 +2,66 @@
 #'
 #' @export
 #'
-#' @param x (character) For \code{scroll}, a single scroll id; for
-#' \code{scroll_clear}, one or more scroll id's
+#' @param x (character) For `scroll`, a single scroll id; for
+#' `scroll_clear`, one or more scroll id's
 #' @param time_scroll (character) Specify how long a consistent view of the
 #' index should be maintained for scrolled search, e.g., "30s", "1m".
-#' See \code{\link{units-time}}.
-#' @param raw (logical) If \code{FALSE} (default), data is parsed to list.
-#' If \code{TRUE}, then raw JSON.
-#' @param asdf (logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}}
-#' to parse JSON directly to a data.frame. If \code{FALSE} (Default), list
+#' See [units-time].
+#' @param raw (logical) If `FALSE` (default), data is parsed to list.
+#' If `TRUE`, then raw JSON.
+#' @param asdf (logical) If `TRUE`, use [jsonlite::fromJSON()]
+#' to parse JSON directly to a data.frame. If `FALSE` (Default), list
 #' output is given.
 #' @param stream_opts (list) A list of options passed to
-#' \code{\link[jsonlite]{stream_out}} - Except that you can't pass \code{x} as
-#' that's the data that's streamed out, and pass a file path instead of a
+#' [jsonlite::stream_out()] - Except that you can't pass `x` as
+#' that's the data that's streamed out, and pass a file path sinstead of a
 #' connection to \code{con}. \code{pagesize} param doesn't do much as
 #' that's more or less controlled by paging with ES.
-#' @param all (logical) If \code{TRUE} (default) then all search contexts
-#' cleared.  If \code{FALSE}, scroll id's must be passed to \code{x}
-#' @param ... Curl args passed on to \code{\link[httr]{POST}}
+#' @param all (logical) If `TRUE` (default) then all search contexts
+#' cleared.  If `FALSE`, scroll id's must be passed to `x`
+#' @param ... Curl args passed on to [httr::POST()]
 #'
-#' @seealso \code{\link{Search}}
+#' @seealso [Search()]
 #' @references
-#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-scroll.html}
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-scroll.html>
 #'
-#' @return \code{scroll()} returns a list, identical to what
-#' \code{\link{Search}} returns. With attribute \code{scroll} that is the
-#' scroll value set via the \code{time_scroll} parameter
+#' @return `scroll()` returns a list, identical to what
+#' [Search()] returns. With attribute `scroll` that is the
+#' scroll value set via the `time_scroll` parameter
 #'
-#' \code{scroll_clear()} returns a boolean (\code{TRUE} on success)
+#' `scroll_clear()` returns a boolean (`TRUE` on success)
 #'
 #' @section Scores:
 #' Scores will be the same for all documents that are returned from a
 #' scroll request. Dems da rules.
 #'
 #' @section Inputs:
-#' Inputs to \code{scroll()} can be one of:
-#' \itemize{
-#'  \item list - This usually will be the output of \code{\link{Search}}, but
+#' Inputs to `scroll()` can be one of:
+#'
+#' - list - This usually will be the output of [Search()], but
 #'  you could in theory make a list yourself with the appropriate elements
-#'  \item character - A scroll ID - this is typically the scroll id output
-#'  from a call to \code{\link{Search}}, accessed like \code{res$`_scroll_id`}
-#' }
+#' - character - A scroll ID - this is typically the scroll id output
+#'  from a call to [Search()], accessed like \code{res$`_scroll_id`}
 #'
-#' All other classes passed to \code{scroll()} will fail with message
+#' All other classes passed to `scroll()` will fail with message
 #'
-#' Lists passed to \code{scroll()} without a \code{_scroll_id} element will
+#' Lists passed to `scroll()` without a `_scroll_id` element will
 #' trigger an error.
 #'
-#' From lists output form \code{\link{Search}} there should be an attribute
-#' ("scroll") that is the \code{scroll} value set in the \code{\link{Search}}
+#' From lists output form [Search()] there should be an attribute
+#' ("scroll") that is the `scroll` value set in the [Search()]
 #' request - if that attribute is missing from the list, we'll attempt to
-#' use the \code{time_scroll} parameter value set in the 
-#' \code{scroll()} function call
+#' use the `time_scroll` parameter value set in the 
+#' `scroll()` function call
 #'
-#' The output of \code{scroll()} has the scroll time value as an attribute so
-#' the output can be passed back into \code{scroll()} to continue.
+#' The output of `scroll()` has the scroll time value as an attribute so
+#' the output can be passed back into `scroll()` to continue.
 #'
 #' @section Clear scroll:
 #' Search context are automatically removed when the scroll timeout has
 #' been exceeded.  Keeping scrolls open has a cost, so scrolls should be
 #' explicitly cleared as soon  as the scroll is not being used anymore
-#' using \code{scroll_clear}
+#' using `scroll_clear`
 #'
 #' @section Sliced scrolling:
 #' For scroll queries that return a lot of documents it is possible to split

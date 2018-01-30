@@ -12,14 +12,14 @@ search_body(index = NULL, type = NULL, raw = FALSE, callopts = list(),
 
 \item{type}{Document type}
 
-\item{raw}{If TRUE (default), data is parsed to list. If \code{FALSE}, then 
+\item{raw}{If \code{TRUE} (default), data is parsed to list. If \code{FALSE}, then
 raw JSON.}
 
-\item{callopts}{Curl args passed on to \code{httr::POST}}
+\item{callopts}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}}
 
 \item{query}{Query, either a list or json.}
 
-\item{...}{Further args passed on to elastic search HTTP API as parameters. 
+\item{...}{Further args passed on to elastic search HTTP API as parameters.
 Not used right now.}
 }
 \description{

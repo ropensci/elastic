@@ -5,14 +5,14 @@
 #' @export
 #' @param x (character) A file path
 #' @param raw (logical) Get raw JSON back or not.
-#' @param asdf (logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} 
-#' to parse JSON directly to a data.frame. If \code{FALSE} (Default), list 
+#' @param asdf (logical) If `TRUE`, use [jsonlite::fromJSON()]
+#' to parse JSON directly to a data.frame. If `FALSE` (Default), list 
 #' output is given.
-#' @param ... Curl args passed on to \code{\link[httr]{POST}}
+#' @param ... Curl args passed on to [httr::POST()]
 #'
-#' @details This function behaves similarly to \code{\link{docs_bulk}} - 
+#' @details This function behaves similarly to [docs_bulk()] - 
 #' performs searches based on queries defined in a file.
-#' @seealso \code{\link{Search_uri}} \code{\link{Search}}
+#' @seealso [Search_uri()] [Search()]
 #' @examples \dontrun{
 #' connect()
 #' msearch1 <- system.file("examples", "msearch_eg1.json", package = "elastic")

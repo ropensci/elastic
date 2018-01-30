@@ -12,10 +12,10 @@
 #' @param version (character) Explicit version number for concurrency control
 #' @param version_type (character) Specific version type. One of internal 
 #' or external
-#' @param callopts Curl args passed on to \code{\link[httr]{DELETE}}
+#' @param callopts Curl args passed on to [httr::DELETE()]
 #' @param ... Further args to query DSL
 #' @references
-#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html}
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html>
 #' @examples \dontrun{
 #' if (!index_exists("plos")) {
 #'  plosdat <- system.file("examples", "plos_data.json", package = "elastic")

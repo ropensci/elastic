@@ -42,12 +42,13 @@ to _all field.}
 analyzer of the _all field.}
 
 \item{analyze_wildcard}{(logical) Should wildcard and prefix queries be analyzed or not.
-Default: FALSE}
+Default: \code{FALSE}}
 
-\item{lowercase_expanded_terms}{Should terms be automatically lowercased or not. Default: TRUE}
+\item{lowercase_expanded_terms}{Should terms be automatically lowercased or not.
+Default: \code{TRUE}}
 
 \item{lenient}{If set to true will cause format based failures (like providing text to a
-numeric field) to be ignored. Default: FALSE}
+numeric field) to be ignored. Default: \code{FALSE}}
 
 \item{default_operator}{The default operator to be used, can be AND or OR. Defaults to OR.}
 
@@ -58,9 +59,9 @@ numeric field) to be ignored. Default: FALSE}
 \item{body}{The query definition using the Query DSL. This is passed in the body of the
 request.}
 
-\item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
+\item{raw}{If \code{TRUE} (default), data is parsed to list. If \code{FALSE}, then raw JSON.}
 
-\item{...}{Curl args passed on to \code{\link[httr]{GET}}}
+\item{...}{Curl args passed on to \code{\link[httr:GET]{httr::GET()}}}
 }
 \description{
 Explain a search query.

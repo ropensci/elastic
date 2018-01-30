@@ -8,10 +8,10 @@
 #' (default)
 #' @param body Query, either a list or json
 #' @param raw (logical) Get raw JSON back or not
-#' @param asdf (logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} 
-#' to parse JSON directly to a data.frame. If \code{FALSE} (Default), list 
+#' @param asdf (logical) If `TRUE`, use \code{\link[jsonlite]{fromJSON}} 
+#' to parse JSON directly to a data.frame. If `FALSE` (Default), list 
 #' output is given.
-#' @param ... Curl args passed on to \code{\link[httr]{POST}}
+#' @param ... Curl args passed on to [httr::POST()]
 #'
 #' @details The field stats api allows you to get statistical properties of a 
 #' field without executing a search, but looking up measurements that are 
@@ -23,9 +23,12 @@
 #' The field stats api by defaults executes on all indices, but can execute on 
 #' specific indices too.
 #' 
-#' @references \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-field-stats.html}
+#' @note Deprecated in Elasticsearch versions equal to/greater than 5.4.0
 #' 
-#' @seealso \code{\link{field_caps}}
+#' @references 
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/5.6/search-field-stats.html>
+#' 
+#' @seealso [field_caps()]
 #' @examples \dontrun{
 #' connect()
 #' 

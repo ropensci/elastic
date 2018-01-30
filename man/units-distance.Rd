@@ -4,12 +4,12 @@
 \alias{units-distance}
 \title{Distance units}
 \description{
-Wherever distances need to be specified, such as the distance parameter in the 
-Geo Distance Filter), the default unit if none is specified is the meter. Distances 
+Wherever distances need to be specified, such as the distance parameter in the
+Geo Distance Filter), the default unit if none is specified is the meter. Distances
 can be specified in other units, such as "1km" or "2mi" (2 miles).
 }
 \details{
-\tabular{ll}{ 
+\tabular{ll}{
 mi or miles \tab Mile \cr
 yd or yards \tab Yard \cr
 ft or feet \tab Feet \cr
@@ -21,10 +21,10 @@ mm or millimeters \tab Millimeter \cr
 NM, nmi or nauticalmiles \tab Nautical mile \cr
 }
 
-The precision parameter in the Geohash Cell Filter accepts distances with the above 
-units, but if no unit is specified, then the precision is interpreted as the length 
+The precision parameter in the Geohash Cell Filter accepts distances with the above
+units, but if no unit is specified, then the precision is interpreted as the length
 of the geohash.
 }
 \seealso{
-\code{\link{units-time}}
+\link{units-time}
 }

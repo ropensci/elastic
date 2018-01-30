@@ -17,13 +17,13 @@ mtermvectors(index = NULL, type = NULL, ids = NULL, body = list(),
 
 \item{ids}{(character) One or more document ids}
 
-\item{body}{(character) Define parameters and or supply a document to get 
+\item{body}{(character) Define parameters and or supply a document to get
 termvectors for}
 
 \item{pretty}{(logical) pretty print. Default: \code{TRUE}}
 
-\item{field_statistics}{(character) Specifies if document count, sum of 
-document frequencies and sum of total term frequencies should be returned. 
+\item{field_statistics}{(character) Specifies if document count, sum of
+document frequencies and sum of total term frequencies should be returned.
 Default: \code{TRUE}}
 
 \item{fields}{(character) A comma-separated list of fields to return.}
@@ -39,7 +39,7 @@ Default: \code{TRUE}}
 \item{positions}{(character) Specifies if term positions should be returned.
 Default: \code{TRUE}}
 
-\item{preference}{(character) Specify the node or shard the operation 
+\item{preference}{(character) Specify the node or shard the operation
 should be performed on (Default: \code{random}).}
 
 \item{realtime}{(character) Specifies if request is real-time as opposed to
@@ -47,21 +47,21 @@ near-real-time (Default: \code{TRUE}).}
 
 \item{routing}{(character) Specific routing value.}
 
-\item{term_statistics}{(character) Specifies if total term frequency and 
+\item{term_statistics}{(character) Specifies if total term frequency and
 document frequency should be returned. Default: \code{FALSE}}
 
 \item{version}{(character) Explicit version number for concurrency control}
 
-\item{version_type}{(character) Specific version type, valid choices are: 
+\item{version_type}{(character) Specific version type, valid choices are:
 'internal', 'external', 'external_gte', 'force'}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}}}
+\item{...}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}}
 }
 \description{
 Multi Termvectors
 }
 \details{
-Multi termvectors API allows to get multiple termvectors based on an 
+Multi termvectors API allows to get multiple termvectors based on an
 index, type and id.
 }
 \examples{

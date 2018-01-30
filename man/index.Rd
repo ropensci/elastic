@@ -72,21 +72,21 @@ index_clear_cache(index = NULL, filter = FALSE, filter_keys = NULL,
 \arguments{
 \item{index}{(character) A character vector of index names}
 
-\item{features}{(character) A character vector of features. One or more of 
+\item{features}{(character) A character vector of features. One or more of
 settings, mappings, or aliases}
 
-\item{raw}{If TRUE (default), data is parsed to list. If FALSE, then raw JSON.}
+\item{raw}{If \code{TRUE} (default), data is parsed to list. If FALSE, then raw JSON.}
 
-\item{verbose}{If TRUE (default) the url call used printed to console.}
+\item{verbose}{If \code{TRUE} (default) the url call used printed to console.}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}}, \code{\link[httr]{GET}},
-\code{\link[httr]{PUT}}, \code{\link[httr]{HEAD}}, or \code{\link[httr]{DELETE}}}
+\item{...}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}, \code{\link[httr:GET]{httr::GET()}},
+\code{\link[httr:PUT]{httr::PUT()}}, \code{\link[httr:HEAD]{httr::HEAD()}}, or \code{\link[httr:DELETE]{httr::DELETE()}}}
 
 \item{body}{Query, either a list or json.}
 
-\item{metric}{(character) A character vector of metrics to display. Possible 
-values: "_all", "completion", "docs", "fielddata", "filter_cache", "flush", 
-"get", "id_cache", "indexing", "merge", "percolate", "refresh", "search", 
+\item{metric}{(character) A character vector of metrics to display. Possible
+values: "_all", "completion", "docs", "fielddata", "filter_cache", "flush",
+"get", "id_cache", "indexing", "merge", "percolate", "refresh", "search",
 "segments", "store", "warmer".}
 
 \item{completion_fields}{(character) A character vector of fields for completion metric
@@ -102,10 +102,10 @@ values: "_all", "completion", "docs", "fielddata", "filter_cache", "flush",
 \item{level}{(character) Return stats aggregated on "cluster", "indices" (default) or "shards"}
 
 \item{detailed}{(logical) Whether to display detailed information about shard recovery.
-Default: FALSE}
+Default: \code{FALSE}}
 
 \item{active_only}{(logical) Display only those recoveries that are currently on-going.
-Default: FALSE}
+Default: \code{FALSE}}
 
 \item{max_num_segments}{(character) The number of segments the index should be merged into.
 Default: "dynamic"}
@@ -114,13 +114,13 @@ Default: "dynamic"}
 deleted documents}
 
 \item{flush}{(logical) Specify whether the index should be flushed after performing the
-operation. Default: TRUE}
+operation. Default: \code{TRUE}}
 
 \item{wait_for_merge}{(logical) Specify whether the request should block until the merge
-process is finished. Default: TRUE}
+process is finished. Default: \code{TRUE}}
 
 \item{wait_for_completion}{(logical) Should the request wait for the upgrade to complete.
-Default: FALSE}
+Default: \code{FALSE}}
 
 \item{text}{The text on which the analysis should be performed (when request body is not used)}
 
@@ -142,8 +142,7 @@ changed related to the index writer will be refreshed.}
 
 \item{wait_if_ongoing}{If TRUE, the flush operation will block until the flush can be executed
 if another flush operation is already executing. The default is false and will cause an
-exception to be thrown on the shard level if another flush operation is already running.
-[1.4.0.Beta1]}
+exception to be thrown on the shard level if another flush operation is already running.}
 
 \item{filter}{(logical) Clear filter caches}
 
@@ -160,23 +159,23 @@ parameter (default: all)}
 Index API operations
 }
 \details{
-\bold{index_analyze}:
+\strong{index_analyze}:
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-analyze.html}
 This method can accept a string of text in the body, but this function passes it as a
 parameter in a GET request to simplify.
 
-\bold{index_flush}:
+\strong{index_flush}:
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-flush.html}
 From the ES website: The flush process of an index basically frees memory from the index by
 flushing data to the index storage and clearing the internal transaction log. By default,
 Elasticsearch uses memory heuristics in order to automatically trigger flush operations as
 required in order to clear memory.
 
-\bold{index_status}: The API endpoint for this function was deprecated in
-Elasticsearch \code{v1.2.0}, and will likely be removed soon. Use \code{\link{index_recovery}}
+\strong{index_status}: The API endpoint for this function was deprecated in
+Elasticsearch \code{v1.2.0}, and will likely be removed soon. Use \code{\link[=index_recovery]{index_recovery()}}
 instead.
 
-\bold{index_settings_update}: There are a lot of options you can change with this
+\strong{index_settings_update}: There are a lot of options you can change with this
 function. See
 https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html
 for all the options.
@@ -360,5 +359,5 @@ index_get("foobar")$foobar$settings
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices.html}
 }
 \author{
-Scott Chamberlain <myrmecocystus@gmail.com>
+Scott Chamberlain \href{mailto:myrmecocystus@gmail.com}{myrmecocystus@gmail.com}
 }

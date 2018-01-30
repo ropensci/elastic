@@ -22,28 +22,28 @@ index_template_delete(name, ...)
 
 \item{body}{(character/list) The template definition}
 
-\item{create}{(logical) Whether the index template should only be added 
+\item{create}{(logical) Whether the index template should only be added
 if new or can also replace an existing one. Default: \code{FALSE}}
 
-\item{flat_settings}{(logical) Return settings in flat format. 
+\item{flat_settings}{(logical) Return settings in flat format.
 Default: \code{FALSE}}
 
 \item{master_timeout}{(integer) Specify timeout for connection to master}
 
-\item{order}{(integer) The order for this template when merging 
-multiple matching ones (higher numbers are merged later, overriding the 
+\item{order}{(integer) The order for this template when merging
+multiple matching ones (higher numbers are merged later, overriding the
 lower numbers)}
 
 \item{timeout}{(integer) Explicit operation timeout}
 
-\item{...}{Curl options. Or in \code{percolate_list} function, further 
-args passed on to \code{\link{Search}}}
+\item{...}{Curl options. Or in \code{percolate_list} function, further
+args passed on to \code{\link[=Search]{Search()}}}
 
-\item{filter_path}{(character) a regex for filtering output path, 
+\item{filter_path}{(character) a regex for filtering output path,
 see example}
 }
 \description{
-Index templates allow you to define templates that 
+Index templates allow you to define templates that
 will automatically be applied when new indices are created
 }
 \examples{

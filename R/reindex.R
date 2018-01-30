@@ -19,11 +19,11 @@
 #' set to any non-negative value less than or equal to the total number of 
 #' copies for the shard (number of replicas + 1)
 #' @param wait_for_completion (logical) Should the request block until the 
-#' reindex is complete? Default: \code{TRUE}
-#' @param ... Curl options, passed on to \code{\link[httr]{POST}}
+#' reindex is complete? Default: `TRUE`
+#' @param ... Curl options, passed on to [httr::POST()]
 #'
 #' @references
-#' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-reindex.html}
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-reindex.html>
 #'
 #' @examples \dontrun{
 #' if (!index_exists("twitter")) index_create("twitter")

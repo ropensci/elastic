@@ -13,22 +13,22 @@ docs_delete(index, type, id, refresh = NULL, routing = NULL,
 
 \item{type}{(character) The type of the document. Required}
 
-\item{id}{(numeric/character) The document ID. Can be numeric or character. 
+\item{id}{(numeric/character) The document ID. Can be numeric or character.
 Required}
 
 \item{refresh}{(logical) Refresh the index after performing the operation}
 
 \item{routing}{(character) Specific routing value}
 
-\item{timeout}{(character) Explicit operation timeout, e.g,. 5m (for 5 
+\item{timeout}{(character) Explicit operation timeout, e.g,. 5m (for 5
 minutes)}
 
 \item{version}{(character) Explicit version number for concurrency control}
 
-\item{version_type}{(character) Specific version type. One of internal 
+\item{version_type}{(character) Specific version type. One of internal
 or external}
 
-\item{callopts}{Curl args passed on to \code{\link[httr]{DELETE}}}
+\item{callopts}{Curl args passed on to \code{\link[httr:DELETE]{httr::DELETE()}}}
 
 \item{...}{Further args to query DSL}
 }

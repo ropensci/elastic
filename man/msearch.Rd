@@ -11,17 +11,17 @@ msearch(x, raw = FALSE, asdf = FALSE, ...)
 
 \item{raw}{(logical) Get raw JSON back or not.}
 
-\item{asdf}{(logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} 
-to parse JSON directly to a data.frame. If \code{FALSE} (Default), list 
+\item{asdf}{(logical) If \code{TRUE}, use \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}}
+to parse JSON directly to a data.frame. If \code{FALSE} (Default), list
 output is given.}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}}}
+\item{...}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}}
 }
 \description{
 Performs multiple searches, defined in a file
 }
 \details{
-This function behaves similarly to \code{\link{docs_bulk}} - 
+This function behaves similarly to \code{\link[=docs_bulk]{docs_bulk()}} -
 performs searches based on queries defined in a file.
 }
 \examples{
@@ -38,5 +38,5 @@ msearch("~/mysearch.json")
 }
 }
 \seealso{
-\code{\link{Search_uri}} \code{\link{Search}}
+\code{\link[=Search_uri]{Search_uri()}} \code{\link[=Search]{Search()}}
 }

@@ -3,8 +3,8 @@
 #' @export
 #' @param index Index name. Required.
 #' @param type Document type. Optional.
-#' @param ... Additional args passed on to \code{\link{Search}}
-#' @seealso \code{\link{Search}}
+#' @param ... Additional args passed on to [Search()]
+#' @seealso [Search()]
 #' @examples \dontrun{
 #' if (!index_exists("twitter")) index_create("twitter")
 #' docs_create('twitter', type='tweet', id=1, body = list(

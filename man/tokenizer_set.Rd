@@ -11,7 +11,7 @@ tokenizer_set(index, body, ...)
 
 \item{body}{Query, either a list or json.}
 
-\item{...}{Curl options passed on to \code{\link[httr]{PUT}}}
+\item{...}{Curl options passed on to \code{\link[httr:PUT]{httr::PUT()}}}
 }
 \description{
 Tokenizer operations
@@ -47,5 +47,5 @@ index_analyze(text = "hello world", index = "test1",
 }
 }
 \author{
-Scott Chamberlain <myrmecocystus@gmail.com>
+Scott Chamberlain \href{mailto:myrmecocystus@gmail.com}{myrmecocystus@gmail.com}
 }
