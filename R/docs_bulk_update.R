@@ -9,18 +9,26 @@
 #' 
 #' For doing updates with a file already prepared for the bulk API, 
 #' see \code{\link{docs_bulk}}
+#' 
+#' Only data.frame's are supported for now.
 #' @seealso \code{\link{docs_bulk}} \code{\link{docs_bulk_prep}}
 #' @examples \dontrun{
+#' connect()
 #' if (index_exists("foobar")) index_delete("foobar")
 #' 
 #' df <- data.frame(name = letters[1:3], size = 1:3, id = 100:102)
 #' invisible(docs_bulk(df, 'foobar', 'foobar', es_ids = FALSE))
 #' 
-#' # specifying operation types
-#' df2 <- data.frame(size = c(45, 56), id = 100:101)
-#' df2
+#' # add new rows in existing fields
+#' (df2 <- data.frame(size = c(45, 56), id = 100:101))
 #' Search("foobar", asdf = TRUE)$hits$hits
 #' invisible(docs_bulk_update(df2, index = 'foobar', type = 'foobar'))
+#' Search("foobar", asdf = TRUE)$hits$hits
+#' 
+#' # add new fields (and new rows by extension)
+#' (df3 <- data.frame(color = c("blue", "red", "green"), id = 100:102))
+#' Search("foobar", asdf = TRUE)$hits$hits
+#' invisible(docs_bulk_update(df3, index = 'foobar', type = 'foobar'))
 #' Search("foobar", asdf = TRUE)$hits$hits
 #' }
 docs_bulk_update <- function(x, index = NULL, type = NULL, chunk_size = 1000,
@@ -32,16 +40,18 @@ docs_bulk_update <- function(x, index = NULL, type = NULL, chunk_size = 1000,
 #' @export
 docs_bulk_update.default <- function(x, index = NULL, type = NULL, 
                                      chunk_size = 1000, doc_ids = NULL, 
-                                     raw = FALSE, ...) {
+                                     raw = FALSE, quiet = FALSE, ...) {
   
-  stop("no 'docs_bulk_update' method for class ", class(x), call. = FALSE)
+  stop("no 'docs_bulk_update' method for class ", class(x)[[1L]], 
+    call. = FALSE)
 }
 
 #' @export
 docs_bulk_update.data.frame <- function(x, index = NULL, type = NULL, 
                                         chunk_size = 1000, doc_ids = NULL, 
-                                        raw = FALSE, ...) {
+                                        raw = FALSE, quiet = FALSE, ...) {
   
+  assert(quiet, "logical")
   if (is.null(index)) {
     stop("index can't be NULL when passing a data.frame",
          call. = FALSE)
@@ -50,7 +60,7 @@ docs_bulk_update.data.frame <- function(x, index = NULL, type = NULL,
   check_doc_ids(x, doc_ids)
   # make sure document ids passed 
   if (!'id' %in% names(x) && is.null(doc_ids)) {
-    stop('data.frame must have a column "_id" or pass doc_ids')
+    stop('data.frame must have a column "id" or pass param "doc_ids"')
   }
   if (is.factor(doc_ids)) doc_ids <- as.character(doc_ids)
   row.names(x) <- NULL
@@ -65,11 +75,14 @@ docs_bulk_update.data.frame <- function(x, index = NULL, type = NULL,
     rws <- shift_start(rws, index, type)
     id_chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
   }
-  pb <- txtProgressBar(min = 0, max = length(data_chks), initial = 0, style = 3)
-  on.exit(close(pb))
+
+  if (!quiet) {
+    pb <- txtProgressBar(min = 0, max = length(data_chks), initial = 0, style = 3)
+    on.exit(close(pb))
+  }
   resl <- vector(mode = "list", length = length(data_chks))
   for (i in seq_along(data_chks)) {
-    setTxtProgressBar(pb, i)
+    if (!quiet) setTxtProgressBar(pb, i)
     resl[[i]] <- docs_bulk(make_bulk_update(x[data_chks[[i]], , drop = FALSE], 
                                      index, type, id_chks[[i]]), ...)
   }

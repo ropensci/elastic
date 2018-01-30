@@ -43,19 +43,27 @@ Use the bulk API to update documents
 
 For doing updates with a file already prepared for the bulk API, 
 see \code{\link{docs_bulk}}
+
+Only data.frame's are supported for now.
 }
 \examples{
 \dontrun{
+connect()
 if (index_exists("foobar")) index_delete("foobar")
 
 df <- data.frame(name = letters[1:3], size = 1:3, id = 100:102)
 invisible(docs_bulk(df, 'foobar', 'foobar', es_ids = FALSE))
 
-# specifying operation types
-df2 <- data.frame(size = c(45, 56), id = 100:101)
-df2
+# add new rows in existing fields
+(df2 <- data.frame(size = c(45, 56), id = 100:101))
 Search("foobar", asdf = TRUE)$hits$hits
 invisible(docs_bulk_update(df2, index = 'foobar', type = 'foobar'))
+Search("foobar", asdf = TRUE)$hits$hits
+
+# add new fields (and new rows by extension)
+(df3 <- data.frame(color = c("blue", "red", "green"), id = 100:102))
+Search("foobar", asdf = TRUE)$hits$hits
+invisible(docs_bulk_update(df3, index = 'foobar', type = 'foobar'))
 Search("foobar", asdf = TRUE)$hits$hits
 }
 }

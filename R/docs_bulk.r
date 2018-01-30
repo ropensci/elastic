@@ -25,7 +25,9 @@
 #' @param ... Pass on curl options to \code{\link[httr]{POST}}
 #'
 #' @seealso \code{\link{docs_bulk_prep}} for prepping a newline delimited 
-#' JSON file that you can load into Elasticsearch yourself
+#' JSON file that you can load into Elasticsearch yourself. See 
+#' \code{\link{docs_bulk_update}} for updating documents from an R data.frame
+#' or list.
 #'
 #' @details More on the Bulk API:
 #' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html}.
