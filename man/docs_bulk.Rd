@@ -228,5 +228,7 @@ x <- docs_bulk(mtcars, index = "hello", type = "world", quiet = FALSE)
 }
 \seealso{
 \code{\link{docs_bulk_prep}} for prepping a newline delimited 
-JSON file that you can load into Elasticsearch yourself
+JSON file that you can load into Elasticsearch yourself. See 
+\code{\link{docs_bulk_update}} for updating documents from an R data.frame
+or list.
 }
