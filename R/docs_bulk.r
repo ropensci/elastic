@@ -52,13 +52,17 @@
 #'
 #' @section Document IDs:
 #' Document IDs can be passed in via the `doc_ids` paramater when passing
-#' in data.frame or list, but not with files. If ids not passed to
+#' in data.frame or list, but not with files. If ids are not passed to
 #' `doc_ids`, we assign document IDs from 1 to length of the object
 #' (rows of a data.frame, or length of a list). In the future we may allow the
-#' user to select whether
-#' they want to assign sequential numeric IDs or to allow Elasticsearch to
-#' assign IDs, which are UUIDs that are actually sequential, so you still can
-#' determine an order of your documents.
+#' user to select whether they want to assign sequential numeric IDs or 
+#' to allow Elasticsearch to assign IDs, which are UUIDs that are actually 
+#' sequential, so you still can determine an order of your documents.
+#' 
+#' @section Document IDs and Factors:
+#' If you pass in ids that are of class factor, we coerce them to character 
+#' with `as.character`. This applies to both data.frame and list inputs, but
+#' not to file inputs.
 #'
 #' @section Large numbers for document IDs:
 #' Until recently, if you had very large integers for document IDs,
@@ -78,8 +82,7 @@
 #' @section Tips:
 #' This function returns the response from Elasticsearch, but you'll likely
 #' not be that interested in the response. If not, wrap your call to
-#' `docs_bulk` in [invisible()], like so:
-#' `invisible(docs_bulk(...))`
+#' `docs_bulk` in [invisible()], like so: `invisible(docs_bulk(...))`
 #' 
 #' @section Connections/Files:
 #' We create temporary files, and connections to those files, when data.frame's 
@@ -233,7 +236,7 @@ docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000
   if (!is.null(doc_ids)) {
     id_chks <- split(doc_ids, ceiling(seq_along(doc_ids) / chunk_size))
   } else if (has_ids(x)) {
-    rws <- x$id
+    rws <- if (inherits(x$id, "factor")) as.character(x$id) else x$id
     id_chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
   } else {
     rws <- shift_start(rws, index, type)
@@ -273,7 +276,8 @@ docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
   if (!is.null(doc_ids)) {
     id_chks <- split(doc_ids, ceiling(seq_along(doc_ids) / chunk_size))
   } else if (has_ids(x)) {
-    rws <- as.numeric(sapply(x, "[[", "id"))
+    rws <- sapply(x, "[[", "id")
+    rws <- if (inherits(rws, "factor")) as.character(rws) else rws
     id_chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
   } else {
     rws <- shift_start(rws, index, type)

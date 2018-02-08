@@ -68,7 +68,7 @@ docs_bulk_update.data.frame <- function(x, index = NULL, type = NULL,
   if (!is.null(doc_ids)) {
     id_chks <- split(doc_ids, ceiling(seq_along(doc_ids) / chunk_size))
   } else if (has_ids(x)) {
-    rws <- x$id
+    rws <- if (inherits(x$id, "factor")) as.character(x$id) else x$id
     id_chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
   } else {
     rws <- shift_start(rws, index, type)

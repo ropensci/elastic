@@ -68,11 +68,11 @@ Explain a search query.
 }
 \examples{
 \dontrun{
-explain(index = "plos", type = "article", id = 14, q = "abstract:used")
+explain(index = "plos", type = "article", id = 14, q = "title:Germ")
 
 body <- '{
  "query": {
-   "term": { "abstract": "used" }
+   "term": { "title": "Germ" }
  }
 }'
 explain(index = "plos", type = "article", id = 14, body=body)

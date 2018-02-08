@@ -70,13 +70,19 @@ that's converted to bulk format, then pushed into Elasticsearch. The
 \section{Document IDs}{
 
 Document IDs can be passed in via the \code{doc_ids} paramater when passing
-in data.frame or list, but not with files. If ids not passed to
+in data.frame or list, but not with files. If ids are not passed to
 \code{doc_ids}, we assign document IDs from 1 to length of the object
 (rows of a data.frame, or length of a list). In the future we may allow the
-user to select whether
-they want to assign sequential numeric IDs or to allow Elasticsearch to
-assign IDs, which are UUIDs that are actually sequential, so you still can
-determine an order of your documents.
+user to select whether they want to assign sequential numeric IDs or
+to allow Elasticsearch to assign IDs, which are UUIDs that are actually
+sequential, so you still can determine an order of your documents.
+}
+
+\section{Document IDs and Factors}{
+
+If you pass in ids that are of class factor, we coerce them to character
+with \code{as.character}. This applies to both data.frame and list inputs, but
+not to file inputs.
 }
 
 \section{Large numbers for document IDs}{
@@ -102,8 +108,7 @@ Note also that null values can not be indexed or searched
 
 This function returns the response from Elasticsearch, but you'll likely
 not be that interested in the response. If not, wrap your call to
-\code{docs_bulk} in \code{\link[=invisible]{invisible()}}, like so:
-\code{invisible(docs_bulk(...))}
+\code{docs_bulk} in \code{\link[=invisible]{invisible()}}, like so: \code{invisible(docs_bulk(...))}
 }
 
 \section{Connections/Files}{

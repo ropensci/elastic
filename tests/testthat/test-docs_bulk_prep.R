@@ -17,6 +17,23 @@ test_that("docs_bulk_prep - works with data.frame input", {
   unlink(ff, force = TRUE)
 })
 
+test_that("docs_bulk_prep - works with data.frame input where ids are factors", {
+  ff <- tempfile(fileext = ".json")
+  df <- data.frame(name = letters[1:3], size = 1:3, id =c("AB", "CD", "EF"))
+  a <- docs_bulk_prep(df, index = "hello2", type = "world2", 
+    path = ff, quiet = TRUE)
+  a_res <- readLines(ff)
+  
+  expect_is(a, "character")
+  expect_equal(length(a), 1)
+  expect_match(a, "json")
+  expect_equal(length(a_res), 6)
+  expect_match(a_res[1], "hello2")
+
+  # cleanup
+  unlink(ff, force = TRUE)
+})
+
 test_that("docs_bulk_prep - works with list input", {
   ff <- tempfile(fileext = ".json")
   a <- docs_bulk_prep(apply(iris, 1, as.list), index="iris", type="flowers", 
@@ -29,6 +46,25 @@ test_that("docs_bulk_prep - works with list input", {
   expect_gt(length(a_res), 200)
   expect_match(a_res[1], "iris")
   expect_match(a_res[2], "Sepal")
+
+  # cleanup
+  unlink(ff, force = TRUE)
+})
+
+test_that("docs_bulk_prep - works with list input where ids are factors", {
+  ff <- tempfile(fileext = ".json")
+  df <- data.frame(name = letters[1:3], size = 1:3, id =c("AB", "CD", "EF"))
+  lst <- apply(df, 1, as.list)
+  lst <- lapply(lst, function(z) {z$id <- as.factor(z$id); z})
+  a <- docs_bulk_prep(lst, index = "hello3", type = "world3", 
+    path = ff, quiet = TRUE)
+  a_res <- readLines(ff)
+  
+  expect_is(a, "character")
+  expect_equal(length(a), 1)
+  expect_match(a, "json")
+  expect_equal(length(a_res), 6)
+  expect_match(a_res[1], "hello3")
 
   # cleanup
   unlink(ff, force = TRUE)

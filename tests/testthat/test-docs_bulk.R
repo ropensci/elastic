@@ -39,6 +39,23 @@ test_that("docs_bulk - works with data.frame input", {
   }
 })
 
+test_that("docs_bulk - works with data.frame where ids are factors", {
+  # remove index if it exists
+  if (index_exists("hello2")) {
+    index_delete("hello2")
+  }
+  
+  # load bulk
+  df <- data.frame(name = letters[1:3], size = 1:3, id =c("AB", "CD", "EF"))
+  a <- docs_bulk(df, index = "hello2", type = "hello2", quiet = TRUE)
+  
+  expect_is(df$id, "factor")
+  expect_is(a, "list")
+  expect_equal(length(a), 1)
+  expect_named(a[[1]], c('took', 'errors', 'items'))
+  expect_equal(length(a[[1]]$items), NROW(df))
+})
+
 test_that("docs_bulk - works with list input", {
   # remove index if it exists
   if (index_exists("arrests")) {
@@ -59,6 +76,27 @@ test_that("docs_bulk - works with list input", {
     expect_equal(a[[1]]$items[[1]]$create$`_index`, "arrests")
   }
 })
+
+test_that("docs_bulk - works with list where ids are factors", {
+  # remove index if it exists
+  if (index_exists("hello3")) {
+    index_delete("hello3")
+  }
+  
+  # load bulk
+  df <- data.frame(name = letters[1:3], size = 1:3, id =c("AB", "CD", "EF"))
+  lst <- apply(df, 1, as.list)
+  lst <- lapply(lst, function(z) {z$id <- as.factor(z$id); z})
+  a <- docs_bulk(lst, index = "hello3", type = "hello3", quiet = TRUE)
+  
+  expect_equal(unique(vapply(lst, function(z) class(z$id), character(1))), "factor")
+  expect_is(a, "list")
+  expect_equal(length(a), 1)
+  expect_named(a[[1]], c('took', 'errors', 'items'))
+  expect_equal(length(a[[1]]$items), length(lst))
+})
+
+
 
 test_that("docs_bulk fails as expected", {
   # certain classes not supported
