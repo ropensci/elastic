@@ -289,12 +289,7 @@ index_delete <- function(index, raw=FALSE, verbose=TRUE, ...) {
 #' @rdname index
 index_create <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...) {
   url <- make_url(es_get_auth())
-  out <- PUT(paste0(url, "/", esc(index)), body = body, 
-             content_type_json(), make_up(), ...)
-  geterror(out)
-  if (verbose) message(URLdecode(out$url))
-  tt <- cont_utf8(out)
-  if (raw) tt else jsonlite::fromJSON(tt, FALSE)
+  es_PUT(paste0(url, "/", esc(index)), body = body, ...)
 }
 
 #' @export
