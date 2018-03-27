@@ -4,7 +4,7 @@
 #' @param index (character) The name of the index. Required
 #' @param type (character) The type of the document. Required
 #' @param id (numeric/character) The document ID. Can be numeric or character. 
-#' Required
+#' Optional. if not provided, Elasticsearch creates the ID for you as a UUID.
 #' @param body The document.
 #' @param version (character) Explicit version number for concurrency control
 #' @param version_type (character) Specific version type. One of internal, 
@@ -33,29 +33,43 @@
 #'   invisible(docs_bulk(plosdat))
 #' }
 #' 
-#' docs_create(index='plos', type='article', id=1002, 
+#' # give a document id
+#' x <- docs_create(index='plos', type='article', id=1002, 
 #'   body=list(id="12345", title="New title"))
-#' 
+#' x
 #' # and the document is there now
 #' docs_get(index='plos', type='article', id=1002)
+#' 
+#' # let Elasticsearch create the document id for you
+#' x <- docs_create(index='plos', type='article', 
+#'   body=list(id="6789", title="Some title"))
+#' x
+#' # and the document is there now
+#' docs_get(index='plos', type='article', id=x$`_id`)
 #' }
 
-docs_create <- function(index, type, id, body, version=NULL, version_type=NULL, 
-  op_type=NULL, routing=NULL, parent=NULL, timestamp=NULL, ttl=NULL, 
-  refresh=NULL, timeout=NULL, callopts=list(), ...) {
+docs_create <- function(index, type, id = NULL, body, version=NULL, 
+  version_type=NULL, op_type=NULL, routing=NULL, parent=NULL, timestamp=NULL, 
+  ttl=NULL, refresh=NULL, timeout=NULL, callopts=list(), ...) {
 
   url <- make_url(es_get_auth())
-  url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), esc(id))
+  if (is.null(id)) {
+    method <- POST
+    url <- sprintf("%s/%s/%s", url, esc(index), esc(type))
+  } else {
+    method <- PUT
+    url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), esc(id))
+  }
   query <- ec(list(version=version, version_type=version_type, op_type=op_type, 
                    routing=routing, parent=parent, timestamp=timestamp, ttl=ttl,
                    refresh=refresh, timeout=timeout,
                   ...))
   if (length(query) == 0) query <- NULL
-  create_PUT(url, query, body, callopts)
+  create_docs(method, url, query, body, callopts)
 }
 
-create_PUT <- function(url, query=NULL, body=NULL, callopts) {
-  tt <- PUT(url, es_env$headers, content_type_json(),
+create_docs <- function(method, url, query=NULL, body=NULL, callopts) {
+  tt <- method(url, es_env$headers, content_type_json(),
             mc(make_up(), callopts), query = query, 
             body = body, encode = "json")
   geterror(tt)

@@ -4,9 +4,10 @@
 \alias{docs_create}
 \title{Create a document}
 \usage{
-docs_create(index, type, id, body, version = NULL, version_type = NULL,
-  op_type = NULL, routing = NULL, parent = NULL, timestamp = NULL,
-  ttl = NULL, refresh = NULL, timeout = NULL, callopts = list(), ...)
+docs_create(index, type, id = NULL, body, version = NULL,
+  version_type = NULL, op_type = NULL, routing = NULL, parent = NULL,
+  timestamp = NULL, ttl = NULL, refresh = NULL, timeout = NULL,
+  callopts = list(), ...)
 }
 \arguments{
 \item{index}{(character) The name of the index. Required}
@@ -14,7 +15,7 @@ docs_create(index, type, id, body, version = NULL, version_type = NULL,
 \item{type}{(character) The type of the document. Required}
 
 \item{id}{(numeric/character) The document ID. Can be numeric or character.
-Required}
+Optional. if not provided, Elasticsearch creates the ID for you as a UUID.}
 
 \item{body}{The document.}
 
@@ -58,11 +59,19 @@ if (!index_exists('plos')) {
   invisible(docs_bulk(plosdat))
 }
 
-docs_create(index='plos', type='article', id=1002, 
+# give a document id
+x <- docs_create(index='plos', type='article', id=1002, 
   body=list(id="12345", title="New title"))
-
+x
 # and the document is there now
 docs_get(index='plos', type='article', id=1002)
+
+# let Elasticsearch create the document id for you
+x <- docs_create(index='plos', type='article', 
+  body=list(id="6789", title="Some title"))
+x
+# and the document is there now
+docs_get(index='plos', type='article', id=x$`_id`)
 }
 }
 \references{

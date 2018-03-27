@@ -22,6 +22,17 @@ test_that("docs_create works", {
   expect_true(index_exists("bbbbbbb"))
 })
 
+ind11 <- "stuff_ll"
+test_that("docs_create works with automatically created document IDs", {
+
+  invisible(x<-docs_create(index = ind11, type = 'article', body = list(id = "12345", title = "Some title")))
+  a <- docs_get(index = ind11, type = 'article', id = x$`_id`, verbose = FALSE)
+  expect_is(a, "list")
+  expect_is(a$`_source`, "list")
+  expect_equal(a$`_source`$id[[1]], "12345")
+  expect_equal(length(a), 6)
+})
+
 test_that("docs_create fails as expected", {
 
   expect_error(docs_create("adfadf"), "argument \"type\" is missing, with no default")
