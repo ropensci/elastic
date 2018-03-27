@@ -36,7 +36,6 @@ test_that("docs_create works with automatically created document IDs", {
 test_that("docs_create fails as expected", {
 
   expect_error(docs_create("adfadf"), "argument \"type\" is missing, with no default")
-  expect_error(docs_create("adfadf", "asdfadf"), "argument \"id\" is missing, with no default")
   expect_error(docs_create("adfadf", "asdfadf", 1), "argument \"body\" is missing, with no default")
 
   expect_error(docs_get("bbbbbbb"), "argument \"type\" is missing, with no default")

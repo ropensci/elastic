@@ -12,8 +12,8 @@ test_that("basic search works", {
 })
 
 test_that("search for document type works", {
-  b <- Search(index="shakespeare", type="scene")
-  expect_match(vapply(b$hits$hits, "[[", "", "_type"), "scene")
+  b <- Search(index="shakespeare", type="line")
+  expect_match(vapply(b$hits$hits, "[[", "", "_type"), "line")
 })
 
 test_that("search for specific fields works", {

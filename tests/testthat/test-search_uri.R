@@ -13,8 +13,8 @@ test_that("basic search_uri works", {
 
 test_that("search for document type works", {
 
-  b <- Search_uri(index="shakespeare", type="scene")
-  expect_match(vapply(b$hits$hits, "[[", "", "_type"), "scene")
+  b <- Search_uri(index="shakespeare", type="line")
+  expect_match(vapply(b$hits$hits, "[[", "", "_type"), "line")
 })
 
 test_that("search for specific fields works", {
@@ -47,7 +47,7 @@ test_that("search terminate_after parameter works", {
 test_that("getting json data back from search works", {
 
   suppressMessages(require('jsonlite'))
-  f <- Search_uri(index="shakespeare", type="scene", raw=TRUE)
+  f <- Search_uri(index="shakespeare", type="line", raw=TRUE)
   expect_is(f, "character")
   expect_true(jsonlite::validate(f))
   expect_is(jsonlite::fromJSON(f), "list")

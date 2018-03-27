@@ -3,21 +3,21 @@ context("explain")
 invisible(connect())
 
 test_that("explain", {
-  a <- explain(index = "shakespeare", type = "scene", id = 324, q = "palace")
+  a <- explain(index = "shakespeare", type = "line", id = 324, q = "palace")
 
   body <- '{
    "query": {
      "term": { "text_entry": "palace" }
    }
   }'
-  b <- explain(index = "shakespeare", type = "scene", id = 324, body = body)
+  b <- explain(index = "shakespeare", type = "line", id = 324, body = body)
 
   body <- '{
    "query": {
      "term": { "text_entry": "stuff" }
    }
   }'
-  c <- explain(index = "shakespeare", type = "scene", id = 324, body = body)
+  c <- explain(index = "shakespeare", type = "line", id = 324, body = body)
 
   expect_is(a, "list")
   expect_is(b, "list")
