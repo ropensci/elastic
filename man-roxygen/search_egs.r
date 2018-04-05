@@ -648,6 +648,30 @@
 #' }'
 #' out <- Search('geoshape', body = body)
 #' out$hits$total
+#' 
+#' 
+#' # Geofilter with WKT
+#' # format follows "BBOX (minlon, maxlon, maxlat, minlat)"
+#' x <- '{
+#'     "query": {
+#'         "bool" : {
+#'             "must" : {
+#'                 "match_all" : {}
+#'             },
+#'             "filter" : {
+#'                 "geo_bounding_box" : {
+#'                     "pin.location" : {
+#'                         "wkt" : "BBOX (1, 14, 60, 40)"
+#'                     }
+#'                 }
+#'             }
+#'         }
+#'     }
+#' }'
+#' out <- Search('gbifgeopoint', body = body)
+#' out$hits$total
+#' 
+#' 
 #'
 #' # Missing filter
 #' if (gsub("\\.", "", ping()$version$number) < 500) {
