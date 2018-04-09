@@ -12,7 +12,7 @@ README.Rmd
 es_matrix_travis.yml
 notes-v2.md
 ^\.httr-oauth$
-^CONDUCT\.md$
+^CODE_OF_CONDUCT\.md$
 .github
 ^codemeta\.json$
 ^LICENSE\.md$
