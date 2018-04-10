@@ -72,8 +72,8 @@ index_clear_cache(index = NULL, filter = FALSE, filter_keys = NULL,
 \arguments{
 \item{index}{(character) A character vector of index names}
 
-\item{features}{(character) A character vector of features. One or more of
-settings, mappings, or aliases}
+\item{features}{(character) A single feature. One of settings, mappings, or
+aliases}
 
 \item{raw}{If \code{TRUE} (default), data is parsed to list. If FALSE, then raw JSON.}
 
@@ -184,8 +184,10 @@ for all the options.
 \dontrun{
 # get information on an index
 index_get(index='shakespeare')
-index_get(index='shakespeare', features=c('settings','mappings'))
-index_get(index='shakespeare', features='aliases')
+## this one is the same as running index_settings('shakespeare')
+index_get(index='shakespeare', features='settings')
+index_get(index='shakespeare', features='mappings')
+index_get(index='shakespeare', features='alias')
 
 # check for index existence
 index_exists(index='shakespeare')

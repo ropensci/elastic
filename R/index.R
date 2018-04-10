@@ -6,8 +6,8 @@
 #' @name index
 #'
 #' @param index (character) A character vector of index names
-#' @param features (character) A character vector of features. One or more of 
-#' settings, mappings, or aliases
+#' @param features (character) A single feature. One of settings, mappings, or 
+#' aliases
 #' @param raw If `TRUE` (default), data is parsed to list. If FALSE, then raw JSON.
 #' @param ... Curl args passed on to [httr::POST()], [httr::GET()],
 #' [httr::PUT()], [httr::HEAD()], or [httr::DELETE()]
@@ -87,8 +87,10 @@
 #' @examples \dontrun{
 #' # get information on an index
 #' index_get(index='shakespeare')
-#' index_get(index='shakespeare', features=c('settings','mappings'))
-#' index_get(index='shakespeare', features='aliases')
+#' ## this one is the same as running index_settings('shakespeare')
+#' index_get(index='shakespeare', features='settings')
+#' index_get(index='shakespeare', features='mappings')
+#' index_get(index='shakespeare', features='alias')
 #'
 #' # check for index existence
 #' index_exists(index='shakespeare')
@@ -263,6 +265,7 @@ NULL
 #' @rdname index
 index_get <- function(index=NULL, features=NULL, raw=FALSE, verbose=TRUE, ...) {
   stop_es_version(120, "index_get")
+  if (length(features) > 1) stop("'features' must be length 1")
   index_GET(index, features, raw, ...)
 }
 
