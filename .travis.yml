@@ -26,11 +26,10 @@ matrix:
       env: ES_VERSION=5.5.0
     - os: linux
       r: release
-      env: ES_VERSION=6.0.0 R_CODECOV=true R_DOCS=true
+      env: ES_VERSION=6.0.0 R_CODECOV=true
 
 r_github_packages:
   - jimhester/covr 
-  - hafen/packagedocs
 
 before_install:
   - case "$ES_VERSION" in
@@ -67,7 +66,6 @@ before_install:
 
 after_success:
 - if [[ "${R_CODECOV}" ]]; then R -e 'covr::codecov()'; fi
-- if [[ "${R_DOCS}" ]]; then R -e 'packagedocs::deploy_travis()'; fi
 
 notifications:
   email:
