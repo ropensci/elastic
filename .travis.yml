@@ -7,17 +7,25 @@ addons:
     packages: oracle-java8-set-default
 
 env:
-  matrix:
-  - ES_VERSION=1.0.0
-  - ES_VERSION=1.4.0
-  - ES_VERSION=1.7.2
-  - ES_VERSION=2.0.0
-  - ES_VERSION=2.3.0
-  - ES_VERSION=5.0.0
-  - ES_VERSION=5.5.0
-  - ES_VERSION=6.0.0
   global:
-    secure: H5kkOKDCSt3AUreH4dCGFNs053LzlkTUnxumw8T1WvaoKarPNp26BkuD/v2jepP7I5D32GePbypJkAsnf7//axwTv+5pCg+Jvp3QXqVInF7L3firSnMhZYaT103sGoQfirSRR36t8Fs18r+Z5HIMajiQtthcwUT1MsdsOhsPxNg=
+        secure: H5kkOKDCSt3AUreH4dCGFNs053LzlkTUnxumw8T1WvaoKarPNp26BkuD/v2jepP7I5D32GePbypJkAsnf7//axwTv+5pCg+Jvp3QXqVInF7L3firSnMhZYaT103sGoQfirSRR36t8Fs18r+Z5HIMajiQtthcwUT1MsdsOhsPxNg=
+  matrix:
+    include:
+      - os: linux
+        r: release
+        env: ES_VERSION=2.0.0
+      - os: linux
+        r: release
+        env: ES_VERSION=2.3.0
+      - os: linux
+        r: release
+        env: ES_VERSION=5.0.0
+      - os: linux
+        r: release
+        env: ES_VERSION=5.5.0
+      - os: linux
+        r: release
+        env: ES_VERSION=6.0.0 R_CODECOV=true
 
 r_github_packages:
   - jimhester/covr
@@ -25,21 +33,6 @@ r_github_packages:
 before_install:
   - case "$ES_VERSION" in
     "") ;;
-
-    "1.0.0")
-      export ES_VERSION=1.0.0 ;
-      curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-$ES_VERSION.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION.deb && sudo service elasticsearch start
-      ;;
-
-    "1.4.0")
-      export ES_VERSION=1.4.0 ;
-      curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-$ES_VERSION.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION.deb && sudo service elasticsearch start
-      ;;
-
-    "1.7.2")
-      export ES_VERSION=1.7.2 ;
-      curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-$ES_VERSION.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION.deb && sudo service elasticsearch start
-      ;;
 
     "2.0.0")
       export ES_VERSION=2.0.0 ;
