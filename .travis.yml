@@ -4,8 +4,7 @@ dist: trusty
 
 addons:
   apt:
-    packages:
-      - oracle-java8-set-default
+    packages: oracle-java8-set-default
 
 env:
   matrix:
@@ -17,6 +16,8 @@ env:
   - ES_VERSION=5.0.0
   - ES_VERSION=5.5.0
   - ES_VERSION=6.0.0
+  global:
+    secure: H5kkOKDCSt3AUreH4dCGFNs053LzlkTUnxumw8T1WvaoKarPNp26BkuD/v2jepP7I5D32GePbypJkAsnf7//axwTv+5pCg+Jvp3QXqVInF7L3firSnMhZYaT103sGoQfirSRR36t8Fs18r+Z5HIMajiQtthcwUT1MsdsOhsPxNg=
 
 r_github_packages:
   - jimhester/covr
@@ -71,6 +72,7 @@ before_install:
 
 after_success:
 - Rscript -e 'covr::codecov()'
+- Rscript -e "packagedocs::deploy_travis()"
 
 notifications:
   email:
