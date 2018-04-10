@@ -26,7 +26,7 @@ matrix:
       env: ES_VERSION=5.5.0
     - os: linux
       r: release
-      env: ES_VERSION=6.0.0 R_CODECOV=true
+      env: ES_VERSION=6.0.0 R_CODECOV=true R_DOCS=true
 
 r_github_packages:
   - jimhester/covr 
@@ -66,8 +66,8 @@ before_install:
   - sudo service elasticsearch status
 
 after_success:
-- Rscript -e 'covr::codecov()'
-- Rscript -e "packagedocs::deploy_travis()"
+- if [[ "${R_CODECOV}" ]]; then R -e 'covr::codecov()'; fi
+- if [[ "${R_DOCS}" ]]; then R -e 'packagedocs::deploy_travis()'; fi
 
 notifications:
   email:
