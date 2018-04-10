@@ -26,9 +26,11 @@ test_that("explain", {
   expect_is(c, "list")
 
   if (es_ver() < 600) {
-    expect_match(a$explanation$description, "sum of")
-    expect_match(b$explanation$description, "sum of")
-    expect_match(c$explanation$description, "Failure to meet condition")  
+    if (es_ver() >= 200) {
+      expect_match(a$explanation$description, "sum of")
+      expect_match(b$explanation$description, "sum of")
+      expect_match(c$explanation$description, "Failure to meet condition")  
+    }
   } else {
     expect_match(a$explanation$description, "max of")
     expect_match(b$explanation$description, "weight")
