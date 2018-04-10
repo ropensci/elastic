@@ -9,23 +9,24 @@ addons:
 env:
   global:
         secure: H5kkOKDCSt3AUreH4dCGFNs053LzlkTUnxumw8T1WvaoKarPNp26BkuD/v2jepP7I5D32GePbypJkAsnf7//axwTv+5pCg+Jvp3QXqVInF7L3firSnMhZYaT103sGoQfirSRR36t8Fs18r+Z5HIMajiQtthcwUT1MsdsOhsPxNg=
-  matrix:
-    include:
-      - os: linux
-        r: release
-        env: ES_VERSION=2.0.0
-      - os: linux
-        r: release
-        env: ES_VERSION=2.3.0
-      - os: linux
-        r: release
-        env: ES_VERSION=5.0.0
-      - os: linux
-        r: release
-        env: ES_VERSION=5.5.0
-      - os: linux
-        r: release
-        env: ES_VERSION=6.0.0 R_CODECOV=true
+
+matrix:
+  include:
+    - os: linux
+      r: release
+      env: ES_VERSION=2.0.0
+    - os: linux
+      r: release
+      env: ES_VERSION=2.3.0
+    - os: linux
+      r: release
+      env: ES_VERSION=5.0.0
+    - os: linux
+      r: release
+      env: ES_VERSION=5.5.0
+    - os: linux
+      r: release
+      env: ES_VERSION=6.0.0 R_CODECOV=true
 
 r_github_packages:
   - jimhester/covr
