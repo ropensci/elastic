@@ -11,6 +11,7 @@
 #' 
 #' Only data.frame's are supported for now.
 #' @seealso [docs_bulk()] [docs_bulk_prep()]
+#' @references <https://www.elastic.co/guide/en/elasticsearch/reference/6.2/docs-bulk.html#bulk-update>
 #' @examples \dontrun{
 #' connect()
 #' if (index_exists("foobar")) index_delete("foobar")

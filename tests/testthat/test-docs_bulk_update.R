@@ -6,6 +6,37 @@ test_that("docs_bulk_update - works with data.frame input", {
   # remove index if it exists
   if (index_exists("world")) index_delete("world")
 
+  iris_mapping <- '{
+   "mappings": {
+     "world": {
+       "properties": {
+          "Petal_Length": {
+            "type": "float"
+          },
+          "Petal_Width": {
+            "type": "float"
+          },
+          "Sepal_Length": {
+            "type": "float"
+          },
+          "Sepal_Width": {
+            "type": "float"
+          },
+          "Species": {
+            "type": "%s"
+          },
+          "id": {
+            "type": "long"
+          }
+        }
+     }
+   }
+  }'
+
+  # use 'string' or 'text' depending on ES version
+  string_text <- if (es_ver() < 500) "string" else "text"
+  index_create('world', sprintf(iris_mapping, string_text))
+
   # load bulk
   iris <- stats::setNames(iris, gsub("\\.", "_", names(iris)))
   iris$id <- seq_len(NROW(iris))
@@ -13,7 +44,7 @@ test_that("docs_bulk_update - works with data.frame input", {
     es_ids = FALSE))
 
   # get data
-  Sys.sleep(1) # sleep a bit to wait for data to be there
+  Sys.sleep(2) # sleep a bit to wait for data to be there
   res_before <- Search("world", asdf = TRUE)
 
   # update data
@@ -24,7 +55,7 @@ test_that("docs_bulk_update - works with data.frame input", {
     quiet = TRUE))
 
   # get data again
-  Sys.sleep(1) # sleep a bit to wait for data to be updated
+  Sys.sleep(2) # sleep a bit to wait for data to be updated
   res_after <- Search("world", asdf = TRUE)
   
   expect_is(a, "list")

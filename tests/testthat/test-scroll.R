@@ -72,9 +72,17 @@ test_that("scroll fails well", {
   
   # skip if ES version < 2
   if (es_ver() >= 200) {
-    expect_error(
-      Search(time_scroll = "1m", size = 0),
-      "\\[size\\] cannot be \\[0\\] in a scroll context"
-    )
+    if (es_ver() >= 620) {
+      expect_error(
+        Search(time_scroll = "1m", size = 0),
+        "\\[size\\] cannot be \\[0\\] in a scroll context"
+      )
+    } else {
+      tt <- Search(time_scroll = "1m", size = 0)
+      expect_error(
+        scroll(tt$`_scroll_id`, time_scroll = "5"),
+        "parse setting \\[scroll\\] with value \\[5\\]"
+      )
+    }
   }
 })

@@ -67,6 +67,9 @@ invisible(docs_bulk_update(df3, index = 'foobar', type = 'foobar'))
 Search("foobar", asdf = TRUE)$hits$hits
 }
 }
+\references{
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/6.2/docs-bulk.html#bulk-update}
+}
 \seealso{
 \code{\link[=docs_bulk]{docs_bulk()}} \code{\link[=docs_bulk_prep]{docs_bulk_prep()}}
 }
