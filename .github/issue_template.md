@@ -13,6 +13,9 @@ showing any code examples)
 Make absolutely sure not to include any secrets in your issue!
 -->
 
+<details> <summary><strong>Session Info</strong></summary>
+
 ```r
 
 ```
+</details>
