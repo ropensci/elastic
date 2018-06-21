@@ -160,9 +160,6 @@ assert <- function(x, y) {
 
 
 write_utf8 = function(text, con, ...) {
-  if (identical(con, '')) {
-    cat(text, sep = '\n', file = con)
-  } else {
     # prevent re-encoding the text in the file() connection in writeLines()
     # https://kevinushey.github.io/blog/2018/02/21/string-encoding-and-r/
     opts = options(encoding = 'native.enc'); on.exit(options(opts), add = TRUE)
