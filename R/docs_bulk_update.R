@@ -119,6 +119,6 @@ make_bulk_update <- function(df, index, type, counter, path = NULL) {
 
   data <- lapply(tmp, jsonlite::toJSON, na = "null", auto_unbox = TRUE)
   tmpf <- if (is.null(path)) tempfile("elastic__") else path
-  writeLines(paste(metadata, data, sep = "\n"), tmpf)
+  write_utf8(paste(metadata, data, sep = "\n"), tmpf)
   invisible(tmpf)
 }
