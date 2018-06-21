@@ -1,3 +1,27 @@
+elastic 0.8.4
+=============
+
+### NEW FEATURES
+
+* Gains new function `docs_bulk_update()` to do bulk updates to documents (#169)
+
+### MINOR IMPROVEMENTS
+
+* Vignettes weren't showing up on CRAN, fixed (#205)
+* Added an example of using WKT in a query (#215)
+* using markdown docs (#209)
+* `id` is now optional in `docs_create()` - if you don't pass a document identifier Elasticsearch generates one for you (#216) thanks @jbrant
+* `docs_bulk()` gains new parameter `quiet` to optionally turn off the progress bar (#202)
+
+### BUG FIXES
+
+* Fix to `docs_bulk()` for encoding in different locales (#223) (#224) thanks @Lchiffon
+* Fix for `index_get()`: you can now only pass in one value to the `features` parameter (one of settings, mappings, or aliases) (#218) thanks @happyshows
+* Fix to `index_create()` to handle a list body, in addition to a JSON body (#214) thanks @emillykkejensen
+* Fix to `docs_bulk()` for document IDs as factors (#212) thanks @AMR-KELEG
+* Temporary files created when using `docs_bulk()` (and taking up disk space) are cleaned up now (deleted), though if you pass in your own file paths you have to clean them up (#208) thanks @emillykkejensen
+
+
 elastic 0.8.0
 =============
 
