@@ -1,6 +1,8 @@
 library('testthat')
 library('elastic')
 
+skip_on_cran()
+
 invisible(elastic::connect())
 
 if (elastic:::es_ver() < 600) {
