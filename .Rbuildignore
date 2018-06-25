@@ -16,3 +16,4 @@ notes-v2.md
 .github
 ^codemeta\.json$
 ^LICENSE\.md$
+tests/test-all.R
