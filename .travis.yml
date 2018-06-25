@@ -35,7 +35,10 @@ matrix:
       env: ES_VERSION=5.5.0
     - os: linux
       r: release
-      env: ES_VERSION=6.0.0 R_CODECOV=true
+      env: ES_VERSION=6.0.0
+    - os: linux
+      r: release
+      env: ES_VERSION=6.3.0 R_CODECOV=true
 
 r_github_packages:
   - jimhester/covr 
@@ -81,6 +84,11 @@ before_install:
 
     "6.0.0")
       export ES_VERSION=6.0.0 ;
+      curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ES_VERSION.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION.deb && sudo service elasticsearch start
+      ;;
+
+    "6.3.0")
+      export ES_VERSION=6.3.0 ;
       curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ES_VERSION.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION.deb && sudo service elasticsearch start
       ;;
    esac
