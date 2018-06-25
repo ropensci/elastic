@@ -30,15 +30,7 @@ among multiple indices.
 \dontrun{
 connect()
 
-if (gsub("\\\\.", "", ping()$version$number) >= 500) {
-  mapping_create("shakespeare", "act", update_all_types = TRUE, body = '{
-    "properties": {
-      "speaker": { 
-      "type":     "text",
-      "fielddata": true
-  }}}')
-  field_caps(body = '{ "fields": ["speaker"] }', index = "shakespeare")
-}
+field_caps(body = '{ "fields": ["speaker"] }', index = "shakespeare")
 }
 }
 \references{

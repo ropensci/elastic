@@ -24,7 +24,9 @@ type_exists(index, type, ...)
 
 \item{body}{(list) Either a list or json, representing the query.}
 
-\item{update_all_types}{(logical) update all types. default: \code{FALSE}}
+\item{update_all_types}{(logical) update all types. default: \code{FALSE}.
+This parameter is deprecated in ES v6.3.0 and higher, see
+https://github.com/elastic/elasticsearch/pull/28284}
 
 \item{...}{Curl options passed on to \code{\link[httr:HEAD]{httr::HEAD()}} or other
 http verbs}
@@ -113,13 +115,26 @@ mapping_create("gbifgeopoint", "record", body = body)
 invisible(docs_bulk(file))
 
 # update_all_fields, see also ?fielddata
-mapping_create("shakespeare", "record", update_all_types=TRUE, body = '{
-  "properties": {
-    "speaker": { 
-      "type":     "text",
-      "fielddata": true
-    }
-  }
-}')
+if (es_ver() < 603) {
+ mapping_create("shakespeare", "record", update_all_types=TRUE, body = '{
+   "properties": {
+     "speaker": { 
+       "type":     "text",
+       "fielddata": true
+     }
+   }
+ }')
+} else {
+ index_create('brownchair')
+ mapping_create('brownchair', 'brown', body = '{
+   "properties": {
+     "foo": { 
+       "type":     "text",
+       "fielddata": true
+     }
+   }
+ }')
+}
+
 }
 }
