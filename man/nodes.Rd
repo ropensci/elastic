@@ -18,7 +18,7 @@ nodes_hot_threads(node = NULL, metric = NULL, threads = 3,
 \arguments{
 \item{node}{The node}
 
-\item{metric}{A metric to get}
+\item{metric}{A metric to get. See Details.}
 
 \item{raw}{If \code{TRUE} (default), data is parsed to list. If \code{FALSE}, then
 raw JSON.}
@@ -82,6 +82,5 @@ nodes_info(metric='process')
 nodes_info(metric='jvm')
 nodes_info(metric='http')
 nodes_info(metric='network')
-nodes_hot_threads()
 }
 }
