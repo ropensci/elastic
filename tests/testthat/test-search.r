@@ -121,7 +121,10 @@ test_that("Search fails as expected", {
 
   aggs <- list(aggs = list(stats = list(stfff = list(field = "text_entry"))))
   if (gsub("\\.", "", ping()$version$number) >= 500) {
-    if (gsub("\\.", "", ping()$version$number) >= 530) {
+    if (gsub("\\.", "", ping()$version$number) >= 630) {
+      expect_error(Search(index = "shakespeare", body = aggs), 
+                   "unable to parse BaseAggregationBuilder with name \\[stfff\\]: parser not found")
+    } else if (gsub("\\.", "", ping()$version$number) >= 530) {
       expect_error(Search(index = "shakespeare", body = aggs), 
                    "Unknown BaseAggregationBuilder \\[stfff\\]")
     } else {
