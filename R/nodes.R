@@ -2,7 +2,7 @@
 #'
 #' @name nodes
 #' @param node The node
-#' @param metric A metric to get
+#' @param metric A metric to get. See Details.
 #' @param fields You can get information about field data memory usage on
 #' node level or on index level
 #' @param threads (character) Number of hot threads to provide. Default: 3
@@ -54,7 +54,6 @@
 #' nodes_info(metric='jvm')
 #' nodes_info(metric='http')
 #' nodes_info(metric='network')
-#' nodes_hot_threads()
 #' }
 
 #' @export
