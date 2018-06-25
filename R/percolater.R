@@ -34,7 +34,6 @@
 #'
 #' @references
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-percolate-query.html>
-#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-percolate.html>
 #'
 #' @details Additional body options, pass those in the body. These aren't query string
 #' parameters:

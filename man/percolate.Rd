@@ -231,5 +231,4 @@ percolate_match(index = "myindex", body = query)
 }
 \references{
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-percolate-query.html}
-\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-percolate.html}
 }
