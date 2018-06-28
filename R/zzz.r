@@ -122,7 +122,7 @@ construct_url <- function(url, path, index, type = NULL, id = NULL) {
 
 extractr <- function(x, y) regmatches(x, gregexpr(y, x))
 
-elastic_env <- new.env()
+# elastic_env <- new.env()
 
 es_ver <- function() {
   pinged <- elastic_env$ping_result

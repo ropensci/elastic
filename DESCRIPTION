@@ -21,7 +21,8 @@ Imports:
     methods,
     httr (>= 1.2.1),
     curl (>= 2.2),
-    jsonlite (>= 1.1)
+    jsonlite (>= 1.1),
+    R6
 Suggests:
     roxygen2 (>= 6.0.1),
     knitr,
