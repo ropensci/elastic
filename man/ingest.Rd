@@ -33,6 +33,9 @@ a named list
 \description{
 Ingest API operations
 }
+\details{
+ingest/pipeline functions available in Elasticsearch v5 and greater
+}
 \examples{
 \dontrun{
 # create
