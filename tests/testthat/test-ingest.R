@@ -78,21 +78,25 @@ test_that("pipeline_get", {
 })
 
 test_that("pipeline_delete", {
-  a <- pipeline_delete('foo')
-  expect_named(a, "acknowledged")
-  expect_is(a, "list")
-  expect_true(a$acknowledged)
+  if (!es_version() < 500) {
+    a <- pipeline_delete('foo')
+    expect_named(a, "acknowledged")
+    expect_is(a, "list")
+    expect_true(a$acknowledged)
 
-  expect_error(pipeline_delete('stuff'), "pipeline \\[stuff\\] is missing")
+    expect_error(pipeline_delete('stuff'), "pipeline \\[stuff\\] is missing")
+  }
 })
 
 test_that("pipeline_simulate", {
-  a <- pipeline_simulate(bodysim)
-  expect_named(a, "docs")
-  expect_is(a, "list")
-  expect_is(a$docs, "data.frame")
+  if (!es_version() < 500) {
+    a <- pipeline_simulate(bodysim)
+    expect_named(a, "docs")
+    expect_is(a, "list")
+    expect_is(a$docs, "data.frame")
 
-  expect_error(pipeline_delete('stuff'), "pipeline \\[stuff\\] is missing")
+    expect_error(pipeline_delete('stuff'), "pipeline \\[stuff\\] is missing")
+  }
 })
 
 test_that("pipeline fxns error well", {
