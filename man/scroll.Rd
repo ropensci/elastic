@@ -120,15 +120,16 @@ scroll(res$`_scroll_id`)
 # Get all results - one approach is to use a while loop
 res <- Search(index = 'shakespeare', q="a*", time_scroll="5m",
   body = '{"sort": ["_doc"]}')
-out <- list()
+out <- res$hits$hits
 hits <- 1
 while(hits != 0){
-  res <- scroll(res$`_scroll_id`)
+  res <- scroll(res$`_scroll_id`, time_scroll="5m")
   hits <- length(res$hits$hits)
   if(hits > 0)
     out <- c(out, res$hits$hits)
 }
 length(out)
+res$hits$total
 out[[1]]
 
 # clear scroll

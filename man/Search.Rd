@@ -298,12 +298,12 @@ aggs <- '{
     "aggs": {
         "stats" : {
             "terms" : {
-                "field" : "text_entry"
+                "field" : "speaker"
             }
         }
     }
 }'
-Search(index="shakespeare", body=aggs)
+Search(index="shakespeare", body=aggs, asdf=TRUE, size = 0)
 
 ## or pass in collapsed json string
 aggs <- '{"aggs":{"stats":{"terms":{"field":"text_entry"}}}}'

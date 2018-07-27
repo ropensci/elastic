@@ -642,7 +642,7 @@ Search('shakespeare', q="a*")$hits$total
 
 ```r
 res <- Search(index = 'shakespeare', q="a*", time_scroll = "1m")
-length(scroll(res$`_scroll_id`)$hits$hits)
+length(scroll(res$`_scroll_id`, time_scroll = "1m")$hits$hits)
 ```
 
 ```
@@ -652,7 +652,7 @@ length(scroll(res$`_scroll_id`)$hits$hits)
 
 ```r
 res <- Search(index = 'shakespeare', q = "a*", time_scroll = "5m")
-out <- list()
+out <- res$hits$hits
 hits <- 1
 while (hits != 0) {
   res <- scroll(res$`_scroll_id`)
@@ -661,10 +661,11 @@ while (hits != 0) {
     out <- c(out, res$hits$hits)
 }
 length(out)
+res$hits$total
 ```
 
 ```
-#> [1] 2737
+#> [1] 2747
 ```
 
-Woohoo! Collected all 2737 documents in very little time.
+Woohoo! Collected all 2747 documents in very little time.
