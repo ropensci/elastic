@@ -15,8 +15,8 @@ cluster_settings(index = NULL, raw = FALSE, callopts = list(),
 
 cluster_health(index = NULL, level = NULL, wait_for_status = NULL,
   wait_for_relocating_shards = NULL, wait_for_active_shards = NULL,
-  wait_for_nodes = NULL, timeout = NULL, raw = FALSE, callopts = list(),
-  verbose = TRUE, ...)
+  wait_for_nodes = NULL, timeout = NULL, raw = FALSE,
+  callopts = list(), verbose = TRUE, ...)
 
 cluster_state(index = NULL, metrics = NULL, raw = FALSE,
   callopts = list(), verbose = TRUE, ...)

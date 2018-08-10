@@ -5,10 +5,11 @@
 \title{Update a document}
 \usage{
 docs_update(index, type, id, body, fields = NULL, source = NULL,
-  version = NULL, version_type = NULL, routing = NULL, parent = NULL,
-  timestamp = NULL, ttl = NULL, refresh = NULL, timeout = NULL,
-  retry_on_conflict = NULL, wait_for_active_shards = NULL,
-  detect_noop = NULL, callopts = list(), ...)
+  version = NULL, version_type = NULL, routing = NULL,
+  parent = NULL, timestamp = NULL, ttl = NULL, refresh = NULL,
+  timeout = NULL, retry_on_conflict = NULL,
+  wait_for_active_shards = NULL, detect_noop = NULL,
+  callopts = list(), ...)
 }
 \arguments{
 \item{index}{(character) The name of the index. Required}

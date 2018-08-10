@@ -4,8 +4,8 @@
 \alias{reindex}
 \title{Reindex}
 \usage{
-reindex(body, refresh = NULL, requests_per_second = NULL, slices = NULL,
-  timeout = NULL, wait_for_active_shards = NULL,
+reindex(body, refresh = NULL, requests_per_second = NULL,
+  slices = NULL, timeout = NULL, wait_for_active_shards = NULL,
   wait_for_completion = NULL, ...)
 }
 \arguments{

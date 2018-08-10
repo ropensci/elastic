@@ -4,7 +4,8 @@
 \alias{count}
 \title{Get counts of the number of records per index.}
 \usage{
-count(index = NULL, type = NULL, callopts = list(), verbose = TRUE, ...)
+count(index = NULL, type = NULL, callopts = list(), verbose = TRUE,
+  ...)
 }
 \arguments{
 \item{index}{Index, defaults to all indices}

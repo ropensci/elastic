@@ -4,8 +4,9 @@
 \alias{docs_get}
 \title{Get documents}
 \usage{
-docs_get(index, type, id, source = NULL, fields = NULL, exists = FALSE,
-  raw = FALSE, callopts = list(), verbose = TRUE, ...)
+docs_get(index, type, id, source = NULL, fields = NULL,
+  exists = FALSE, raw = FALSE, callopts = list(), verbose = TRUE,
+  ...)
 }
 \arguments{
 \item{index}{(character) The name of the index. Required}

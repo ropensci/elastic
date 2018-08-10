@@ -8,8 +8,9 @@
 \alias{index_template_delete}
 \title{Index templates}
 \usage{
-index_template_put(name, body = NULL, create = NULL, flat_settings = NULL,
-  master_timeout = NULL, order = NULL, timeout = NULL, ...)
+index_template_put(name, body = NULL, create = NULL,
+  flat_settings = NULL, master_timeout = NULL, order = NULL,
+  timeout = NULL, ...)
 
 index_template_get(name = NULL, filter_path = NULL, ...)
 

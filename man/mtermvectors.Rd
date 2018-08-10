@@ -5,8 +5,8 @@
 \title{Multi Termvectors}
 \usage{
 mtermvectors(index = NULL, type = NULL, ids = NULL, body = list(),
-  pretty = TRUE, field_statistics = TRUE, fields = NULL, offsets = TRUE,
-  parent = NULL, payloads = TRUE, positions = TRUE,
+  pretty = TRUE, field_statistics = TRUE, fields = NULL,
+  offsets = TRUE, parent = NULL, payloads = TRUE, positions = TRUE,
   preference = "random", realtime = TRUE, routing = NULL,
   term_statistics = FALSE, version = NULL, version_type = NULL, ...)
 }

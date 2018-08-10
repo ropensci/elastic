@@ -5,9 +5,9 @@
 \title{Create a document}
 \usage{
 docs_create(index, type, id = NULL, body, version = NULL,
-  version_type = NULL, op_type = NULL, routing = NULL, parent = NULL,
-  timestamp = NULL, ttl = NULL, refresh = NULL, timeout = NULL,
-  callopts = list(), ...)
+  version_type = NULL, op_type = NULL, routing = NULL,
+  parent = NULL, timestamp = NULL, ttl = NULL, refresh = NULL,
+  timeout = NULL, callopts = list(), ...)
 }
 \arguments{
 \item{index}{(character) The name of the index. Required}

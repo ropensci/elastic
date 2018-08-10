@@ -7,7 +7,8 @@
 \usage{
 connect(es_host = "127.0.0.1", es_port = 9200, es_path = NULL,
   es_transport_schema = "http", es_user = NULL, es_pwd = NULL,
-  force = FALSE, errors = "simple", es_base = NULL, headers = NULL, ...)
+  force = FALSE, errors = "simple", es_base = NULL, headers = NULL,
+  ...)
 
 connection()
 }

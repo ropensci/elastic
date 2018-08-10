@@ -5,10 +5,10 @@
 \title{Termvectors}
 \usage{
 termvectors(index, type, id = NULL, body = list(), pretty = TRUE,
-  field_statistics = TRUE, fields = NULL, offsets = TRUE, parent = NULL,
-  payloads = TRUE, positions = TRUE, realtime = TRUE,
-  preference = "random", routing = NULL, term_statistics = FALSE,
-  version = NULL, version_type = NULL, ...)
+  field_statistics = TRUE, fields = NULL, offsets = TRUE,
+  parent = NULL, payloads = TRUE, positions = TRUE,
+  realtime = TRUE, preference = "random", routing = NULL,
+  term_statistics = FALSE, version = NULL, version_type = NULL, ...)
 }
 \arguments{
 \item{index}{(character) The index in which the document resides.}
