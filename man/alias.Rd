@@ -26,9 +26,9 @@ alias_rename(index, alias, alias_new, ...)
 alias_delete(index = NULL, alias, ...)
 }
 \arguments{
-\item{index}{An index name}
+\item{index}{(character) An index name}
 
-\item{alias}{An alias name}
+\item{alias}{(character) An alias name}
 
 \item{ignore_unavailable}{(logical) What to do if an specified index name
 doesn't exist. If set to \code{TRUE} then those indices are ignored.}
@@ -43,6 +43,8 @@ examples}
 
 \item{routing, search_routing, index_routing}{(character) Associate a routing
 value with an alias}
+
+\item{alias_new}{(character) A new alias name, used in rename only}
 }
 \description{
 Elasticsearch alias APIs

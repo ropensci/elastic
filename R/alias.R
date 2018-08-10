@@ -1,7 +1,8 @@
 #' Elasticsearch alias APIs
 #'
-#' @param index An index name
-#' @param alias An alias name
+#' @param index (character) An index name
+#' @param alias (character) An alias name
+#' @param alias_new (character) A new alias name, used in rename only
 #' @param ignore_unavailable (logical) What to do if an specified index name
 #' doesn't exist. If set to `TRUE` then those indices are ignored.
 #' @param filter (named list) provides an easy way to create different "views" of 
