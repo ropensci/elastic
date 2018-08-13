@@ -218,6 +218,25 @@ count(db)
 index_delete(db)
 
 
+# data.frame with a mix of actions
+## make sure you use a column named 'es_action' or this won't work
+## if you need to delete or update you need document IDs
+if (index_exists("baz")) index_delete("baz")
+df <- data.frame(a = 1:5, b = 6:10, c = letters[1:5], stringsAsFactors = FALSE) 
+invisible(docs_bulk(df, "baz"))
+(res <- Search('baz', asdf=TRUE)$hits$hits)
+df[1, "a"] <- 99
+df[1, "c"] <- "aa"
+df[3, "c"] <- 33
+df[3, "c"] <- "cc"
+df$es_action <- c('update', 'delete', 'update', 'delete', 'delete')
+df$id <- res$`_id`
+df
+invisible(docs_bulk(df, "baz", es_ids = FALSE))
+### or es_ids = FALSE and pass in document ids to doc_ids
+# invisible(docs_bulk(df, "baz", es_ids = FALSE, doc_ids = df$id))
+Search('baz', asdf=TRUE)$hits$hits
+
 
 # Curl options
 library("httr")
@@ -232,8 +251,10 @@ x <- docs_bulk(mtcars, index = "hello", type = "world", quiet = FALSE)
 }
 }
 \seealso{
-\code{\link[=docs_bulk_prep]{docs_bulk_prep()}} for prepping a newline delimited
-JSON file that you can load into Elasticsearch yourself. See
-\code{\link[=docs_bulk_update]{docs_bulk_update()}} for updating documents from an R data.frame
-or list.
+Other bulk-functions: \code{\link{docs_bulk_create}},
+  \code{\link{docs_bulk_delete}},
+  \code{\link{docs_bulk_index}},
+  \code{\link{docs_bulk_prep}},
+  \code{\link{docs_bulk_update}}
 }
+\concept{bulk-functions}

@@ -18,7 +18,7 @@
 #' when you R session ends though - be aware of that. If you want to 
 #' keep the files make sure to move them outside of the temp directory.
 #'
-#' @seealso [docs_bulk()]
+#' @family bulk-functions
 #'
 #' @examples \dontrun{
 #' # From a data.frame
@@ -99,6 +99,30 @@
 #' }
 #' unlist(paths)
 #'
+#' 
+#' # A mix of actions
+#' ## make sure you use a column named 'es_action' or this won't work
+#' ## if you need to delete or update you need document IDs
+#' if (index_exists("baz")) index_delete("baz")
+#' df <- data.frame(a = 1:5, b = 6:10, c = letters[1:5], stringsAsFactors = FALSE) 
+#' f <- tempfile(fileext = ".json")
+#' invisible(docs_bulk_prep(df, "baz", f))
+#' cat(readLines(f), sep = "\n")
+#' docs_bulk(f)
+#' (res <- Search('baz', asdf=TRUE)$hits$hits)
+#' 
+#' df[1, "a"] <- 99
+#' df[1, "c"] <- "aa"
+#' df[3, "c"] <- 33
+#' df[3, "c"] <- "cc"
+#' df$es_action <- c('update', 'delete', 'update', 'delete', 'delete')
+#' df$id <- res$`_id`
+#' df
+#' f <- tempfile(fileext = ".json")
+#' invisible(docs_bulk_prep(df, "baz", path = f, doc_ids = df$id))
+#' cat(readLines(f), sep = "\n")
+#' docs_bulk(f)
+#' 
 #' 
 #' # suppress progress bar
 #' docs_bulk_prep(mtcars, index = "hello", type = "world", 
