@@ -107,6 +107,31 @@ Obviously, upgrading Elasticsearch while keeping it running is a different thing
 
 I create a little bash shortcut called `es` that does both of the above commands in one step (`cd /usr/local/elasticsearch && bin/elasticsearch`).
 
+## Initialization
+
+The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
+
+```{r}
+connect(es_port = 9200)
+```
+
+For AWS hosted elasticsearch, make sure to specify es_path = "" and the correct port - transport schema pair.
+
+```{r eval=FALSE}
+connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 80, es_transport_schema  = "http")
+  # or
+connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 443, es_transport_schema  = "https")
+```
+
+If you are using Elastic Cloud or an installation with authentication (X-pack), make sure to specify es_path = "", es_user = "", es_pwd = "" and the correct port - transport schema pair.
+
+
+```r
+connect(es_host = <ec_endpoint>, es_path = "", es_user="test", es_pwd = "1234", es_port = 9243, es_transport_schema  = "https")
+```
+
+<br>
+
 ## Get some data
 
 Elasticsearch has a bulk load API to load data in fast. The format is pretty weird though. It's sort of JSON, but would pass no JSON linter. I include a few data sets in `elastic` so it's easy to get up and running, and so when you run examples in this package they'll actually run the same way (hopefully).
@@ -175,28 +200,8 @@ invisible(docs_bulk(gbifgeo))
 
 There are more datasets formatted for bulk loading in the `ropensci/elastic_data` GitHub repository. Find it at <https://github.com/ropensci/elastic_data>
 
-## Initialization
 
-The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
-
-```{r}
-connect(es_port = 9200)
-```
-
-For AWS hosted elasticsearch, make sure to specify es_path = "" and the correct port - transport schema pair.
-
-```{r eval=FALSE}
-connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 80, es_transport_schema  = "http")
-  # or
-connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 443, es_transport_schema  = "https")
-```
-
-If you are using Elastic Cloud or an installation with authentication (X-pack), make sure to specify es_path = "", es_user = "", es_pwd = "" and the correct port - transport schema pair.
-
-
-```r
-connect(es_host = <ec_endpoint>, es_path = "", es_user="test", es_pwd = "1234", es_port = 9243, es_transport_schema  = "https")
-```
+<br>
 
 ## Search
 
