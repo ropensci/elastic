@@ -38,7 +38,7 @@ matrix:
       env: ES_VERSION=6.0.0
     - os: linux
       r: release
-      env: ES_VERSION=6.3.0 R_CODECOV=true
+      env: ES_VERSION=6.4.0 R_CODECOV=true
 
 r_github_packages:
   - jimhester/covr 
