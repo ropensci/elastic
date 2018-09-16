@@ -88,6 +88,10 @@ test_that("mapping_get works", {
 #   expect_error(mapping_delete("plos", "citation"), "No index has the type")
 # })
 
+invisible(tryCatch(index_delete(index = "plos", verbose = FALSE), error = function(e) e))
+plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+invisible(docs_bulk(plosdat))
+
 test_that("field_mapping_get works", {
   
   if (!es_version() < 110) {
