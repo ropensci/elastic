@@ -10,10 +10,12 @@
 nodes_stats(node = NULL, metric = NULL, raw = FALSE, fields = NULL,
   verbose = TRUE, ...)
 
-nodes_info(node = NULL, metric = NULL, raw = FALSE, verbose = TRUE, ...)
+nodes_info(node = NULL, metric = NULL, raw = FALSE, verbose = TRUE,
+  ...)
 
 nodes_hot_threads(node = NULL, metric = NULL, threads = 3,
-  interval = "500ms", type = NULL, raw = FALSE, verbose = TRUE, ...)
+  interval = "500ms", type = NULL, raw = FALSE, verbose = TRUE,
+  ...)
 }
 \arguments{
 \item{node}{The node}

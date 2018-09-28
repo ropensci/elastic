@@ -22,18 +22,18 @@
 \alias{index_clear_cache}
 \title{Index API operations}
 \usage{
-index_get(index = NULL, features = NULL, raw = FALSE, verbose = TRUE,
-  ...)
+index_get(index = NULL, features = NULL, raw = FALSE,
+  verbose = TRUE, ...)
 
 index_exists(index, ...)
 
 index_delete(index, raw = FALSE, verbose = TRUE, ...)
 
-index_create(index = NULL, body = NULL, raw = FALSE, verbose = TRUE,
-  ...)
+index_create(index = NULL, body = NULL, raw = FALSE,
+  verbose = TRUE, ...)
 
-index_recreate(index = NULL, body = NULL, raw = FALSE, verbose = TRUE,
-  ...)
+index_recreate(index = NULL, body = NULL, raw = FALSE,
+  verbose = TRUE, ...)
 
 index_close(index, ...)
 
@@ -49,19 +49,21 @@ index_settings_update(index = NULL, body, ...)
 
 index_segments(index = NULL, ...)
 
-index_recovery(index = NULL, detailed = FALSE, active_only = FALSE, ...)
+index_recovery(index = NULL, detailed = FALSE, active_only = FALSE,
+  ...)
 
 index_optimize(index = NULL, max_num_segments = NULL,
-  only_expunge_deletes = FALSE, flush = TRUE, wait_for_merge = TRUE, ...)
+  only_expunge_deletes = FALSE, flush = TRUE, wait_for_merge = TRUE,
+  ...)
 
 index_forcemerge(index = NULL, max_num_segments = NULL,
   only_expunge_deletes = FALSE, flush = TRUE, ...)
 
 index_upgrade(index = NULL, wait_for_completion = FALSE, ...)
 
-index_analyze(text = NULL, field = NULL, index = NULL, analyzer = NULL,
-  tokenizer = NULL, filters = NULL, char_filters = NULL, body = list(),
-  ...)
+index_analyze(text = NULL, field = NULL, index = NULL,
+  analyzer = NULL, tokenizer = NULL, filters = NULL,
+  char_filters = NULL, body = list(), ...)
 
 index_flush(index = NULL, force = FALSE, full = FALSE,
   wait_if_ongoing = FALSE, ...)

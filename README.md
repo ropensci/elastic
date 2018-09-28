@@ -24,7 +24,7 @@ Also check out `elasticdsl` - an R DSL for Elasticsearch - [https://github.com/r
 
 ## Compatibility
 
-This client is developed following the latest stable releases, currently `v6.3.0`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
+This client is developed following the latest stable releases, currently `v6.4.0`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
 
 ## Security
 
@@ -79,12 +79,12 @@ If you're using boot2docker, you'll need to use the IP address in place of local
 
 __on OSX__
 
-+ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.3.0.tar.gz`
-+ Extract: `tar -zxvf elasticsearch-6.3.0.tar.gz`
-+ Move it: `sudo mv elasticsearch-6.3.0 /usr/local`
++ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.4.0.tar.gz`
++ Extract: `tar -zxvf elasticsearch-6.4.0.tar.gz`
++ Move it: `sudo mv elasticsearch-6.4.0 /usr/local`
 + Navigate to /usr/local: `cd /usr/local`
 + Delete symlinked `elasticsearch` directory: `rm -rf elasticsearch`
-+ Add shortcut: `sudo ln -s elasticsearch-6.3.0 elasticsearch` (replace version with your version)
++ Add shortcut: `sudo ln -s elasticsearch-6.4.0 elasticsearch` (replace version with your version)
 
 You can also install via Homebrew: `brew install elasticsearch`
 
@@ -102,6 +102,40 @@ Obviously, upgrading Elasticsearch while keeping it running is a different thing
 * Start elasticsearch: `bin/elasticsearch`
 
 I create a little bash shortcut called `es` that does both of the above commands in one step (`cd /usr/local/elasticsearch && bin/elasticsearch`).
+
+## Initialization
+
+The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
+
+
+```r
+connect(es_port = 9200)
+#> transport:  http 
+#> host:       127.0.0.1 
+#> port:       9200 
+#> path:       NULL 
+#> username:   NULL 
+#> password:   <secret> 
+#> errors:     simple 
+#> headers (names):  NULL
+```
+
+For AWS hosted elasticsearch, make sure to specify es_path = "" and the correct port - transport schema pair.
+
+
+```r
+connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 80, es_transport_schema  = "http")
+  # or
+connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 443, es_transport_schema  = "https")
+```
+
+If you are using Elastic Cloud or an installation with authentication (X-pack), make sure to specify es_path = "", es_user = "", es_pwd = "" and the correct port - transport schema pair.
+
+
+```r
+connect(es_host = <ec_endpoint>, es_path = "", es_user="test", es_pwd = "1234", es_port = 9243, es_transport_schema  = "https")
+```
+
 
 ## Get some data
 
@@ -178,38 +212,6 @@ invisible(docs_bulk(gbifgeo))
 
 There are more datasets formatted for bulk loading in the `ropensci/elastic_data` GitHub repository. Find it at <https://github.com/ropensci/elastic_data>
 
-## Initialization
-
-The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
-
-
-```r
-connect(es_port = 9200)
-#> transport:  http 
-#> host:       127.0.0.1 
-#> port:       9200 
-#> path:       NULL 
-#> username:   NULL 
-#> password:   <secret> 
-#> errors:     simple 
-#> headers (names):  NULL
-```
-
-For AWS hosted elasticsearch, make sure to specify es_path = "" and the correct port - transport schema pair.
-
-
-```r
-connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 80, es_transport_schema  = "http")
-  # or
-connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 443, es_transport_schema  = "https")
-```
-
-If you are using Elastic Cloud or an installation with authentication (X-pack), make sure to specify es_path = "", es_user = "", es_pwd = "" and the correct port - transport schema pair.
-
-
-```r
-connect(es_host = <ec_endpoint>, es_path = "", es_user="test", es_pwd = "1234", es_port = 9243, es_transport_schema  = "https")
-```
 
 ## Search
 

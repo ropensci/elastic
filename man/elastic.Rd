@@ -4,7 +4,6 @@
 \name{elastic}
 \alias{elastic}
 \alias{elastic-package}
-\alias{elastic-package}
 \title{elastic: An Elasticsearch R client.}
 \description{
 elastic: An Elasticsearch R client.

@@ -8,7 +8,7 @@ Description: Connect to 'Elasticsearch', a 'NoSQL' database built on the 'Java'
     requests. In addition, 'elastic' provides functions for interacting with API's
     for 'indices', documents, nodes, clusters, an interface to the cat API, and
     more.
-Version: 0.8.4.9100
+Version: 0.8.4.9410
 License: MIT + file LICENSE
 Authors@R: person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "myrmecocystus@gmail.com")
@@ -16,6 +16,8 @@ URL: https://github.com/ropensci/elastic
 BugReports: https://github.com/ropensci/elastic/issues
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
+Encoding: UTF-8
+Language: en-US
 Imports:
     utils,
     methods,
@@ -24,10 +26,10 @@ Imports:
     jsonlite (>= 1.1),
     R6
 Suggests:
-    roxygen2 (>= 6.0.1),
+    roxygen2 (>= 6.1.0),
     knitr,
     testthat
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 X-schema.org-applicationCategory: Databases
 X-schema.org-keywords: database, Elasticsearch, HTTP, API, search, NoSQL, Java, JSON, documents
 X-schema.org-isPartOf: https://ropensci.org

@@ -4,8 +4,8 @@
 \alias{search_body}
 \title{Full text search of Elasticsearch - body requests.}
 \usage{
-search_body(index = NULL, type = NULL, raw = FALSE, callopts = list(),
-  query = list(), ...)
+search_body(index = NULL, type = NULL, raw = FALSE,
+  callopts = list(), query = list(), ...)
 }
 \arguments{
 \item{index}{Index name}

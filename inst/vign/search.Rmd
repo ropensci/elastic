@@ -270,12 +270,12 @@ sapply(out$hits$hits, function(x) x$highlight$title[[1]])[8:10]
 ```{r}
 Search('shakespeare', q="a*")$hits$total
 res <- Search(index = 'shakespeare', q="a*", time_scroll = "1m")
-length(scroll(res$`_scroll_id`)$hits$hits)
+length(scroll(res$`_scroll_id`, time_scroll = "1m")$hits$hits)
 ```
 
 ```{r}
 res <- Search(index = 'shakespeare', q = "a*", time_scroll = "5m")
-out <- list()
+out <- res$hits$hits
 hits <- 1
 while (hits != 0) {
   res <- scroll(res$`_scroll_id`)
@@ -284,6 +284,7 @@ while (hits != 0) {
     out <- c(out, res$hits$hits)
 }
 length(out)
+res$hits$total
 ```
 
 Woohoo! Collected all `r length(out)` documents in very little time.

@@ -25,8 +25,8 @@ cat_(parse = FALSE, ...)
 cat_aliases(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
   bytes = FALSE, parse = FALSE, ...)
 
-cat_allocation(verbose = FALSE, h = NULL, help = FALSE, bytes = FALSE,
-  parse = FALSE, ...)
+cat_allocation(verbose = FALSE, h = NULL, help = FALSE,
+  bytes = FALSE, parse = FALSE, ...)
 
 cat_count(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
   bytes = FALSE, parse = FALSE, ...)
@@ -46,8 +46,8 @@ cat_master(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
 cat_nodes(verbose = FALSE, h = NULL, help = FALSE, bytes = FALSE,
   parse = FALSE, ...)
 
-cat_nodeattrs(verbose = FALSE, h = NULL, help = FALSE, bytes = FALSE,
-  parse = FALSE, ...)
+cat_nodeattrs(verbose = FALSE, h = NULL, help = FALSE,
+  bytes = FALSE, parse = FALSE, ...)
 
 cat_pending_tasks(verbose = FALSE, h = NULL, help = FALSE,
   bytes = FALSE, parse = FALSE, ...)
@@ -58,14 +58,14 @@ cat_plugins(verbose = FALSE, h = NULL, help = FALSE, bytes = FALSE,
 cat_recovery(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
   bytes = FALSE, parse = FALSE, ...)
 
-cat_thread_pool(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
-  bytes = FALSE, parse = FALSE, ...)
+cat_thread_pool(verbose = FALSE, index = NULL, h = NULL,
+  help = FALSE, bytes = FALSE, parse = FALSE, ...)
 
 cat_shards(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
   bytes = FALSE, parse = FALSE, ...)
 
-cat_fielddata(verbose = FALSE, index = NULL, fields = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_fielddata(verbose = FALSE, index = NULL, fields = NULL,
+  h = NULL, help = FALSE, bytes = FALSE, parse = FALSE, ...)
 }
 \arguments{
 \item{parse}{(logical) Parse to a data.frame or not. Default: \code{FALSE}}
