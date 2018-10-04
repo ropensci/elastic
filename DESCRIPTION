@@ -23,6 +23,7 @@ Imports:
     methods,
     httr (>= 1.2.1),
     curl (>= 2.2),
+    crul (>= 0.6.0),
     jsonlite (>= 1.1),
     R6
 Suggests:

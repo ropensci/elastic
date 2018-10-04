@@ -23,7 +23,9 @@ elastic_env <- new.env()
 #' [httr::add_headers()]. These headers are  used in all requests. 
 #' To use headers in individual requests and not others, pass in headers 
 #' using [httr::add_headers()] via `...` in a function call.
-#' @param ... Further args passed on to print
+#' @param cainfo (character) path to a crt bundle, passed to curl option
+#' `cainfo`
+#' @param ... additional curl options to be passed in ALL http requests
 #' 
 #' @format NULL
 #' @usage NULL
@@ -44,8 +46,15 @@ elastic_env <- new.env()
 #' @examples \dontrun{
 #' # the default is set to 127.0.0.1 (i.e., localhost) and port 9200
 #' (x <- connect())
-#' x
+#' x$make_url()
+#' x$ping()
+#' 
+#' # pass connection object to function calls
+#' Search(x, q = "*:*")
 #'
+#' # set username/password (hidden in print method)
+#' connect(user = "me", pwd = "stuff")
+#'  
 #' # set a different host
 #' # connect(host = '162.243.152.53')
 #' # => http://162.243.152.53:9200
@@ -63,17 +72,20 @@ elastic_env <- new.env()
 #' # => https://localhost:9200
 #' 
 #' # set headers
-#' connect(headers = list(a = 5))
-#' ## or
-#' connect(headers = httr::add_headers(a = 5))
+#' connect(headers = list(a = 'foobar'))
+#' 
+#' # set cainfo path (hidden in print method)
+#' connect(cainfo = '/some/path/bundle.crt')
 #' }
 connect <- function(host = "127.0.0.1", port = 9200, path = NULL, 
       transport_schema = "http", user = NULL, pwd = NULL, 
-      headers = NULL, force = FALSE, errors = "simple") {
+      headers = NULL, cainfo = NULL, force = FALSE, 
+      errors = "simple", ...) {
   
   Elasticsearch$new(host = host, port = port, path = path,
       transport_schema = transport_schema, user = user, pwd = pwd, 
-      headers = headers, force = FALSE, errors = errors)
+      headers = headers, cainfo = cainfo, force = FALSE, 
+      errors = errors, ...)
 }
 
 Elasticsearch <- R6::R6Class(
@@ -86,18 +98,21 @@ Elasticsearch <- R6::R6Class(
     user = NULL,
     pwd = NULL,
     headers = NULL,
+    cainfo = NULL,
     force = FALSE,
     errors = "simple",
+    opts = NULL,
 
     initialize = function(host = "127.0.0.1", port = 9200, path = NULL, 
       transport_schema = "http", user = NULL, pwd = NULL, 
-      headers = NULL, force = FALSE, errors = "simple") {
+      headers = NULL, cainfo = NULL, force = FALSE, errors = "simple", ...) {
 
       self$port <- port
       self$transport_schema <- transport_schema
       self$user <- user
       self$pwd <- pwd
       self$headers <- headers
+      self$cainfo <- cainfo
       self$force <- force
       self$errors <- errors
 
@@ -116,6 +131,12 @@ Elasticsearch <- R6::R6Class(
         }
       }
       self$path <- path
+
+      # reset ping result in elastic_env
+      elastic_env$ping_result <- NULL
+
+      # collect curl options
+      self$opts <- ec(list(cainfo = cainfo, ...))
     },
 
     print = function(x, ...) {
@@ -129,13 +150,73 @@ Elasticsearch <- R6::R6Class(
       cat(paste('  password:  ', if (!is.null(self$pwd)) "<secret>" else 'NULL' ), "\n")
       cat(paste('  errors:    ', fun(self$errors)), "\n")
       cat(paste('  headers (names): ', ph(self)), "\n")
+      cat(paste('  cainfo: ', if (!is.null(self$cainfo)) "<secret>" else 'NULL'), "\n")
+    },
+
+    make_url = function(x) {
+      url <- sprintf("%s://%s", self$transport_schema, self$host)
+      url <- if (is.null(self$port) || nchar(self$port) == 0) {
+        url
+      } else {
+        paste(url, ":", self$port, sep = "")
+      }
+      if (!is.null(self$path) && nchar(self$path) > 0) {
+        url <- file.path(url, self$path)
+      }
+      url
+    },
+
+    ping = function(...) es_GET_(self, self$make_url(), ...),
+
+    info = function(...) {
+      res <- tryCatch(GET(self$make_url(), make_up(), ...), error = function(e) e)
+      if (inherits(res, "error")) {
+        stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting", 
+                     make_url(es_get_auth())), call. = FALSE)
+      }
+      if (res$status_code > 200) {
+        stop(sprintf("Error:", res$headers$statusmessage), call. = FALSE)
+      }
+      tt <- cont_utf8(res)
+      jsonlite::fromJSON(tt, FALSE)
+    },
+
+    es_ver = function() {
+      pinged <- elastic_env$ping_result
+      if (is.null(pinged)) {
+        elastic_env$ping_result <- pinged <- self$ping()
+      }
+      ver <- pinged$version$number
+      
+      # get only 1st 3 digits, so major:minor:patch
+      as.numeric(
+        paste(
+          stats::na.omit(
+            extractr(ver, "[[:digit:]]+")[[1]][1:3]
+          ), 
+          collapse = ""
+        )
+      )
+    },
+
+    stop_es_version = function(ver_check, fxn) {
+      if (self$es_ver() < ver_check) {
+        stop(fxn, " is not available for this Elasticsearch version", 
+             call. = FALSE)
+      }
+    },
+
+    make_conn = function(url, headers = list(), ...) {
+      crul::HttpClient$new(
+        url = url, 
+        headers = c(self$headers, headers),
+        opts = c(self$opts, ...), 
+        auth = crul::auth(self$user, self$pwd)
+      )
     }
   ),
 
-  private = list(
-    # reset ping result in elastic_env
-    # elastic_env$ping_result <- NULL
-  )
+  private = list()
 )
 
 es_auth <- function(es_host = NULL, es_port = NULL, es_path = NULL, 

@@ -5,6 +5,7 @@
 #' @author Scott Chamberlain <myrmecocystus@@gmail.com>
 #' @name index
 #'
+#' @param conn an Elasticsearch connection object, see [Elasticsearch]
 #' @param index (character) A character vector of index names
 #' @param features (character) A single feature. One of settings, mappings, or 
 #' aliases
@@ -85,31 +86,34 @@
 #' for all the options.
 #'
 #' @examples \dontrun{
+#' # connection setup
+#' (x <- connect())
+#' 
 #' # get information on an index
-#' index_get(index='shakespeare')
+#' index_get(x, x, index='shakespeare')
 #' ## this one is the same as running index_settings('shakespeare')
-#' index_get(index='shakespeare', features='settings')
-#' index_get(index='shakespeare', features='mappings')
-#' index_get(index='shakespeare', features='alias')
+#' index_get(x, index='shakespeare', features='settings')
+#' index_get(x, index='shakespeare', features='mappings')
+#' index_get(x, index='shakespeare', features='alias')
 #'
 #' # check for index existence
-#' index_exists(index='shakespeare')
-#' index_exists(index='plos')
+#' index_exists(x, index='shakespeare')
+#' index_exists(x, index='plos')
 #'
 #' # create an index
-#' if (index_exists('twitter')) index_delete('twitter')
-#' index_create(index='twitter')
-#' if (index_exists('things')) index_delete('things')
-#' index_create(index='things')
-#' if (index_exists('plos')) index_delete('plos')
-#' index_create(index='plos')
+#' if (index_exists(x, 'twitter')) index_delete(x, 'twitter')
+#' index_create(x, index='twitter')
+#' if (index_exists(x, 'things')) index_delete(x, 'things')
+#' index_create(x, index='things')
+#' if (index_exists(x, 'plos')) index_delete(x, 'plos')
+#' index_create(x, index='plos')
 #'
 #' # re-create an index
-#' index_recreate("deer")
-#' index_recreate("deer", verbose = FALSE)
+#' index_recreate(x, "deer")
+#' index_recreate(x, "deer", verbose = FALSE)
 #'
 #' # delete an index
-#' if (index_exists('plos')) index_delete(index='plos')
+#' if (index_exists(x, 'plos')) index_delete(x, index='plos')
 #'
 #' ## with a body
 #' body <- '{
@@ -120,8 +124,8 @@
 #'    }
 #'  }
 #' }'
-#' if (index_exists('alsothat')) index_delete('alsothat')
-#' index_create(index='alsothat', body=body)
+#' if (index_exists(x, 'alsothat')) index_delete(x, 'alsothat')
+#' index_create(x, index='alsothat', body=body)
 #'
 #' ## with mappings
 #' body <- '{
@@ -133,73 +137,71 @@
 #'    }
 #'  }
 #' }'
-#' if (!index_exists('gbifnewgeo')) index_create(index='gbifnewgeo', body=body)
+#' if (!index_exists(x, 'gbifnewgeo')) index_create(x, index='gbifnewgeo', body=body)
 #' gbifgeo <- system.file("examples", "gbif_geosmall.json", package = "elastic")
-#' docs_bulk(gbifgeo)
+#' docs_bulk(x, gbifgeo)
 #'
 #' # close an index
-#' index_create('plos')
-#' index_close('plos')
+#' index_create(x, 'plos')
+#' index_close(x, 'plos')
 #'
 #' # open an index
-#' index_open('plos')
+#' index_open(x, 'plos')
 #'
 #' # Get stats on an index
-#' index_stats('plos')
-#' index_stats(c('plos','gbif'))
-#' index_stats(c('plos','gbif'), metric='refresh')
-#' index_stats(metric = "indexing")
-#' index_stats('shakespeare', metric='completion')
-#' index_stats('shakespeare', metric='completion', completion_fields = "completion")
-#' index_stats('shakespeare', metric='fielddata')
-#' index_stats('shakespeare', metric='fielddata', fielddata_fields = "evictions")
-#' index_stats('plos', level="indices")
-#' index_stats('plos', level="cluster")
-#' index_stats('plos', level="shards")
+#' index_stats(x, 'plos')
+#' index_stats(x, c('plos','gbif'))
+#' index_stats(x, c('plos','gbif'), metric='refresh')
+#' index_stats(x, metric = "indexing")
+#' index_stats(x, 'shakespeare', metric='completion')
+#' index_stats(x, 'shakespeare', metric='completion', completion_fields = "completion")
+#' index_stats(x, 'shakespeare', metric='fielddata')
+#' index_stats(x, 'shakespeare', metric='fielddata', fielddata_fields = "evictions")
+#' index_stats(x, 'plos', level="indices")
+#' index_stats(x, 'plos', level="cluster")
+#' index_stats(x, 'plos', level="shards")
 #'
 #' # Get segments information that a Lucene index (shard level) is built with
-#' index_segments()
-#' index_segments('plos')
-#' index_segments(c('plos','gbif'))
+#' index_segments(x)
+#' index_segments(x, 'plos')
+#' index_segments(x, c('plos','gbif'))
 #'
 #' # Get recovery information that provides insight into on-going index shard recoveries
-#' index_recovery()
-#' index_recovery('plos')
-#' index_recovery(c('plos','gbif'))
-#' index_recovery("plos", detailed = TRUE)
-#' index_recovery("plos", active_only = TRUE)
+#' index_recovery(x)
+#' index_recovery(x, 'plos')
+#' index_recovery(x, c('plos','gbif'))
+#' index_recovery(x, "plos", detailed = TRUE)
+#' index_recovery(x, "plos", active_only = TRUE)
 #'
 #' # Optimize an index, or many indices
-#' if (gsub("\\.", "", ping()$version$number) < 500) {
+#' if (x$es_ver() < 500) {
 #'   ### ES < v5 - use optimize
-#'   index_optimize('plos')
-#'   index_optimize(c('plos','gbif'))
-#'   index_optimize('plos')
+#'   index_optimize(x, 'plos')
+#'   index_optimize(x, c('plos','gbif'))
+#'   index_optimize(x, 'plos')
 #' } else {
 #'   ### ES > v5 - use forcemerge
-#'   index_forcemerge('plos')
+#'   index_forcemerge(x, 'plos')
 #' }
 #'
 #' # Upgrade one or more indices to the latest format. The upgrade process converts any
 #' # segments written with previous formats.
-#' if (gsub("\\.", "", ping()$version$number) < 500) {
-#'   index_upgrade('plos')
-#'   index_upgrade(c('plos','gbif'))
+#' if (conn$es_ver() < 500) {
+#'   index_upgrade(x, 'plos')
+#'   index_upgrade(x, c('plos','gbif'))
 #' }
 #'
 #' # Performs the analysis process on a text and return the tokens breakdown 
 #' # of the text
-#' index_analyze(text = 'this is a test', analyzer='standard')
-#' index_analyze(text = 'this is a test', analyzer='whitespace')
-#' index_analyze(text = 'this is a test', analyzer='stop')
-#' index_analyze(text = 'this is a test', tokenizer='keyword', 
+#' index_analyze(x, text = 'this is a test', analyzer='standard')
+#' index_analyze(x, text = 'this is a test', analyzer='whitespace')
+#' index_analyze(x, text = 'this is a test', analyzer='stop')
+#' index_analyze(x, text = 'this is a test', tokenizer='keyword', 
 #'   filters='lowercase')
-#' index_analyze(text = 'this is a test', tokenizer='keyword', filters='lowercase',
+#' index_analyze(x, text = 'this is a test', tokenizer='keyword', filters='lowercase',
 #'    char_filters='html_strip')
-#' index_analyze(text = 'this is a test', index = 'plos')
-#' index_analyze(text = 'this is a test', index = 'shakespeare')
-#' index_analyze(text = 'this is a test', index = 'shakespeare', 
-#'   config=verbose())
+#' index_analyze(x, text = 'this is a test', index = 'plos')
+#' index_analyze(x, text = 'this is a test', index = 'shakespeare')
 #'
 #' ## NGram tokenizer
 #' body <- '{
@@ -221,112 +223,107 @@
 #'              }
 #'       }
 #' }'
-#' if (index_exists("shakespeare2")) {
-#'    index_delete("shakespeare2")
-#' }
-#' tokenizer_set(index = "shakespeare2", body=body)
-#' index_analyze(text = "art thouh", index = "shakespeare2", 
+#' if (index_exists(x, "shakespeare2")) index_delete(x, "shakespeare2")
+#' tokenizer_set(x, index = "shakespeare2", body=body)
+#' index_analyze(x, text = "art thouh", index = "shakespeare2", 
 #'   analyzer='my_ngram_analyzer')
 #'
 #' # Explicitly flush one or more indices.
-#' index_flush(index = "plos")
-#' index_flush(index = "shakespeare")
-#' index_flush(index = c("plos","shakespeare"))
-#' index_flush(index = "plos", wait_if_ongoing = TRUE)
-#' library('httr')
-#' index_flush(index = "plos", config=verbose())
+#' index_flush(x, index = "plos")
+#' index_flush(x, index = "shakespeare")
+#' index_flush(x, index = c("plos","shakespeare"))
+#' index_flush(x, index = "plos", wait_if_ongoing = TRUE)
+#' index_flush(x, index = "plos", verbose = TRUE)
 #'
 #' # Clear either all caches or specific cached associated with one ore more indices.
-#' index_clear_cache()
-#' index_clear_cache(index = "plos")
-#' index_clear_cache(index = "shakespeare")
-#' index_clear_cache(index = c("plos","shakespeare"))
-#' index_clear_cache(filter = TRUE)
-#' library('httr')
-#' index_clear_cache(config=verbose())
+#' index_clear_cache(x)
+#' index_clear_cache(x, index = "plos")
+#' index_clear_cache(x, index = "shakespeare")
+#' index_clear_cache(x, index = c("plos","shakespeare"))
+#' index_clear_cache(x, filter = TRUE)
 #'
 #' # Index settings
 #' ## get settings
-#' index_settings()
-#' index_settings("_all")
-#' index_settings('gbif')
-#' index_settings(c('gbif','plos'))
-#' index_settings('*s')
+#' index_settings(x)
+#' index_settings(x, "_all")
+#' index_settings(x, 'gbif')
+#' index_settings(x, c('gbif','plos'))
+#' index_settings(x, '*s')
 #' ## update settings
-#' if (index_exists('foobar')) index_delete('foobar')
-#' index_create("foobar")
+#' if (index_exists(x, 'foobar')) index_delete(x, 'foobar')
+#' index_create(x, "foobar")
 #' settings <- list(index = list(number_of_replicas = 4))
-#' index_settings_update("foobar", body = settings)
-#' index_get("foobar")$foobar$settings
+#' index_settings_update(x, "foobar", body = settings)
+#' index_get(x, "foobar")$foobar$settings
 #' }
 NULL
 
 #' @export
 #' @rdname index
-index_get <- function(index=NULL, features=NULL, raw=FALSE, verbose=TRUE, ...) {
-  stop_es_version(120, "index_get")
+index_get <- function(conn, index=NULL, features=NULL, raw=FALSE, verbose=TRUE, ...) {
+  conn$stop_es_version(120, "index_get")
   if (length(features) > 1) stop("'features' must be length 1")
-  index_GET(index, features, raw, ...)
+  index_GET(conn, index, features, raw, ...)
 }
 
 #' @export
 #' @rdname index
-index_exists <- function(index, ...) {
-  url <- file.path(make_url(es_get_auth()), esc(index))
-  res <- HEAD(url, ..., make_up())
+index_exists <- function(conn, index, ...) {
+  url <- file.path(conn$make_url(), esc(index))
+  res <- conn$make_conn(url, ...)$head()
   if (res$status_code == 200) TRUE else FALSE
 }
 
 #' @export
 #' @rdname index
-index_delete <- function(index, raw=FALSE, verbose=TRUE, ...) {
-  url <- paste0(make_url(es_get_auth()), "/", esc(index))
-  out <- DELETE(url, make_up(), ...)
+index_delete <- function(conn, index, raw=FALSE, verbose=TRUE, ...) {
+  url <- paste0(conn$make_url(), "/", esc(index))
+  out <- conn$make_conn(url, ...)$delete()
   if (verbose) message(URLdecode(out$url))
   geterror(out)
-  tt <- structure(cont_utf8(out), class = "index_delete")
+  tt <- structure(out$parse('UTF-8'), class = "index_delete")
   if (raw) tt else es_parse(tt)
 }
 
 #' @export
 #' @rdname index
-index_create <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...) {
-  url <- make_url(es_get_auth())
-  es_PUT(paste0(url, "/", esc(index)), body = body, ...)
+index_create <- function(conn, index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...) {
+  url <- conn$make_url()
+  es_PUT(conn, paste0(url, "/", esc(index)), body = body, ...)
 }
 
 #' @export
 #' @rdname index
-index_recreate <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, 
+index_recreate <- function(conn, index=NULL, body=NULL, raw=FALSE, verbose=TRUE, 
                            ...) {
   
-  if (index_exists(index, ...)) {
+  if (index_exists(conn, index, ...)) {
     if (verbose) message("deleting ", index)
-    index_delete(index, verbose = verbose, ...)
+    index_delete(conn, index, verbose = verbose, ...)
   }
   if (verbose) message("creating ", index)
-  index_create(index = index, body = body, raw = raw, verbose = verbose, ...)
+  index_create(conn, index = index, body = body, raw = raw, verbose = verbose, ...)
 }
 
 #' @export
 #' @rdname index
-index_close <- function(index, ...) {
-  close_open(index, "_close", ...)
+index_close <- function(conn, index, ...) {
+  close_open(conn, index, "_close", ...)
 }
 
 #' @export
 #' @rdname index
-index_open <- function(index, ...) {
-  close_open(index, "_open", ...)
+index_open <- function(conn, index, ...) {
+  close_open(conn, index, "_open", ...)
 }
 
 #' @export
 #' @rdname index
-index_stats <- function(index=NULL, metric=NULL, completion_fields=NULL, 
+index_stats <- function(conn, index=NULL, metric=NULL, completion_fields=NULL, 
                         fielddata_fields=NULL, fields=NULL, groups=NULL, 
                         level='indices', ...) {
   
-  url <- make_url(es_get_auth())
+  url <- conn$make_url()
   url <- if (is.null(index)) {
     file.path(url, "_stats") 
   } else {
@@ -336,61 +333,58 @@ index_stats <- function(index=NULL, metric=NULL, completion_fields=NULL,
   args <- ec(list(completion_fields = completion_fields, 
                   fielddata_fields = fielddata_fields,
                   fields = fields, groups = groups, level = level))
-  es_GET_(url, args, ...)
+  es_GET_(conn, url, args, ...)
 }
 
 #' @export
 #' @rdname index
-index_settings <- function(index="_all", ...) {
-  url <- make_url(es_get_auth())
+index_settings <- function(conn, index="_all", ...) {
+  url <- conn$make_url()
   url <- if (is.null(index) || index == "_all") {
     file.path(url, "_settings")
   } else {
     file.path(url, esc(cl(index)), "_settings")
   }
-  es_GET_(url, ...)
+  es_GET_(conn, url, ...)
 }
 
 #' @export
 #' @rdname index
-index_settings_update <- function(index=NULL, body, ...) {
-  url <- make_url(es_get_auth())
+index_settings_update <- function(conn, index=NULL, body, ...) {
+  url <- conn$make_url()
   url <- if (is.null(index)) {
     file.path(url, "_settings") 
   } else {
     file.path(url, esc(cl(index)), "_settings")
   }
   body <- check_inputs(body)
-  tt <- PUT(url, make_up(), ..., body = body)
-  geterror(tt)
-  res <- cont_utf8(tt)
-  jsonlite::fromJSON(res)
+  es_PUT(conn, url, body = body, ...)
 }
 
 #' @export
 #' @rdname index
-index_segments <- function(index = NULL, ...) {
-  es_GET_wrap1(index, "_segments", ...)
+index_segments <- function(conn, index = NULL, ...) {
+  es_GET_wrap1(conn, index, "_segments", ...)
 }
 
 #' @export
 #' @rdname index
-index_recovery <- function(index = NULL, detailed = FALSE, active_only = FALSE, 
+index_recovery <- function(conn, index = NULL, detailed = FALSE, active_only = FALSE, 
                            ...) {
   
-  stop_es_version(110, "index_recovery")
+  conn$stop_es_version(110, "index_recovery")
   args <- ec(list(detailed = as_log(detailed), 
                   active_only = as_log(active_only)))
-  es_GET_wrap1(index, "_recovery", args, ...)
+  es_GET_wrap1(conn, index, "_recovery", args, ...)
 }
 
 #' @export
 #' @rdname index
-index_optimize <- function(index = NULL, max_num_segments = NULL, 
+index_optimize <- function(conn, index = NULL, max_num_segments = NULL, 
   only_expunge_deletes = FALSE,
   flush = TRUE, wait_for_merge = TRUE, ...) {
   
-  if (es_ver() >= 500) {
+  if (conn$es_ver() >= 500) {
     stop("optimize is gone in ES >= v5, see ?index_forcemerge")
   }
   args <- ec(list(max_num_segments = max_num_segments,
@@ -398,15 +392,15 @@ index_optimize <- function(index = NULL, max_num_segments = NULL,
                   flush = as_log(flush),
                   wait_for_merge = as_log(wait_for_merge)
   ))
-  es_POST_(index, which = "_optimize", args, ...)
+  es_POST_(conn, index, which = "_optimize", args, ...)
 }
 
 #' @export
 #' @rdname index
-index_forcemerge <- function(index = NULL, max_num_segments = NULL, 
+index_forcemerge <- function(conn, index = NULL, max_num_segments = NULL, 
                            only_expunge_deletes = FALSE, flush = TRUE, ...) {
   
-  if (es_ver() < 500) {
+  if (conn$es_ver() < 500) {
     stop("forcemerge is only in ES >= v5, see ?index_optimize")
   }
   args <- ec(list(
@@ -414,34 +408,34 @@ index_forcemerge <- function(index = NULL, max_num_segments = NULL,
     only_expunge_deletes = as_log(only_expunge_deletes),
     flush = as_log(flush)
   ))
-  es_POST_(index, which = "_forcemerge", args, ...)
+  es_POST_(conn, index, which = "_forcemerge", args, ...)
 }
 
 #' @export
 #' @rdname index
-index_upgrade <- function(index = NULL, wait_for_completion = FALSE, ...) {
-  stop_es_version(120, "index_get")
-  if (es_ver() >= 500) {
+index_upgrade <- function(conn, index = NULL, wait_for_completion = FALSE, ...) {
+  conn$stop_es_version(120, "index_get")
+  if (conn$es_ver() >= 500) {
     stop("upgrade is removed in ES >= v5, see
 https://www.elastic.co/guide/en/elasticsearch/reference/current/reindex-upgrade.html")
   }
   args <- ec(list(wait_for_completion = as_log(wait_for_completion)))
-  es_POST_(index, "_upgrade", args, ...)
+  es_POST_(conn, index, "_upgrade", args, ...)
 }
 
 #' @export
 #' @rdname index
-index_analyze <- function(text=NULL, field=NULL, index=NULL, analyzer=NULL, 
+index_analyze <- function(conn, text=NULL, field=NULL, index=NULL, analyzer=NULL, 
                           tokenizer=NULL, filters=NULL, char_filters=NULL, 
                           body=list(), ...) {
-  url <- make_url(es_get_auth())
+  url <- conn$make_url()
   if (!is.null(index)) {
     url <- sprintf("%s/%s/_analyze", url, esc(cl(index)))
   } else {
     url <- sprintf("%s/_analyze", url)
   }
   
-  if (es_ver() >= 500) {
+  if (conn$es_ver() >= 500) {
     body <- ec(list(text = text, analyzer = analyzer, tokenizer = tokenizer, 
                  filter = list(filters), char_filter = char_filters, 
                  field = field))
@@ -453,15 +447,15 @@ index_analyze <- function(text=NULL, field=NULL, index=NULL, analyzer=NULL,
                     field = field))
   }
   
-  analyze_POST(url, args, body, ...)$tokens
+  analyze_POST(conn, url, args, body, ...)$tokens
 }
 
 #' @export
 #' @rdname index
-index_flush <- function(index=NULL, force=FALSE, full=FALSE, 
+index_flush <- function(conn, index=NULL, force=FALSE, full=FALSE, 
                         wait_if_ongoing=FALSE, ...) {
   
-  url <- make_url(es_get_auth())
+  url <- conn$make_url()
   if (!is.null(index)) {
     url <- sprintf("%s/%s/_flush", url, esc(cl(index)))
   } else {
@@ -469,15 +463,15 @@ index_flush <- function(index=NULL, force=FALSE, full=FALSE,
   }
   args <- ec(list(force = as_log(force), full = as_log(full), 
                   wait_if_ongoing = as_log(wait_if_ongoing)))
-  cc_POST(url, args, ...)
+  cc_POST(conn, url, args, ...)
 }
 
 #' @export
 #' @rdname index
-index_clear_cache <- function(index=NULL, filter=FALSE, filter_keys=NULL, 
+index_clear_cache <- function(conn, index=NULL, filter=FALSE, filter_keys=NULL, 
                               fielddata=FALSE, query_cache=FALSE, 
                               id_cache=FALSE, ...) {
-  url <- make_url(es_get_auth())
+  url <- conn$make_url()
   if (!is.null(index)) {
     url <- sprintf("%s/%s/_cache/clear", url, esc(cl(index)))
   } else {
@@ -487,58 +481,61 @@ index_clear_cache <- function(index=NULL, filter=FALSE, filter_keys=NULL,
                   fielddata = as_log(fielddata), 
                   query_cache = as_log(query_cache), 
                   id_cache = as_log(id_cache)))
-  cc_POST(url, args, ...)
+  cc_POST(conn, url, args, ...)
 }
 
-close_open <- function(index, which, ...){
-  url <- make_url(es_get_auth())
+
+
+###### HELPERS
+close_open <- function(conn, index, which, ...){
+  url <- conn$make_url()
   url <- sprintf("%s/%s/%s", url, esc(index), which)
-  out <- POST(url, make_up(), ...)
+  out <- conn$make_conn(url, ...)$post()
   geterror(out)
-  jsonlite::fromJSON(cont_utf8(out), FALSE)
+  jsonlite::fromJSON(out$parse("UTF-8"), FALSE)
 }
 
-es_GET_wrap1 <- function(index, which, args=NULL, ...){
-  url <- make_url(es_get_auth())
+es_GET_wrap1 <- function(conn, index, which, args=NULL, ...){
+  url <- conn$make_url()
   url <- if (is.null(index)) {
     file.path(url, which) 
   } else {
     file.path(url, esc(cl(index)), which)
   }
-  es_GET_(url, args, ...)
+  es_GET_(conn, url, args, ...)
 }
 
-es_POST_ <- function(index, which, args=NULL, ...){
-  url <- make_url(es_get_auth())
+es_POST_ <- function(conn, index, which, args=NULL, ...){
+  url <- conn$make_url()
   url <- if (is.null(index)) {
     file.path(url, which) 
   } else {
     file.path(url, esc(cl(index)), which)
   }
-  tt <- POST(url, query = args, make_up(), es_env$headers, ...)
+  tt <- conn$make_conn(url, ...)$post(query = args)
   geterror(tt)
-  jsonlite::fromJSON(cont_utf8(tt), FALSE)
+  jsonlite::fromJSON(tt$parse('UTF-8'), FALSE)
 }
 
-analyze_GET <- function(url, args = NULL, ...){
+analyze_GET <- function(conn, url, args = NULL, ...){
   out <- GET(url, query = args, make_up(), es_env$headers, ...)
   stop_for_status(out)
   tt <- cont_utf8(out)
   jsonlite::fromJSON(tt)
 }
 
-analyze_POST <- function(url, args = NULL, body, ...){
+analyze_POST <- function(conn, url, args = NULL, body, ...){
   body <- check_inputs(body)
-  out <- POST(url, query = args, body = body, make_up(),
-              content_type_json(), es_env$headers, ...)
+  out <- conn$make_conn(url, json_type(), ...)$post(query = args, body = body)
+  # out <- POST(url, query = args, body = body, make_up(),
+  #             content_type_json(), es_env$headers, ...)
   geterror(out)
-  tt <- cont_utf8(out)
-  jsonlite::fromJSON(tt)
+  jsonlite::fromJSON(out$parse("UTF-8"))
 }
 
-cc_POST <- function(url, args = NULL, ...){
-  tt <- POST(url, body = args, encode = "json", make_up(), es_env$headers, ...)
+cc_POST <- function(conn, url, args = NULL, ...){
+  # tt <- POST(url, body = args, encode = "json", make_up(), es_env$headers, ...)
+  tt <- conn$make_conn(url, ...)$post(body = args, encode = "json")
   if (tt$status_code > 202) geterror(tt)
-  res <- cont_utf8(tt)
-  jsonlite::fromJSON(res, FALSE)
+  jsonlite::fromJSON(res <- tt$parse("UTF-8"), FALSE)
 }

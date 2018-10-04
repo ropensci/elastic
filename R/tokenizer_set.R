@@ -2,12 +2,16 @@
 #'
 #' @export
 #'
+#' @param conn an Elasticsearch connection object, see [Elasticsearch]
 #' @param index (character) A character vector of index names
 #' @param body Query, either a list or json.
-#' @param ... Curl options passed on to [httr::PUT()]
+#' @param ... Curl options passed on to [crul::HttpClient]
 #'
 #' @author Scott Chamberlain <myrmecocystus@@gmail.com>
 #' @examples \dontrun{
+#' # connection setup
+#' (x <- connect())
+#' 
 #' # set tokenizer
 #'
 #' ## NGram tokenizer
@@ -36,18 +40,19 @@
 #'   analyzer='my_ngram_analyzer')
 #' }
 
-tokenizer_set <- function(index, body, ...) {
+tokenizer_set <- function(conn, index, body, ...) {
   if (length(index) > 1) stop("Only one index allowed", call. = FALSE)
-  url <- make_url(es_get_auth())
+  url <- conn$make_url()
   url <- sprintf("%s/%s", url, esc(index))
-  tokenizer_PUT(url, body, ...)
+  tokenizer_PUT(conn, url, body, ...)
 }
 
-tokenizer_PUT <- function(url, body, ...){
+tokenizer_PUT <- function(conn, url, body, ...){
   body <- check_inputs(body)
-  out <- PUT(url, make_up(), es_env$headers, content_type_json(), 
-             ..., body = body, encode = "json")
+  out <- conn$make_conn(url, json_type(), ...)$put(
+    body = body, encode = "json")
+  # out <- PUT(url, make_up(), es_env$headers, content_type_json(), 
+  #            ..., body = body, encode = "json")
   if (out$status_code > 202) geterror(out)
-  tt <- cont_utf8(out)
-  jsonlite::fromJSON(tt)
+  jsonlite::fromJSON(out$parse('UTF-8'))
 }

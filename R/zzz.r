@@ -124,30 +124,30 @@ extractr <- function(x, y) regmatches(x, gregexpr(y, x))
 
 # elastic_env <- new.env()
 
-es_ver <- function() {
-  pinged <- elastic_env$ping_result
-  if (is.null(pinged)) {
-    elastic_env$ping_result <- pinged <- ping()
-  }
-  ver <- pinged$version$number
+# es_ver <- function(conn) {
+#   pinged <- elastic_env$ping_result
+#   if (is.null(pinged)) {
+#     elastic_env$ping_result <- pinged <- conn$ping()
+#   }
+#   ver <- pinged$version$number
   
-  # get only 1st 3 digits, so major:minor:patch
-  as.numeric(
-    paste(
-      stats::na.omit(
-        extractr(ver, "[[:digit:]]+")[[1]][1:3]
-      ), 
-      collapse = ""
-    )
-  )
-}
+#   # get only 1st 3 digits, so major:minor:patch
+#   as.numeric(
+#     paste(
+#       stats::na.omit(
+#         extractr(ver, "[[:digit:]]+")[[1]][1:3]
+#       ), 
+#       collapse = ""
+#     )
+#   )
+# }
 
-stop_es_version <- function(ver_check, fxn) {
-  if (es_ver() < ver_check) {
-    stop(fxn, " is not available for this Elasticsearch version", 
-         call. = FALSE)
-  }
-}
+# stop_es_version <- function(ver_check, fxn) {
+#   if (es_ver() < ver_check) {
+#     stop(fxn, " is not available for this Elasticsearch version", 
+#          call. = FALSE)
+#   }
+# }
 
 assert <- function(x, y) {
   if (!is.null(x)) {
@@ -165,3 +165,5 @@ write_utf8 = function(text, con, ...) {
   opts = options(encoding = 'native.enc'); on.exit(options(opts), add = TRUE)
   writeLines(enc2utf8(text), con, ..., useBytes = TRUE)
 }
+
+json_type <- function() list(`Content-Type` = "application/json")

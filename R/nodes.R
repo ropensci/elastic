@@ -1,6 +1,7 @@
 #' Elasticsearch nodes endpoints.
 #'
 #' @name nodes
+#' @param conn an Elasticsearch connection object, see [Elasticsearch]
 #' @param node The node
 #' @param metric A metric to get. See Details.
 #' @param fields You can get information about field data memory usage on
@@ -12,7 +13,6 @@
 #' wait and block to see hot threads that are in wait or block state.
 #' @param raw If `TRUE` (default), data is parsed to list. If `FALSE`, then
 #' raw JSON.
-#' @param verbose If TRUE (default) the url call used printed to console
 #' @param ... Curl args passed on to \code{\link[httr]{GET}}
 #'
 #' @details
@@ -44,43 +44,46 @@
 #' is used to print to the console.
 #'
 #' @examples \dontrun{
-#' (out <- nodes_stats())
-#' nodes_stats(node = names(out$nodes))
-#' nodes_stats(metric='get')
-#' nodes_stats(metric='jvm')
-#' nodes_stats(metric=c('os','process'))
-#' nodes_info()
-#' nodes_info(metric='process')
-#' nodes_info(metric='jvm')
-#' nodes_info(metric='http')
-#' nodes_info(metric='network')
+#' # connection setup
+#' (x <- connect())
+#' 
+#' (out <- nodes_stats(x))
+#' nodes_stats(x, node = names(out$nodes))
+#' nodes_stats(x, metric='get')
+#' nodes_stats(x, metric='jvm')
+#' nodes_stats(x, metric=c('os','process'))
+#' nodes_info(x)
+#' nodes_info(x, metric='process')
+#' nodes_info(x, metric='jvm')
+#' nodes_info(x, metric='http')
+#' nodes_info(x, metric='network')
 #' }
 
 #' @export
 #' @rdname nodes
-nodes_stats <- function(node=NULL, metric=NULL, raw=FALSE, fields=NULL,
-                        verbose=TRUE, ...) {
-  node_GET('stats', metric, node, raw, ec(list(fields = fields)), ...)
+nodes_stats <- function(conn, node=NULL, metric=NULL, raw=FALSE, fields=NULL, 
+  ...) {
+
+  node_GET(conn, 'stats', metric, node, raw, ec(list(fields = fields)), ...)
 }
 
 #' @export
 #' @rdname nodes
-nodes_info <- function(node=NULL, metric=NULL, raw=FALSE, verbose=TRUE, ...) {
-  node_GET('', metric, node, raw, list(), ...)
+nodes_info <- function(conn, node=NULL, metric=NULL, raw=FALSE, ...) {
+  node_GET(conn, '', metric, node, raw, list(), ...)
 }
 
 #' @export
 #' @rdname nodes
-nodes_hot_threads <- function(node=NULL, metric=NULL, threads=3,
-  interval='500ms', type=NULL, raw=FALSE, verbose=TRUE, ...) {
+nodes_hot_threads <- function(conn, node=NULL, metric=NULL, threads=3,
+  interval='500ms', type=NULL, raw=FALSE, ...) {
 
   args <- list(threads = threads, interval = interval, type = type)
-  cat(node_GET('hot_threads', metric, node, raw = TRUE, args, ...))
+  cat(node_GET(conn, 'hot_threads', metric, node, raw = TRUE, args, ...))
 }
 
-node_GET <- function(path, metric, node, raw, args, ...) {
-  #checkconn(...)
-  url <- make_url(es_get_auth())
+node_GET <- function(conn, path, metric, node, raw, args, ...) {
+  url <- conn$make_url()
   url <- file.path(url, '_nodes')
   if (!is.null(node)) {
     url <- paste(url, paste(node, collapse = ","), path, sep = "/")
@@ -93,8 +96,9 @@ node_GET <- function(path, metric, node, raw, args, ...) {
 
   args <- ec(args)
   if (length(args) == 0) args <- NULL
-  tt <- GET(url, query = args, make_up(), es_env$headers, ...)
+  tt <- conn$make_conn(url, ...)$get(query = args)
+  # tt <- GET(url, query = args, make_up(), es_env$headers, ...)
   if (tt$status_code > 202) geterror(tt)
-  res <- cont_utf8(tt)
+  res <- tt$parse("UTF-8")
   if (raw) res else jsonlite::fromJSON(res, FALSE)
 }

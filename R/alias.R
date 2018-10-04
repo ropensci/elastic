@@ -1,5 +1,6 @@
 #' Elasticsearch alias APIs
 #'
+#' @param conn an Elasticsearch connection object, see [Elasticsearch]
 #' @param index (character) An index name
 #' @param alias (character) An alias name
 #' @param alias_new (character) A new alias name, used in rename only
@@ -19,49 +20,51 @@
 #' docs link
 #' 
 #' @examples \dontrun{
+#' # connection setup
+#' (x <- connect())
+#' 
 #' # Create/update an alias
-#' alias_create(index = "plos", alias = "candles", config = httr::verbose())
+#' alias_create(x, index = "plos", alias = "candles")
 #' ## more than one alias
-#' alias_create(index = "plos", alias = c("tables", "chairs"), config = httr::verbose())
+#' alias_create(x, index = "plos", alias = c("tables", "chairs"))
 #' 
 #' # associate an alias with two multiple different indices
-#' alias_create(index = c("plos", "shakespeare"), alias = "stools", config = httr::verbose())
+#' alias_create(x, index = c("plos", "shakespeare"), alias = "stools")
 #'
 #' # Retrieve a specified alias
-#' alias_get(index="plos")
-#' alias_get(alias="tables")
-#' alias_get(alias="stools")
-#' aliases_get()
+#' alias_get(x, index="plos")
+#' alias_get(x, alias="tables")
+#' alias_get(x, alias="stools")
+#' aliases_get(x)
 #' 
 #' # rename an alias
-#' aliases_get("plos")
-#' alias_rename(index = 'plos', alias = "stools", alias_new = "plates")
-#' aliases_get("plos")
+#' aliases_get(x, "plos")
+#' alias_rename(x, index = 'plos', alias = "stools", alias_new = "plates")
+#' aliases_get(x, "plos")
 #' 
 #' # filtered aliases
-#' alias_create(index = "plos", alias = "candles", 
+#' alias_create(x, index = "plos", alias = "candles", 
 #'   filter = list(wildcard = list(title = "cell")))
 #' ## a search with the alias should give titles with cell in them
-#' (titles <- Search("candles", asdf = TRUE)$hits$hits$`_source.title`)
+#' (titles <- Search(x, "candles", asdf = TRUE)$hits$hits$`_source.title`)
 #' grepl("cell", titles, ignore.case = TRUE)
 #' 
 #' # routing
-#' alias_create(index = "plos", alias = "candles", 
+#' alias_create(x, index = "plos", alias = "candles", 
 #'   routing = "1")
 #'
 #' # Check for alias existence
-#' alias_exists(index = "plos")
-#' alias_exists(alias = "tables")
-#' alias_exists(alias = "adsfasdf")
+#' alias_exists(x, index = "plos")
+#' alias_exists(x, alias = "tables")
+#' alias_exists(x, alias = "adsfasdf")
 #'
 #' # Delete an alias
-#' alias_delete(index = "plos", alias = "candles")
-#' alias_exists(alias = "tables")
+#' alias_delete(x, index = "plos", alias = "tables")
+#' alias_exists(x, alias = "tables")
 #'
 #' # Curl options
-#' library("httr")
-#' alias_create(index = "plos", alias = "tables")
-#' aliases_get(alias = "tables", config=verbose())
+#' alias_create(x, index = "plos", alias = "tables")
+#' aliases_get(x, alias = "tables", verbose = TRUE)
 #' }
 #' @references
 #' \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-aliases.html}
@@ -71,26 +74,26 @@ NULL
 
 #' @export
 #' @rdname alias
-alias_get <- function(index=NULL, alias=NULL, ignore_unavailable=FALSE, ...) {
-  alias_GET(index, alias, ignore_unavailable, ...)
+alias_get <- function(conn, index=NULL, alias=NULL, ignore_unavailable=FALSE, ...) {
+  alias_GET(conn, index, alias, ignore_unavailable, ...)
 }
 
 #' @export
 #' @rdname alias
-aliases_get <- function(index=NULL, alias=NULL, ignore_unavailable=FALSE, ...) {
-  alias_GET(index, alias, ignore_unavailable, ...)
+aliases_get <- function(conn, index=NULL, alias=NULL, ignore_unavailable=FALSE, ...) {
+  alias_GET(conn, index, alias, ignore_unavailable, ...)
 }
 
 #' @export
 #' @rdname alias
-alias_exists <- function(index=NULL, alias=NULL, ...) {
-  res <- HEAD(alias_url(index, alias), es_env$headers, make_up(), ...)
+alias_exists <- function(conn, index=NULL, alias=NULL, ...) {
+  res <- conn$make_conn(alias_url(conn, index, alias), ...)$head()
   if (res$status_code == 200) TRUE else FALSE
 }
 
 #' @export
 #' @rdname alias
-alias_create <- function(index, alias, filter=NULL, routing=NULL, 
+alias_create <- function(conn, index, alias, filter=NULL, routing=NULL, 
   search_routing=NULL, index_routing=NULL, ...) {
 
   assert(index, "character")
@@ -106,47 +109,45 @@ alias_create <- function(index, alias, filter=NULL, routing=NULL,
     }, index, alias))
   )
   body <- jsonlite::toJSON(body, auto_unbox = TRUE)
-  out <- POST(aliases_url(), es_env$headers, make_up(), body = body, 
-    httr::content_type_json(), ...)
+  out <- conn$make_conn(aliases_url(conn), json_type(), ...)$post(body = body)
   geterror(out)
-  jsonlite::fromJSON(cont_utf8(out), FALSE)
+  jsonlite::fromJSON(out$parse('UTF-8'), FALSE)
 }
 
 #' @export
 #' @rdname alias
-alias_rename <- function(index, alias, alias_new, ...) {
+alias_rename <- function(conn, index, alias, alias_new, ...) {
   body <- list(actions = list(
     list(remove = list(index = index, alias = alias)),
     list(add = list(index = index, alias = alias_new))
   ))
   body <- jsonlite::toJSON(body, auto_unbox = TRUE)
-  out <- POST(aliases_url(), es_env$headers, make_up(), body = body, 
-    httr::content_type_json(), ...)
+  out <- conn$make_conn(aliases_url(conn), json_type(), ...)$post(body = body)
   geterror(out)
-  jsonlite::fromJSON(cont_utf8(out), FALSE)
+  jsonlite::fromJSON(out$parse('UTF-8'), FALSE)
 }
 
 #' @export
 #' @rdname alias
-alias_delete <- function(index=NULL, alias, ...) {
-  out <- DELETE(alias_url(index, alias), es_env$headers, make_up(), ...)
+alias_delete <- function(conn, index=NULL, alias, ...) {
+  out <- conn$make_conn(alias_url(conn, index, alias), ...)$delete()
+  # out <- DELETE(alias_url(index, alias), es_env$headers, make_up(), ...)
   geterror(out)
-  jsonlite::fromJSON(cont_utf8(out), FALSE)
+  jsonlite::fromJSON(out$parse('UTF-8'), FALSE)
 }
 
 
 
 # helpers ---------
-alias_GET <- function(index, alias, ignore, ...) {
-  tt <- GET(alias_url(index, alias),
-             query = ec(list(ignore_unavailable = as_log(ignore))),
-             make_up(), es_env$headers, ...)
+alias_GET <- function(conn, index, alias, ignore, ...) {
+  cli <- conn$make_conn(alias_url(conn, index, alias), ...)
+  tt <- cli$get(query = ec(list(ignore_unavailable = as_log(ignore))))
   geterror(tt)
-  jsonlite::fromJSON(cont_utf8(tt), FALSE)
+  jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }
 
-alias_url <- function(index, alias) {
-  url <- make_url(es_get_auth())
+alias_url <- function(conn, index, alias) {
+  url <- conn$make_url()
   if (!is.null(index)) {
     if (!is.null(alias))
       sprintf("%s/%s/_alias/%s", url, cl(index), alias)
@@ -160,4 +161,4 @@ alias_url <- function(index, alias) {
   }
 }
 
-aliases_url <- function() file.path(make_url(es_get_auth()), "_aliases")
+aliases_url <- function(conn) file.path(conn$make_url(), "_aliases")

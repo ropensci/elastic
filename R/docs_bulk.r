@@ -1,6 +1,7 @@
 #' Use the bulk API to create, index, update, or delete documents.
 #'
 #' @export
+#' @param conn an Elasticsearch connection object, see [Elasticsearch]
 #' @param x A list, data.frame, or character path to a file. required.
 #' @param index (character) The index name to use. Required for data.frame
 #' input, but optional for file inputs.
@@ -22,7 +23,7 @@
 #' @param raw (logical) Get raw JSON back or not. If `TRUE` 
 #' you get JSON; if `FALSE` you get a list. Default: `FALSE`
 #' @param quiet (logical) Suppress progress bar. Default: `FALSE`
-#' @param ... Pass on curl options to [httr::POST()]
+#' @param ... Pass on curl options to [crul::HttpClient]
 #'
 #' @seealso [docs_bulk_prep()] for prepping a newline delimited 
 #' JSON file that you can load into Elasticsearch yourself. See 
@@ -202,15 +203,15 @@
 #' ## vs. 
 #' x <- docs_bulk(mtcars, index = "hello", type = "world", quiet = FALSE)
 #' }
-docs_bulk <- function(x, index = NULL, type = NULL, chunk_size = 1000,
+docs_bulk <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
                       doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
                       quiet = FALSE, ...) {
 
-  UseMethod("docs_bulk")
+  UseMethod("docs_bulk", x)
 }
 
 #' @export
-docs_bulk.default <- function(x, index = NULL, type = NULL, chunk_size = 1000,
+docs_bulk.default <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
                       doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
                       quiet = FALSE, ...) {
 
@@ -218,7 +219,7 @@ docs_bulk.default <- function(x, index = NULL, type = NULL, chunk_size = 1000,
 }
 
 #' @export
-docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000,
+docs_bulk.data.frame <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
                                  doc_ids = NULL, 
                                  es_ids = TRUE, raw = FALSE, quiet = FALSE, ...) {
 
@@ -257,7 +258,7 @@ docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000
 }
 
 #' @export
-docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
+docs_bulk.list <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
                            doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
                            quiet = FALSE, ...) {
 
@@ -298,19 +299,22 @@ docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
 }
 
 #' @export
-docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000,
+docs_bulk.character <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
                                 doc_ids = NULL, es_ids = TRUE, raw=FALSE, 
                                 quiet = FALSE, ...) {
 
   stopifnot(file.exists(x))
   on.exit(close_conns())
   on.exit(cleanup_file(x), add = TRUE)
-  url <- paste0(make_url(es_get_auth()), '/_bulk')
-  tt <- POST(url, make_up(), es_env$headers, ..., 
-             body = upload_file(x, type = "application/x-ndjson"), 
-             encode = "json")
+  url <- file.path(conn$make_url(), '_bulk')
+  cli <- crul::HttpClient$new(url = url,
+    headers = conn$headers, 
+    opts = c(conn$opts, ...),
+    auth = crul::auth(conn$user, conn$pwd)
+  )
+  tt <- cli$post(body = crul::upload(x, type = "application/x-ndjson"), encode = "json")
   geterror(tt)
-  res <- cont_utf8(tt)
+  res <- tt$parse("UTF-8")
   res <- structure(res, class = "bulk_make")
   if (raw) res else es_parse(res)
 }

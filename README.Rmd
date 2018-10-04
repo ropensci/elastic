@@ -144,7 +144,7 @@ Elasticsearch provides some data on Shakespeare plays. I've provided a subset of
 
 ```{r echo=FALSE}
 library(elastic)
-connect()
+x <- connect()
 if (elastic:::es_ver() < 600) {
   shakespeare <- system.file("examples", "shakespeare_data.json", package = "elastic")
 } else {
@@ -161,7 +161,7 @@ shakespeare <- system.file("examples", "shakespeare_data_.json", package = "elas
 Then load the data into Elasticsearch:
 
 ```{r eval=FALSE}
-invisible(docs_bulk(shakespeare))
+invisible(docs_bulk(x, shakespeare))
 ```
 
 If you need some big data to play with, the shakespeare dataset is a good one to start with. You can get the whole thing and pop it into Elasticsearch (beware, may take up to 10 minutes or so.):
@@ -177,7 +177,7 @@ A dataset inluded in the `elastic` package is metadata for PLOS scholarly articl
 
 ```{r eval=FALSE}
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-invisible(docs_bulk(plosdat))
+invisible(docs_bulk(x, plosdat))
 ```
 
 ### Global Biodiversity Information Facility (GBIF) data
@@ -186,14 +186,14 @@ A dataset inluded in the `elastic` package is data for GBIF species occurrence r
 
 ```{r eval=FALSE}
 gbifdat <- system.file("examples", "gbif_data.json", package = "elastic")
-invisible(docs_bulk(gbifdat))
+invisible(docs_bulk(x, gbifdat))
 ```
 
 GBIF geo data with a coordinates element to allow `geo_shape` queries
 
 ```{r eval=FALSE}
 gbifgeo <- system.file("examples", "gbif_geo.json", package = "elastic")
-invisible(docs_bulk(gbifgeo))
+invisible(docs_bulk(x, gbifgeo))
 ```
 
 ### More data sets
