@@ -269,7 +269,7 @@ Search(index = "plos", type = "article", q = "antibody", size = 1)$hits$hits
 
 ## Get documents
 
-Get document with id=1
+Get document with id=4
 
 
 ```r
