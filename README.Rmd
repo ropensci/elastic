@@ -271,6 +271,10 @@ jsonlite::fromJSON(out)
   you can use `Search_uri()` to get around this, which uses `GET` instead
   of `POST`, but you can't pass a more complicated query via the body
 
+## Screencast
+
+<a href="https://vimeo.com/92883063"><img src="tools/screencast.png" width="400"></a>
+
 ## Meta
 
 * Please [report any issues or bugs](https://github.com/ropensci/elastic/issues)
