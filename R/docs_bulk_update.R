@@ -111,7 +111,7 @@ make_bulk_update <- function(df, index, type, counter, path = NULL) {
     counter
   )
   
-  tmp <- lapply(1:nrow(df), function(i) {
+  tmp <- lapply(seq_len(nrow(df)), function(i) {
     r <- df[i,]
     r$id <- NULL
     list(doc = as.list(r), doc_as_upsert = TRUE)
