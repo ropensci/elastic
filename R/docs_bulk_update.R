@@ -111,13 +111,13 @@ make_bulk_update <- function(df, index, type, counter, path = NULL) {
     counter
   )
   
-  tmp <- lapply(seq_len(nrow(df)), function(i) {
-    r <- df[i,]
-    r$id <- NULL
-    list(doc = as.list(r), doc_as_upsert = TRUE)
+  df$id <- NULL
+  
+  data <- lapply(seq_len(nrow(df)), function(i) {
+    z <- list(doc = unbox(df[i,]), doc_as_upsert = TRUE)
+    jsonlite::toJSON(z, auto_unbox = TRUE, na = "null", null = "null")
   })
 
-  data <- lapply(tmp, jsonlite::toJSON, na = "null", auto_unbox = TRUE)
   tmpf <- if (is.null(path)) tempfile("elastic__") else path
   write_utf8(paste(metadata, data, sep = "\n"), tmpf)
   invisible(tmpf)
