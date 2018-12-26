@@ -116,6 +116,6 @@ test_that("pipeline fxns error well", {
 })
 
 ## cleanup -----------------------------------
-if (!es_version() < 500) {
+if (!es_version() < 502) {
   invisible(pipeline_delete("*"))
 }
