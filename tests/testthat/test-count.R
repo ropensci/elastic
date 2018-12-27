@@ -20,6 +20,7 @@ test_that("count", {
   if (es_version(x) > 246) {
     expect_equal(count(x, type = "adfad"), 0)
   } else {
-    expect_error(count(x, type = "adfad"), "no such index")
+    expect_error(count(x, type = "adfad"), 
+      "no such index||IndexMissingException")
   }
 })
