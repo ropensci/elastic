@@ -143,7 +143,7 @@ Search_template_register <- function(conn, template, body = list(), raw = FALSE,
     stop("search template not available in this ES version", call. = FALSE)
   }
   # path for registering a template changed in Elasticsearch v5.2
-  if (conn$es_ver() <= 520) {
+  if (conn$es_ver() <= 560) {
     path <- file.path("_search/template", template)
   } else {
     path <- file.path("_scripts", template)

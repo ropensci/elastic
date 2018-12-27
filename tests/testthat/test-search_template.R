@@ -71,8 +71,12 @@ test_that("Search_template pre-registration works", {
     b <- Search_template_get(x, 'foobar')
     expect_is(b, "list")
     expect_equal(b$`_id`, "foobar")
-    expect_equal(b$lang, "mustache")
-    expect_is(b$template, "character")
+    if (es_version(x) >= 560) {
+      expect_equal(b$lang, "mustache")
+      expect_is(b$template, "character")
+    } else {
+      expect_equal(b$script$lang, "mustache")
+    }
     
     c <- Search_template_delete(x, 'foobar')
     expect_is(c, "list")
