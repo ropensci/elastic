@@ -26,6 +26,8 @@ a wildcard match}
 \code{\link[httr:PUT]{httr::PUT()}}, or \code{\link[httr:DELETE]{httr::DELETE()}}}
 
 \item{filter_path}{(character) fields to return. deafults to all if not given}
+
+\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
 }
 \value{
 a named list
