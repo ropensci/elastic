@@ -5,8 +5,8 @@ stop_es_version <- function(ver_check, fxn) {
   }
 }
 
-es_version <- function(ver_check, fxn) {
-  xx <- info()$version$number
+es_version <- function(conn, ver_check, fxn) {
+  xx <- conn$info()$version$number
   xx <- gsub("[A-Za-z]", "", xx)
   as.numeric(gsub("\\.|-", "", xx))
 }

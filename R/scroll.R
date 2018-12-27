@@ -20,7 +20,7 @@
 #' that's more or less controlled by paging with ES.
 #' @param all (logical) If `TRUE` (default) then all search contexts
 #' cleared.  If `FALSE`, scroll id's must be passed to `x`
-#' @param ... Curl args passed on to [httr::POST()]
+#' @param ... Curl args passed on to [crul::verb-POST]
 #'
 #' @seealso [Search()]
 #' @references

@@ -12,8 +12,8 @@
 #' @param timeout (integer) timeout time
 #' @param raw If `TRUE` (default), data is parsed to list. If `FALSE`, then
 #' raw JSON.
-#' @param ... Curl args passed on to [httr::GET()] or 
-#' [httr::POST()]
+#' @param ... Curl args passed on to [crul::verb-GET] or 
+#' [crul::verb-POST]
 #'
 #' @references 
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/tasks.html>

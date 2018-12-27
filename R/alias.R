@@ -12,8 +12,8 @@
 #' examples
 #' @param routing,search_routing,index_routing (character) Associate a routing
 #' value with an alias
-#' @param ... Curl args passed on to [httr::POST()], [httr::GET()], [httr::HEAD()],
-#' or [httr::DELETE()]
+#' @param ... Curl args passed on to [crul::verb-POST], [crul::verb-GET], 
+#' [crul::verb-HEAD], or [crul::verb-DELETE]
 #' 
 #' @details Note that you can also create aliases when you create indices
 #' by putting the directive in the request body. See the Elasticsearch 

@@ -112,22 +112,22 @@ I create a little bash shortcut called `es` that does both of the above commands
 The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
 
 ```{r}
-connect(es_port = 9200)
+connect(port = 9200)
 ```
 
-For AWS hosted elasticsearch, make sure to specify es_path = "" and the correct port - transport schema pair.
+For AWS hosted elasticsearch, make sure to specify path = "" and the correct port - transport schema pair.
 
 ```{r eval=FALSE}
-connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 80, es_transport_schema  = "http")
+connect(host = <aws_es_endpoint>, path = "", port = 80, transport_schema  = "http")
   # or
-connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 443, es_transport_schema  = "https")
+connect(host = <aws_es_endpoint>, path = "", port = 443, transport_schema  = "https")
 ```
 
-If you are using Elastic Cloud or an installation with authentication (X-pack), make sure to specify es_path = "", es_user = "", es_pwd = "" and the correct port - transport schema pair.
+If you are using Elastic Cloud or an installation with authentication (X-pack), make sure to specify path = "", user = "", pwd = "" and the correct port - transport schema pair.
 
 
 ```r
-connect(es_host = <ec_endpoint>, es_path = "", es_user="test", es_pwd = "1234", es_port = 9243, es_transport_schema  = "https")
+connect(host = <ec_endpoint>, path = "", user="test", pwd = "1234", port = 9243, transport_schema  = "https")
 ```
 
 <br>
@@ -145,7 +145,7 @@ Elasticsearch provides some data on Shakespeare plays. I've provided a subset of
 ```{r echo=FALSE}
 library(elastic)
 x <- connect()
-if (elastic:::es_ver() < 600) {
+if (x$es_ver() < 600) {
   shakespeare <- system.file("examples", "shakespeare_data.json", package = "elastic")
 } else {
   shakespeare <- system.file("examples", "shakespeare_data_.json", package = "elastic")
@@ -208,13 +208,13 @@ There are more datasets formatted for bulk loading in the `ropensci/elastic_data
 Search the `plos` index and only return 1 result
 
 ```{r}
-Search(index = "plos", size = 1)$hits$hits
+Search(x, index = "plos", size = 1)$hits$hits
 ```
 
 Search the `plos` index, and the `article` document type, and query for _antibody_, limit to 1 result
 
 ```{r}
-Search(index = "plos", type = "article", q = "antibody", size = 1)$hits$hits
+Search(x, index = "plos", type = "article", q = "antibody", size = 1)$hits$hits
 ```
 
 ## Get documents
@@ -222,13 +222,13 @@ Search(index = "plos", type = "article", q = "antibody", size = 1)$hits$hits
 Get document with id=4
 
 ```{r}
-docs_get(index = 'plos', type = 'article', id = 4)
+docs_get(x, index = 'plos', type = 'article', id = 4)
 ```
 
 Get certain fields
 
 ```{r}
-docs_get(index = 'plos', type = 'article', id = 4, fields = 'id')
+docs_get(x, index = 'plos', type = 'article', id = 4, fields = 'id')
 ```
 
 
@@ -237,13 +237,13 @@ docs_get(index = 'plos', type = 'article', id = 4, fields = 'id')
 Same index and type, different document ids
 
 ```{r}
-docs_mget(index = "plos", type = "article", id = 1:2)
+docs_mget(x, index = "plos", type = "article", id = 1:2)
 ```
 
 Different indeces, types, and ids
 
 ```{r}
-docs_mget(index_type_id = list(c("plos", "article", 1), c("gbif", "record", 1)))$docs[[1]]
+docs_mget(x, index_type_id = list(c("plos", "article", 1), c("gbif", "record", 1)))$docs[[1]]
 ```
 
 ## Parsing
@@ -253,7 +253,7 @@ You can optionally get back raw `json` from `Search()`, `docs_get()`, and `docs_
 For example:
 
 ```{r}
-(out <- docs_mget(index = "plos", type = "article", id = 1:2, raw = TRUE))
+(out <- docs_mget(x, index = "plos", type = "article", id = 1:2, raw = TRUE))
 ```
 
 Then parse

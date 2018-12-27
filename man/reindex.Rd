@@ -32,7 +32,7 @@ copies for the shard (number of replicas + 1)}
 \item{wait_for_completion}{(logical) Should the request block until the
 reindex is complete? Default: \code{TRUE}}
 
-\item{...}{Curl options, passed on to \code{\link[httr:POST]{httr::POST()}}}
+\item{...}{Curl options, passed on to \link[crul:verb-POST]{crul::verb-POST}}
 }
 \description{
 Reindex all documents from one index to another.

@@ -146,15 +146,9 @@
 #' ## Get raw data
 #' Search(x, index="shakespeare", type="scene", raw=TRUE)
 #'
-#' ## Curl options
-#' library('httr')
-#' 
+#' ## Curl options 
 #' ### verbose 
-#' out <- Search(x, index="shakespeare", type="line", config = verbose())
-#' 
-#' ### print progress
-#' res <- Search(x, config = progress(), size = 5000)
-#'
+#' out <- Search(x, index="shakespeare", type="line", verbose = TRUE)
 #'
 #'
 #' # Query DSL searches - queries sent in the body of the request

@@ -30,8 +30,8 @@ type_exists(conn, index, type, ...)
 This parameter is deprecated in ES v6.3.0 and higher, see
 https://github.com/elastic/elasticsearch/pull/28284}
 
-\item{...}{Curl options passed on to \code{\link[httr:HEAD]{httr::HEAD()}} or other
-http verbs}
+\item{...}{Curl options passed on to \link[crul:verb-PUT]{crul::verb-PUT}, \link[crul:verb-GET]{crul::verb-GET},
+or \link[crul:verb-HEAD]{crul::verb-HEAD}}
 
 \item{field}{(character) One or more field names}
 

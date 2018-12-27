@@ -7,7 +7,7 @@
 #' @param body Query, either a list or json.
 #' @param raw (logical) If `FALSE` (default), data is parsed to list.
 #' If `TRUE`, then raw JSON returned
-#' @param ... Curl args passed on to [httr::POST()]
+#' @param ... Curl args passed on to [crul::verb-POST]
 #'
 #' @seealso [Search()], [Search_uri()]
 #'

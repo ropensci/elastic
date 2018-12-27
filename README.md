@@ -109,33 +109,36 @@ The function `connect()` is used before doing anything else to set the connectio
 
 
 ```r
-connect(es_port = 9200)
-#> transport:  http 
-#> host:       127.0.0.1 
-#> port:       9200 
-#> path:       NULL 
-#> username:   NULL 
-#> password:   <secret> 
-#> errors:     simple 
-#> headers (names):  NULL
+connect(port = 9200)
+#> <Elasticsearch Connection> 
+#>   transport:  http 
+#>   host:       127.0.0.1 
+#>   port:       9200 
+#>   path:       NULL 
+#>   username:   NULL 
+#>   password:   NULL 
+#>   errors:     simple 
+#>   headers (names):   
+#>   cainfo:  NULL
 ```
 
-For AWS hosted elasticsearch, make sure to specify es_path = "" and the correct port - transport schema pair.
+For AWS hosted elasticsearch, make sure to specify path = "" and the correct port - transport schema pair.
 
 
 ```r
-connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 80, es_transport_schema  = "http")
+connect(host = <aws_es_endpoint>, path = "", port = 80, transport_schema  = "http")
   # or
-connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 443, es_transport_schema  = "https")
+connect(host = <aws_es_endpoint>, path = "", port = 443, transport_schema  = "https")
 ```
 
-If you are using Elastic Cloud or an installation with authentication (X-pack), make sure to specify es_path = "", es_user = "", es_pwd = "" and the correct port - transport schema pair.
+If you are using Elastic Cloud or an installation with authentication (X-pack), make sure to specify path = "", user = "", pwd = "" and the correct port - transport schema pair.
 
 
 ```r
-connect(es_host = <ec_endpoint>, es_path = "", es_user="test", es_pwd = "1234", es_port = 9243, es_transport_schema  = "https")
+connect(host = <ec_endpoint>, path = "", user="test", pwd = "1234", port = 9243, transport_schema  = "https")
 ```
 
+<br>
 
 ## Get some data
 
@@ -148,16 +151,6 @@ I have prepare a non-exported function useful for preparing the weird format tha
 Elasticsearch provides some data on Shakespeare plays. I've provided a subset of this data in this package. Get the path for the file specific to your machine:
 
 
-```
-#> transport:  http 
-#> host:       127.0.0.1 
-#> port:       9200 
-#> path:       NULL 
-#> username:   NULL 
-#> password:   <secret> 
-#> errors:     simple 
-#> headers (names):  NULL
-```
 
 
 ```r
@@ -170,7 +163,7 @@ Then load the data into Elasticsearch:
 
 
 ```r
-invisible(docs_bulk(shakespeare))
+invisible(docs_bulk(x, shakespeare))
 ```
 
 If you need some big data to play with, the shakespeare dataset is a good one to start with. You can get the whole thing and pop it into Elasticsearch (beware, may take up to 10 minutes or so.):
@@ -187,7 +180,7 @@ A dataset inluded in the `elastic` package is metadata for PLOS scholarly articl
 
 ```r
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-invisible(docs_bulk(plosdat))
+invisible(docs_bulk(x, plosdat))
 ```
 
 ### Global Biodiversity Information Facility (GBIF) data
@@ -197,7 +190,7 @@ A dataset inluded in the `elastic` package is data for GBIF species occurrence r
 
 ```r
 gbifdat <- system.file("examples", "gbif_data.json", package = "elastic")
-invisible(docs_bulk(gbifdat))
+invisible(docs_bulk(x, gbifdat))
 ```
 
 GBIF geo data with a coordinates element to allow `geo_shape` queries
@@ -205,7 +198,7 @@ GBIF geo data with a coordinates element to allow `geo_shape` queries
 
 ```r
 gbifgeo <- system.file("examples", "gbif_geo.json", package = "elastic")
-invisible(docs_bulk(gbifgeo))
+invisible(docs_bulk(x, gbifgeo))
 ```
 
 ### More data sets
@@ -213,13 +206,15 @@ invisible(docs_bulk(gbifgeo))
 There are more datasets formatted for bulk loading in the `ropensci/elastic_data` GitHub repository. Find it at <https://github.com/ropensci/elastic_data>
 
 
+<br>
+
 ## Search
 
 Search the `plos` index and only return 1 result
 
 
 ```r
-Search(index = "plos", size = 1)$hits$hits
+Search(x, index = "plos", size = 1)$hits$hits
 #> [[1]]
 #> [[1]]$`_index`
 #> [1] "plos"
@@ -245,7 +240,7 @@ Search the `plos` index, and the `article` document type, and query for _antibod
 
 
 ```r
-Search(index = "plos", type = "article", q = "antibody", size = 1)$hits$hits
+Search(x, index = "plos", type = "article", q = "antibody", size = 1)$hits$hits
 #> [[1]]
 #> [[1]]$`_index`
 #> [1] "plos"
@@ -273,7 +268,7 @@ Get document with id=4
 
 
 ```r
-docs_get(index = 'plos', type = 'article', id = 4)
+docs_get(x, index = 'plos', type = 'article', id = 4)
 #> $`_index`
 #> [1] "plos"
 #> 
@@ -301,7 +296,7 @@ Get certain fields
 
 
 ```r
-docs_get(index = 'plos', type = 'article', id = 4, fields = 'id')
+docs_get(x, index = 'plos', type = 'article', id = 4, fields = 'id')
 #> $`_index`
 #> [1] "plos"
 #> 
@@ -325,7 +320,7 @@ Same index and type, different document ids
 
 
 ```r
-docs_mget(index = "plos", type = "article", id = 1:2)
+docs_mget(x, index = "plos", type = "article", id = 1:2)
 #> $docs
 #> $docs[[1]]
 #> $docs[[1]]$`_index`
@@ -380,7 +375,7 @@ Different indeces, types, and ids
 
 
 ```r
-docs_mget(index_type_id = list(c("plos", "article", 1), c("gbif", "record", 1)))$docs[[1]]
+docs_mget(x, index_type_id = list(c("plos", "article", 1), c("gbif", "record", 1)))$docs[[1]]
 #> $`_index`
 #> [1] "plos"
 #> 
@@ -412,7 +407,7 @@ For example:
 
 
 ```r
-(out <- docs_mget(index = "plos", type = "article", id = 1:2, raw = TRUE))
+(out <- docs_mget(x, index = "plos", type = "article", id = 1:2, raw = TRUE))
 #> [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"1\",\"_version\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098602\",\"title\":\"Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar\"}},{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"2\",\"_version\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0107757\",\"title\":\"Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition\"}}]}"
 #> attr(,"class")
 #> [1] "elastic_mget"

@@ -27,7 +27,7 @@ values.}
 to determine where shards are allocated instead of using the Master node's
 cluster state.}
 
-\item{...}{Curl args passed on to \code{\link[httr:GET]{httr::GET()}}}
+\item{...}{Curl args passed on to \link[crul:verb-GET]{crul::verb-GET}}
 }
 \description{
 Search shards

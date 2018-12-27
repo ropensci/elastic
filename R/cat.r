@@ -74,8 +74,7 @@
 #' cat_indices(x, verbose = TRUE, bytes = TRUE)
 #'
 #' # Curl options
-#' library("httr")
-#' cat_count(x, config=verbose(x))
+#' # cat_count(x, timeout_ms = 1)
 #' }
 
 #' @export

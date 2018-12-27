@@ -27,7 +27,7 @@ Search_template_render(conn, body = list(), raw = FALSE, ...)
 \item{raw}{(logical) If \code{FALSE} (default), data is parsed to list.
 If \code{TRUE}, then raw JSON returned}
 
-\item{...}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}}
+\item{...}{Curl args passed on to \link[crul:verb-POST]{crul::verb-POST}}
 
 \item{template}{(character) a template name}
 }

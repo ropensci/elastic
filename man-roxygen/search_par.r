@@ -68,4 +68,4 @@
 #' that's the data that's streamed out, and pass a file path instead of a 
 #' connection to \code{con}. \code{pagesize} param doesn't do much as 
 #' that's more or less controlled by paging with ES.
-#' @param ... Curl args passed on to \code{\link[httr]{POST}}
+#' @param ... Curl args passed on to \code{\link[crul]{verb-POST}}

@@ -14,7 +14,7 @@
 #' cluster state.
 #' @param raw If `TRUE` (default), data is parsed to list. If `FALSE`, then 
 #' raw JSON
-#' @param ... Curl args passed on to [httr::GET()]
+#' @param ... Curl args passed on to [crul::verb-GET]
 #' @references
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-shards.html>
 #' @examples \dontrun{

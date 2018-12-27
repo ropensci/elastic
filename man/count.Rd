@@ -14,7 +14,7 @@ count(conn, index = NULL, type = NULL, callopts = list(),
 
 \item{type}{Document type}
 
-\item{callopts}{Curl args passed on to \link[crul:HttpClient]{crul::HttpClient}}
+\item{callopts}{Curl args passed on to \link[crul:verb-GET]{crul::verb-GET}}
 
 \item{verbose}{If \code{TRUE} (default) the url call used printed to console.}
 

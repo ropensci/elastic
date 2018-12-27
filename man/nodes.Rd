@@ -28,7 +28,7 @@ raw JSON.}
 \item{fields}{You can get information about field data memory usage on
 node level or on index level}
 
-\item{...}{Curl args passed on to \code{\link[httr]{GET}}}
+\item{...}{Curl args passed on to \link[crul:verb-GET]{crul::verb-GET}}
 
 \item{threads}{(character) Number of hot threads to provide. Default: 3}
 

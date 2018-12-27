@@ -35,8 +35,8 @@ alias_delete(conn, index = NULL, alias, ...)
 \item{ignore_unavailable}{(logical) What to do if an specified index name
 doesn't exist. If set to \code{TRUE} then those indices are ignored.}
 
-\item{...}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}, \code{\link[httr:GET]{httr::GET()}}, \code{\link[httr:HEAD]{httr::HEAD()}},
-or \code{\link[httr:DELETE]{httr::DELETE()}}}
+\item{...}{Curl args passed on to \link[crul:verb-POST]{crul::verb-POST}, \link[crul:verb-GET]{crul::verb-GET},
+\link[crul:verb-HEAD]{crul::verb-HEAD}, or \link[crul:verb-DELETE]{crul::verb-DELETE}}
 
 \item{filter}{(named list) provides an easy way to create different "views" of
 the same index. Defined using Query DSL and is applied to all Search, Count,

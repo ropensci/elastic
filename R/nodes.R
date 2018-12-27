@@ -13,7 +13,7 @@
 #' wait and block to see hot threads that are in wait or block state.
 #' @param raw If `TRUE` (default), data is parsed to list. If `FALSE`, then
 #' raw JSON.
-#' @param ... Curl args passed on to \code{\link[httr]{GET}}
+#' @param ... Curl args passed on to [crul::verb-GET]
 #'
 #' @details
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-nodes-stats.html>
@@ -97,7 +97,6 @@ node_GET <- function(conn, path, metric, node, raw, args, ...) {
   args <- ec(args)
   if (length(args) == 0) args <- NULL
   tt <- conn$make_conn(url, ...)$get(query = args)
-  # tt <- GET(url, query = args, make_up(), es_env$headers, ...)
   if (tt$status_code > 202) geterror(tt)
   res <- tt$parse("UTF-8")
   if (raw) res else jsonlite::fromJSON(res, FALSE)

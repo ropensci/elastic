@@ -118,7 +118,7 @@ that's the data that's streamed out, and pass a file path instead of a
 connection to \code{con}. \code{pagesize} param doesn't do much as
 that's more or less controlled by paging with ES.}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}}}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}}}
 }
 \description{
 Full text search of Elasticsearch
@@ -271,15 +271,9 @@ Search(x, index="shakespeare", version=TRUE, size=2)
 ## Get raw data
 Search(x, index="shakespeare", type="scene", raw=TRUE)
 
-## Curl options
-library('httr')
-
+## Curl options 
 ### verbose 
-out <- Search(x, index="shakespeare", type="line", config = verbose())
-
-### print progress
-res <- Search(x, config = progress(), size = 5000)
-
+out <- Search(x, index="shakespeare", type="line", verbose = TRUE)
 
 
 # Query DSL searches - queries sent in the body of the request

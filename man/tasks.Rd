@@ -34,8 +34,8 @@ tasks_cancel(node_id = NULL, task_id = NULL, nodes = NULL,
 \item{raw}{If \code{TRUE} (default), data is parsed to list. If \code{FALSE}, then
 raw JSON.}
 
-\item{...}{Curl args passed on to \code{\link[httr:GET]{httr::GET()}} or
-\code{\link[httr:POST]{httr::POST()}}}
+\item{...}{Curl args passed on to \link[crul:verb-GET]{crul::verb-GET} or
+\link[crul:verb-POST]{crul::verb-POST}}
 
 \item{node_id}{a node id}
 }

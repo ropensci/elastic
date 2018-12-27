@@ -20,7 +20,7 @@
 #' copies for the shard (number of replicas + 1)
 #' @param wait_for_completion (logical) Should the request block until the 
 #' reindex is complete? Default: `TRUE`
-#' @param ... Curl options, passed on to [httr::POST()]
+#' @param ... Curl options, passed on to [crul::verb-POST]
 #'
 #' @references
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-reindex.html>

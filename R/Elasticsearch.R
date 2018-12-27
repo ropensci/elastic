@@ -18,11 +18,7 @@ elastic_env <- new.env()
 #' @param errors (character) One of simple (Default) or complete. Simple gives 
 #' http code and  error message on an error, while complete gives both http 
 #' code and error message,  and stack trace, if available.
-#' @param headers Either an object of class `request` or a list that can 
-#' be coerced to an object of class `request` via 
-#' [httr::add_headers()]. These headers are  used in all requests. 
-#' To use headers in individual requests and not others, pass in headers 
-#' using [httr::add_headers()] via `...` in a function call.
+#' @param headers named list of headers. These headers are used in all requests
 #' @param cainfo (character) path to a crt bundle, passed to curl option
 #' `cainfo`
 #' @param ... additional curl options to be passed in ALL http requests
@@ -157,7 +153,7 @@ Elasticsearch <- R6::R6Class(
       cat(paste('  cainfo: ', if (!is.null(self$cainfo)) "<secret>" else 'NULL'), "\n")
     },
 
-    make_url = function(x) {
+    make_url = function() {
       url <- sprintf("%s://%s", self$transport_schema, self$host)
       url <- if (is.null(self$port) || nchar(self$port) == 0) {
         url
@@ -173,15 +169,16 @@ Elasticsearch <- R6::R6Class(
     ping = function(...) es_GET_(self, self$make_url(), ...),
 
     info = function(...) {
-      res <- tryCatch(GET(self$make_url(), make_up(), ...), error = function(e) e)
+      cli <- crul::HttpClient$new(self$make_url(), headers = make_up())
+      res <- tryCatch(cli$get(), error = function(e) e)
       if (inherits(res, "error")) {
         stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting", 
-                     make_url(es_get_auth())), call. = FALSE)
+                     self$make_url()), call. = FALSE)
       }
       if (res$status_code > 200) {
-        stop(sprintf("Error:", res$headers$statusmessage), call. = FALSE)
+        stop(res$response_headers$status, call. = FALSE)
       }
-      tt <- cont_utf8(res)
+      tt <- res$parse("UTF-8")
       jsonlite::fromJSON(tt, FALSE)
     },
 
@@ -267,4 +264,10 @@ ph <- function(x) {
     str <- paste0(names(x$headers), collapse = ", ")
     if (nchar(str) > 30) paste0(substring(str, 1, 30), " ...") else str
   }
+}
+
+es_get_user_pwd <- function() {
+  user <- Sys.getenv("ES_USER")
+  pwd <- Sys.getenv("ES_PWD")
+  list(user = user, pwd = pwd)
 }

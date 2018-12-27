@@ -1,15 +1,15 @@
 context("termvectors")
 
-invisible(connect())
+x <- connect()
 
-if (!index_exists('omdb')) {
+if (!index_exists(x, 'omdb')) {
   omdb <- system.file("examples", "omdb.json", package = "elastic")
-  invisible(docs_bulk(omdb))
+  invisible(docs_bulk(x, omdb))
 }
 
 test_that("termvectors works", {
   skip_on_travis()
-  if (gsub("\\.", "", ping()$version$number) < 130) skip('feature not in this ES version')
+  if (gsub("\\.", "", x$ping()$version$number) < 130) skip('feature not in this ES version')
 
   body <- '{
     "fields" : ["Plot"],
@@ -19,8 +19,8 @@ test_that("termvectors works", {
     "field_statistics" : true
   }'
 
-  id <- vapply(Search("omdb", size = 1)$hits$hits, "[[", "", "_id")
-  aa <- termvectors('omdb', 'omdb', id, body = body)
+  id <- vapply(Search(x, "omdb", size = 1)$hits$hits, "[[", "", "_id")
+  aa <- termvectors(x, 'omdb', 'omdb', id, body = body)
 
 
   expect_is(aa, 'list')
@@ -39,11 +39,11 @@ test_that("termvectors works", {
 
 test_that("termvectors fails well", {
   skip_on_travis()
-  if (gsub("\\.", "", ping()$version$number) < 130) skip('feature not in this ES version')
+  if (gsub("\\.", "", x$ping()$version$number) < 130) skip('feature not in this ES version')
 
-  expect_error(termvectors(), "argument \"index\" is missing")
-  expect_error(termvectors("omdb"), "argument \"type\" is missing")
-  expect_error(termvectors("omdb", "omdb"), "Validation Failed")
+  expect_error(termvectors(x), "argument \"index\" is missing")
+  expect_error(termvectors(x, "omdb"), "argument \"type\" is missing")
+  expect_error(termvectors(x, "omdb", "omdb"), "Validation Failed")
 
   body <- '{
      "fields" : ["Plot"],
@@ -53,8 +53,8 @@ test_that("termvectors fails well", {
     "field_statistics" : true
   }'
 
-  expect_error(termvectors('omdb', 'omdb', body = body),
+  expect_error(termvectors(x, 'omdb', 'omdb', body = body),
                "Validation Failed")
-  expect_equal(length(termvectors('omdb', 'omdb', 'AVXdx8Eqg_0Z_tpMDyP_')$term_vectors),
+  expect_equal(length(termvectors(x, 'omdb', 'omdb', 'AVXdx8Eqg_0Z_tpMDyP_')$term_vectors),
                0)
 })

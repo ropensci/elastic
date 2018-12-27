@@ -1,8 +1,8 @@
 context("ping")
 
-invisible(connect())
+x <- connect()
 
 test_that("ping", {
-  expect_is(ping(), "list")
+  expect_is(x$ping(), "list")
 })
 

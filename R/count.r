@@ -4,7 +4,7 @@
 #' @param conn an Elasticsearch connection object, see [Elasticsearch]
 #' @param index Index, defaults to all indices
 #' @param type Document type
-#' @param callopts Curl args passed on to [crul::HttpClient]
+#' @param callopts Curl args passed on to [crul::verb-GET]
 #' @param verbose If `TRUE` (default) the url call used printed to console.
 #' @param ... Further args passed on to elastic search HTTP API as parameters.
 #' @details See docs for the count API here

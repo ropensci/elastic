@@ -10,8 +10,8 @@
 #' @param update_all_types (logical) update all types. default: `FALSE`. 
 #' This parameter is deprecated in ES v6.3.0 and higher, see 
 #' https://github.com/elastic/elasticsearch/pull/28284
-#' @param ... Curl options passed on to [httr::HEAD()] or other 
-#' http verbs
+#' @param ... Curl options passed on to [crul::verb-PUT], [crul::verb-GET], 
+#' or [crul::verb-HEAD]
 #' @details
 #' Find documentation for each function at:
 #' 
@@ -188,6 +188,5 @@ type_exists <- function(conn, index, type, ...) {
   }
   
   res <- conn$make_conn(url, ...)$head()
-  # res <- HEAD(url, make_up(), es_env$headers, ...)
   if (res$status_code == 200) TRUE else FALSE
 }

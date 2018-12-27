@@ -8,7 +8,7 @@ Description: Connect to 'Elasticsearch', a 'NoSQL' database built on the 'Java'
     requests. In addition, 'elastic' provides functions for interacting with API's
     for 'indices', documents, nodes, clusters, an interface to the cat API, and
     more.
-Version: 0.8.4.9410
+Version: 0.8.7.9110
 License: MIT + file LICENSE
 Authors@R: person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "myrmecocystus@gmail.com")
@@ -20,14 +20,12 @@ Encoding: UTF-8
 Language: en-US
 Imports:
     utils,
-    methods,
-    httr (>= 1.2.1),
     curl (>= 2.2),
-    crul (>= 0.6.2.9210),
+    crul (>= 0.6.2.9331),
     jsonlite (>= 1.1),
     R6
 Suggests:
-    roxygen2 (>= 6.1.0),
+    roxygen2 (>= 6.1.1),
     knitr,
     testthat
 RoxygenNote: 6.1.1

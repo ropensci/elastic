@@ -29,10 +29,14 @@ The main interface to searching documents in your Elasticsearch store is the fun
 
 There are a huge amount of ways you can search Elasticsearch documents - this tutorial covers some of them, and highlights the ways in which you interact with the R outputs.
 
+```{r}
+x <- connect()
+```
+
 ### Search an index
 
 ```{r}
-out <- Search(index="shakespeare")
+out <- Search(x, index="shakespeare")
 out$hits$total
 ```
 
@@ -43,13 +47,13 @@ out$hits$hits[[1]]
 ### Search an index by type
 
 ```{r}
-Search(index = "shakespeare", type = "act")$hits$hits[[1]]
+Search(x, index = "shakespeare", type = "line")$hits$hits[[1]]
 ```
 
 ### Return certain fields
 
 ```{r}
-Search(index = "shakespeare", body = '{
+Search(x, index = "shakespeare", body = '{
   "_source": ["play_name", "speaker"]
 }')$hits$hits[[1]]
 ```
@@ -58,7 +62,7 @@ Search(index = "shakespeare", body = '{
 ### Paging
 
 ```{r}
-Search(index="shakespeare", size=1, from=1)$hits
+Search(x, index="shakespeare", size=1, from=1)$hits
 ```
 
 ### Queries
@@ -66,7 +70,7 @@ Search(index="shakespeare", size=1, from=1)$hits
 Using the `q` parameter you can pass in a query, which gets passed in the URI of the query. This type of query is less powerful than the below query passed in the body of the request, using the `body` parameter.
 
 ```{r}
-Search(index="shakespeare", type="act", q="speaker:KING HENRY IV")$hits$total
+Search(x, index="shakespeare", type="line", q="speaker:KING HENRY IV")$hits$total
 ```
 
 #### More complex queries
@@ -74,7 +78,7 @@ Search(index="shakespeare", type="act", q="speaker:KING HENRY IV")$hits$total
 Here, query for values from 10 to 20 in the field `line_id`
 
 ```{r}
-Search(index="shakespeare", q="line_id:[10 TO 20]")$hits$total
+Search(x, index="shakespeare", q="line_id:[10 TO 20]")$hits$total
 ```
 
 ### Get version number for each document
@@ -82,22 +86,21 @@ Search(index="shakespeare", q="line_id:[10 TO 20]")$hits$total
 Version number usually is not returned.
 
 ```{r}
-sapply(Search(index="shakespeare", version=TRUE, size=2)$hits$hits, "[[", "_version")
+sapply(Search(x, index="shakespeare", version=TRUE, size=2)$hits$hits, "[[", "_version")
 ```
 
 ### Get raw data
 
 ```{r}
-Search(index="shakespeare", type="scene", raw=TRUE)
+Search(x, index="shakespeare", type="line", raw=TRUE)
 ```
 
 ### Curl debugging
 
-Common options are `verbose()`, `timeout()`, `progress()`, `config(followlocation=TRUE)`.
+Common options are `verbose=TRUE`, `timeout_ms=1`, `followlocation=TRUE`.
 
 ```{r}
-library('httr')
-out <- Search(index="shakespeare", type="line", config=verbose())
+out <- Search(x, index="shakespeare", type="line", verbose = TRUE)
 ```
 
 ### Query DSL searches - queries sent in the body of the request
@@ -105,7 +108,7 @@ out <- Search(index="shakespeare", type="line", config=verbose())
 Pass in as an R list
 
 ```{r}
-mapping_create("shakespeare", "act", update_all_types = TRUE, body = '{
+mapping_create(x, "shakespeare", "line", update_all_types = TRUE, body = '{
    "properties": {
      "text_entry": {
        "type":     "text",
@@ -114,7 +117,7 @@ mapping_create("shakespeare", "act", update_all_types = TRUE, body = '{
   }
 }')
 aggs <- list(aggs = list(stats = list(terms = list(field = "text_entry"))))
-Search(index="shakespeare", body=aggs)$hits$hits[[1]]
+Search(x, index="shakespeare", body=aggs)$hits$hits[[1]]
 ```
 
 Or pass in as json query with newlines, easy to read
@@ -129,14 +132,14 @@ aggs <- '{
         }
     }
 }'
-Search(index="shakespeare", body=aggs)$hits$hits[[1]]
+Search(x, index="shakespeare", body=aggs)$hits$hits[[1]]
 ```
 
 Or pass in collapsed json string
 
 ```{r}
 aggs <- '{"aggs":{"stats":{"terms":{"field":"text_entry"}}}}'
-Search(index="shakespeare", body=aggs)$hits$hits[[1]]
+Search(x, index="shakespeare", body=aggs)$hits$hits[[1]]
 ```
 
 ### Aggregations
@@ -154,7 +157,7 @@ aggs <- '{
         }
     }
 }'
-Search(index="gbif", body=aggs, size=0)$aggregations$latbuckets$buckets[1:3]
+Search(x, index="gbif", body=aggs, size=0)$aggregations$latbuckets$buckets[1:3]
 ```
 
 ### A bool query
@@ -168,7 +171,7 @@ mmatch <- '{
          "speech_number" : {
            "from" : 1, "to": 5
 }}}}}}'
-sapply(Search(index="shakespeare", body=mmatch)$hits$hits, function(x) x$`_source`$speech_number)
+sapply(Search(x, index="shakespeare", body=mmatch)$hits$hits, function(x) x$`_source`$speech_number)
 ```
 
 ### Fuzzy query
@@ -177,12 +180,12 @@ Fuzzy query on numerics
 
 ```{r}
 fuzzy <- list(query = list(fuzzy = list(text_entry = "arms")))
-Search(index="shakespeare", body = fuzzy)$hits$total
+Search(x, index="shakespeare", body = fuzzy)$hits$total
 ```
 
 ```{r}
 fuzzy <- list(query = list(fuzzy = list(text_entry = list(value = "arms", fuzziness = 4))))
-Search(index="shakespeare", body=fuzzy)$hits$total
+Search(x, index="shakespeare", body=fuzzy)$hits$total
 ```
 
 ### Range query
@@ -191,24 +194,24 @@ With numeric
 
 ```{r}
 body <- list(query=list(range=list(decimalLongitude=list(gte=1, lte=3))))
-Search('gbif', body=body)$hits$total
+Search(x, 'gbif', body=body)$hits$total
 ```
 
 ```{r}
 body <- list(query=list(range=list(decimalLongitude=list(gte=2.9, lte=10))))
-Search('gbif', body=body)$hits$total
+Search(x, 'gbif', body=body)$hits$total
 ```
 
 With dates
 
 ```{r}
 body <- list(query=list(range=list(eventDate=list(gte="2012-01-01", lte="now"))))
-Search('gbif', body=body)$hits$total
+Search(x, 'gbif', body=body)$hits$total
 ```
 
 ```{r}
 body <- list(query=list(range=list(eventDate=list(gte="2014-01-01", lte="now"))))
-Search('gbif', body=body)$hits$total
+Search(x, 'gbif', body=body)$hits$total
 ```
 
 ### More-like-this query (more_like_this can be shortened to mlt)
@@ -218,13 +221,13 @@ body <- '{
  "query": {
    "more_like_this": {
      "fields": ["abstract","title"],
-     "like_text": "and then",
+     "like": "and then",
      "min_term_freq": 1,
      "max_query_terms": 12
    }
  }
 }'
-Search('plos', body=body)$hits$total
+Search(x, 'plos', body=body)$hits$total
 ```
 
 ```{r}
@@ -232,13 +235,13 @@ body <- '{
  "query": {
    "more_like_this": {
      "fields": ["abstract","title"],
-     "like_text": "cell",
+     "like": "cell",
      "min_term_freq": 1,
      "max_query_terms": 12
    }
  }
 }'
-Search('plos', body=body)$hits$total
+Search(x, 'plos', body=body)$hits$total
 ```
 
 
@@ -257,7 +260,7 @@ body <- '{
    }
  }
 }'
-out <- Search('plos', 'article', body=body)
+out <- Search(x, 'plos', 'article', body=body)
 out$hits$total
 ```
 
@@ -268,17 +271,17 @@ sapply(out$hits$hits, function(x) x$highlight$title[[1]])[8:10]
 ### Scrolling search - instead of paging
 
 ```{r}
-Search('shakespeare', q="a*")$hits$total
-res <- Search(index = 'shakespeare', q="a*", time_scroll = "1m")
-length(scroll(res$`_scroll_id`, time_scroll = "1m")$hits$hits)
+Search(x, 'shakespeare', q="a*")$hits$total
+res <- Search(x, index = 'shakespeare', q="a*", time_scroll = "1m")
+length(scroll(x, res$`_scroll_id`, time_scroll = "1m")$hits$hits)
 ```
 
 ```{r}
-res <- Search(index = 'shakespeare', q = "a*", time_scroll = "5m")
+res <- Search(x, index = 'shakespeare', q = "a*", time_scroll = "5m")
 out <- res$hits$hits
 hits <- 1
 while (hits != 0) {
-  res <- scroll(res$`_scroll_id`)
+  res <- scroll(x, res$`_scroll_id`)
   hits <- length(res$hits$hits)
   if (hits > 0)
     out <- c(out, res$hits$hits)

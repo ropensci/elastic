@@ -8,26 +8,26 @@
 \alias{pipeline_simulate}
 \title{Ingest API operations}
 \usage{
-pipeline_create(id, body, ...)
+pipeline_create(conn, id, body, ...)
 
-pipeline_get(id, filter_path = NULL, ...)
+pipeline_get(conn, id, filter_path = NULL, ...)
 
-pipeline_delete(id, body, ...)
+pipeline_delete(conn, id, body, ...)
 
-pipeline_simulate(body, id = NULL, ...)
+pipeline_simulate(conn, body, id = NULL, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+
 \item{id}{(character) one or more pipeline id's. with delete, you can use
 a wildcard match}
 
 \item{body}{body describing pipeline, see examples and Elasticsearch docs}
 
-\item{...}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}, \code{\link[httr:GET]{httr::GET()}},
-\code{\link[httr:PUT]{httr::PUT()}}, or \code{\link[httr:DELETE]{httr::DELETE()}}}
+\item{...}{Curl args passed on to \link[crul:verb-POST]{crul::verb-POST}, \link[crul:verb-GET]{crul::verb-GET},
+\link[crul:verb-PUT]{crul::verb-PUT}, or \link[crul:verb-DELETE]{crul::verb-DELETE}}
 
 \item{filter_path}{(character) fields to return. deafults to all if not given}
-
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
 }
 \value{
 a named list
@@ -40,6 +40,9 @@ ingest/pipeline functions available in Elasticsearch v5 and greater
 }
 \examples{
 \dontrun{
+# connection setup
+(x <- connect())
+
 # create
 body1 <- '{
   "description" : "do a thing",
@@ -64,17 +67,17 @@ body2 <- '{
     }
   ]
 }'
-pipeline_create(id = 'foo', body = body1)
-pipeline_create(id = 'bar', body = body2)
+pipeline_create(x, id = 'foo', body = body1)
+pipeline_create(x, id = 'bar', body = body2)
 
 # get
-pipeline_get(id = 'foo')
-pipeline_get(id = 'bar')
-pipeline_get(id = 'foo', filter_path = "*.version")
-pipeline_get(id = c('foo', 'bar')) # get >1
+pipeline_get(x, id = 'foo')
+pipeline_get(x, id = 'bar')
+pipeline_get(x, id = 'foo', filter_path = "*.version")
+pipeline_get(x, id = c('foo', 'bar')) # get >1
 
 # delete
-pipeline_delete(id = 'foo')
+pipeline_delete(x, id = 'foo')
 
 # simulate
 ## with pipeline included
@@ -95,7 +98,7 @@ body <- '{
     { "_source": {"foo": "world"} }
   ]
 }'
-pipeline_simulate(body)
+pipeline_simulate(x, body)
 
 ## referencing existing pipeline
 body <- '{
@@ -104,7 +107,7 @@ body <- '{
     { "_source": {"foo": "world"} }
   ]
 }'
-pipeline_simulate(body, id = "foo")
+pipeline_simulate(x, body, id = "foo")
 }
 }
 \references{

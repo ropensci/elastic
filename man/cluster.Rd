@@ -37,7 +37,7 @@ cluster_pending_tasks(conn, index = NULL, raw = FALSE,
 
 \item{raw}{If \code{TRUE} (default), data is parsed to list. If \code{FALSE}, then raw JSON.}
 
-\item{callopts}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}}
+\item{callopts}{Curl args passed on to \link[crul:verb-POST]{crul::verb-POST}}
 
 \item{verbose}{If \code{TRUE} (default) the url call used printed to console.}
 

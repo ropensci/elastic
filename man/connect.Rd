@@ -20,11 +20,7 @@ can specify,  but ignored for now.}
 \item{pwd}{(character) Password, if required for the connection. You
 can specify, but ignored for now.}
 
-\item{headers}{Either an object of class \code{request} or a list that can
-be coerced to an object of class \code{request} via
-\code{\link[httr:add_headers]{httr::add_headers()}}. These headers are  used in all requests.
-To use headers in individual requests and not others, pass in headers
-using \code{\link[httr:add_headers]{httr::add_headers()}} via \code{...} in a function call.}
+\item{headers}{named list of headers. These headers are used in all requests}
 
 \item{cainfo}{(character) path to a crt bundle, passed to curl option
 \code{cainfo}}

@@ -1,18 +1,17 @@
 #' Ping an Elasticsearch server.
 #'
 #' @export
-#' @param ... Curl args passed on to [httr::GET()]
+#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param ... Curl args passed on to [crul::verb-GET]
 #' @seealso [connect()]
 #' @examples \dontrun{
-#' ping()
+#' x <- connect()
+#' ping(x)
+#' # ideally call ping on the connetion object itself
+#' x$ping()
 #' }
-ping <- function(...) { 
-  es_GET_(make_url(es_get_auth()), ...)
-}
-
-checkconn <- function(...) {
-  res <- tryCatch(HEAD(make_url(es_get_auth()), make_up(), es_env$headers, ...), error = function(e) e)
-  if (inherits(res, "error")) {
-    stop("Check your connection, server may be down, url or port incorrect, or authentication wrong", call. = FALSE)
-  }
+ping <- function(conn, ...) {
+  .Deprecated(msg = "call ping() on the connection object; 
+this standalone function will be removed in the next version")
+  conn$ping(...)
 }
