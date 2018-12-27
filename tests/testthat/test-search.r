@@ -57,6 +57,7 @@ test_that("getting json data back from search works", {
 })
 
 test_that("Search works with special characters - +", {
+  if (es_version(x) < 200) skip('skipping for this ES version')
   invisible(tryCatch(index_delete(x, "a+b"), error = function(e) e))
   invisible(index_create(x, "a+b"))
   invisible(docs_create(x, index = "a+b", type = "wiz", id=1, body=list(a="ddd", b="eee")))
