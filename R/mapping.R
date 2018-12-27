@@ -116,6 +116,7 @@
 #' @export
 #' @rdname mapping
 mapping_create <- function(conn, index, type, body, update_all_types = FALSE, ...) {
+  is_conn(conn)
   url <- conn$make_url()
   url <- file.path(url, esc(index), "_mapping", esc(type))
   args <- list()
@@ -127,7 +128,8 @@ mapping_create <- function(conn, index, type, body, update_all_types = FALSE, ..
 
 #' @export
 #' @rdname mapping
-mapping_get <- function(conn, index = NULL, type = NULL, ...){
+mapping_get <- function(conn, index = NULL, type = NULL, ...) {
+  is_conn(conn)
   url <- conn$make_url()
   if (any(index == "_all")) {
     url <- file.path(url, "_mapping")
@@ -146,7 +148,8 @@ mapping_get <- function(conn, index = NULL, type = NULL, ...){
 
 #' @export
 #' @rdname mapping
-field_mapping_get <- function(conn, index = NULL, type = NULL, field, include_defaults=FALSE, ...){
+field_mapping_get <- function(conn, index = NULL, type = NULL, field, include_defaults=FALSE, ...) {
+  is_conn(conn)
   stopifnot(!is.null(field))
   url <- conn$make_url()
   if (any(index == "_all")){
@@ -168,7 +171,8 @@ field_mapping_get <- function(conn, index = NULL, type = NULL, field, include_de
 
 #' @export
 #' @rdname mapping
-type_exists <- function(conn, index, type, ...){
+type_exists <- function(conn, index, type, ...) {
+  is_conn(conn)
   # seems to not work in v1, so don't try cause would give false result
   if (conn$es_ver() <= 100) {
     stop("type exists not available in this ES version", call. = FALSE)

@@ -2,12 +2,14 @@
 % Please edit documentation in R/search_shards.R
 \name{search_shards}
 \alias{search_shards}
-\title{Search shards.}
+\title{Search shards}
 \usage{
-search_shards(index = NULL, raw = FALSE, routing = NULL,
+search_shards(conn, index = NULL, raw = FALSE, routing = NULL,
   preference = NULL, local = NULL, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+
 \item{index}{One or more indeces}
 
 \item{raw}{If \code{TRUE} (default), data is parsed to list. If \code{FALSE}, then
@@ -28,17 +30,20 @@ cluster state.}
 \item{...}{Curl args passed on to \code{\link[httr:GET]{httr::GET()}}}
 }
 \description{
-Search shards.
+Search shards
 }
 \examples{
 \dontrun{
-search_shards(index = "plos")
-search_shards(index = c("plos","gbif"))
-search_shards(index = "plos", preference='_primary')
-search_shards(index = "plos", preference='_shards:2')
+# connection setup
+(x <- connect())
 
-library('httr')
-search_shards(index = "plos", config=verbose())
+search_shards(x, index = "plos")
+search_shards(x, index = c("plos","gbif"))
+search_shards(x, index = "plos", preference='_primary')
+search_shards(x, index = "plos", preference='_shards:2')
+
+# curl options
+search_shards(x, index = "plos", verbose = TRUE)
 }
 }
 \references{

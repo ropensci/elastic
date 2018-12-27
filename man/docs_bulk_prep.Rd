@@ -103,7 +103,7 @@ paths <- vector("list", length = length(files))
 for (i in seq_along(files)) {
   d <- read.csv(files[[i]])
   paths[i] <- docs_bulk_prep(d, index = "testes", type = "docs",
-    doc_ids = ids[[i]], es_ids = FALSE, path = tempfile(fileext = ".json"))
+    doc_ids = ids[[i]], path = tempfile(fileext = ".json"))
 }
 unlist(paths)
 

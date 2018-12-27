@@ -4,11 +4,13 @@
 \alias{docs_delete}
 \title{Delete a document}
 \usage{
-docs_delete(index, type, id, refresh = NULL, routing = NULL,
+docs_delete(conn, index, type, id, refresh = NULL, routing = NULL,
   timeout = NULL, version = NULL, version_type = NULL,
   callopts = list(), ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+
 \item{index}{(character) The name of the index. Required}
 
 \item{type}{(character) The type of the document. Required}
@@ -28,7 +30,7 @@ minutes)}
 \item{version_type}{(character) Specific version type. One of internal
 or external}
 
-\item{callopts}{Curl args passed on to \code{\link[httr:DELETE]{httr::DELETE()}}}
+\item{callopts}{Curl args passed on to \link[crul:HttpClient]{crul::HttpClient}}
 
 \item{...}{Further args to query DSL}
 }
@@ -37,20 +39,22 @@ Delete a document
 }
 \examples{
 \dontrun{
-if (!index_exists("plos")) {
+(x <- connect())
+
+if (!index_exists(x, "plos")) {
  plosdat <- system.file("examples", "plos_data.json", package = "elastic")
- docs_bulk(plosdat)
+ docs_bulk(x, plosdat)
 }
 
 # delete a document
-if (!docs_get(index='plos', type='article', id=36, exists=TRUE)) {
-  docs_create(index='plos', type='article', id=36, 
+if (!docs_get(x, index='plos', type='article', id=36, exists=TRUE)) {
+  docs_create(x, index='plos', type='article', id=36, 
     body = list(id="12345", title="New title")
   )
 }
-docs_get(index='plos', type='article', id=36)
-docs_delete(index='plos', type='article', id=36)
-# docs_get(index='plos', type='article', id=36) # and the document is gone
+docs_get(x, index='plos', type='article', id=36)
+docs_delete(x, index='plos', type='article', id=36)
+# docs_get(x, index='plos', type='article', id=36) # and the document is gone
 }
 }
 \references{

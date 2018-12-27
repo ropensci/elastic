@@ -114,6 +114,10 @@ Elasticsearch <- R6::R6Class(
       self$headers <- headers
       self$cainfo <- cainfo
       self$force <- force
+
+      # validate and store user error preference
+      errors <- match.arg(errors, c('simple', 'complete'))
+      Sys.setenv("ELASTIC_RCLIENT_ERRORS" = errors)
       self$errors <- errors
 
       # strip off transport if found
@@ -254,4 +258,13 @@ es_auth <- function(es_host = NULL, es_port = NULL, es_path = NULL,
   # Sys.setenv(ES_USER = user)
   # Sys.setenv(ES_PWD = pwd)
   list(host = host, port = port, path = path, transport = transport)
+}
+
+ph <- function(x) {
+  if (is.null(x)) {
+    'NULL'
+  } else {
+    str <- paste0(names(x$headers), collapse = ", ")
+    if (nchar(str) > 30) paste0(substring(str, 1, 30), " ...") else str
+  }
 }

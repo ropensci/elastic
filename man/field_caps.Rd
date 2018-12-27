@@ -4,10 +4,12 @@
 \alias{field_caps}
 \title{Field capabilities}
 \usage{
-field_caps(fields = NULL, index = NULL, body = list(), raw = FALSE,
-  asdf = FALSE, ...)
+field_caps(conn, fields = NULL, index = NULL, body = list(),
+  raw = FALSE, asdf = FALSE, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+
 \item{fields}{A list of fields to compute stats for. optional}
 
 \item{index}{Index name, one or more}
@@ -20,7 +22,7 @@ field_caps(fields = NULL, index = NULL, body = list(), raw = FALSE,
 to parse JSON directly to a data.frame if possible. If \code{FALSE}
 (default), list output is given.}
 
-\item{...}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}}
+\item{...}{Curl args passed on to \link[crul:HttpClient]{crul::HttpClient}}
 }
 \description{
 The field capabilities API allows to retrieve the capabilities of fields
@@ -28,9 +30,9 @@ among multiple indices.
 }
 \examples{
 \dontrun{
-connect()
+x <- connect()
 
-field_caps(body = '{ "fields": ["speaker"] }', index = "shakespeare")
+field_caps(x, body = '{ "fields": ["speaker"] }', index = "shakespeare")
 }
 }
 \references{

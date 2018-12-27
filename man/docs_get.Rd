@@ -4,11 +4,13 @@
 \alias{docs_get}
 \title{Get documents}
 \usage{
-docs_get(index, type, id, source = NULL, fields = NULL,
+docs_get(conn, index, type, id, source = NULL, fields = NULL,
   exists = FALSE, raw = FALSE, callopts = list(), verbose = TRUE,
   ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+
 \item{index}{(character) The name of the index. Required}
 
 \item{type}{(character) The type of the document. Required}
@@ -26,7 +28,7 @@ exists or not.}
 \item{raw}{If \code{TRUE} (default), data is parsed to list. If \code{FALSE}, then raw
 JSON.}
 
-\item{callopts}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}}
+\item{callopts}{Curl args passed on to \link[crul:HttpClient]{crul::HttpClient}}
 
 \item{verbose}{If TRUE (default) the url call used printed to console.}
 
@@ -37,26 +39,28 @@ Get documents
 }
 \examples{
 \dontrun{
-docs_get(index='shakespeare', type='line', id=10)
-docs_get(index='shakespeare', type='line', id=12)
-docs_get(index='shakespeare', type='line', id=12, source=TRUE)
+(x <- connect())
+
+docs_get(x, index='shakespeare', type='line', id=10)
+docs_get(x, index='shakespeare', type='line', id=12)
+docs_get(x, index='shakespeare', type='line', id=12, source=TRUE)
 
 # Get certain fields
-if (gsub("\\\\.", "", ping()$version$number) < 500) {
+if (gsub("\\\\.", "", x$ping()$version$number) < 500) {
   ### ES < v5
-  docs_get(index='shakespeare', type='line', id=10, fields='play_name')
-  docs_get(index='shakespeare', type='line', id=10, 
+  docs_get(x, index='shakespeare', type='line', id=10, fields='play_name')
+  docs_get(x, index='shakespeare', type='line', id=10, 
     fields=c('play_name','speaker'))
 } else {
   ### ES > v5
-  docs_get(index='shakespeare', type='line', id=10, source='play_name')
-  docs_get(index='shakespeare', type='line', id=10, 
+  docs_get(x, index='shakespeare', type='line', id=10, source='play_name')
+  docs_get(x, index='shakespeare', type='line', id=10, 
     source=c('play_name','speaker'))
 }
 
 # Just test for existence of the document
-docs_get(index='plos', type='article', id=1, exists=TRUE)
-docs_get(index='plos', type='article', id=123456, exists=TRUE)
+docs_get(x, index='plos', type='article', id=1, exists=TRUE)
+docs_get(x, index='plos', type='article', id=123456, exists=TRUE)
 }
 }
 \references{

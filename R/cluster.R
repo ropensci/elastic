@@ -1,6 +1,7 @@
 #' Elasticsearch cluster endpoints
 #'
 #' @name cluster
+#' @param conn an Elasticsearch connection object, see [Elasticsearch]
 #' @param index Index
 #' @param metrics One or more of version, master_node, nodes, routing_table,
 #' metadata, and blocks. See Details.
@@ -65,55 +66,63 @@
 #' - types A comma-separated list of document types for the indexing index metric
 #'
 #' @examples \dontrun{
-#' cluster_settings()
-#' cluster_health()
+#' # connection setup
+#' (x <- connect())
+#' 
+#' cluster_settings(x)
+#' cluster_health(x)
 #'
-#' cluster_state()
-#' cluster_state(metrics = "version")
-#' cluster_state(metrics = "nodes")
-#' cluster_state(metrics = c("version", "nodes"))
-#' cluster_state(metrics = c("version", "nodes", 'blocks'))
-#' cluster_state("shakespeare", metrics = "metadata")
-#' cluster_state(c("shakespeare", "flights"), metrics = "metadata")
+#' cluster_state(x)
+#' cluster_state(x, metrics = "version")
+#' cluster_state(x, metrics = "nodes")
+#' cluster_state(x, metrics = c("version", "nodes"))
+#' cluster_state(x, metrics = c("version", "nodes", 'blocks'))
+#' cluster_state(x, "shakespeare", metrics = "metadata")
+#' cluster_state(x, c("shakespeare", "flights"), metrics = "metadata")
 #'
-#' cluster_stats()
-#' cluster_pending_tasks()
+#' cluster_stats(x)
+#' cluster_pending_tasks(x)
 #' 
 #' body <- '{
-#'   "commands" : [ {
-#'     "move" :
-#'       {
+#'   "commands": [ 
+#'     {
+#'       "move": {
 #'         "index" : "test", "shard" : 0,
 #'         "from_node" : "node1", "to_node" : "node2"
 #'       }
 #'     },
 #'     {
-#'       "allocate" : {
-#'           "index" : "test", "shard" : 1, "node" : "node3"
+#'       "allocate_replica" : {
+#'         "index" : "test", "shard" : 1, "node" : "node3"
 #'       }
 #'     }
 #'   ]
 #' }'
-#' # cluster_reroute(body =  body)
+#' # cluster_reroute(x, body =  body)
 #'
-#' cluster_health()
-#' # cluster_health(wait_for_status = "yellow", timeout = "3s")
+#' cluster_health(x)
+#' # cluster_health(x, wait_for_status = "yellow", timeout = "3s")
 #' }
 
 #' @export
 #' @rdname cluster
-cluster_settings <- function(index=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...){
-  es_GET('_cluster/settings', index, NULL, NULL, NULL, 'elastic_cluster_settings', raw, callopts, ...)
+cluster_settings <- function(conn, index=NULL, raw=FALSE, callopts=list(), 
+  verbose=TRUE, ...) {
+
+  is_conn(conn)
+  es_GET(conn, '_cluster/settings', index, NULL, NULL, NULL, 
+    'elastic_cluster_settings', raw, callopts, ...)
 }
 
 #' @export
 #' @rdname cluster
-cluster_health <- function(index=NULL, level = NULL, wait_for_status = NULL, 
-                           wait_for_relocating_shards = NULL, wait_for_active_shards = NULL, 
-                           wait_for_nodes = NULL, timeout = NULL, raw=FALSE, 
-                           callopts=list(), verbose=TRUE, ...) {
+cluster_health <- function(conn, index=NULL, level = NULL, 
+  wait_for_status = NULL, wait_for_relocating_shards = NULL, 
+  wait_for_active_shards = NULL, wait_for_nodes = NULL, timeout = NULL, 
+  raw=FALSE, callopts=list(), verbose=TRUE, ...) {
   
-  url <- file.path(make_url(es_get_auth()), '_cluster/health')
+  is_conn(conn)
+  url <- file.path(conn$make_url(), '_cluster/health')
   if (!is.null(index)) {
     url <- file.path(url, paste0(index, collapse = ","))
   }
@@ -121,12 +130,15 @@ cluster_health <- function(index=NULL, level = NULL, wait_for_status = NULL,
                   wait_for_relocating_shards = wait_for_relocating_shards, 
                   wait_for_active_shards = wait_for_active_shards, 
                   wait_for_nodes = wait_for_nodes, timeout = timeout))
-  es_GET_(url, args, callopts, ...)
+  es_GET_(conn, url, args, callopts, ...)
 }
 
 #' @export
 #' @rdname cluster
-cluster_state <- function(index=NULL, metrics=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...){
+cluster_state <- function(conn, index=NULL, metrics=NULL, raw=FALSE, 
+  callopts=list(), verbose=TRUE, ...) {
+
+  is_conn(conn)
   path <- '_cluster/state'
   if (!is.null(metrics)) {
     path <- file.path(path, paste0(metrics, collapse = ","))
@@ -134,23 +146,34 @@ cluster_state <- function(index=NULL, metrics=NULL, raw=FALSE, callopts=list(), 
   if (!is.null(index)) {
     path <- file.path(path, paste0(index, collapse = ","))
   }
-  es_GET(path, NULL, NULL, NULL, NULL, 'elastic_cluster_state', raw, callopts, ...)
+  es_GET(conn, path, NULL, NULL, NULL, NULL, 'elastic_cluster_state', 
+    raw, callopts, ...)
 }
 
 #' @export
 #' @rdname cluster
-cluster_stats <- function(index=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...){
-  es_GET('_cluster/stats', index, NULL, NULL, NULL, 'elastic_cluster_stats', raw, callopts, ...)
+cluster_stats <- function(conn, index=NULL, raw=FALSE, callopts=list(), 
+  verbose=TRUE, ...) {
+
+  is_conn(conn)
+  es_GET(conn, '_cluster/stats', index, NULL, NULL, NULL, 
+    'elastic_cluster_stats', raw, callopts, ...)
 }
 
 #' @export
 #' @rdname cluster
-cluster_reroute <- function(body, raw=FALSE, callopts=list(), ...){
-  es_POST('_cluster/reroute', query = body, raw = raw, callopts = callopts, ...)
+cluster_reroute <- function(conn, body, raw=FALSE, callopts=list(), ...) {
+  is_conn(conn)
+  es_POST(conn, '_cluster/reroute', query = body, raw = raw, callopts = callopts, 
+    ...)
 }
 
 #' @export
 #' @rdname cluster
-cluster_pending_tasks <- function(index=NULL, raw=FALSE, callopts=list(), verbose=TRUE, ...){
-  es_GET('_cluster/pending_tasks', index, NULL, NULL, NULL, 'elastic_cluster_pending_tasks', raw, callopts, ...)
+cluster_pending_tasks <- function(conn, index=NULL, raw=FALSE, 
+  callopts=list(), verbose=TRUE, ...){
+
+  is_conn(conn)
+  es_GET(conn, '_cluster/pending_tasks', index, NULL, NULL, NULL, 
+    'elastic_cluster_pending_tasks', raw, callopts, ...)
 }

@@ -22,9 +22,10 @@ Search <- function(conn, index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL,
   version=NULL, lenient=FALSE, body=list(), raw=FALSE, asdf=FALSE, 
   time_scroll=NULL, search_path="_search", stream_opts=list(), ...) {
 
+  is_conn(conn)
   tmp <- search_POST(conn, search_path, cl(index), type,
     args = ec(list(df = df, analyzer = analyzer, 
-      default_operator = default_operator, explain = explain, 
+      default_operator = default_operator, explain = as_log(explain), 
       `_source` = cl(source), fields = cl(fields), sort = cl(sort), 
       track_scores = track_scores, timeout = cn(timeout), 
       terminate_after = cn(terminate_after), from = cn(from), size = cn(size), 

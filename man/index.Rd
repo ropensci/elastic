@@ -22,56 +22,59 @@
 \alias{index_clear_cache}
 \title{Index API operations}
 \usage{
-index_get(index = NULL, features = NULL, raw = FALSE,
+index_get(conn, index = NULL, features = NULL, raw = FALSE,
   verbose = TRUE, ...)
 
-index_exists(index, ...)
+index_exists(conn, index, ...)
 
-index_delete(index, raw = FALSE, verbose = TRUE, ...)
+index_delete(conn, index, raw = FALSE, verbose = TRUE, ...)
 
-index_create(index = NULL, body = NULL, raw = FALSE,
+index_create(conn, index = NULL, body = NULL, raw = FALSE,
   verbose = TRUE, ...)
 
-index_recreate(index = NULL, body = NULL, raw = FALSE,
+index_recreate(conn, index = NULL, body = NULL, raw = FALSE,
   verbose = TRUE, ...)
 
-index_close(index, ...)
+index_close(conn, index, ...)
 
-index_open(index, ...)
+index_open(conn, index, ...)
 
-index_stats(index = NULL, metric = NULL, completion_fields = NULL,
-  fielddata_fields = NULL, fields = NULL, groups = NULL,
-  level = "indices", ...)
+index_stats(conn, index = NULL, metric = NULL,
+  completion_fields = NULL, fielddata_fields = NULL, fields = NULL,
+  groups = NULL, level = "indices", ...)
 
-index_settings(index = "_all", ...)
+index_settings(conn, index = "_all", ...)
 
-index_settings_update(index = NULL, body, ...)
+index_settings_update(conn, index = NULL, body, ...)
 
-index_segments(index = NULL, ...)
+index_segments(conn, index = NULL, ...)
 
-index_recovery(index = NULL, detailed = FALSE, active_only = FALSE,
-  ...)
+index_recovery(conn, index = NULL, detailed = FALSE,
+  active_only = FALSE, ...)
 
-index_optimize(index = NULL, max_num_segments = NULL,
+index_optimize(conn, index = NULL, max_num_segments = NULL,
   only_expunge_deletes = FALSE, flush = TRUE, wait_for_merge = TRUE,
   ...)
 
-index_forcemerge(index = NULL, max_num_segments = NULL,
+index_forcemerge(conn, index = NULL, max_num_segments = NULL,
   only_expunge_deletes = FALSE, flush = TRUE, ...)
 
-index_upgrade(index = NULL, wait_for_completion = FALSE, ...)
+index_upgrade(conn, index = NULL, wait_for_completion = FALSE, ...)
 
-index_analyze(text = NULL, field = NULL, index = NULL,
+index_analyze(conn, text = NULL, field = NULL, index = NULL,
   analyzer = NULL, tokenizer = NULL, filters = NULL,
   char_filters = NULL, body = list(), ...)
 
-index_flush(index = NULL, force = FALSE, full = FALSE,
+index_flush(conn, index = NULL, force = FALSE, full = FALSE,
   wait_if_ongoing = FALSE, ...)
 
-index_clear_cache(index = NULL, filter = FALSE, filter_keys = NULL,
-  fielddata = FALSE, query_cache = FALSE, id_cache = FALSE, ...)
+index_clear_cache(conn, index = NULL, filter = FALSE,
+  filter_keys = NULL, fielddata = FALSE, query_cache = FALSE,
+  id_cache = FALSE, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+
 \item{index}{(character) A character vector of index names}
 
 \item{features}{(character) A single feature. One of settings, mappings, or
@@ -81,8 +84,7 @@ aliases}
 
 \item{verbose}{If \code{TRUE} (default) the url call used printed to console.}
 
-\item{...}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}, \code{\link[httr:GET]{httr::GET()}},
-\code{\link[httr:PUT]{httr::PUT()}}, \code{\link[httr:HEAD]{httr::HEAD()}}, or \code{\link[httr:DELETE]{httr::DELETE()}}}
+\item{...}{Curl args passed on to \link[crul:HttpClient]{crul::HttpClient}}
 
 \item{body}{Query, either a list or json.}
 
@@ -184,31 +186,34 @@ for all the options.
 }
 \examples{
 \dontrun{
+# connection setup
+(x <- connect())
+
 # get information on an index
-index_get(index='shakespeare')
+index_get(x, index='shakespeare')
 ## this one is the same as running index_settings('shakespeare')
-index_get(index='shakespeare', features='settings')
-index_get(index='shakespeare', features='mappings')
-index_get(index='shakespeare', features='alias')
+index_get(x, index='shakespeare', features='settings')
+index_get(x, index='shakespeare', features='mappings')
+index_get(x, index='shakespeare', features='alias')
 
 # check for index existence
-index_exists(index='shakespeare')
-index_exists(index='plos')
+index_exists(x, index='shakespeare')
+index_exists(x, index='plos')
 
 # create an index
-if (index_exists('twitter')) index_delete('twitter')
-index_create(index='twitter')
-if (index_exists('things')) index_delete('things')
-index_create(index='things')
-if (index_exists('plos')) index_delete('plos')
-index_create(index='plos')
+if (index_exists(x, 'twitter')) index_delete(x, 'twitter')
+index_create(x, index='twitter')
+if (index_exists(x, 'things')) index_delete(x, 'things')
+index_create(x, index='things')
+if (index_exists(x, 'plos')) index_delete(x, 'plos')
+index_create(x, index='plos')
 
 # re-create an index
-index_recreate("deer")
-index_recreate("deer", verbose = FALSE)
+index_recreate(x, "deer")
+index_recreate(x, "deer", verbose = FALSE)
 
 # delete an index
-if (index_exists('plos')) index_delete(index='plos')
+if (index_exists(x, 'plos')) index_delete(x, index='plos')
 
 ## with a body
 body <- '{
@@ -219,8 +224,8 @@ body <- '{
    }
  }
 }'
-if (index_exists('alsothat')) index_delete('alsothat')
-index_create(index='alsothat', body=body)
+if (index_exists(x, 'alsothat')) index_delete(x, 'alsothat')
+index_create(x, index='alsothat', body=body)
 
 ## with mappings
 body <- '{
@@ -232,73 +237,73 @@ body <- '{
    }
  }
 }'
-if (!index_exists('gbifnewgeo')) index_create(index='gbifnewgeo', body=body)
+if (!index_exists(x, 'gbifnewgeo')) index_create(x, index='gbifnewgeo', body=body)
 gbifgeo <- system.file("examples", "gbif_geosmall.json", package = "elastic")
-docs_bulk(gbifgeo)
+docs_bulk(x, gbifgeo)
 
 # close an index
-index_create('plos')
-index_close('plos')
+index_create(x, 'plos')
+index_close(x, 'plos')
 
 # open an index
-index_open('plos')
+index_open(x, 'plos')
 
 # Get stats on an index
-index_stats('plos')
-index_stats(c('plos','gbif'))
-index_stats(c('plos','gbif'), metric='refresh')
-index_stats(metric = "indexing")
-index_stats('shakespeare', metric='completion')
-index_stats('shakespeare', metric='completion', completion_fields = "completion")
-index_stats('shakespeare', metric='fielddata')
-index_stats('shakespeare', metric='fielddata', fielddata_fields = "evictions")
-index_stats('plos', level="indices")
-index_stats('plos', level="cluster")
-index_stats('plos', level="shards")
+index_stats(x, 'plos')
+index_stats(x, c('plos','gbif'))
+index_stats(x, c('plos','gbif'), metric='refresh')
+index_stats(x, metric = "indexing")
+index_stats(x, 'shakespeare', metric='completion')
+index_stats(x, 'shakespeare', metric='completion', completion_fields = "completion")
+index_stats(x, 'shakespeare', metric='fielddata')
+index_stats(x, 'shakespeare', metric='fielddata', fielddata_fields = "evictions")
+index_stats(x, 'plos', level="indices")
+index_stats(x, 'plos', level="cluster")
+index_stats(x, 'plos', level="shards")
 
 # Get segments information that a Lucene index (shard level) is built with
-index_segments()
-index_segments('plos')
-index_segments(c('plos','gbif'))
+index_segments(x)
+index_segments(x, 'plos')
+index_segments(x, c('plos','gbif'))
 
 # Get recovery information that provides insight into on-going index shard recoveries
-index_recovery()
-index_recovery('plos')
-index_recovery(c('plos','gbif'))
-index_recovery("plos", detailed = TRUE)
-index_recovery("plos", active_only = TRUE)
+index_recovery(x)
+index_recovery(x, 'plos')
+index_recovery(x, c('plos','gbif'))
+index_recovery(x, "plos", detailed = TRUE)
+index_recovery(x, "plos", active_only = TRUE)
 
 # Optimize an index, or many indices
-if (gsub("\\\\.", "", ping()$version$number) < 500) {
+if (x$es_ver() < 500) {
   ### ES < v5 - use optimize
-  index_optimize('plos')
-  index_optimize(c('plos','gbif'))
-  index_optimize('plos')
+  index_optimize(x, 'plos')
+  index_optimize(x, c('plos','gbif'))
+  index_optimize(x, 'plos')
 } else {
   ### ES > v5 - use forcemerge
-  index_forcemerge('plos')
+  index_forcemerge(x, 'plos')
 }
 
 # Upgrade one or more indices to the latest format. The upgrade process converts any
 # segments written with previous formats.
-if (gsub("\\\\.", "", ping()$version$number) < 500) {
-  index_upgrade('plos')
-  index_upgrade(c('plos','gbif'))
+if (x$es_ver() < 500) {
+  index_upgrade(x, 'plos')
+  index_upgrade(x, c('plos','gbif'))
 }
 
 # Performs the analysis process on a text and return the tokens breakdown 
 # of the text
-index_analyze(text = 'this is a test', analyzer='standard')
-index_analyze(text = 'this is a test', analyzer='whitespace')
-index_analyze(text = 'this is a test', analyzer='stop')
-index_analyze(text = 'this is a test', tokenizer='keyword', 
+index_analyze(x, text = 'this is a test', analyzer='standard')
+index_analyze(x, text = 'this is a test', analyzer='whitespace')
+index_analyze(x, text = 'this is a test', analyzer='stop')
+index_analyze(x, text = 'this is a test', tokenizer='keyword', 
   filters='lowercase')
-index_analyze(text = 'this is a test', tokenizer='keyword', filters='lowercase',
-   char_filters='html_strip')
-index_analyze(text = 'this is a test', index = 'plos')
-index_analyze(text = 'this is a test', index = 'shakespeare')
-index_analyze(text = 'this is a test', index = 'shakespeare', 
-  config=verbose())
+index_analyze(x, text = 'this is a test', tokenizer='keyword', 
+  filters='lowercase', char_filters='html_strip')
+index_analyze(x, text = 'this is a test', index = 'plos', 
+  analyzer="standard")
+index_analyze(x, text = 'this is a test', index = 'shakespeare', 
+  analyzer="standard")
 
 ## NGram tokenizer
 body <- '{
@@ -320,43 +325,38 @@ body <- '{
              }
       }
 }'
-if (index_exists("shakespeare2")) {
-   index_delete("shakespeare2")
-}
-tokenizer_set(index = "shakespeare2", body=body)
-index_analyze(text = "art thouh", index = "shakespeare2", 
+if (index_exists(x, "shakespeare2")) index_delete(x, "shakespeare2")
+tokenizer_set(x, index = "shakespeare2", body=body)
+index_analyze(x, text = "art thouh", index = "shakespeare2", 
   analyzer='my_ngram_analyzer')
 
 # Explicitly flush one or more indices.
-index_flush(index = "plos")
-index_flush(index = "shakespeare")
-index_flush(index = c("plos","shakespeare"))
-index_flush(index = "plos", wait_if_ongoing = TRUE)
-library('httr')
-index_flush(index = "plos", config=verbose())
+index_flush(x, index = "plos")
+index_flush(x, index = "shakespeare")
+index_flush(x, index = c("plos","shakespeare"))
+index_flush(x, index = "plos", wait_if_ongoing = TRUE)
+index_flush(x, index = "plos", verbose = TRUE)
 
 # Clear either all caches or specific cached associated with one ore more indices.
-index_clear_cache()
-index_clear_cache(index = "plos")
-index_clear_cache(index = "shakespeare")
-index_clear_cache(index = c("plos","shakespeare"))
-index_clear_cache(filter = TRUE)
-library('httr')
-index_clear_cache(config=verbose())
+index_clear_cache(x)
+index_clear_cache(x, index = "plos")
+index_clear_cache(x, index = "shakespeare")
+index_clear_cache(x, index = c("plos","shakespeare"))
+index_clear_cache(x, filter = TRUE)
 
 # Index settings
 ## get settings
-index_settings()
-index_settings("_all")
-index_settings('gbif')
-index_settings(c('gbif','plos'))
-index_settings('*s')
+index_settings(x)
+index_settings(x, "_all")
+index_settings(x, 'gbif')
+index_settings(x, c('gbif','plos'))
+index_settings(x, '*s')
 ## update settings
-if (index_exists('foobar')) index_delete('foobar')
-index_create("foobar")
+if (index_exists(x, 'foobar')) index_delete(x, 'foobar')
+index_create(x, "foobar")
 settings <- list(index = list(number_of_replicas = 4))
-index_settings_update("foobar", body = settings)
-index_get("foobar")$foobar$settings
+index_settings_update(x, "foobar", body = settings)
+index_get(x, "foobar")$foobar$settings
 }
 }
 \references{

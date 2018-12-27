@@ -81,17 +81,33 @@
 #'
 #' ## pre-registered templates
 #' ### register a template
-#' body3 <- '{
-#'   "template": {
-#'      "query": {
-#'          "match": {
-#'              "Species": "{{query_string}}"
-#'          }
+#' if (x$es_ver() <= 520) {
+#'   body3 <- '{
+#'     "template": {
+#'        "query": {
+#'            "match": {
+#'                "Species": "{{query_string}}"
+#'            }
+#'        }
 #'      }
-#'    }
-#' }'
-#' Search_template_register(x, 'foobar', body = body3)
-#'
+#'   }'
+#'   Search_template_register(x, 'foobar', body = body3)
+#' } else {
+#'   body3 <- '{
+#'    "script": {
+#'      "lang": "mustache",
+#'        "source": {
+#'          "query": {
+#'            "match": {
+#'              "Species": "{{query_string}}"
+#'            }
+#'          }
+#'        }
+#'      }
+#'   }'
+#'   Search_template_register(x, 'foobar', body = body3)
+#' }
+#' 
 #' ### get template
 #' Search_template_get(x, 'foobar')
 #'
@@ -108,6 +124,7 @@
 #' Search_template_delete(x, 'foobar')
 #' }
 Search_template <- function(conn, body = list(), raw = FALSE, ...) {
+  is_conn(conn)
   # search template render added in Elasticsearch v1.1, stop if version pre that
   if (conn$es_ver() < 110) {
     stop("search template not available in this ES version", call. = FALSE)
@@ -120,13 +137,19 @@ Search_template <- function(conn, body = list(), raw = FALSE, ...) {
 #' @rdname Search_template
 Search_template_register <- function(conn, template, body = list(), raw = FALSE, 
                                      ...) {
+  is_conn(conn)
   # search template render added in Elasticsearch v1.1, stop if version pre that
   if (conn$es_ver() < 110) {
     stop("search template not available in this ES version", call. = FALSE)
   }
+  # path for registering a template changed in Elasticsearch v5.2
+  if (conn$es_ver() <= 520) {
+    path <- file.path("_search/template", template)
+  } else {
+    path <- file.path("_scripts", template)
+  }
   search_POST(conn, 
-    paste0("_search/template/", template),
-    args = list(), body = body, raw = raw, asdf = FALSE, 
+    path = path, args = list(), body = body, raw = raw, asdf = FALSE, 
     stream_opts = list(), ...
   )
 }
@@ -134,30 +157,43 @@ Search_template_register <- function(conn, template, body = list(), raw = FALSE,
 #' @export
 #' @rdname Search_template
 Search_template_get <- function(conn, template, ...) {
+  is_conn(conn)
   # search template render added in Elasticsearch v1.1, stop if version pre that
   if (conn$es_ver() < 110) {
     stop("search template not available in this ES version", call. = FALSE)
   }
   url <- conn$make_url()
-  url <- paste0(url, "/_search/template/", template)
+  # path for fetching a template changed in Elasticsearch v5.2
+  if (conn$es_ver() <= 520) {
+    url <- file.path(url, "_search/template", template)
+  } else {
+    url <- file.path(url, "_scripts", template)
+  }
   es_GET_(conn, url, ...)
 }
 
 #' @export
 #' @rdname Search_template
 Search_template_delete <- function(conn, template, ...) {
+  is_conn(conn)
   # search template render added in Elasticsearch v1.1, stop if version pre that
   if (conn$es_ver() < 110) {
     stop("search template not available in this ES version", call. = FALSE)
   }
   url <- conn$make_url()
-  url <- paste0(url, "/_search/template/", template)
+  # path for deleting a template changed in Elasticsearch v5.2
+  if (conn$es_ver() <= 520) {
+    url <- file.path(url, "_search/template", template)
+  } else {
+    url <- file.path(url, "_scripts", template)
+  }
   es_DELETE(conn, url, ...)
 }
 
 #' @export
 #' @rdname Search_template
 Search_template_render <- function(conn, body = list(), raw = FALSE, ...) {
+  is_conn(conn)
   # search template render added in Elasticsearch v2.0, stop if version pre that
   if (conn$es_ver() < 200) {
     stop("render template not available in this ES version", call. = FALSE)

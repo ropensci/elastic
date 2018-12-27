@@ -4,20 +4,25 @@
 \alias{tokenizer_set}
 \title{Tokenizer operations}
 \usage{
-tokenizer_set(index, body, ...)
+tokenizer_set(conn, index, body, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+
 \item{index}{(character) A character vector of index names}
 
 \item{body}{Query, either a list or json.}
 
-\item{...}{Curl options passed on to \code{\link[httr:PUT]{httr::PUT()}}}
+\item{...}{Curl options passed on to \link[crul:HttpClient]{crul::HttpClient}}
 }
 \description{
 Tokenizer operations
 }
 \examples{
 \dontrun{
+# connection setup
+(x <- connect())
+
 # set tokenizer
 
 ## NGram tokenizer

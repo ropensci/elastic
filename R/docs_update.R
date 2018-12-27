@@ -1,6 +1,7 @@
 #' Update a document
 #'
 #' @export
+#' @param conn an Elasticsearch connection object, see [Elasticsearch]
 #' @param index (character) The name of the index. Required
 #' @param type (character) The type of the document. Required
 #' @param id (numeric/character) The document ID. Can be numeric or character. 
@@ -35,42 +36,43 @@
 #' @param detect_noop (logical) Specifying `TRUE` will cause Elasticsearch 
 #' to check if there are changes and, if there aren't, turn the update request
 #' into a noop.
-#' @param callopts Curl options passed on to [httr::POST()]
+#' @param callopts Curl options passed on to [crul::HttpClient]
 #' @param ... Further args to query DSL
 #' @references <http://bit.ly/2eVYqLz>
 #' @examples \dontrun{
-#' connect()
-#' if (!index_exists('plos')) {
+#' (x <- connect())
+#' if (!index_exists(x, 'plos')) {
 #'   plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-#'   invisible(docs_bulk(plosdat))
+#'   invisible(docs_bulk(x, plosdat))
 #' }
 #' 
-#' docs_create(index='plos', type='article', id=1002, 
+#' docs_create(x, index='plos', type='article', id=1002, 
 #'   body=list(id="12345", title="New title"))
 #' # and the document is there now
-#' docs_get(index='plos', type='article', id=1002) 
+#' docs_get(x, index='plos', type='article', id=1002) 
 #' # update the document
-#' docs_update(index='plos', type='article', id=1002, 
+#' docs_update(x, index='plos', type='article', id=1002, 
 #'   body = list(doc = list(title = "Even newer title again")))
 #' # get it again, notice changes
-#' docs_get(index='plos', type='article', id=1002) 
+#' docs_get(x, index='plos', type='article', id=1002) 
 #' 
-#' if (!index_exists('stuffthings')) {
-#'   index_create("stuffthings")
+#' if (!index_exists(x, 'stuffthings')) {
+#'   index_create(x, "stuffthings")
 #' }
-#' docs_create(index='stuffthings', type='thing', id=1, 
+#' docs_create(x, index='stuffthings', type='thing', id=1, 
 #'   body=list(name = "foo", what = "bar"))
-#' docs_update(index='stuffthings', type='thing', id=1, 
+#' docs_update(x, index='stuffthings', type='thing', id=1, 
 #'   body = list(doc = list(name = "hello", what = "bar")), 
 #'   source = 'name')
 #' }
 
-docs_update <- function(index, type, id, body, fields=NULL, source=NULL, 
+docs_update <- function(conn, index, type, id, body, fields=NULL, source=NULL, 
   version=NULL, version_type=NULL, routing=NULL, parent=NULL, timestamp=NULL, 
   ttl=NULL, refresh=NULL, timeout=NULL, retry_on_conflict=NULL, 
   wait_for_active_shards=NULL, detect_noop=NULL, callopts=list(), ...) {
 
-  url <- make_url(es_get_auth())
+  is_conn(conn)
+  url <- conn$make_url()
   url <- sprintf("%s/%s/%s/%s/_update", url, esc(index), esc(type), esc(id))
   query <- ec(
     list(
@@ -85,14 +87,16 @@ docs_update <- function(index, type, id, body, fields=NULL, source=NULL,
   if (!is.null(detect_noop)) {
     if (is.logical(detect_noop)) body$detect_noop <- detect_noop
   }
-  update_POST(url, query, body, callopts)
+  update_POST(conn, url, query, body, callopts)
 }
 
-update_POST <- function(url, query=NULL, body=NULL, callopts) {
-  tt <- POST(url, es_env$headers, make_up(), callopts, query = query, 
-             content_type_json(), body = body, encode = "json")
+update_POST <- function(conn, url, query=NULL, body=NULL, callopts) {
+  cli <- conn$make_conn(url, json_type(), callopts)
+  tt <- cli$post(query = query, body = body, encode = "json")
+  # tt <- POST(url, es_env$headers, make_up(), callopts, query = query, 
+  #            content_type_json(), body = body, encode = "json")
   geterror(tt)
-  jsonlite::fromJSON(cont_utf8(tt), FALSE)
+  jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }
 
 # other params to consider -----------

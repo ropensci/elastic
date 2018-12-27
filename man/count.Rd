@@ -4,15 +4,17 @@
 \alias{count}
 \title{Get counts of the number of records per index.}
 \usage{
-count(index = NULL, type = NULL, callopts = list(), verbose = TRUE,
-  ...)
+count(conn, index = NULL, type = NULL, callopts = list(),
+  verbose = TRUE, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+
 \item{index}{Index, defaults to all indices}
 
 \item{type}{Document type}
 
-\item{callopts}{Curl args passed on to httr::GET.}
+\item{callopts}{Curl args passed on to \link[crul:HttpClient]{crul::HttpClient}}
 
 \item{verbose}{If \code{TRUE} (default) the url call used printed to console.}
 
@@ -30,15 +32,17 @@ You can also get a count of documents using \code{\link[=Search]{Search()}} or
 }
 \examples{
 \dontrun{
-count()
-count(index='plos')
-count(index='plos', type='article')
-count(index='shakespeare')
-count(index=c('plos','shakespeare'), q="a*")
-count(index=c('plos','shakespeare'), q="z*")
+# connection setup
+(x <- connect())
+
+count(x)
+count(x, index='plos')
+count(x, index='plos', type='article')
+count(x, index='shakespeare')
+count(x, index=c('plos','shakespeare'), q="a*")
+count(x, index=c('plos','shakespeare'), q="z*")
 
 # Curl options
-library("httr")
-count(callopts=verbose())
+count(x, callopts = list(verbose = TRUE))
 }
 }

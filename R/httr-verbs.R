@@ -63,8 +63,8 @@ index_GET <- function(conn, index, features, raw, ...) {
   jsonlite::fromJSON(tt$parse('UTF-8'), FALSE)
 }
 
-es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, query, ...) {
-  url <- make_url(es_get_auth())
+es_POST <- function(conn, path, index=NULL, type=NULL, clazz=NULL, raw, callopts, query, ...) {
+  url <- conn$make_url()
   index <- esc(index)
   type <- esc(type)
   if (is.null(index) && is.null(type)) {
@@ -80,11 +80,10 @@ es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, quer
   args <- check_inputs(query)
   if (length(args) == 0) args <- NULL
 
-  tt <- POST(url, body = args, content_type_json(),
-             c(es_env$headers, mc(make_up(), callopts)), 
-             encode = "json")
+  cli <- conn$make_conn(url, json_type(), ...)
+  tt <- cli$post(body = args, encode = "json")
   geterror(tt)
-  res <- cont_utf8(tt)
+  res <- tt$parse("UTF-8")
   if (!is.null(clazz)) {
     class(res) <- clazz
     if (raw) res else es_parse(input = res)
@@ -93,10 +92,11 @@ es_POST <- function(path, index=NULL, type=NULL, clazz=NULL, raw, callopts, quer
   }
 }
 
-es_DELETE <- function(url, query = NULL, ...) {
-  tt <- DELETE(url, query = query, c(make_up(), es_env$headers, ...))
+es_DELETE <- function(conn, url, query = NULL, ...) {
+  cli <- conn$make_conn(url, ...)
+  tt <- cli$delete(query = query)
   geterror(tt)
-  jsonlite::fromJSON(cont_utf8(tt), FALSE)
+  jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }
 
 es_PUT <- function(conn, url, body = list(), args = list(), ...) {

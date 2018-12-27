@@ -23,14 +23,15 @@ Imports:
     methods,
     httr (>= 1.2.1),
     curl (>= 2.2),
-    crul (>= 0.6.0),
+    crul (>= 0.6.2.9210),
     jsonlite (>= 1.1),
     R6
 Suggests:
     roxygen2 (>= 6.1.0),
     knitr,
     testthat
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
+Remotes: ropensci/crul
 X-schema.org-applicationCategory: Databases
 X-schema.org-keywords: database, Elasticsearch, HTTP, API, search, NoSQL, Java, JSON, documents
 X-schema.org-isPartOf: https://ropensci.org

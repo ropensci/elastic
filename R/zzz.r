@@ -16,42 +16,6 @@ cl <- function(x) if (is.null(x)) NULL else paste0(x, collapse = ",")
 
 cw <- function(x) if (is.null(x)) x else paste(x, collapse = ",")
 
-scroll_POST <- function(path, args = list(), body, raw, asdf, stream_opts, ...) {
-  url <- make_url(es_get_auth())
-  tt <- POST(file.path(url, path), make_up(), 
-             es_env$headers, content_type_json(), ..., encode = "json",
-             query = args, body = body)
-  geterror(tt)
-  res <- cont_utf8(tt)
-  if (raw) {
-    res 
-  } else {
-    if (length(stream_opts) != 0) {
-      dat <- jsonlite::fromJSON(res, flatten = TRUE)
-      stream_opts$x <- dat$hits$hits
-      if (length(stream_opts$x) != 0) {
-        stream_opts$con <- file(stream_opts$file, open = "ab")
-        stream_opts$file <- NULL
-        do.call(jsonlite::stream_out, stream_opts)
-        close(stream_opts$con)
-      } else {
-        warning("no scroll results remain", call. = FALSE)
-      }
-      return(list(`_scroll_id` = dat$`_scroll_id`))
-    } else {
-      jsonlite::fromJSON(res, asdf, flatten = TRUE)
-    }
-  }
-}
-
-scroll_DELETE <- function(path, body, ...) {
-  url <- make_url(es_get_auth())
-  tt <- DELETE(file.path(url, path), make_up(), es_env$headers, ..., 
-               body = body, encode = "json")
-  geterror(tt)
-  tt$status_code == 200
-}
-
 esc <- function(x) {
   if (is.null(x)) {
     NULL
@@ -122,33 +86,6 @@ construct_url <- function(url, path, index, type = NULL, id = NULL) {
 
 extractr <- function(x, y) regmatches(x, gregexpr(y, x))
 
-# elastic_env <- new.env()
-
-# es_ver <- function(conn) {
-#   pinged <- elastic_env$ping_result
-#   if (is.null(pinged)) {
-#     elastic_env$ping_result <- pinged <- conn$ping()
-#   }
-#   ver <- pinged$version$number
-  
-#   # get only 1st 3 digits, so major:minor:patch
-#   as.numeric(
-#     paste(
-#       stats::na.omit(
-#         extractr(ver, "[[:digit:]]+")[[1]][1:3]
-#       ), 
-#       collapse = ""
-#     )
-#   )
-# }
-
-# stop_es_version <- function(ver_check, fxn) {
-#   if (es_ver() < ver_check) {
-#     stop(fxn, " is not available for this Elasticsearch version", 
-#          call. = FALSE)
-#   }
-# }
-
 assert <- function(x, y) {
   if (!is.null(x)) {
     if (!class(x) %in% y) {
@@ -158,7 +95,6 @@ assert <- function(x, y) {
   }
 }
 
-
 write_utf8 = function(text, con, ...) {
   # prevent re-encoding the text in the file() connection in writeLines()
   # https://kevinushey.github.io/blog/2018/02/21/string-encoding-and-r/
@@ -167,3 +103,10 @@ write_utf8 = function(text, con, ...) {
 }
 
 json_type <- function() list(`Content-Type` = "application/json")
+
+is_conn <- function(x) {
+  if (!inherits(x, "Elasticsearch")) {
+    stop("'conn' must be an elastic connection object; see ?connect", 
+      call. = FALSE)
+  }
+}

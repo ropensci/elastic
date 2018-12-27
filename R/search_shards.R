@@ -1,6 +1,7 @@
-#' Search shards.
+#' Search shards
 #'
 #' @export
+#' @param conn an Elasticsearch connection object, see [Elasticsearch]
 #' @param index One or more indeces
 #' @param routing A character vector of routing values to take into account 
 #' when determining which shards a request would be executed against.
@@ -17,19 +18,22 @@
 #' @references
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-shards.html>
 #' @examples \dontrun{
-#' search_shards(index = "plos")
-#' search_shards(index = c("plos","gbif"))
-#' search_shards(index = "plos", preference='_primary')
-#' search_shards(index = "plos", preference='_shards:2')
-#'
-#' library('httr')
-#' search_shards(index = "plos", config=verbose())
+#' # connection setup
+#' (x <- connect())
+#' 
+#' search_shards(x, index = "plos")
+#' search_shards(x, index = c("plos","gbif"))
+#' search_shards(x, index = "plos", preference='_primary')
+#' search_shards(x, index = "plos", preference='_shards:2')
+#' 
+#' # curl options
+#' search_shards(x, index = "plos", verbose = TRUE)
 #' }
 
-search_shards <- function(index=NULL, raw=FALSE, routing=NULL, preference=NULL, 
+search_shards <- function(conn, index=NULL, raw=FALSE, routing=NULL, preference=NULL, 
                           local=NULL, ...) {
-  url <- make_url(es_get_auth())
-  es_GET_(file.path(url, esc(cl(index)), "_search_shards"),
-          ec(list(routing = routing, preference = preference, local = local)), 
-          ...)
+  is_conn(conn)
+  es_GET_(conn, file.path(conn$make_url(), esc(cl(index)), "_search_shards"),
+    ec(list(routing = routing, preference = preference, local = local)), 
+    ...)
 }

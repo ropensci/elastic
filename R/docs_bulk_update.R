@@ -13,32 +13,32 @@
 #' @seealso [docs_bulk()] [docs_bulk_prep()]
 #' @references <https://www.elastic.co/guide/en/elasticsearch/reference/6.2/docs-bulk.html#bulk-update>
 #' @examples \dontrun{
-#' connect()
-#' if (index_exists("foobar")) index_delete("foobar")
+#' (x <- connect())
+#' if (index_exists(x, "foobar")) index_delete(x, "foobar")
 #' 
 #' df <- data.frame(name = letters[1:3], size = 1:3, id = 100:102)
-#' invisible(docs_bulk(df, 'foobar', 'foobar', es_ids = FALSE))
+#' invisible(docs_bulk(x, df, 'foobar', 'foobar', es_ids = FALSE))
 #' 
 #' # add new rows in existing fields
 #' (df2 <- data.frame(size = c(45, 56), id = 100:101))
-#' Search("foobar", asdf = TRUE)$hits$hits
-#' invisible(docs_bulk_update(df2, index = 'foobar', type = 'foobar'))
-#' Search("foobar", asdf = TRUE)$hits$hits
+#' Search(x, "foobar", asdf = TRUE)$hits$hits
+#' invisible(docs_bulk_update(x, df2, index = 'foobar', type = 'foobar'))
+#' Search(x, "foobar", asdf = TRUE)$hits$hits
 #' 
 #' # add new fields (and new rows by extension)
 #' (df3 <- data.frame(color = c("blue", "red", "green"), id = 100:102))
-#' Search("foobar", asdf = TRUE)$hits$hits
-#' invisible(docs_bulk_update(df3, index = 'foobar', type = 'foobar'))
-#' Search("foobar", asdf = TRUE)$hits$hits
+#' Search(x, "foobar", asdf = TRUE)$hits$hits
+#' invisible(docs_bulk_update(x, df3, index = 'foobar', type = 'foobar'))
+#' Search(x, "foobar", asdf = TRUE)$hits$hits
 #' }
-docs_bulk_update <- function(x, index = NULL, type = NULL, chunk_size = 1000,
+docs_bulk_update <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
                              doc_ids = NULL, raw = FALSE, ...) {
   
-  UseMethod("docs_bulk_update")
+  UseMethod("docs_bulk_update", x)
 }
 
 #' @export
-docs_bulk_update.default <- function(x, index = NULL, type = NULL, 
+docs_bulk_update.default <- function(conn, x, index = NULL, type = NULL, 
                                      chunk_size = 1000, doc_ids = NULL, 
                                      raw = FALSE, quiet = FALSE, ...) {
   
@@ -47,7 +47,7 @@ docs_bulk_update.default <- function(x, index = NULL, type = NULL,
 }
 
 #' @export
-docs_bulk_update.data.frame <- function(x, index = NULL, type = NULL, 
+docs_bulk_update.data.frame <- function(conn, x, index = NULL, type = NULL, 
                                         chunk_size = 1000, doc_ids = NULL, 
                                         raw = FALSE, quiet = FALSE, ...) {
   
@@ -83,7 +83,7 @@ docs_bulk_update.data.frame <- function(x, index = NULL, type = NULL,
   resl <- vector(mode = "list", length = length(data_chks))
   for (i in seq_along(data_chks)) {
     if (!quiet) setTxtProgressBar(pb, i)
-    resl[[i]] <- docs_bulk(make_bulk_update(x[data_chks[[i]], , drop = FALSE], 
+    resl[[i]] <- docs_bulk(conn, make_bulk_update(x[data_chks[[i]], , drop = FALSE], 
                                      index, type, id_chks[[i]]), ...)
   }
   return(resl)

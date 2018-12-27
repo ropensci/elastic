@@ -64,7 +64,7 @@
 #' head(cat_nodes(x, help = TRUE, parse = TRUE))
 #'
 #' # Get back only certain fields
-#' cat_nodes(x, x)
+#' cat_nodes(x)
 #' cat_nodes(x, h = c('ip','port','heapPercent','name'))
 #' cat_nodes(x, h = c('id', 'ip', 'port', 'v', 'm'))
 #' cat_indices(x, verbose = TRUE)
@@ -81,6 +81,7 @@
 #' @export
 #' @rdname cat
 cat_ <- function(conn, parse = FALSE, ...) {
+  is_conn(conn)
   conn$stop_es_version(110, "cat_aliases")
   cat_helper(conn, '', parse = parse, ...)
 }
@@ -88,6 +89,7 @@ cat_ <- function(conn, parse = FALSE, ...) {
 #' @export
 #' @rdname cat
 cat_aliases <- function(conn, verbose=FALSE, index=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  is_conn(conn)
   conn$stop_es_version(110, "cat_aliases")
   cat_helper(conn, 'aliases', v=verbose, i=index, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
@@ -95,6 +97,7 @@ cat_aliases <- function(conn, verbose=FALSE, index=NULL, h=NULL, help=FALSE, byt
 #' @export
 #' @rdname cat
 cat_allocation <- function(conn, verbose=FALSE, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  is_conn(conn)
   conn$stop_es_version(110, "cat_aliases")
   cat_helper(conn, 'allocation', v=verbose, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
@@ -102,6 +105,7 @@ cat_allocation <- function(conn, verbose=FALSE, h=NULL, help=FALSE, bytes=FALSE,
 #' @export
 #' @rdname cat
 cat_count <- function(conn, verbose=FALSE, index=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  is_conn(conn)
   conn$stop_es_version(110, "cat_aliases")
   cat_helper(conn, 'count', v=verbose, i=index, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
@@ -109,6 +113,7 @@ cat_count <- function(conn, verbose=FALSE, index=NULL, h=NULL, help=FALSE, bytes
 #' @export
 #' @rdname cat
 cat_segments <- function(conn, verbose=FALSE, index=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  is_conn(conn)
   conn$stop_es_version(110, "cat_aliases")
   cat_helper(conn, 'segments', v=verbose, i=index, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
@@ -116,6 +121,7 @@ cat_segments <- function(conn, verbose=FALSE, index=NULL, h=NULL, help=FALSE, by
 #' @export
 #' @rdname cat
 cat_health <- function(conn, verbose=FALSE, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  is_conn(conn)
   conn$stop_es_version(110, "cat_aliases")
   cat_helper(conn, 'health', v=verbose, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
@@ -123,6 +129,7 @@ cat_health <- function(conn, verbose=FALSE, h=NULL, help=FALSE, bytes=FALSE, par
 #' @export
 #' @rdname cat
 cat_indices <- function(conn, verbose=FALSE, index=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  is_conn(conn)
   conn$stop_es_version(110, "cat_aliases")
   cat_helper(conn, 'indices', v=verbose, i=index, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
@@ -130,6 +137,7 @@ cat_indices <- function(conn, verbose=FALSE, index=NULL, h=NULL, help=FALSE, byt
 #' @export
 #' @rdname cat
 cat_master <- function(conn, verbose=FALSE, index=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  is_conn(conn)
   conn$stop_es_version(110, "cat_aliases")
   cat_helper(conn, 'master', v=verbose, i=index, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
@@ -137,6 +145,7 @@ cat_master <- function(conn, verbose=FALSE, index=NULL, h=NULL, help=FALSE, byte
 #' @export
 #' @rdname cat
 cat_nodes <- function(conn, verbose=FALSE, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  is_conn(conn)
   conn$stop_es_version(110, "cat_aliases")
   cat_helper(conn, 'nodes', v=verbose, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
@@ -144,7 +153,9 @@ cat_nodes <- function(conn, verbose=FALSE, h=NULL, help=FALSE, bytes=FALSE, pars
 #' @export
 #' @rdname cat
 cat_nodeattrs <- function(conn, verbose=FALSE, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  is_conn(conn)
   conn$stop_es_version(110, "cat_nodeattrs")
+  is_conn(conn)
   conn$stop_es_version(160, "cat_nodeattrs")
   cat_helper(conn, 'nodeattrs', v=verbose, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
@@ -152,6 +163,7 @@ cat_nodeattrs <- function(conn, verbose=FALSE, h=NULL, help=FALSE, bytes=FALSE, 
 #' @export
 #' @rdname cat
 cat_pending_tasks <- function(conn, verbose=FALSE, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  is_conn(conn)
   conn$stop_es_version(110, "cat_aliases")
   cat_helper(conn, 'pending_tasks', v=verbose, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
@@ -159,6 +171,7 @@ cat_pending_tasks <- function(conn, verbose=FALSE, h=NULL, help=FALSE, bytes=FAL
 #' @export
 #' @rdname cat
 cat_plugins <- function(conn, verbose=FALSE, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  is_conn(conn)
   conn$stop_es_version(110, "cat_aliases")
   cat_helper(conn, 'plugins', v=verbose, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
@@ -166,6 +179,7 @@ cat_plugins <- function(conn, verbose=FALSE, h=NULL, help=FALSE, bytes=FALSE, pa
 #' @export
 #' @rdname cat
 cat_recovery <- function(conn, verbose=FALSE, index=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  is_conn(conn)
   conn$stop_es_version(110, "cat_aliases")
   cat_helper(conn, 'recovery', v=verbose, i=index, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
@@ -173,6 +187,7 @@ cat_recovery <- function(conn, verbose=FALSE, index=NULL, h=NULL, help=FALSE, by
 #' @export
 #' @rdname cat
 cat_thread_pool <- function(conn, verbose=FALSE, index=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  is_conn(conn)
   conn$stop_es_version(110, "cat_aliases")
   cat_helper(conn, 'thread_pool', v=verbose, i=index, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
@@ -180,6 +195,7 @@ cat_thread_pool <- function(conn, verbose=FALSE, index=NULL, h=NULL, help=FALSE,
 #' @export
 #' @rdname cat
 cat_shards <- function(conn, verbose=FALSE, index=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  is_conn(conn)
   conn$stop_es_version(110, "cat_aliases")
   cat_helper(conn, 'shards', v=verbose, i=index, h=h, help=help, bytes=bytes, parse=parse, ...)
 }
@@ -187,6 +203,7 @@ cat_shards <- function(conn, verbose=FALSE, index=NULL, h=NULL, help=FALSE, byte
 #' @export
 #' @rdname cat
 cat_fielddata <- function(conn, verbose=FALSE, index=NULL, fields=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+  is_conn(conn)
   conn$stop_es_version(110, "cat_aliases")
   cat_helper(conn, 'fielddata', v=verbose, i=index, f=fields, h=h, help=help, bytes=bytes, parse=parse, ...)
 }

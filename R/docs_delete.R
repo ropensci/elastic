@@ -1,6 +1,7 @@
 #' Delete a document
 #'
 #' @export
+#' @param conn an Elasticsearch connection object, see [Elasticsearch]
 #' @param index (character) The name of the index. Required
 #' @param type (character) The type of the document. Required
 #' @param id (numeric/character) The document ID. Can be numeric or character. 
@@ -12,37 +13,40 @@
 #' @param version (character) Explicit version number for concurrency control
 #' @param version_type (character) Specific version type. One of internal 
 #' or external
-#' @param callopts Curl args passed on to [httr::DELETE()]
+#' @param callopts Curl args passed on to [crul::HttpClient]
 #' @param ... Further args to query DSL
 #' @references
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html>
 #' @examples \dontrun{
-#' if (!index_exists("plos")) {
+#' (x <- connect())
+#' 
+#' if (!index_exists(x, "plos")) {
 #'  plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-#'  docs_bulk(plosdat)
+#'  docs_bulk(x, plosdat)
 #' }
 #'
 #' # delete a document
-#' if (!docs_get(index='plos', type='article', id=36, exists=TRUE)) {
-#'   docs_create(index='plos', type='article', id=36, 
+#' if (!docs_get(x, index='plos', type='article', id=36, exists=TRUE)) {
+#'   docs_create(x, index='plos', type='article', id=36, 
 #'     body = list(id="12345", title="New title")
 #'   )
 #' }
-#' docs_get(index='plos', type='article', id=36)
-#' docs_delete(index='plos', type='article', id=36)
-#' # docs_get(index='plos', type='article', id=36) # and the document is gone
+#' docs_get(x, index='plos', type='article', id=36)
+#' docs_delete(x, index='plos', type='article', id=36)
+#' # docs_get(x, index='plos', type='article', id=36) # and the document is gone
 #' }
 
-docs_delete <- function(index, type, id, refresh=NULL, routing=NULL, 
+docs_delete <- function(conn, index, type, id, refresh=NULL, routing=NULL, 
   timeout=NULL, version=NULL, version_type=NULL, callopts=list(), ...) {
   
-  url <- make_url(es_get_auth())
+  is_conn(conn)
+  url <- conn$make_url()
   url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), esc(id))
   args <- ec(list(refresh=refresh, routing=routing, timeout=timeout,
                   version=version, version_type=version_type, ...))
   if (length(args) == 0) args <- NULL
-  out <- DELETE(url, query=args, c(es_env$headers, mc(make_up(), callopts)))
-  stop_for_status(out)
-  tt <- cont_utf8(out)
-  jsonlite::fromJSON(tt, FALSE)
+  cli <- conn$make_conn(url, list(), callopts)
+  res <- cli$delete(query = args)
+  geterror(res)
+  jsonlite::fromJSON(res$parse("UTF-8"), FALSE)
 }

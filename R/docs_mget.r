@@ -1,7 +1,8 @@
-#' Get multiple documents via the multiple get API.
+#' Get multiple documents via the multiple get API
 #'
 #' @export
 #' @template all
+#' @param conn an Elasticsearch connection object, see [Elasticsearch]
 #' @param ids More than one document id, see examples.
 #' @param type_id List of vectors of length 2, each with an element for 
 #' type and id.
@@ -26,52 +27,52 @@
 #'  multiple documents from different indexes and different types.
 #' 
 #' @examples \dontrun{
-#' connect()
+#' (x <- connect())
 #' 
-#' if (!index_exists('plos')) {
+#' if (!index_exists(x, 'plos')) {
 #'   plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-#'   invisible(docs_bulk(plosdat))
+#'   invisible(docs_bulk(x, plosdat))
 #' }
 #' 
 #' # Same index and type
-#' docs_mget(index="plos", type="article", ids=c(9,10))
+#' docs_mget(x, index="plos", type="article", ids=c(9,10))
 #' 
-#' tmp <- docs_mget(index="plos", type="article", ids=c(9, 10), 
+#' tmp <- docs_mget(x, index="plos", type="article", ids=c(9, 10), 
 #'   raw=TRUE)
 #' es_parse(tmp)
-#' docs_mget(index="plos", type="article", ids=c(9, 10), 
+#' docs_mget(x, index="plos", type="article", ids=c(9, 10), 
 #'   source='title')
-#' docs_mget(index="plos", type="article", ids=c(14, 19), 
+#' docs_mget(x, index="plos", type="article", ids=c(14, 19), 
 #'   source=TRUE)
 #' 
 #' # curl options
-#' library("httr")
-#' docs_mget(index="plos", type="article", ids=1:2, callopts=verbose())
+#' docs_mget(x, index="plos", type="article", ids=1:2, callopts=list(verbose=TRUE))
 #'
 #' # Same index, but different types
-#' if (!index_exists('shakespeare')) {
+#' if (!index_exists(x, 'shakespeare')) {
 #'   shakedat <- system.file("examples", "shakespeare_data.json", package = "elastic")
-#'   invisible(docs_bulk(shakedat))
+#'   invisible(docs_bulk(x, shakedat))
 #' }
 #' 
-#' docs_mget(index="shakespeare", type_id=list(c("scene",1), c("line",20)))
-#' docs_mget(index="shakespeare", type_id=list(c("scene",1), c("line",20)), 
+#' docs_mget(x, index="shakespeare", type_id=list(c("scene",1), c("line",20)))
+#' docs_mget(x, index="shakespeare", type_id=list(c("scene",1), c("line",20)), 
 #'   source='play_name')
 #'
 #' # Different indices and different types pass in separately
-#' docs_mget(index_type_id = list(
+#' docs_mget(x, index_type_id = list(
 #'   c("shakespeare", "line", 20), 
 #'   c("plos", "article", 1)
 #'  )
 #' )
 #' }
 
-docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL, 
+docs_mget <- function(conn, index=NULL, type=NULL, ids=NULL, type_id=NULL, 
   index_type_id=NULL, source=NULL, fields=NULL, raw=FALSE, callopts=list(), 
   verbose=TRUE, ...) {
 
+  is_conn(conn)
   check_params(index, type, ids, type_id, index_type_id)
-  base <- make_url(es_get_auth())
+  base <- conn$make_url()
 
   if (!is.null(ids)) {
     if (length(ids) < 2) stop("If ids parameter is used, more than 1 id must be passed", call. = FALSE)
@@ -87,17 +88,13 @@ docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL,
 
   # One index, one type, one to many ids
   if (length(index) == 1 && length(unique(type)) == 1 && length(ids) > 1) {
-
     body <- jsonlite::toJSON(list("ids" = ids))
     url <- paste(base, esc(index), esc(type), '_mget', sep = "/")
-    out <- POST(url, c(es_env$headers, mc(make_up(), callopts)), 
-                content_type_json(), body = body, encode = 'json', 
-                query = args)
-
+    cli <- conn$make_conn(url, json_type(), callopts)
+    out <- cli$post(query = args, body = body, encode = "json")
   }
   # One index, many types, one to many ids
   else if (length(index) == 1 & length(type) > 1 | !is.null(type_id)) {
-
     # check for 2 elements in each element
     stopifnot(all(sapply(type_id, function(x) length(x) == 2)))
     docs <- lapply(type_id, function(x){
@@ -105,9 +102,8 @@ docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL,
     })
     tt <- jsonlite::toJSON(list("docs" = docs))
     url <- paste(base, esc(index), '_mget', sep = "/")
-    out <- POST(url, c(es_env$headers, mc(make_up(), callopts)), body = tt, 
-                content_type_json(), encode = 'json', query = args)
-
+    cli <- conn$make_conn(url, json_type(), callopts)
+    out <- cli$post(query = args, body = tt, encode = "json")
   }
   # Many indeces, many types, one to many ids
   else if (length(index) > 1 | !is.null(index_type_id)) {
@@ -118,20 +114,17 @@ docs_mget <- function(index=NULL, type=NULL, ids=NULL, type_id=NULL,
     })
     tt <- jsonlite::toJSON(list("docs" = docs))
     url <- paste(base, '_mget', sep = "/")
-    out <- POST(url, c(es_env$headers, mc(make_up(), callopts)), 
-                content_type_json(), body = tt, encode = 'json', query = args)
+    cli <- conn$make_conn(url, json_type(), callopts)
+    out <- cli$post(query = args, body = tt, encode = "json")
   }
 
-  stop_for_status(out)
+  geterror(out)
   if (verbose) message(URLdecode(out$url))
-  tt <- cont_utf8(out)
+  tt <- out$parse("UTF-8")
   class(tt) <- "elastic_mget"
 
-  if (raw) {
-    tt
-  } else {
-    es_parse(tt)
-  }
+  if (raw) return(tt)
+  es_parse(tt)
 }
 
 check_params <- function(index, type, ids, type_id, index_type_id){

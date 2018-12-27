@@ -10,8 +10,7 @@
 #' @param features (character) A single feature. One of settings, mappings, or 
 #' aliases
 #' @param raw If `TRUE` (default), data is parsed to list. If FALSE, then raw JSON.
-#' @param ... Curl args passed on to [httr::POST()], [httr::GET()],
-#' [httr::PUT()], [httr::HEAD()], or [httr::DELETE()]
+#' @param ... Curl args passed on to [crul::HttpClient]
 #' @param verbose If `TRUE` (default) the url call used printed to console.
 #' @param fields (character) Fields to add.
 #' @param metric (character) A character vector of metrics to display. Possible 
@@ -90,7 +89,7 @@
 #' (x <- connect())
 #' 
 #' # get information on an index
-#' index_get(x, x, index='shakespeare')
+#' index_get(x, index='shakespeare')
 #' ## this one is the same as running index_settings('shakespeare')
 #' index_get(x, index='shakespeare', features='settings')
 #' index_get(x, index='shakespeare', features='mappings')
@@ -186,7 +185,7 @@
 #'
 #' # Upgrade one or more indices to the latest format. The upgrade process converts any
 #' # segments written with previous formats.
-#' if (conn$es_ver() < 500) {
+#' if (x$es_ver() < 500) {
 #'   index_upgrade(x, 'plos')
 #'   index_upgrade(x, c('plos','gbif'))
 #' }
@@ -198,10 +197,12 @@
 #' index_analyze(x, text = 'this is a test', analyzer='stop')
 #' index_analyze(x, text = 'this is a test', tokenizer='keyword', 
 #'   filters='lowercase')
-#' index_analyze(x, text = 'this is a test', tokenizer='keyword', filters='lowercase',
-#'    char_filters='html_strip')
-#' index_analyze(x, text = 'this is a test', index = 'plos')
-#' index_analyze(x, text = 'this is a test', index = 'shakespeare')
+#' index_analyze(x, text = 'this is a test', tokenizer='keyword', 
+#'   filters='lowercase', char_filters='html_strip')
+#' index_analyze(x, text = 'this is a test', index = 'plos', 
+#'   analyzer="standard")
+#' index_analyze(x, text = 'this is a test', index = 'shakespeare', 
+#'   analyzer="standard")
 #'
 #' ## NGram tokenizer
 #' body <- '{
@@ -261,6 +262,7 @@ NULL
 #' @export
 #' @rdname index
 index_get <- function(conn, index=NULL, features=NULL, raw=FALSE, verbose=TRUE, ...) {
+  is_conn(conn)
   conn$stop_es_version(120, "index_get")
   if (length(features) > 1) stop("'features' must be length 1")
   index_GET(conn, index, features, raw, ...)
@@ -269,6 +271,7 @@ index_get <- function(conn, index=NULL, features=NULL, raw=FALSE, verbose=TRUE, 
 #' @export
 #' @rdname index
 index_exists <- function(conn, index, ...) {
+  is_conn(conn)
   url <- file.path(conn$make_url(), esc(index))
   res <- conn$make_conn(url, ...)$head()
   if (res$status_code == 200) TRUE else FALSE
@@ -277,6 +280,7 @@ index_exists <- function(conn, index, ...) {
 #' @export
 #' @rdname index
 index_delete <- function(conn, index, raw=FALSE, verbose=TRUE, ...) {
+  is_conn(conn)
   url <- paste0(conn$make_url(), "/", esc(index))
   out <- conn$make_conn(url, ...)$delete()
   if (verbose) message(URLdecode(out$url))
@@ -288,6 +292,7 @@ index_delete <- function(conn, index, raw=FALSE, verbose=TRUE, ...) {
 #' @export
 #' @rdname index
 index_create <- function(conn, index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...) {
+  is_conn(conn)
   url <- conn$make_url()
   es_PUT(conn, paste0(url, "/", esc(index)), body = body, ...)
 }
@@ -296,7 +301,7 @@ index_create <- function(conn, index=NULL, body=NULL, raw=FALSE, verbose=TRUE, .
 #' @rdname index
 index_recreate <- function(conn, index=NULL, body=NULL, raw=FALSE, verbose=TRUE, 
                            ...) {
-  
+  is_conn(conn)
   if (index_exists(conn, index, ...)) {
     if (verbose) message("deleting ", index)
     index_delete(conn, index, verbose = verbose, ...)
@@ -308,12 +313,14 @@ index_recreate <- function(conn, index=NULL, body=NULL, raw=FALSE, verbose=TRUE,
 #' @export
 #' @rdname index
 index_close <- function(conn, index, ...) {
+  is_conn(conn)
   close_open(conn, index, "_close", ...)
 }
 
 #' @export
 #' @rdname index
 index_open <- function(conn, index, ...) {
+  is_conn(conn)
   close_open(conn, index, "_open", ...)
 }
 
@@ -322,7 +329,7 @@ index_open <- function(conn, index, ...) {
 index_stats <- function(conn, index=NULL, metric=NULL, completion_fields=NULL, 
                         fielddata_fields=NULL, fields=NULL, groups=NULL, 
                         level='indices', ...) {
-  
+  is_conn(conn)
   url <- conn$make_url()
   url <- if (is.null(index)) {
     file.path(url, "_stats") 
@@ -339,6 +346,7 @@ index_stats <- function(conn, index=NULL, metric=NULL, completion_fields=NULL,
 #' @export
 #' @rdname index
 index_settings <- function(conn, index="_all", ...) {
+  is_conn(conn)
   url <- conn$make_url()
   url <- if (is.null(index) || index == "_all") {
     file.path(url, "_settings")
@@ -351,6 +359,7 @@ index_settings <- function(conn, index="_all", ...) {
 #' @export
 #' @rdname index
 index_settings_update <- function(conn, index=NULL, body, ...) {
+  is_conn(conn)
   url <- conn$make_url()
   url <- if (is.null(index)) {
     file.path(url, "_settings") 
@@ -364,6 +373,7 @@ index_settings_update <- function(conn, index=NULL, body, ...) {
 #' @export
 #' @rdname index
 index_segments <- function(conn, index = NULL, ...) {
+  is_conn(conn)
   es_GET_wrap1(conn, index, "_segments", ...)
 }
 
@@ -371,7 +381,7 @@ index_segments <- function(conn, index = NULL, ...) {
 #' @rdname index
 index_recovery <- function(conn, index = NULL, detailed = FALSE, active_only = FALSE, 
                            ...) {
-  
+  is_conn(conn)
   conn$stop_es_version(110, "index_recovery")
   args <- ec(list(detailed = as_log(detailed), 
                   active_only = as_log(active_only)))
@@ -384,6 +394,7 @@ index_optimize <- function(conn, index = NULL, max_num_segments = NULL,
   only_expunge_deletes = FALSE,
   flush = TRUE, wait_for_merge = TRUE, ...) {
   
+  is_conn(conn)
   if (conn$es_ver() >= 500) {
     stop("optimize is gone in ES >= v5, see ?index_forcemerge")
   }
@@ -400,6 +411,7 @@ index_optimize <- function(conn, index = NULL, max_num_segments = NULL,
 index_forcemerge <- function(conn, index = NULL, max_num_segments = NULL, 
                            only_expunge_deletes = FALSE, flush = TRUE, ...) {
   
+  is_conn(conn)
   if (conn$es_ver() < 500) {
     stop("forcemerge is only in ES >= v5, see ?index_optimize")
   }
@@ -414,6 +426,7 @@ index_forcemerge <- function(conn, index = NULL, max_num_segments = NULL,
 #' @export
 #' @rdname index
 index_upgrade <- function(conn, index = NULL, wait_for_completion = FALSE, ...) {
+  is_conn(conn)
   conn$stop_es_version(120, "index_get")
   if (conn$es_ver() >= 500) {
     stop("upgrade is removed in ES >= v5, see
@@ -428,6 +441,7 @@ https://www.elastic.co/guide/en/elasticsearch/reference/current/reindex-upgrade.
 index_analyze <- function(conn, text=NULL, field=NULL, index=NULL, analyzer=NULL, 
                           tokenizer=NULL, filters=NULL, char_filters=NULL, 
                           body=list(), ...) {
+  is_conn(conn)
   url <- conn$make_url()
   if (!is.null(index)) {
     url <- sprintf("%s/%s/_analyze", url, esc(cl(index)))
@@ -437,13 +451,13 @@ index_analyze <- function(conn, text=NULL, field=NULL, index=NULL, analyzer=NULL
   
   if (conn$es_ver() >= 500) {
     body <- ec(list(text = text, analyzer = analyzer, tokenizer = tokenizer, 
-                 filter = list(filters), char_filter = char_filters, 
+                 filter = I(filters), char_filter = I(char_filters), 
                  field = field))
     args <- list()
   } else {
     body <- list()
     args <- ec(list(text = text, analyzer = analyzer, tokenizer = tokenizer, 
-                    filters = filters, char_filters = char_filters, 
+                    filters = I(filters), char_filters = I(char_filters), 
                     field = field))
   }
   
@@ -455,6 +469,7 @@ index_analyze <- function(conn, text=NULL, field=NULL, index=NULL, analyzer=NULL
 index_flush <- function(conn, index=NULL, force=FALSE, full=FALSE, 
                         wait_if_ongoing=FALSE, ...) {
   
+  is_conn(conn)
   url <- conn$make_url()
   if (!is.null(index)) {
     url <- sprintf("%s/%s/_flush", url, esc(cl(index)))
@@ -471,6 +486,8 @@ index_flush <- function(conn, index=NULL, force=FALSE, full=FALSE,
 index_clear_cache <- function(conn, index=NULL, filter=FALSE, filter_keys=NULL, 
                               fielddata=FALSE, query_cache=FALSE, 
                               id_cache=FALSE, ...) {
+
+  is_conn(conn)
   url <- conn$make_url()
   if (!is.null(index)) {
     url <- sprintf("%s/%s/_cache/clear", url, esc(cl(index)))

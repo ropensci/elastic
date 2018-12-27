@@ -10,22 +10,24 @@
 \alias{alias_delete}
 \title{Elasticsearch alias APIs}
 \usage{
-alias_get(index = NULL, alias = NULL, ignore_unavailable = FALSE,
-  ...)
+alias_get(conn, index = NULL, alias = NULL,
+  ignore_unavailable = FALSE, ...)
 
-aliases_get(index = NULL, alias = NULL, ignore_unavailable = FALSE,
-  ...)
+aliases_get(conn, index = NULL, alias = NULL,
+  ignore_unavailable = FALSE, ...)
 
-alias_exists(index = NULL, alias = NULL, ...)
+alias_exists(conn, index = NULL, alias = NULL, ...)
 
-alias_create(index, alias, filter = NULL, routing = NULL,
+alias_create(conn, index, alias, filter = NULL, routing = NULL,
   search_routing = NULL, index_routing = NULL, ...)
 
-alias_rename(index, alias, alias_new, ...)
+alias_rename(conn, index, alias, alias_new, ...)
 
-alias_delete(index = NULL, alias, ...)
+alias_delete(conn, index = NULL, alias, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+
 \item{index}{(character) An index name}
 
 \item{alias}{(character) An alias name}
@@ -56,49 +58,51 @@ docs link
 }
 \examples{
 \dontrun{
+# connection setup
+(x <- connect())
+
 # Create/update an alias
-alias_create(index = "plos", alias = "candles", config = httr::verbose())
+alias_create(x, index = "plos", alias = "candles")
 ## more than one alias
-alias_create(index = "plos", alias = c("tables", "chairs"), config = httr::verbose())
+alias_create(x, index = "plos", alias = c("tables", "chairs"))
 
 # associate an alias with two multiple different indices
-alias_create(index = c("plos", "shakespeare"), alias = "stools", config = httr::verbose())
+alias_create(x, index = c("plos", "shakespeare"), alias = "stools")
 
 # Retrieve a specified alias
-alias_get(index="plos")
-alias_get(alias="tables")
-alias_get(alias="stools")
-aliases_get()
+alias_get(x, index="plos")
+alias_get(x, alias="tables")
+alias_get(x, alias="stools")
+aliases_get(x)
 
 # rename an alias
-aliases_get("plos")
-alias_rename(index = 'plos', alias = "stools", alias_new = "plates")
-aliases_get("plos")
+aliases_get(x, "plos")
+alias_rename(x, index = 'plos', alias = "stools", alias_new = "plates")
+aliases_get(x, "plos")
 
 # filtered aliases
-alias_create(index = "plos", alias = "candles", 
+alias_create(x, index = "plos", alias = "candles", 
   filter = list(wildcard = list(title = "cell")))
 ## a search with the alias should give titles with cell in them
-(titles <- Search("candles", asdf = TRUE)$hits$hits$`_source.title`)
+(titles <- Search(x, "candles", asdf = TRUE)$hits$hits$`_source.title`)
 grepl("cell", titles, ignore.case = TRUE)
 
 # routing
-alias_create(index = "plos", alias = "candles", 
+alias_create(x, index = "plos", alias = "candles", 
   routing = "1")
 
 # Check for alias existence
-alias_exists(index = "plos")
-alias_exists(alias = "tables")
-alias_exists(alias = "adsfasdf")
+alias_exists(x, index = "plos")
+alias_exists(x, alias = "tables")
+alias_exists(x, alias = "adsfasdf")
 
 # Delete an alias
-alias_delete(index = "plos", alias = "candles")
-alias_exists(alias = "tables")
+alias_delete(x, index = "plos", alias = "tables")
+alias_exists(x, alias = "tables")
 
 # Curl options
-library("httr")
-alias_create(index = "plos", alias = "tables")
-aliases_get(alias = "tables", config=verbose())
+alias_create(x, index = "plos", alias = "tables")
+aliases_get(x, alias = "tables", verbose = TRUE)
 }
 }
 \references{
