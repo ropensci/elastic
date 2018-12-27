@@ -228,7 +228,7 @@ cat_helper <- function(conn, what='', v=FALSE, i=NULL, f=NULL, h=NULL, help=FALS
                   h = asnull(paste0(h, collapse = ",")),
                   bytes = ifbytes(bytes)))
   cli <- crul::HttpClient$new(url = url,
-    headers = c(conn$headers, json_type()), 
+    headers = c(conn$headers), 
     opts = c(conn$opts, ...),
     auth = crul::auth(conn$user, conn$pwd)
   )

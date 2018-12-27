@@ -33,14 +33,3 @@ test_that("cat_indices", {
     expect_error(cat_indices(x, bytes = "adfad"), "is not TRUE")
   }
 })
-
-# test_that("cat_master", {
-# 
-#   d <- cat_master(parse = TRUE, verbose = TRUE)
-#   expect_is(d, "data.frame")
-#   expect_named(d)
-# 
-#   expect_is(d$host, "character")
-# 
-#   expect_error(cat_master(help = "Adf"), "is not TRUE")
-# })

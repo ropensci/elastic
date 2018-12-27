@@ -16,5 +16,10 @@ test_that("count", {
   expect_gt(b, 10)
 
   expect_error(count(x, "adfadf"), "no such index||IndexMissing")
-  expect_equal(count(x, type = "adfad"), 0)
+  
+  if (es_version(x) > 246) {
+    expect_equal(count(x, type = "adfad"), 0)
+  } else {
+    expect_error(count(x, type = "adfad"), "no such index")
+  }
 })
