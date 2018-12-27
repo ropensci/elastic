@@ -93,8 +93,6 @@ docs_update <- function(conn, index, type, id, body, fields=NULL, source=NULL,
 update_POST <- function(conn, url, query=NULL, body=NULL, callopts) {
   cli <- conn$make_conn(url, json_type(), callopts)
   tt <- cli$post(query = query, body = body, encode = "json")
-  # tt <- POST(url, es_env$headers, make_up(), callopts, query = query, 
-  #            content_type_json(), body = body, encode = "json")
   geterror(tt)
   jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }

@@ -5,16 +5,18 @@
 \alias{tasks_cancel}
 \title{Elasticsearch tasks endpoints}
 \usage{
-tasks(task_id = NULL, nodes = NULL, actions = NULL,
+tasks(conn, task_id = NULL, nodes = NULL, actions = NULL,
   parent_task_id = NULL, detailed = FALSE, group_by = NULL,
   wait_for_completion = FALSE, timeout = NULL, raw = FALSE, ...)
 
-tasks_cancel(node_id = NULL, task_id = NULL, nodes = NULL,
+tasks_cancel(conn, node_id = NULL, task_id = NULL, nodes = NULL,
   actions = NULL, parent_task_id = NULL, detailed = FALSE,
   group_by = NULL, wait_for_completion = FALSE, timeout = NULL,
   raw = FALSE, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{task_id}{a task id}
 
 \item{nodes}{(character) The nodes}
@@ -44,13 +46,13 @@ Elasticsearch tasks endpoints
 }
 \examples{
 \dontrun{
-connect()
+x <- connect()
 
-tasks()
-# tasks(parent_task_id = "1234")
+tasks(x)
+# tasks(x, parent_task_id = "1234")
 
 # delete a task
-# tasks_cancel()
+# tasks_cancel(x)
 }
 }
 \references{

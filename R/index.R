@@ -504,7 +504,7 @@ index_clear_cache <- function(conn, index=NULL, filter=FALSE, filter_keys=NULL,
 
 
 ###### HELPERS
-close_open <- function(conn, index, which, ...){
+close_open <- function(conn, index, which, ...) {
   url <- conn$make_url()
   url <- sprintf("%s/%s/%s", url, esc(index), which)
   out <- conn$make_conn(url, ...)$post()
@@ -512,7 +512,7 @@ close_open <- function(conn, index, which, ...){
   jsonlite::fromJSON(out$parse("UTF-8"), FALSE)
 }
 
-es_GET_wrap1 <- function(conn, index, which, args=NULL, ...){
+es_GET_wrap1 <- function(conn, index, which, args=NULL, ...) {
   url <- conn$make_url()
   url <- if (is.null(index)) {
     file.path(url, which) 
@@ -522,7 +522,7 @@ es_GET_wrap1 <- function(conn, index, which, args=NULL, ...){
   es_GET_(conn, url, args, ...)
 }
 
-es_POST_ <- function(conn, index, which, args=NULL, ...){
+es_POST_ <- function(conn, index, which, args=NULL, ...) {
   url <- conn$make_url()
   url <- if (is.null(index)) {
     file.path(url, which) 
@@ -534,24 +534,14 @@ es_POST_ <- function(conn, index, which, args=NULL, ...){
   jsonlite::fromJSON(tt$parse('UTF-8'), FALSE)
 }
 
-analyze_GET <- function(conn, url, args = NULL, ...){
-  out <- GET(url, query = args, make_up(), es_env$headers, ...)
-  stop_for_status(out)
-  tt <- cont_utf8(out)
-  jsonlite::fromJSON(tt)
-}
-
-analyze_POST <- function(conn, url, args = NULL, body, ...){
+analyze_POST <- function(conn, url, args = NULL, body, ...) {
   body <- check_inputs(body)
   out <- conn$make_conn(url, json_type(), ...)$post(query = args, body = body)
-  # out <- POST(url, query = args, body = body, make_up(),
-  #             content_type_json(), es_env$headers, ...)
   geterror(out)
   jsonlite::fromJSON(out$parse("UTF-8"))
 }
 
-cc_POST <- function(conn, url, args = NULL, ...){
-  # tt <- POST(url, body = args, encode = "json", make_up(), es_env$headers, ...)
+cc_POST <- function(conn, url, args = NULL, ...) {
   tt <- conn$make_conn(url, ...)$post(body = args, encode = "json")
   if (tt$status_code > 202) geterror(tt)
   jsonlite::fromJSON(res <- tt$parse("UTF-8"), FALSE)

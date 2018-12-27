@@ -169,8 +169,8 @@ Elasticsearch <- R6::R6Class(
     ping = function(...) es_GET_(self, self$make_url(), ...),
 
     info = function(...) {
-      cli <- crul::HttpClient$new(self$make_url(), headers = make_up())
-      res <- tryCatch(cli$get(), error = function(e) e)
+      cli <- crul::HttpClient$new(self$make_url(), auth = self$make_up())
+      res <- tryCatch(cli$get(...), error = function(e) e)
       if (inherits(res, "error")) {
         stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting", 
                      self$make_url()), call. = FALSE)
@@ -214,60 +214,13 @@ Elasticsearch <- R6::R6Class(
         opts = c(self$opts, ...), 
         auth = crul::auth(self$user, self$pwd)
       )
+    },
+
+    make_up = function() {
+      crul::auth(self$user, self$pwd)
     }
+
   ),
 
   private = list()
 )
-
-es_auth <- function(es_host = NULL, es_port = NULL, es_path = NULL, 
-                    es_transport_schema = NULL, es_user = NULL, es_pwd = NULL, 
-                    force = FALSE, es_base = NULL) {
-  
-  host <- ifnull(es_host, 'ES_HOST')
-  port <- if (is.null(es_port)) "" else es_port
-  path <- ifnull(es_path, 'ES_PATH')
-  transport <- ifnull(es_transport_schema, 'ES_TRANSPORT_SCHEMA')
-  user <- ifnull(es_user, 'ES_USER')
-  pwd <- ifnull(es_pwd, 'ES_PWD')
-
-  if (identical(host, "") || force) {
-    if (!interactive()) {
-      stop("Please set env var ES_HOST for your host url for your Elasticsearch server",
-           call. = FALSE)
-    }
-    message("Couldn't find env var ES_HOST See ?es_auth for more details.")
-    message("Please enter your Elasticsearch host url and press enter:")
-    host <- readline(": ")
-    if (identical(host, "")) {
-      stop("Elasticsearch host url entry failed", call. = FALSE)
-    }
-    message("Updating ES_HOST env var\n")
-    Sys.setenv(ES_HOST = host)
-  } else { 
-    host <- host 
-  }
-
-  # Sys.setenv(ES_HOST = host)
-  # Sys.setenv(ES_TRANSPORT = transport)
-  # Sys.setenv(ES_PORT = port)
-  # Sys.setenv(ES_PATH = path)
-  # Sys.setenv(ES_USER = user)
-  # Sys.setenv(ES_PWD = pwd)
-  list(host = host, port = port, path = path, transport = transport)
-}
-
-ph <- function(x) {
-  if (is.null(x)) {
-    'NULL'
-  } else {
-    str <- paste0(names(x$headers), collapse = ", ")
-    if (nchar(str) > 30) paste0(substring(str, 1, 30), " ...") else str
-  }
-}
-
-es_get_user_pwd <- function() {
-  user <- Sys.getenv("ES_USER")
-  pwd <- Sys.getenv("ES_PWD")
-  list(user = user, pwd = pwd)
-}

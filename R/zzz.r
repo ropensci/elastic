@@ -1,7 +1,5 @@
 ec <- function(l) Filter(Negate(is.null), l)
 
-cont_utf8 <- function(x) content(x, as = "text", encoding = "UTF-8")
-
 as_log <- function(x){
   if (is.null(x)) {
     x
@@ -29,15 +27,6 @@ pluck <- function(x, name, type) {
     lapply(x, "[[", name)
   } else {
     vapply(x, "[[", name, FUN.VALUE = type)
-  }
-}
-
-make_up <- function() {
-  up <- es_get_user_pwd()
-  if (nchar(up$user) != 0 && nchar(up$pwd) != 0) {
-    authenticate(up$user, up$pwd)
-  } else {
-    list()
   }
 }
 
@@ -109,4 +98,19 @@ is_conn <- function(x) {
     stop("'conn' must be an elastic connection object; see ?connect", 
       call. = FALSE)
   }
+}
+
+ph <- function(x) {
+  if (is.null(x)) {
+    'NULL'
+  } else {
+    str <- paste0(names(x$headers), collapse = ", ")
+    if (nchar(str) > 30) paste0(substring(str, 1, 30), " ...") else str
+  }
+}
+
+es_get_user_pwd <- function() {
+  user <- Sys.getenv("ES_USER")
+  pwd <- Sys.getenv("ES_PWD")
+  list(user = user, pwd = pwd)
 }

@@ -67,7 +67,7 @@ docs_get <- function(conn, index, type, id, source=NULL, fields=NULL, exists=FAL
     geterror(out)
     if (verbose) message(URLdecode(out$url))
     if (raw) {
-      cont_utf8(out)
+      out$parse("UTF-8")
     } else {
       jsonlite::fromJSON(out$parse("UTF-8"), FALSE)
     }

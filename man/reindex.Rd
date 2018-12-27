@@ -4,11 +4,13 @@
 \alias{reindex}
 \title{Reindex}
 \usage{
-reindex(body, refresh = NULL, requests_per_second = NULL,
+reindex(conn, body, refresh = NULL, requests_per_second = NULL,
   slices = NULL, timeout = NULL, wait_for_active_shards = NULL,
   wait_for_completion = NULL, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{body}{(list/character/json) The search definition using the Query DSL
 and the prototype for the index request.}
 
@@ -39,8 +41,10 @@ Reindex all documents from one index to another.
 }
 \examples{
 \dontrun{
-if (!index_exists("twitter")) index_create("twitter")
-if (!index_exists("new_twitter")) index_create("new_twitter")
+x <- connect()
+
+if (!index_exists(x, "twitter")) index_create(x, "twitter")
+if (!index_exists(x, "new_twitter")) index_create(x, "new_twitter")
 body <- '{
   "source": {
     "index": "twitter"
@@ -49,7 +53,7 @@ body <- '{
     "index": "new_twitter"
   }
 }'
-reindex(body = body)
+reindex(x, body = body)
 }
 }
 \references{

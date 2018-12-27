@@ -131,7 +131,6 @@ alias_rename <- function(conn, index, alias, alias_new, ...) {
 #' @rdname alias
 alias_delete <- function(conn, index=NULL, alias, ...) {
   out <- conn$make_conn(alias_url(conn, index, alias), ...)$delete()
-  # out <- DELETE(alias_url(index, alias), es_env$headers, make_up(), ...)
   geterror(out)
   jsonlite::fromJSON(out$parse('UTF-8'), FALSE)
 }
