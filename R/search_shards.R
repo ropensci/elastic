@@ -1,7 +1,7 @@
 #' Search shards
 #'
 #' @export
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param index One or more indeces
 #' @param routing A character vector of routing values to take into account 
 #' when determining which shards a request would be executed against.

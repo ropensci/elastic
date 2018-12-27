@@ -68,7 +68,7 @@ cat_fielddata(conn, verbose = FALSE, index = NULL, fields = NULL,
   h = NULL, help = FALSE, bytes = FALSE, parse = FALSE, ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{parse}{(logical) Parse to a data.frame or not. Default: \code{FALSE}}
 

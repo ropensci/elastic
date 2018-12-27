@@ -2,7 +2,7 @@
 #'
 #' @export
 #'
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param x (character) For `scroll`, a single scroll id; for
 #' `scroll_clear`, one or more scroll id's
 #' @param time_scroll (character) Specify how long a consistent view of the

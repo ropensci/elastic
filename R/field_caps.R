@@ -4,7 +4,7 @@
 #' among multiple indices.
 #'
 #' @export
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param fields A list of fields to compute stats for. optional
 #' @param index Index name, one or more
 #' @param body Query, either a list or json

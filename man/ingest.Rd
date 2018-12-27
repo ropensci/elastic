@@ -17,7 +17,7 @@ pipeline_delete(conn, id, body, ...)
 pipeline_simulate(conn, body, id = NULL, ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{id}{(character) one or more pipeline id's. with delete, you can use
 a wildcard match}

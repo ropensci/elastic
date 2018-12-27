@@ -29,7 +29,6 @@ es_GET <- function(conn, path, index=NULL, type=NULL, metric=NULL, node=NULL,
     auth = crul::auth(conn$user, conn$pwd)
   )
   tt <- cli$get(query = args)
-  # tt <- GET(url, query = args, c(es_env$headers, mc(make_up(), callopts)))
   geterror(tt)
   res <- tt$parse("UTF-8")
   if (!is.null(clazz)) {
@@ -58,7 +57,6 @@ index_GET <- function(conn, index, features, raw, ...) {
   tt <- crul::HttpClient$new(url = url, headers = conn$headers, 
     opts = c(conn$opts, ...), auth = crul::auth(conn$user, conn$pwd)
   )$get()
-  # tt <- GET(url, make_up(), es_env$headers, ...)
   if (tt$status_code > 202) geterror(tt)
   jsonlite::fromJSON(tt$parse('UTF-8'), FALSE)
 }

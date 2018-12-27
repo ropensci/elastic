@@ -1,7 +1,7 @@
 #' Elasticsearch cluster endpoints
 #'
 #' @name cluster
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param index Index
 #' @param metrics One or more of version, master_node, nodes, routing_table,
 #' metadata, and blocks. See Details.

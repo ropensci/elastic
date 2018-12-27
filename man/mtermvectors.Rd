@@ -12,7 +12,7 @@ mtermvectors(conn, index = NULL, type = NULL, ids = NULL,
   version_type = NULL, ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{index}{(character) The index in which the document resides.}
 

@@ -1,7 +1,7 @@
 #' Multi Termvectors
 #'
 #' @export
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param index (character) The index in which the document resides.
 #' @param type (character) The type of the document.
 #' @param ids (character) One or more document ids

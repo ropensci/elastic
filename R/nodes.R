@@ -1,7 +1,7 @@
 #' Elasticsearch nodes endpoints.
 #'
 #' @name nodes
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param node The node
 #' @param metric A metric to get. See Details.
 #' @param fields You can get information about field data memory usage on

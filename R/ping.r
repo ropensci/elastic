@@ -1,7 +1,7 @@
 #' Ping an Elasticsearch server.
 #'
 #' @export
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param ... Curl args passed on to [crul::verb-GET]
 #' @seealso [connect()]
 #' @examples \dontrun{

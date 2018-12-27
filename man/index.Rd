@@ -73,7 +73,7 @@ index_clear_cache(conn, index = NULL, filter = FALSE,
   id_cache = FALSE, ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{index}{(character) A character vector of index names}
 

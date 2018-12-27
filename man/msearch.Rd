@@ -7,7 +7,7 @@
 msearch(conn, x, raw = FALSE, asdf = FALSE, ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{x}{(character) A file path}
 

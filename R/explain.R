@@ -1,7 +1,7 @@
 #' Explain a search query.
 #'
 #' @export
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param index Only one index
 #' @param type Only one document type
 #' @param id Document id, only one

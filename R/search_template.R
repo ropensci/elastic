@@ -2,7 +2,7 @@
 #'
 #' @export
 #' @name Search_template
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param template (character) a template name
 #' @param body Query, either a list or json.
 #' @param raw (logical) If `FALSE` (default), data is parsed to list.

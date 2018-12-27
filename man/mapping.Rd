@@ -18,7 +18,7 @@ field_mapping_get(conn, index = NULL, type = NULL, field,
 type_exists(conn, index, type, ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{index}{(character) An index}
 

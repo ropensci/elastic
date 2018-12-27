@@ -7,7 +7,7 @@
 tokenizer_set(conn, index, body, ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{index}{(character) A character vector of index names}
 

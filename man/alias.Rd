@@ -26,7 +26,7 @@ alias_rename(conn, index, alias, alias_new, ...)
 alias_delete(conn, index = NULL, alias, ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{index}{(character) An index name}
 

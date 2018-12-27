@@ -1,7 +1,7 @@
 #' Get counts of the number of records per index.
 #'
 #' @export
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param index Index, defaults to all indices
 #' @param type Document type
 #' @param callopts Curl args passed on to [crul::verb-GET]

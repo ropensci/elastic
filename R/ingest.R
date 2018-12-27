@@ -4,7 +4,7 @@
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/ingest-apis.html>
 #' @name ingest
 #'
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param id (character) one or more pipeline id's. with delete, you can use 
 #' a wildcard match
 #' @param body body describing pipeline, see examples and Elasticsearch docs

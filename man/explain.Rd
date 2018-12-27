@@ -12,7 +12,7 @@ explain(conn, index = NULL, type = NULL, id = NULL, source2 = NULL,
   source_include = NULL, body = NULL, raw = FALSE, ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{index}{Only one index}
 

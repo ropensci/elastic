@@ -1,7 +1,7 @@
 #' Use the cat Elasticsearch api.
 #'
 #' @name cat
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param verbose (logical) If `TRUE` (default) the url call used printed to console
 #' @param index (character) Index name
 #' @param fields (character) Fields to return, only used with `fielddata`

@@ -20,7 +20,7 @@ Search_template_delete(conn, template, ...)
 Search_template_render(conn, body = list(), raw = FALSE, ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{body}{Query, either a list or json.}
 

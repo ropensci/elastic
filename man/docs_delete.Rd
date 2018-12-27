@@ -9,7 +9,7 @@ docs_delete(conn, index, type, id, refresh = NULL, routing = NULL,
   callopts = list(), ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{index}{(character) The name of the index. Required}
 

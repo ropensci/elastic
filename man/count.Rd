@@ -8,7 +8,7 @@ count(conn, index = NULL, type = NULL, callopts = list(),
   verbose = TRUE, ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{index}{Index, defaults to all indices}
 

@@ -1,6 +1,6 @@
 #' Elasticsearch alias APIs
 #'
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param index (character) An index name
 #' @param alias (character) An alias name
 #' @param alias_new (character) A new alias name, used in rename only

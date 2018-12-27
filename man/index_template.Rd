@@ -19,7 +19,7 @@ index_template_exists(conn, name, ...)
 index_template_delete(conn, name, ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{name}{(character) The name of the template}
 

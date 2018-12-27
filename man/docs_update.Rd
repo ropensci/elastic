@@ -12,7 +12,7 @@ docs_update(conn, index, type, id, body, fields = NULL, source = NULL,
   callopts = list(), ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{index}{(character) The name of the index. Required}
 

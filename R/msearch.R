@@ -3,7 +3,7 @@
 #' @description Performs multiple searches, defined in a file
 #'
 #' @export
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param x (character) A file path
 #' @param raw (logical) Get raw JSON back or not.
 #' @param asdf (logical) If `TRUE`, use [jsonlite::fromJSON()]

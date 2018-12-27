@@ -8,7 +8,7 @@ docs_bulk_update(conn, x, index = NULL, type = NULL,
   chunk_size = 1000, doc_ids = NULL, raw = FALSE, ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{x}{A list, data.frame, or character path to a file. required.}
 

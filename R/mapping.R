@@ -1,7 +1,7 @@
 #' Mapping management
 #'
 #' @name mapping
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param index (character) An index
 #' @param type (character) A document type
 #' @param body (list) Either a list or json, representing the query.

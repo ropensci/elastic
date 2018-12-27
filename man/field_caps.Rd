@@ -8,7 +8,7 @@ field_caps(conn, fields = NULL, index = NULL, body = list(),
   raw = FALSE, asdf = FALSE, ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{fields}{A list of fields to compute stats for. optional}
 

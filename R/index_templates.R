@@ -5,7 +5,7 @@
 #'
 #' @export
 #' @name index_template
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param name (character) The name of the template
 #' @param body (character/list) The template definition
 #' @param create (logical) Whether the index template should only be added 

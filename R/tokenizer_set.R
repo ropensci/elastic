@@ -2,7 +2,7 @@
 #'
 #' @export
 #'
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param index (character) A character vector of index names
 #' @param body Query, either a list or json.
 #' @param ... Curl options passed on to [crul::HttpClient]

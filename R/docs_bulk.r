@@ -1,7 +1,7 @@
 #' Use the bulk API to create, index, update, or delete documents.
 #'
 #' @export
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param x A list, data.frame, or character path to a file. required.
 #' @param index (character) The index name to use. Required for data.frame
 #' input, but optional for file inputs.

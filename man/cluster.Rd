@@ -31,7 +31,7 @@ cluster_pending_tasks(conn, index = NULL, raw = FALSE,
   callopts = list(), verbose = TRUE, ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{index}{Index}
 

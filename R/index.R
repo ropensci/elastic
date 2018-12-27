@@ -5,7 +5,7 @@
 #' @author Scott Chamberlain <myrmecocystus@@gmail.com>
 #' @name index
 #'
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param index (character) A character vector of index names
 #' @param features (character) A single feature. One of settings, mappings, or 
 #' aliases

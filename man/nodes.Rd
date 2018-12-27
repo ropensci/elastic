@@ -16,7 +16,7 @@ nodes_hot_threads(conn, node = NULL, metric = NULL, threads = 3,
   interval = "500ms", type = NULL, raw = FALSE, ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{node}{The node}
 

@@ -10,7 +10,7 @@ docs_mget(conn, index = NULL, type = NULL, ids = NULL,
   ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{index}{Index. Required.}
 

@@ -7,7 +7,7 @@
 ping(conn, ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{...}{Curl args passed on to \link[crul:verb-GET]{crul::verb-GET}}
 }

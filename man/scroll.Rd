@@ -11,7 +11,7 @@ scroll(conn, x, time_scroll = "1m", raw = FALSE, asdf = FALSE,
 scroll_clear(conn, x = NULL, all = FALSE, ...)
 }
 \arguments{
-\item{conn}{an Elasticsearch connection object, see \link{Elasticsearch}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
 \item{x}{(character) For \code{scroll}, a single scroll id; for
 \code{scroll_clear}, one or more scroll id's}

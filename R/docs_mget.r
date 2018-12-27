@@ -2,7 +2,7 @@
 #'
 #' @export
 #' @template all
-#' @param conn an Elasticsearch connection object, see [Elasticsearch]
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param ids More than one document id, see examples.
 #' @param type_id List of vectors of length 2, each with an element for 
 #' type and id.
