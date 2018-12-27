@@ -1,3 +1,4 @@
+#' @param conn an Elasticsearch connection object, see \code{\link{connect}}
 #' @param index Index name, one or more
 #' @param type Document type
 #' @param q The query string (maps to the query_string query, see Query String 

@@ -14,6 +14,8 @@ Search_uri(conn, index = NULL, type = NULL, q = NULL, df = NULL,
   stream_opts = list(), ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link{connect}}}
+
 \item{index}{Index name, one or more}
 
 \item{type}{Document type}
