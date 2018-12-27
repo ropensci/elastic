@@ -11,6 +11,7 @@
 #' x$ping()
 #' }
 ping <- function(conn, ...) {
+  is_conn(conn)
   .Deprecated(msg = "call ping() on the connection object; 
 this standalone function will be removed in the next version")
   conn$ping(...)

@@ -226,6 +226,7 @@ scroll.default <- function(conn, x, time_scroll = "1m", raw = FALSE, asdf = FALS
 #' @export
 scroll.list <- function(conn, x, time_scroll = "1m", raw = FALSE, asdf = FALSE,
                         stream_opts = list(), force_scroll = FALSE, ...) {
+  is_conn(conn)
   scroll_ <- NULL
   if (!is.null(x$`_scroll_id`)) {
     scroll_ <- attr(x, "scroll")
@@ -246,6 +247,7 @@ scroll.list <- function(conn, x, time_scroll = "1m", raw = FALSE, asdf = FALSE,
 scroll.character <- function(conn, x, time_scroll = "1m", raw = FALSE, asdf = FALSE,
                              stream_opts = list(), ...) {
 
+  is_conn(conn)
   calls <- names(list(...))
   if ("scroll" %in% calls) {
     stop("The parameter `scroll` has been removed - use `time_scroll`")
@@ -272,6 +274,7 @@ scroll.character <- function(conn, x, time_scroll = "1m", raw = FALSE, asdf = FA
 #' @export
 #' @rdname scroll
 scroll_clear <- function(conn, x = NULL, all = FALSE, ...) {
+  is_conn(conn)
   if (all) {
     path <- "_search/scroll/_all"
     body <- NULL

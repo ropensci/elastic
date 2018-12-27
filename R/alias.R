@@ -75,18 +75,21 @@ NULL
 #' @export
 #' @rdname alias
 alias_get <- function(conn, index=NULL, alias=NULL, ignore_unavailable=FALSE, ...) {
+  is_conn(conn)
   alias_GET(conn, index, alias, ignore_unavailable, ...)
 }
 
 #' @export
 #' @rdname alias
 aliases_get <- function(conn, index=NULL, alias=NULL, ignore_unavailable=FALSE, ...) {
+  is_conn(conn)
   alias_GET(conn, index, alias, ignore_unavailable, ...)
 }
 
 #' @export
 #' @rdname alias
 alias_exists <- function(conn, index=NULL, alias=NULL, ...) {
+  is_conn(conn)
   res <- conn$make_conn(alias_url(conn, index, alias), ...)$head()
   if (res$status_code == 200) TRUE else FALSE
 }
@@ -96,6 +99,7 @@ alias_exists <- function(conn, index=NULL, alias=NULL, ...) {
 alias_create <- function(conn, index, alias, filter=NULL, routing=NULL, 
   search_routing=NULL, index_routing=NULL, ...) {
 
+  is_conn(conn)
   assert(index, "character")
   assert(alias, "character")
   assert(routing, "character")
@@ -117,6 +121,7 @@ alias_create <- function(conn, index, alias, filter=NULL, routing=NULL,
 #' @export
 #' @rdname alias
 alias_rename <- function(conn, index, alias, alias_new, ...) {
+  is_conn(conn)
   body <- list(actions = list(
     list(remove = list(index = index, alias = alias)),
     list(add = list(index = index, alias = alias_new))
@@ -130,6 +135,7 @@ alias_rename <- function(conn, index, alias, alias_new, ...) {
 #' @export
 #' @rdname alias
 alias_delete <- function(conn, index=NULL, alias, ...) {
+  is_conn(conn)
   out <- conn$make_conn(alias_url(conn, index, alias), ...)$delete()
   geterror(out)
   jsonlite::fromJSON(out$parse('UTF-8'), FALSE)

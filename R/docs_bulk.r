@@ -225,6 +225,7 @@ docs_bulk.data.frame <- function(conn, x, index = NULL, type = NULL, chunk_size 
                                  doc_ids = NULL, 
                                  es_ids = TRUE, raw = FALSE, quiet = FALSE, ...) {
 
+  is_conn(conn)
   assert(quiet, "logical")
   if (is.null(index)) {
     stop("index can't be NULL when passing a data.frame",
@@ -264,6 +265,7 @@ docs_bulk.list <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000
                            doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
                            quiet = FALSE, ...) {
 
+  is_conn(conn)
   assert(quiet, "logical")
   if (is.null(index)) {
     stop("index can't be NULL when passing a list",
@@ -305,6 +307,7 @@ docs_bulk.character <- function(conn, x, index = NULL, type = NULL, chunk_size =
                                 doc_ids = NULL, es_ids = TRUE, raw=FALSE, 
                                 quiet = FALSE, ...) {
 
+  is_conn(conn)
   stopifnot(file.exists(x))
   on.exit(close_conns())
   on.exit(cleanup_file(x), add = TRUE)

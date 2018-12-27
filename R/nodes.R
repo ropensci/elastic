@@ -64,12 +64,14 @@
 nodes_stats <- function(conn, node=NULL, metric=NULL, raw=FALSE, fields=NULL, 
   ...) {
 
+  is_conn(conn)
   node_GET(conn, 'stats', metric, node, raw, ec(list(fields = fields)), ...)
 }
 
 #' @export
 #' @rdname nodes
 nodes_info <- function(conn, node=NULL, metric=NULL, raw=FALSE, ...) {
+  is_conn(conn)
   node_GET(conn, '', metric, node, raw, list(), ...)
 }
 
@@ -78,6 +80,7 @@ nodes_info <- function(conn, node=NULL, metric=NULL, raw=FALSE, ...) {
 nodes_hot_threads <- function(conn, node=NULL, metric=NULL, threads=3,
   interval='500ms', type=NULL, raw=FALSE, ...) {
 
+  is_conn(conn)
   args <- list(threads = threads, interval = interval, type = type)
   cat(node_GET(conn, 'hot_threads', metric, node, raw = TRUE, args, ...))
 }

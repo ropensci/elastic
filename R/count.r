@@ -27,7 +27,11 @@
 #' count(x, callopts = list(verbose = TRUE))
 #' }
 
-count <- function(conn, index=NULL, type=NULL, callopts=list(), verbose=TRUE, ...){
-  out <- es_GET(conn, path = '_count', cl(index), type, NULL, NULL, NULL, FALSE, callopts, ...)
+count <- function(conn, index=NULL, type=NULL, callopts=list(), 
+  verbose=TRUE, ...) {
+
+  is_conn(conn)
+  out <- es_GET(conn, path = '_count', cl(index), type, 
+    NULL, NULL, NULL, FALSE, callopts, ...)
   jsonlite::fromJSON(out, FALSE)$count
 }

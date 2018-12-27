@@ -41,6 +41,7 @@
 #' }
 
 tokenizer_set <- function(conn, index, body, ...) {
+  is_conn(conn)
   if (length(index) > 1) stop("Only one index allowed", call. = FALSE)
   url <- conn$make_url()
   url <- sprintf("%s/%s", url, esc(index))

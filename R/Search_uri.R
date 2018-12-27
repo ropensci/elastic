@@ -17,6 +17,7 @@ Search_uri <- function(conn, index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NU
   version=NULL, lenient=FALSE, raw=FALSE, asdf=FALSE,
   search_path="_search", stream_opts=list(), ...) {
 
+  is_conn(conn)
   search_GET(conn, search_path, cl(index), type,
     args = ec(list(df = df, analyzer = analyzer,
       default_operator = default_operator, explain = explain,

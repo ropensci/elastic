@@ -29,6 +29,7 @@
 #' msearch(x, tf)
 #' }
 msearch <- function(conn, x, raw = FALSE, asdf = FALSE, ...) {
+  is_conn(conn)
   if (!file.exists(x)) stop("file ", x, " does not exist", call. = FALSE)
   url <- file.path(conn$make_url(), '_msearch')
   cli <- conn$make_conn(url)

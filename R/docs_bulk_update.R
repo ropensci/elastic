@@ -51,6 +51,7 @@ docs_bulk_update.data.frame <- function(conn, x, index = NULL, type = NULL,
                                         chunk_size = 1000, doc_ids = NULL, 
                                         raw = FALSE, quiet = FALSE, ...) {
   
+  is_conn(conn)
   assert(quiet, "logical")
   if (is.null(index)) {
     stop("index can't be NULL when passing a data.frame",
