@@ -61,6 +61,15 @@ docs link
 # connection setup
 (x <- connect())
 
+if (!index_exists(x, "plos")) {
+  plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+  invisible(docs_bulk(x, plosdat))
+}
+if (!index_exists(x, "shakespeare")) {
+  shake <- system.file("examples", "shakespeare_data_.json", package = "elastic")
+  invisible(docs_bulk(x, shake))
+}
+
 # Create/update an alias
 alias_create(x, index = "plos", alias = "candles")
 ## more than one alias

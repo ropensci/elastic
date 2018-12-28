@@ -4,25 +4,17 @@
 \alias{field_caps}
 \title{Field capabilities}
 \usage{
-field_caps(conn, fields = NULL, index = NULL, body = list(),
-  raw = FALSE, asdf = FALSE, ...)
+field_caps(conn, fields, index = NULL, raw = FALSE, asdf = FALSE,
+  ...)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
-\item{fields}{A list of fields to compute stats for. optional}
+\item{fields}{A list of fields to compute stats for. required}
 
 \item{index}{Index name, one or more}
 
-\item{body}{Query, either a list or json}
-
-\item{raw}{(logical) Get raw JSON back or not}
-
-\item{asdf}{(logical) If \code{TRUE}, use \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}}
-to parse JSON directly to a data.frame if possible. If \code{FALSE}
-(default), list output is given.}
-
-\item{...}{Curl args passed on to \link[crul:HttpClient]{crul::HttpClient}}
+\item{...}{Curl args passed on to \link[crul:verb-GET]{crul::verb-GET}}
 }
 \description{
 The field capabilities API allows to retrieve the capabilities of fields
@@ -30,9 +22,12 @@ among multiple indices.
 }
 \examples{
 \dontrun{
-x <- connect()
 
-field_caps(x, body = '{ "fields": ["speaker"] }', index = "shakespeare")
+if (x$es_ver() >= 540) {
+  x <- connect()
+  field_caps(x, fields = "speaker", index = "shakespeare")
+}
+
 }
 }
 \references{
