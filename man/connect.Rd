@@ -90,6 +90,3 @@ connect(headers = list(a = 'foobar'))
 connect(cainfo = '/some/path/bundle.crt')
 }
 }
-\seealso{
-\code{\link[=ping]{ping()}} to check your connection
-}

@@ -41,8 +41,6 @@ elastic_env <- new.env()
 #' so you can have any number of connection objects and they shouldn't 
 #' conflict with one another.
 #' 
-#' @seealso [ping()] to check your connection
-#'
 #' @examples \dontrun{
 #' # the default is set to 127.0.0.1 (i.e., localhost) and port 9200
 #' (x <- connect())
