@@ -77,7 +77,7 @@ extractr <- function(x, y) regmatches(x, gregexpr(y, x))
 
 assert <- function(x, y) {
   if (!is.null(x)) {
-    if (!class(x) %in% y) {
+    if (!inherits(x, y)) {
       stop(deparse(substitute(x)), " must be of class ",
            paste0(y, collapse = ", "), call. = FALSE)
     }
@@ -113,4 +113,25 @@ es_get_user_pwd <- function() {
   user <- Sys.getenv("ES_USER")
   pwd <- Sys.getenv("ES_PWD")
   list(user = user, pwd = pwd)
+}
+
+type_deprecated <- function(conn, type = NULL) { 
+  z <- "Types in search queries are deprecated, filter on a field instead"
+  if (conn$es_ver() >= 700) {
+    if (!is.null(type)) warning(z)
+  }  
+}
+
+catch_warnings <- function(z) {
+  assert(z, "HttpResponse")
+  hds <- z$response_headers
+  if ("warning" %in% names(hds)) {
+    hds_warn <- hds[names(hds) %in% "warning"]
+    mssg <- unname(vapply(hds_warn, parse_es_warning, ""))
+    for (i in seq_along(mssg)) warning(mssg[i], call. = FALSE)
+  }
+}
+
+parse_es_warning <- function(w) {
+  strsplit(w, "\"")[[1]][2]
 }

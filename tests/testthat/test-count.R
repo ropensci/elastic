@@ -18,9 +18,14 @@ test_that("count", {
   expect_error(count(x, "adfadf"), "no such index||IndexMissing")
   
   if (es_version(x) > 246) {
-    expect_equal(count(x, type = "adfad"), 0)
+    expect_equal(suppressWarnings(count(x, type = "adfad")), 0)
   } else {
     expect_error(count(x, type = "adfad"), 
       "no such index||IndexMissingException")
+  }
+
+  if (es_version(x) >= 700) {
+    expect_warning(count(x, 'shakespeare', type = "line"), 
+      "Specifying types in count requests is deprecated")
   }
 })

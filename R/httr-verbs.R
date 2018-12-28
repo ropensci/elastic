@@ -30,6 +30,7 @@ es_GET <- function(conn, path, index=NULL, type=NULL, metric=NULL, node=NULL,
   )
   tt <- cli$get(query = args)
   geterror(tt)
+  if (conn$warn) catch_warnings(tt)
   res <- tt$parse("UTF-8")
   if (!is.null(clazz)) {
     class(res) <- clazz

@@ -37,7 +37,11 @@ You can also get a count of documents using \code{\link[=Search]{Search()}} or
 
 count(x)
 count(x, index='plos')
-count(x, index='plos', type='article')
+
+if (x$es_ver() < 700) {
+  count(x, index='plos', type='article')
+}
+
 count(x, index='shakespeare')
 count(x, index=c('plos','shakespeare'), q="a*")
 count(x, index=c('plos','shakespeare'), q="z*")

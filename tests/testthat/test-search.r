@@ -8,12 +8,25 @@ test_that("basic search works", {
   expect_equal(names(a), c('took','timed_out','_shards','hits'))
   expect_is(a, "list")
   expect_is(a$hits$hits, "list")
+  if (es_version(x) >= 700) {
+    expect_is(a$hits$total, "list")
+  } else {
+    expect_type(a$hits$total, "integer")
+  }
   expect_equal(names(a$hits$hits[[1]]), c('_index','_type','_id','_score','_source'))
 })
 
-test_that("search for document type works", {
-  b <- Search(x, index="shakespeare", type="line")
-  expect_match(vapply(b$hits$hits, "[[", "", "_type"), "line")
+test_that("search for document type works, and differently for different ES versions", {
+  if (es_version(x) >= 700) {
+    expect_warning(
+      bb <- Search(x, index="shakespeare", type="line"),
+      "Specifying types in search requests is deprecated"
+    )
+    expect_match(vapply(bb$hits$hits, "[[", "", "_type"), "line")
+  } else {
+    cc <- Search(x, index="shakespeare", type="line")
+    expect_match(vapply(cc$hits$hits, "[[", "", "_type"), "line")
+  }
 })
 
 test_that("search for specific fields works", {

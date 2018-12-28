@@ -32,6 +32,11 @@ Default: \code{FALSE}}
 http code and  error message on an error, while complete gives both http
 code and error message,  and stack trace, if available.}
 
+\item{warn}{(logical) whether to throw warnings from the Elasticsearch
+server when provided. Pulls warnings from response headers when given.
+default: \code{TRUE}. To turn these off, you can set \code{warn=FALSE} or
+wrap function calls in \code{\link[=suppressWarnings]{suppressWarnings()}}}
+
 \item{...}{additional curl options to be passed in ALL http requests}
 }
 \description{

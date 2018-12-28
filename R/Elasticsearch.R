@@ -18,6 +18,10 @@ elastic_env <- new.env()
 #' @param errors (character) One of simple (Default) or complete. Simple gives 
 #' http code and  error message on an error, while complete gives both http 
 #' code and error message,  and stack trace, if available.
+#' @param warn (logical) whether to throw warnings from the Elasticsearch 
+#' server when provided. Pulls warnings from response headers when given. 
+#' default: `TRUE`. To turn these off, you can set `warn=FALSE` or 
+#' wrap function calls in [suppressWarnings()]
 #' @param headers named list of headers. These headers are used in all requests
 #' @param cainfo (character) path to a crt bundle, passed to curl option
 #' `cainfo`
@@ -74,14 +78,14 @@ elastic_env <- new.env()
 #' connect(cainfo = '/some/path/bundle.crt')
 #' }
 connect <- function(host = "127.0.0.1", port = 9200, path = NULL, 
-      transport_schema = "http", user = NULL, pwd = NULL, 
-      headers = NULL, cainfo = NULL, force = FALSE, 
-      errors = "simple", ...) {
+  transport_schema = "http", user = NULL, pwd = NULL, 
+  headers = NULL, cainfo = NULL, force = FALSE, 
+  errors = "simple", warn = TRUE, ...) {
   
   Elasticsearch$new(host = host, port = port, path = path,
       transport_schema = transport_schema, user = user, pwd = pwd, 
       headers = headers, cainfo = cainfo, force = FALSE, 
-      errors = errors, ...)
+      errors = errors, warn = warn, ...)
 }
 
 Elasticsearch <- R6::R6Class(
@@ -98,10 +102,12 @@ Elasticsearch <- R6::R6Class(
     force = FALSE,
     errors = "simple",
     opts = NULL,
+    warn = TRUE,
 
     initialize = function(host = "127.0.0.1", port = 9200, path = NULL, 
       transport_schema = "http", user = NULL, pwd = NULL, 
-      headers = NULL, cainfo = NULL, force = FALSE, errors = "simple", ...) {
+      headers = NULL, cainfo = NULL, force = FALSE, 
+      errors = "simple", warn = TRUE, ...) {
 
       self$port <- port
       self$transport_schema <- transport_schema
@@ -110,6 +116,7 @@ Elasticsearch <- R6::R6Class(
       self$headers <- headers
       self$cainfo <- cainfo
       self$force <- force
+      self$warn <- warn
 
       # validate and store user error preference
       errors <- match.arg(errors, c('simple', 'complete'))

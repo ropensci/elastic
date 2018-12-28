@@ -18,7 +18,8 @@ Search(conn, index = NULL, type = NULL, q = NULL, df = NULL,
 
 \item{index}{Index name, one or more}
 
-\item{type}{Document type}
+\item{type}{Document type. Note that \code{type} is deprecated in
+Elasticsearch v7 and greater}
 
 \item{q}{The query string (maps to the query_string query, see Query String
 Query for more details). See

@@ -66,6 +66,7 @@ search_POST <- function(conn, path, index=NULL, type=NULL, args, body, raw,
   )
   tt <- cli$post(query = args, body = body)
   geterror(tt)
+  if (conn$warn) catch_warnings(tt)
   res <- tt$parse("UTF-8")
   
   if (raw) {

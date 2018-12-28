@@ -44,5 +44,8 @@ test_that("mtermvectors fails well", {
   skip_on_travis()
 
   expect_error(mtermvectors(x, body = body), "index is missing")
-  expect_error(mtermvectors(x, "omdb", body = body), "type is missing")
+
+  if (es_version(x) < 700) {
+    expect_error(mtermvectors(x, "omdb", body = body), "type is missing")
+  }
 })

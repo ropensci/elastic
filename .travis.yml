@@ -39,6 +39,9 @@ matrix:
     - os: linux
       r: release
       env: ES_VERSION=6.5.3 R_CODECOV=true
+    - os: linux
+      r: release
+      env: ES_VERSION=7.0.0-alpha2
 
 r_binary_packages:
   - covr 
@@ -89,6 +92,11 @@ before_install:
 
     "6.5.3")
       export ES_VERSION=6.5.3 ;
+      curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ES_VERSION.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION.deb && sudo service elasticsearch start
+      ;;
+
+    "7.0.0-alpha2")
+      export ES_VERSION=7.0.0-alpha2 ;
       curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ES_VERSION.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION.deb && sudo service elasticsearch start
       ;;
    esac
