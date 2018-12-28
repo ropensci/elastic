@@ -63,7 +63,15 @@ test_that("search terminate_after parameter works", {
 test_that("getting json data back from search works", {
 
   suppressMessages(require('jsonlite'))
-  f <- Search(x, index="shakespeare", type="scene", raw=TRUE)
+
+  if (es_version(x) >= 700) {
+    expect_warning(
+      f <- Search(x, index="shakespeare", type="scene", raw=TRUE),
+      "Specifying types in search requests is deprecated"
+    )
+  } else {
+    f <- Search(x, index="shakespeare", type="scene", raw=TRUE)
+  }
   expect_is(f, "character")
   expect_true(jsonlite::validate(f))
   expect_is(jsonlite::fromJSON(f), "list")

@@ -27,6 +27,11 @@ body2 <- '{
  }
 }'
 
+if (es_version(x) >= 700) {
+  body1 <- sub("inline", "source", body1)
+  body2 <- sub("inline", "source", body2)
+}
+
 iris2 <- stats::setNames(iris, gsub("\\.", "_", names(iris)))
 
 test_that("basic Search_template works", {
@@ -34,7 +39,7 @@ test_that("basic Search_template works", {
   
   if (index_exists(x, "iris")) invisible(suppressMessages(index_delete(x, "iris")))
   invisible(docs_bulk(x, iris2, "iris"))
-
+  
   a <- Search_template(x, body = body1)
   expect_equal(names(a), c('took','timed_out','_shards','hits'))
   expect_is(a, "list")
