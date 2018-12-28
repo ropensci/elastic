@@ -13,7 +13,7 @@ test_that("validate", {
   a <- validate(x, "twitter", q='user:foobar')
 
   expect_is(a, "list")
-  expect_named(a, c('_shards', 'valid'))
+  expect_equal(sort(names(a)), c('_shards', 'valid'))
   expect_true(a$valid)
   
   if (es_version(x) >= 700) {
