@@ -40,6 +40,7 @@ Delete a document
 \examples{
 \dontrun{
 (x <- connect())
+x$ping()
 
 if (!index_exists(x, "plos")) {
  plosdat <- system.file("examples", "plos_data.json", package = "elastic")

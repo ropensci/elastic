@@ -30,10 +30,11 @@ Full text search of Elasticsearch - body requests.
 \examples{
 \dontrun{
 # connection setup
-# (x <- connect())
+# x <- connect()
+# x$ping()
 
 # pass in as an R list
-# aggs <- list(aggs = list(stats = list(terms = list(field = "text_entry"))))
+aggs <- list(aggs = list(stats = list(terms = list(field = "text_entry"))))
 # search_body(x, index="shakespeare", query=aggs)
 
 # or pass in as json query with newlines, easy to read

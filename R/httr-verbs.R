@@ -62,25 +62,15 @@ index_GET <- function(conn, index, features, raw, ...) {
   jsonlite::fromJSON(tt$parse('UTF-8'), FALSE)
 }
 
-es_POST <- function(conn, path, index=NULL, type=NULL, clazz=NULL, raw, callopts, query, ...) {
-  url <- conn$make_url()
-  index <- esc(index)
-  type <- esc(type)
-  if (is.null(index) && is.null(type)) {
-    url <- paste(url, path, sep = "/")
-  } else {
-    if (is.null(type) && !is.null(index)) {
-      url <- paste(url, index, path, sep = "/")
-    } else {
-      url <- paste(url, index, type, path, sep = "/")
-    }
-  }
+es_POST <- function(conn, path, index=NULL, type=NULL, clazz=NULL, raw, 
+  callopts, query, args, ...) {
 
-  args <- check_inputs(query)
-  if (length(args) == 0) args <- NULL
-
+  url <- construct_url(conn$make_url(), path, cl(index), cl(type))
+  url <- prune_trailing_slash(url)
+  body <- check_inputs(query)
+  if (length(body) == 0) body <- NULL
   cli <- conn$make_conn(url, json_type(), ...)
-  tt <- cli$post(body = args, encode = "json")
+  tt <- cli$post(body = body, query = args, encode = "json")
   geterror(tt)
   res <- tt$parse("UTF-8")
   if (!is.null(clazz)) {

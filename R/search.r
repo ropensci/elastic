@@ -23,7 +23,7 @@ Search <- function(conn, index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL,
   time_scroll=NULL, search_path="_search", stream_opts=list(), ...) {
 
   is_conn(conn)
-  tmp <- search_POST(conn, search_path, cl(index), type,
+  tmp <- search_POST(conn, search_path, cl(index), cl(type),
     args = ec(list(df = df, analyzer = analyzer, 
       default_operator = default_operator, explain = as_log(explain), 
       `_source` = cl(source), fields = cl(fields), sort = cl(sort), 

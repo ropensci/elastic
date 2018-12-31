@@ -19,6 +19,7 @@
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html>
 #' @examples \dontrun{
 #' (x <- connect())
+#' x$ping()
 #' 
 #' if (!index_exists(x, "plos")) {
 #'  plosdat <- system.file("examples", "plos_data.json", package = "elastic")
