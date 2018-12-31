@@ -110,6 +110,6 @@ docs_delete_by_query <- function(conn, index, body, type = NULL,
     scroll=scroll, requests_per_second=requests_per_second))
   if (length(args) == 0) args <- NULL
   jsonlite::fromJSON(es_POST(conn, "_delete_by_query", 
-    index, type, NULL, FALSE, callopts, body, args, ...), 
+    index, type, NULL, FALSE, NULL, body, args, ...), 
   FALSE)
 }

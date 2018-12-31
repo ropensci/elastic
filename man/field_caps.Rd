@@ -4,8 +4,7 @@
 \alias{field_caps}
 \title{Field capabilities}
 \usage{
-field_caps(conn, fields, index = NULL, raw = FALSE, asdf = FALSE,
-  ...)
+field_caps(conn, fields, index = NULL, ...)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
@@ -22,9 +21,10 @@ among multiple indices.
 }
 \examples{
 \dontrun{
+x <- connect()
+x$ping()
 
 if (x$es_ver() >= 540) {
-  x <- connect()
   field_caps(x, fields = "speaker", index = "shakespeare")
 }
 

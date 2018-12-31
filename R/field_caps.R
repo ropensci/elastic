@@ -1,6 +1,6 @@
 #' Field capabilities
 #' 
-#' The field capabilities API allows to retrieve the capabilities of fields 
+#' The field capabilities API allows to retrieve the capabilities of fields
 #' among multiple indices.
 #'
 #' @export
@@ -14,19 +14,19 @@
 #' 
 #' @seealso [field_stats()]
 #' @examples \dontrun{
+#' x <- connect()
+#' x$ping()
 #' 
 #' if (x$es_ver() >= 540) {
-#'   x <- connect()
 #'   field_caps(x, fields = "speaker", index = "shakespeare")
 #' }
 #' 
 #' }
-field_caps <- function(conn, fields, index = NULL, raw = FALSE, 
-  asdf = FALSE, ...) {
-  
+field_caps <- function(conn, fields, index = NULL, ...) {
   is_conn(conn)
   conn$stop_es_version(540, "field_caps")
   fields <- paste(fields, collapse = ",")
-  tt <- es_GET(conn, "_field_caps", index = index, fields = fields)
+  tt <- es_GET(conn, "_field_caps", index = index, 
+    fields = fields, callopts = list(...))
   jsonlite::fromJSON(tt)
 }
