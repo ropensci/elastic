@@ -83,6 +83,10 @@
 #' function. See
 #' https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html
 #' for all the options.
+#' 
+#' **index settings**: See
+#' https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules.html
+#' for the *static* and *dynamic* settings you can set on indices.
 #'
 #' @examples \dontrun{
 #' # connection setup
@@ -124,7 +128,21 @@
 #'  }
 #' }'
 #' if (index_exists(x, 'alsothat')) index_delete(x, 'alsothat')
-#' index_create(x, index='alsothat', body=body)
+#' index_create(x, index='alsothat', body = body)
+#' ## with read only
+#' body <- '{
+#'  "settings" : {
+#'   "index" : {
+#'     "blocks" : {
+#'       "read_only" : true
+#'     }
+#'    }
+#'  }
+#' }'
+#' # index_create(x, index='myindex', body = body)
+#' # then this delete call should fail with something like:
+#' ## > Error: 403 - blocked by: [FORBIDDEN/5/index read-only (api)]
+#' # index_delete(x, index='myindex')
 #'
 #' ## with mappings
 #' body <- '{
