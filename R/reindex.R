@@ -60,6 +60,6 @@ reindex_POST <- function(conn, url, args = NULL, body = list(), ...) {
   tt <- conn$make_conn(url, json_type(), ...)$post(
     body = body, query = args, encode = 'json'
   )
-  geterror(tt)
+  geterror(conn, tt)
   jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }

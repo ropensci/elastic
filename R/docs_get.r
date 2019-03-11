@@ -64,7 +64,7 @@ docs_get <- function(conn, index, type, id, source=NULL, fields=NULL, exists=FAL
     if (out$status_code == 200) TRUE else FALSE
   } else {
     out <- cli$get(query = args)
-    geterror(out)
+    geterror(conn, out)
     if (verbose) message(URLdecode(out$url))
     if (raw) {
       out$parse("UTF-8")

@@ -75,7 +75,7 @@ explain_POST <- function(conn, index, type, id, args, body, raw, ...) {
   } else {
     cli$post(query = args, body = body)
   }
-  geterror(tt)
+  geterror(conn, tt)
   txt <- tt$parse("UTF-8")
   if (raw) txt else jsonlite::fromJSON(txt, FALSE)
 }

@@ -123,7 +123,7 @@ alias_create <- function(conn, index, alias, filter=NULL, routing=NULL,
   )
   body <- jsonlite::toJSON(body, auto_unbox = TRUE)
   out <- conn$make_conn(aliases_url(conn), json_type(), ...)$post(body = body)
-  geterror(out)
+  geterror(conn, out)
   jsonlite::fromJSON(out$parse('UTF-8'), FALSE)
 }
 
@@ -137,7 +137,7 @@ alias_rename <- function(conn, index, alias, alias_new, ...) {
   ))
   body <- jsonlite::toJSON(body, auto_unbox = TRUE)
   out <- conn$make_conn(aliases_url(conn), json_type(), ...)$post(body = body)
-  geterror(out)
+  geterror(conn, out)
   jsonlite::fromJSON(out$parse('UTF-8'), FALSE)
 }
 
@@ -146,7 +146,7 @@ alias_rename <- function(conn, index, alias, alias_new, ...) {
 alias_delete <- function(conn, index=NULL, alias, ...) {
   is_conn(conn)
   out <- conn$make_conn(alias_url(conn, index, alias), ...)$delete()
-  geterror(out)
+  geterror(conn, out)
   jsonlite::fromJSON(out$parse('UTF-8'), FALSE)
 }
 
@@ -156,7 +156,7 @@ alias_delete <- function(conn, index=NULL, alias, ...) {
 alias_GET <- function(conn, index, alias, ignore, ...) {
   cli <- conn$make_conn(alias_url(conn, index, alias), ...)
   tt <- cli$get(query = ec(list(ignore_unavailable = as_log(ignore))))
-  geterror(tt)
+  geterror(conn, tt)
   jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }
 

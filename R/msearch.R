@@ -34,7 +34,7 @@ msearch <- function(conn, x, raw = FALSE, asdf = FALSE, ...) {
   url <- file.path(conn$make_url(), '_msearch')
   cli <- conn$make_conn(url)
   tt <- cli$post(body = crul::upload(x, "application/json"), encode = "json")
-  geterror(tt)
+  geterror(conn, tt)
   res <- tt$parse("UTF-8")
   if (raw) res else jsonlite::fromJSON(res, asdf)
 }

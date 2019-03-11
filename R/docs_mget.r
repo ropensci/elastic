@@ -118,7 +118,7 @@ docs_mget <- function(conn, index=NULL, type=NULL, ids=NULL, type_id=NULL,
     out <- cli$post(query = args, body = tt, encode = "json")
   }
 
-  geterror(out)
+  geterror(conn, out)
   if (verbose) message(URLdecode(out$url))
   tt <- out$parse("UTF-8")
   class(tt) <- "elastic_mget"

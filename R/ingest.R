@@ -114,7 +114,7 @@ pipeline_delete <- function(conn, id, body, ...) {
   pipeline_ver(conn)
   url <- file.path(conn$make_url(), "_ingest/pipeline", esc(id))
   out <- conn$make_conn(url, list(), ...)$delete()
-  geterror(out)
+  geterror(conn, out)
   jsonlite::fromJSON(out$parse("UTF-8"))
 }
 
@@ -132,7 +132,7 @@ pipeline_simulate <- function(conn, body, id = NULL, ...) {
   }
   url <- file.path(url, part)
   tt<-conn$make_conn(url, json_type(), ...)$post(body = body, encode = "json")
-  geterror(tt)
+  geterror(conn, tt)
   jsonlite::fromJSON(tt$parse("UTF-8"))
 }
 

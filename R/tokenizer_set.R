@@ -52,6 +52,6 @@ tokenizer_PUT <- function(conn, url, body, ...){
   body <- check_inputs(body)
   out <- conn$make_conn(url, json_type(), ...)$put(
     body = body, encode = "json")
-  if (out$status_code > 202) geterror(out)
+  if (out$status_code > 202) geterror(conn, out)
   jsonlite::fromJSON(out$parse('UTF-8'))
 }

@@ -318,7 +318,7 @@ docs_bulk.character <- function(conn, x, index = NULL, type = NULL, chunk_size =
     auth = crul::auth(conn$user, conn$pwd)
   )
   tt <- cli$post(body = crul::upload(x, type = "application/x-ndjson"), encode = "json")
-  geterror(tt)
+  geterror(conn, tt)
   res <- tt$parse("UTF-8")
   res <- structure(res, class = "bulk_make")
   if (raw) res else es_parse(res)

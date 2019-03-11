@@ -99,6 +99,6 @@ tv_POST <- function(conn, path, index, type, id, args, body, ...) {
   url <- construct_url(conn$make_url(), path, index, type, id)
   cli <- conn$make_conn(url, json_type(), ...)
   tt <- cli$post(query = args, body = body, encode = "json")
-  geterror(tt)
+  geterror(conn, tt)
   jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }

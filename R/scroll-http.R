@@ -6,7 +6,7 @@ scroll_POST <- function(conn, path, args = list(), body, raw, asdf, stream_opts,
     auth = crul::auth(conn$user, conn$pwd)
   )
   tt <- cli$post(query = args, body = body, encode = "json")
-  geterror(tt)
+  geterror(conn, tt)
   res <- tt$parse("UTF-8")
   if (raw) {
     res 
@@ -37,6 +37,6 @@ scroll_DELETE <- function(conn, path, body, ...) {
     auth = crul::auth(conn$user, conn$pwd)
   )
   tt <- cli$delete(body = body, encode = "json")
-  geterror(tt)
+  geterror(conn, tt)
   tt$status_code == 200
 }

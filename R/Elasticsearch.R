@@ -119,7 +119,6 @@ Elasticsearch <- R6::R6Class(
 
       # validate and store user error preference
       errors <- match.arg(errors, c('simple', 'complete'))
-      Sys.setenv("ELASTIC_RCLIENT_ERRORS" = errors)
       self$errors <- errors
 
       # strip off transport if found

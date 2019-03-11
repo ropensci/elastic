@@ -72,7 +72,7 @@ task_GET <- function(conn, task_id = NULL, raw, args, ...) {
   if (!is.null(task_id)) url <- file.path(url, paste0("task_id:", task_id))
   if (length(args) == 0) args <- NULL
   tt <- conn$make_conn(url, list(), ...)$get(query = args)
-  if (tt$status_code > 202) geterror(tt)
+  if (tt$status_code > 202) geterror(conn, tt)
   res <- tt$parse("UTF-8")
   if (raw) res else jsonlite::fromJSON(res, FALSE)
 }
@@ -88,7 +88,7 @@ task_POST <- function(conn, node_id = NULL, task_id = NULL, raw, args, ...) {
   }
   if (length(args) == 0) args <- NULL
   tt <- conn$make_conn(url, list(), ...)$post(query = args)
-  if (tt$status_code > 202) geterror(tt)
+  if (tt$status_code > 202) geterror(conn, tt)
   res <- tt$parse("UTF-8")
   if (raw) res else jsonlite::fromJSON(res, FALSE)
 }

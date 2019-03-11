@@ -116,13 +116,13 @@ indtemp_PUT <- function(conn, url, args, body = list(), ...) {
   body <- check_inputs(body)
   cli <- conn$make_conn(url, json_type(), ...)
   tt <- cli$put(body = body, query = args, encode = 'json')
-  geterror(tt)
+  geterror(conn, tt)
   tt$status_code == 200
 }
 
 indtemp_GET <- function(conn, url, args, ...) {
   tt <- conn$make_conn(url, json_type(), ...)$get(query = args)
-  geterror(tt)
+  geterror(conn, tt)
   jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }
 
@@ -133,6 +133,6 @@ indtemp_HEAD <- function(conn, url, ...) {
 
 indtemp_DELETE <- function(conn, url, ...) {
   tt <- conn$make_conn(url, json_type(), ...)$delete()
-  geterror(tt)
+  geterror(conn, tt)
   tt$status_code == 200
 }

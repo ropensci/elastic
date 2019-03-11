@@ -51,7 +51,7 @@ search_GET <- function(conn, path, index=NULL, type=NULL, args, raw, asdf,
     auth = crul::auth(conn$user, conn$pwd)
   )
   tt <- cli$get(query = args)
-  geterror(tt)
+  geterror(conn, tt)
   res <- tt$parse("UTF-8")
   
   if (raw) {

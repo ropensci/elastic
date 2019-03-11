@@ -65,7 +65,7 @@ search_POST <- function(conn, path, index=NULL, type=NULL, args, body, raw,
     auth = crul::auth(conn$user, conn$pwd)
   )
   tt <- cli$post(query = args, body = body)
-  geterror(tt)
+  geterror(conn, tt)
   if (conn$warn) catch_warnings(tt)
   res <- tt$parse("UTF-8")
   

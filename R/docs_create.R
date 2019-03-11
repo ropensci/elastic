@@ -74,6 +74,6 @@ docs_create <- function(conn, index, type, id = NULL, body, version=NULL,
 create_docs <- function(conn, method, url, query=NULL, body=NULL, callopts) {
   cli <- conn$make_conn(url, json_type(), callopts)
   tt <- cli$verb(method, query = query, body = body, encode = "json")
-  geterror(tt)
+  geterror(conn, tt)
   jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }

@@ -29,7 +29,7 @@ es_GET <- function(conn, path, index=NULL, type=NULL, metric=NULL, node=NULL,
     auth = crul::auth(conn$user, conn$pwd)
   )
   tt <- cli$get(query = args)
-  geterror(tt)
+  geterror(conn, tt)
   if (conn$warn) catch_warnings(tt)
   res <- tt$parse("UTF-8")
   if (!is.null(clazz)) {
@@ -58,7 +58,7 @@ index_GET <- function(conn, index, features, raw, ...) {
   tt <- crul::HttpClient$new(url = url, headers = conn$headers, 
     opts = c(conn$opts, ...), auth = crul::auth(conn$user, conn$pwd)
   )$get()
-  if (tt$status_code > 202) geterror(tt)
+  if (tt$status_code > 202) geterror(conn, tt)
   jsonlite::fromJSON(tt$parse('UTF-8'), FALSE)
 }
 
@@ -71,7 +71,7 @@ es_POST <- function(conn, path, index=NULL, type=NULL, clazz=NULL, raw,
   if (length(body) == 0) body <- NULL
   cli <- conn$make_conn(url, json_type(), ...)
   tt <- cli$post(body = body, query = args, encode = "json")
-  geterror(tt)
+  geterror(conn, tt)
   res <- tt$parse("UTF-8")
   if (!is.null(clazz)) {
     class(res) <- clazz
@@ -84,7 +84,7 @@ es_POST <- function(conn, path, index=NULL, type=NULL, clazz=NULL, raw,
 es_DELETE <- function(conn, url, query = NULL, ...) {
   cli <- conn$make_conn(url, ...)
   tt <- cli$delete(query = query)
-  geterror(tt)
+  geterror(conn, tt)
   jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }
 
@@ -92,14 +92,14 @@ es_PUT <- function(conn, url, body = list(), args = list(), ...) {
   body <- check_inputs(body)
   cli <- conn$make_conn(url, headers = json_type(), ...)
   tt <- cli$put(body = body, query = args, encode = "json")
-  geterror(tt)
+  geterror(conn, tt)
   jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }
 
 es_GET_ <- function(conn, url, query = NULL, ...) {
   cli <- conn$make_conn(url)
   tt <- cli$get(query = query)
-  geterror(tt)
+  geterror(conn, tt)
   jsonlite::fromJSON(tt$parse('UTF-8'), FALSE)
 }
 
@@ -120,7 +120,7 @@ check_inputs <- function(x) {
   }
 }
 
-geterror <- function(z) {
+geterror <- function(conn, z) {
   if (!inherits(z, "HttpResponse")) stop("Input to error parser must be a HttpResponse object")
   if (z$status_code > 202) {
     err <- tryCatch(z$parse("UTF-8"), error = function(e) e)
@@ -138,8 +138,7 @@ geterror <- function(z) {
         stop(msg, call. = FALSE)
       }
       
-      erropt <- Sys.getenv("ELASTIC_RCLIENT_ERRORS")
-      if (erropt == "complete") {
+      if (conn$errors == "complete") {
         stop(z$status_code, " - ", pluck_reason(err),
              "\nES stack trace:\n",
              pluck_trace(err), call. = FALSE)

@@ -48,6 +48,6 @@ docs_delete <- function(conn, index, type, id, refresh=NULL, routing=NULL,
   if (length(args) == 0) args <- NULL
   cli <- conn$make_conn(url, list(), callopts)
   res <- cli$delete(query = args)
-  geterror(res)
+  geterror(conn, res)
   jsonlite::fromJSON(res$parse("UTF-8"), FALSE)
 }
