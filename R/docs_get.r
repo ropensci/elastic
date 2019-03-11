@@ -6,8 +6,13 @@
 #' @param type (character) The type of the document. Required
 #' @param id (numeric/character) The document ID. Can be numeric or character. 
 #' Required
-#' @param source (logical) If `TRUE`, return source.
+#' @param source (logical) If `TRUE` (default), return source. note that 
+#' it is actually set to `NULL` in the function definition, but within 
+#' Elasticsearch, it returns the source by default. alternatively, 
+#' you can pass a vector of field names to return.
 #' @param fields Fields to return from the response object.
+#' @param source_includes,source_excludes (character) fields to include in the
+#' returned document, or to exclude. a character vector
 #' @param exists (logical) Only return a logical as to whether the document 
 #' exists or not.
 #' @param raw If `TRUE` (default), data is parsed to list. If `FALSE`, then raw 
@@ -21,6 +26,12 @@
 #'
 #' @examples \dontrun{
 #' (x <- connect())
+#' 
+#' if (!index_exists(x, "shakespeare")) {
+#'   shakespeare <- system.file("examples", "shakespeare_data.json",
+#'     package = "elastic")
+#'   invisible(docs_bulk(x, shakespeare))
+#' }
 #' 
 #' docs_get(x, index='shakespeare', type='line', id=10)
 #' docs_get(x, index='shakespeare', type='line', id=12)
@@ -42,9 +53,16 @@
 #' # Just test for existence of the document
 #' docs_get(x, index='plos', type='article', id=1, exists=TRUE)
 #' docs_get(x, index='plos', type='article', id=123456, exists=TRUE)
+#' 
+#' # source includes / excludes
+#' docs_get(x, index='shakespeare', type='line', id=10,
+#'   source_includes = "play_name")
+#' docs_get(x, index='shakespeare', type='line', id=10,
+#'   source_excludes = "play_name")
 #' }
 
-docs_get <- function(conn, index, type, id, source=NULL, fields=NULL, exists=FALSE,
+docs_get <- function(conn, index, type, id, source = NULL, fields = NULL,
+  source_includes = NULL, source_excludes = NULL, exists=FALSE,
   raw=FALSE, callopts=list(), verbose=TRUE, ...) {
   
   is_conn(conn)
@@ -54,6 +72,14 @@ docs_get <- function(conn, index, type, id, source=NULL, fields=NULL, exists=FAL
   args <- ec(stats::setNames(list(cl(fields)), field_name), ...)
   if (inherits(source, "logical")) source <- tolower(source)
   args <- c(args, `_source` = cl(source))
+  if (!is.null(source_includes)) {
+    assert(source_includes, "character")
+    args$`_source_includes` <- cl(source_includes)
+  }
+  if (!is.null(source_excludes)) {
+    assert(source_excludes, "character")
+    args$`_source_excludes` <- cl(source_excludes)
+  }
   if (length(args) == 0) args <- NULL
 
   url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), esc(id))

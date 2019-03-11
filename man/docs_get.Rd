@@ -5,8 +5,8 @@
 \title{Get documents}
 \usage{
 docs_get(conn, index, type, id, source = NULL, fields = NULL,
-  exists = FALSE, raw = FALSE, callopts = list(), verbose = TRUE,
-  ...)
+  source_includes = NULL, source_excludes = NULL, exists = FALSE,
+  raw = FALSE, callopts = list(), verbose = TRUE, ...)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
@@ -18,9 +18,15 @@ docs_get(conn, index, type, id, source = NULL, fields = NULL,
 \item{id}{(numeric/character) The document ID. Can be numeric or character.
 Required}
 
-\item{source}{(logical) If \code{TRUE}, return source.}
+\item{source}{(logical) If \code{TRUE} (default), return source. note that
+it is actually set to \code{NULL} in the function definition, but within
+Elasticsearch, it returns the source by default. alternatively,
+you can pass a vector of field names to return.}
 
 \item{fields}{Fields to return from the response object.}
+
+\item{source_includes, source_excludes}{(character) fields to include in the
+returned document, or to exclude. a character vector}
 
 \item{exists}{(logical) Only return a logical as to whether the document
 exists or not.}
@@ -40,6 +46,12 @@ Get documents
 \examples{
 \dontrun{
 (x <- connect())
+
+if (!index_exists(x, "shakespeare")) {
+  shakespeare <- system.file("examples", "shakespeare_data.json",
+    package = "elastic")
+  invisible(docs_bulk(x, shakespeare))
+}
 
 docs_get(x, index='shakespeare', type='line', id=10)
 docs_get(x, index='shakespeare', type='line', id=12)
@@ -61,6 +73,12 @@ if (gsub("\\\\.", "", x$ping()$version$number) < 500) {
 # Just test for existence of the document
 docs_get(x, index='plos', type='article', id=1, exists=TRUE)
 docs_get(x, index='plos', type='article', id=123456, exists=TRUE)
+
+# source includes / excludes
+docs_get(x, index='shakespeare', type='line', id=10,
+  source_includes = "play_name")
+docs_get(x, index='shakespeare', type='line', id=10,
+  source_excludes = "play_name")
 }
 }
 \references{
