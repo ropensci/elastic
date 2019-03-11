@@ -1,6 +1,7 @@
 context("msearch")
 
 x <- connect()
+load_shakespeare(x)
 
 test_that("basic multi-search works", {
   tf <- tempfile(fileext = ".json")

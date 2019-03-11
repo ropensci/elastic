@@ -1,6 +1,7 @@
 context("explain")
 
 x <- connect()
+load_shakespeare(x)
 
 test_that("explain", {
   type_ <- if (x$es_ver() < 600) "scene" else "line"

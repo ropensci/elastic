@@ -1,6 +1,7 @@
 context("search")
 
 x <- connect()
+load_shakespeare(x)
 
 test_that("basic search works", {
 

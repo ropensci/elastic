@@ -1,6 +1,7 @@
 context("cluster")
 
 x <- connect()
+load_shakespeare(x)
 
 test_that("cluster_settings", {
 

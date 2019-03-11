@@ -1,6 +1,7 @@
 context("indices")
 
 x <- connect()
+load_shakespeare(x)
 
 test_that("index_get", {
   if (!es_version(x) < 120) {

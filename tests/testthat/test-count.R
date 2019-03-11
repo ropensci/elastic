@@ -1,6 +1,7 @@
 context("count")
 
 x <- connect()
+load_shakespeare(x)
 
 test_that("count", {
   a <- count(x)

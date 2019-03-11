@@ -1,11 +1,7 @@
 context("mtermvectors")
 
 x <- connect()
-
-if (!index_exists(x, 'omdb')) {
-  omdb <- system.file("examples", "omdb.json", package = "elastic")
-  invisible(docs_bulk(x, omdb))
-}
+load_omdb(x)
 
 ids <- vapply(Search(x, "omdb", size = 2)$hits$hits, "[[", "", "_id")
 body <- sprintf('{

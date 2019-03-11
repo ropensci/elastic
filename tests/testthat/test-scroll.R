@@ -1,6 +1,7 @@
 context("scroll")
 
 x <- connect()
+load_shakespeare(x)
 
 test_that("basic scroll works", {
   res <- Search(x, time_scroll = "1m")

@@ -15,7 +15,6 @@ test_that("docs_create works", {
   expect_is(a$`_source`, "list")
   expect_equal(a$`_id`, "1002")
   expect_equal(a$`_source`$id[[1]], "12345")
-  expect_equal(length(a), 6)
 
   # can create docs with an index that doesn't exist yet, should create index on the fly
   b <- docs_create(x, "bbbbbbb", "stuff", 1, list(a = 5))
@@ -30,7 +29,6 @@ test_that("docs_create works with automatically created document IDs", {
   expect_is(a, "list")
   expect_is(a$`_source`, "list")
   expect_equal(a$`_source`$id[[1]], "12345")
-  expect_equal(length(a), 6)
 })
 
 test_that("docs_create fails as expected", {

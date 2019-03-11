@@ -1,6 +1,7 @@
 context("mappings")
 
 x <- connect()
+load_omdb(x)
 
 ## create plos index first -----------------------------------
 invisible(tryCatch(index_delete(x, index = "plos", verbose = FALSE), error = function(e) e))
