@@ -3,7 +3,6 @@ context("alias")
 x <- connect()
 
 test_that("alias_get works", {
-
   invisible(tryCatch(index_delete(x, "plos", verbose = FALSE), error = function(e) e))
   invisible(index_create(x, "plos", verbose = FALSE))
   invisible(alias_create(x, index = "plos", alias = "tables"))
@@ -16,7 +15,6 @@ test_that("alias_get works", {
 })
 
 test_that("aliases_get works", {
-
   c <- aliases_get(x)
   expect_is(c, "list")
   expect_is(c$plos, "list")
@@ -28,13 +26,11 @@ test_that("aliases_get works", {
 })
 
 test_that("alias_create works", {
-
   d <- invisible(alias_create(x, index = "plos", alias = "howdy"))
   expect_true(d$acknowledged)
 })
 
 test_that("alias_exists works", {
-
   expect_false(alias_exists(x, index = "fog"))
   
   invisible(tryCatch(index_delete(x, "fog", verbose = FALSE), error = function(e) e))

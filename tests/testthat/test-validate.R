@@ -16,7 +16,7 @@ test_that("validate", {
   expect_equal(sort(names(a)), c('_shards', 'valid'))
   expect_true(a$valid)
   
-  if (es_version(x) >= 700) {
+  if (x$es_ver() >= 700) {
     expect_warning(
       validate(x, "twitter", "tweet", q='user:foobar'),
       "Specifying types in validate query requests is deprecated"

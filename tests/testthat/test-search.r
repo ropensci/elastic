@@ -9,7 +9,7 @@ test_that("basic search works", {
   expect_equal(names(a), c('took','timed_out','_shards','hits'))
   expect_is(a, "list")
   expect_is(a$hits$hits, "list")
-  if (es_version(x) >= 700) {
+  if (x$es_ver() >= 700) {
     expect_is(a$hits$total, "list")
   } else {
     expect_type(a$hits$total, "integer")
@@ -18,7 +18,7 @@ test_that("basic search works", {
 })
 
 test_that("search for document type works, and differently for different ES versions", {
-  if (es_version(x) >= 700) {
+  if (x$es_ver() >= 700) {
     expect_warning(
       bb <- Search(x, index="shakespeare", type="line"),
       "Specifying types in search requests is deprecated"
@@ -65,7 +65,7 @@ test_that("getting json data back from search works", {
 
   suppressMessages(require('jsonlite'))
 
-  if (es_version(x) >= 700) {
+  if (x$es_ver() >= 700) {
     expect_warning(
       f <- Search(x, index="shakespeare", type="scene", raw=TRUE),
       "Specifying types in search requests is deprecated"
@@ -79,7 +79,7 @@ test_that("getting json data back from search works", {
 })
 
 test_that("Search works with special characters - +", {
-  if (es_version(x) < 200) skip('skipping for this ES version')
+  if (x$es_ver() < 200) skip('skipping for this ES version')
   invisible(tryCatch(index_delete(x, "a+b"), error = function(e) e))
   invisible(index_create(x, "a+b"))
   invisible(docs_create(x, index = "a+b", type = "wiz", id=1, body=list(a="ddd", b="eee")))
@@ -166,7 +166,7 @@ test_that("Search fails as expected", {
 
   expect_error(Search(x, index="shakespeare", q="~text_entry:ma~"), "all shards failed")
   
-  if (es_version(x) < 600) {
+  if (x$es_ver() < 600) {
     expect_error(Search(x, index="shakespeare", q="line_id:[10 TO x]"), 
                  "all shards failed||SearchPhaseExecutionException")
   }

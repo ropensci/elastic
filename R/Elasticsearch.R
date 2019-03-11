@@ -6,83 +6,84 @@ elastic_env <- new.env()
 #' @param host (character) The base host, defaults to `127.0.0.1`
 #' @param port (character) port to connect to, defaults to `9200`
 #' (optional)
-#' @param path (character) context path that is appended to the end of the 
+#' @param path (character) context path that is appended to the end of the
 #' url. Default: `NULL`, ignored
 #' @param transport_schema (character) http or https. Default: `http`
-#' @param user (character) User name, if required for the connection. You 
+#' @param user (character) User name, if required for the connection. You
 #' can specify,  but ignored for now.
-#' @param pwd (character) Password, if required for the connection. You 
+#' @param pwd (character) Password, if required for the connection. You
 #' can specify, but ignored for now.
-#' @param force (logical) Force re-load of connection details. 
+#' @param force (logical) Force re-load of connection details.
 #' Default: `FALSE`
-#' @param errors (character) One of simple (Default) or complete. Simple gives 
-#' http code and  error message on an error, while complete gives both http 
+#' @param errors (character) One of simple (Default) or complete. Simple gives
+#' http code and  error message on an error, while complete gives both http
 #' code and error message,  and stack trace, if available.
-#' @param warn (logical) whether to throw warnings from the Elasticsearch 
-#' server when provided. Pulls warnings from response headers when given. 
-#' default: `TRUE`. To turn these off, you can set `warn=FALSE` or 
-#' wrap function calls in [suppressWarnings()]
+#' @param warn (logical) whether to throw warnings from the Elasticsearch
+#' server when provided. Pulls warnings from response headers when given.
+#' default: `TRUE`. To turn these off, you can set `warn=FALSE` or
+#' wrap function calls in [suppressWarnings()]. You can also see warnings in
+#' headers by using curl verbose.
 #' @param headers named list of headers. These headers are used in all requests
 #' @param cainfo (character) path to a crt bundle, passed to curl option
 #' `cainfo`
 #' @param ... additional curl options to be passed in ALL http requests
-#' 
+#'
 #' @format NULL
 #' @usage NULL
-#' 
-#' @details The default configuration is set up for localhost access on port 
+#'
+#' @details The default configuration is set up for localhost access on port
 #' 9200, with no username or password.
 #'
-#' Running this connection method doesn't ping the ES server, but only prints 
+#' Running this connection method doesn't ping the ES server, but only prints
 #' your connection details.
 #'
-#' All connection details are stored within the returned object. We used to 
+#' All connection details are stored within the returned object. We used to
 #' store them in various env vars, but are now contained within the object
-#' so you can have any number of connection objects and they shouldn't 
+#' so you can have any number of connection objects and they shouldn't
 #' conflict with one another.
-#' 
+#'
 #' @examples \dontrun{
 #' # the default is set to 127.0.0.1 (i.e., localhost) and port 9200
 #' (x <- connect())
 #' x$make_url()
 #' x$ping()
-#' 
+#'
 #' # pass connection object to function calls
 #' Search(x, q = "*:*")
 #'
 #' # set username/password (hidden in print method)
 #' connect(user = "me", pwd = "stuff")
-#'  
+#'
 #' # set a different host
 #' # connect(host = '162.243.152.53')
 #' # => http://162.243.152.53:9200
-#' 
+#'
 #' # set a different port
 #' # connect(port = 8000)
 #' # => http://localhost:8000
-#' 
+#'
 #' # set a different context path
 #' # connect(path = 'foo_bar')
 #' # => http://localhost:9200/foo_bar
-#' 
+#'
 #' # set to https
 #' # connect(transport_schema = 'https')
 #' # => https://localhost:9200
-#' 
+#'
 #' # set headers
 #' connect(headers = list(a = 'foobar'))
-#' 
+#'
 #' # set cainfo path (hidden in print method)
 #' connect(cainfo = '/some/path/bundle.crt')
 #' }
-connect <- function(host = "127.0.0.1", port = 9200, path = NULL, 
-  transport_schema = "http", user = NULL, pwd = NULL, 
-  headers = NULL, cainfo = NULL, force = FALSE, 
+connect <- function(host = "127.0.0.1", port = 9200, path = NULL,
+  transport_schema = "http", user = NULL, pwd = NULL,
+  headers = NULL, cainfo = NULL, force = FALSE,
   errors = "simple", warn = TRUE, ...) {
-  
+
   Elasticsearch$new(host = host, port = port, path = path,
-      transport_schema = transport_schema, user = user, pwd = pwd, 
-      headers = headers, cainfo = cainfo, force = FALSE, 
+      transport_schema = transport_schema, user = user, pwd = pwd,
+      headers = headers, cainfo = cainfo, force = FALSE,
       errors = errors, warn = warn, ...)
 }
 
@@ -102,9 +103,9 @@ Elasticsearch <- R6::R6Class(
     opts = NULL,
     warn = TRUE,
 
-    initialize = function(host = "127.0.0.1", port = 9200, path = NULL, 
-      transport_schema = "http", user = NULL, pwd = NULL, 
-      headers = NULL, cainfo = NULL, force = FALSE, 
+    initialize = function(host = "127.0.0.1", port = 9200, path = NULL,
+      transport_schema = "http", user = NULL, pwd = NULL,
+      headers = NULL, cainfo = NULL, force = FALSE,
       errors = "simple", warn = TRUE, ...) {
 
       self$port <- port
@@ -127,7 +128,7 @@ Elasticsearch <- R6::R6Class(
         host <- sub("^http[s]?://", "", host)
       }
       self$host <- host
-      
+
       # normalize path
       if (!is.null(path)) {
         if (grepl("/$", path)) {
@@ -177,7 +178,7 @@ Elasticsearch <- R6::R6Class(
       cli <- crul::HttpClient$new(self$make_url(), auth = self$make_up())
       res <- tryCatch(cli$get(...), error = function(e) e)
       if (inherits(res, "error")) {
-        stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting", 
+        stop(sprintf("\n  Failed to connect to %s\n  Remember to start Elasticsearch before connecting",
                      self$make_url()), call. = FALSE)
       }
       if (res$status_code > 200) {
@@ -193,13 +194,13 @@ Elasticsearch <- R6::R6Class(
         elastic_env$ping_result <- pinged <- self$ping()
       }
       ver <- pinged$version$number
-      
+
       # get only 1st 3 digits, so major:minor:patch
       as.numeric(
         paste(
           stats::na.omit(
             extractr(ver, "[[:digit:]]+")[[1]][1:3]
-          ), 
+          ),
           collapse = ""
         )
       )
@@ -207,16 +208,16 @@ Elasticsearch <- R6::R6Class(
 
     stop_es_version = function(ver_check, fxn) {
       if (self$es_ver() < ver_check) {
-        stop(fxn, " is not available for this Elasticsearch version", 
+        stop(fxn, " is not available for this Elasticsearch version",
              call. = FALSE)
       }
     },
 
     make_conn = function(url, headers = list(), ...) {
       crul::HttpClient$new(
-        url = url, 
+        url = url,
         headers = c(self$headers, headers),
-        opts = c(self$opts, ...), 
+        opts = c(self$opts, ...),
         auth = crul::auth(self$user, self$pwd)
       )
     },
