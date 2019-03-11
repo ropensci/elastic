@@ -33,6 +33,7 @@
 #' @param ... Curl args passed on to [crul::verb-POST]
 #' @references
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete-by-query.html>
+#' @seealso [docs_update_by_query()]
 #' @examples \dontrun{
 #' (x <- connect())
 #' x$ping()
