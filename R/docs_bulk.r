@@ -25,11 +25,6 @@
 #' @param quiet (logical) Suppress progress bar. Default: `FALSE`
 #' @param ... Pass on curl options to [crul::HttpClient]
 #'
-#' @seealso [docs_bulk_prep()] for prepping a newline delimited 
-#' JSON file that you can load into Elasticsearch yourself. See 
-#' [docs_bulk_update()] for updating documents from an R data.frame
-#' or list.
-#'
 #' @details More on the Bulk API:
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html>
 #'
@@ -98,7 +93,8 @@
 #' the R session ends. 
 #'
 #' @return A list
-#'
+#' @family bulk-functions
+#' 
 #' @examples \dontrun{
 #' # connection setup
 #' (x <- connect())
@@ -194,6 +190,25 @@
 #' index_delete(x, db)
 #' 
 #' 
+#' # data.frame with a mix of actions
+#' ## make sure you use a column named 'es_action' or this won't work
+#' ## if you need to delete or update you need document IDs
+#' if (index_exists("baz")) index_delete("baz")
+#' df <- data.frame(a = 1:5, b = 6:10, c = letters[1:5], stringsAsFactors = FALSE) 
+#' invisible(docs_bulk(df, "baz"))
+#' (res <- Search('baz', asdf=TRUE)$hits$hits)
+#' df[1, "a"] <- 99
+#' df[1, "c"] <- "aa"
+#' df[3, "c"] <- 33
+#' df[3, "c"] <- "cc"
+#' df$es_action <- c('update', 'delete', 'update', 'delete', 'delete')
+#' df$id <- res$`_id`
+#' df
+#' invisible(docs_bulk(df, "baz", es_ids = FALSE))
+#' ### or es_ids = FALSE and pass in document ids to doc_ids
+#' # invisible(docs_bulk(df, "baz", es_ids = FALSE, doc_ids = df$id))
+#' Search('baz', asdf=TRUE)$hits$hits
+#' 
 #' 
 #' # Curl options
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
@@ -206,24 +221,21 @@
 #' invisible(docs_bulk(x, mtcars, index = "hello", type = "world", quiet = FALSE))
 #' }
 docs_bulk <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
-                      doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
-                      quiet = FALSE, ...) {
+  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, ...) {
 
   UseMethod("docs_bulk", x)
 }
 
 #' @export
 docs_bulk.default <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
-                      doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
-                      quiet = FALSE, ...) {
+  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, ...) {
 
   stop("no 'docs_bulk' method for class ", class(x), call. = FALSE)
 }
 
 #' @export
 docs_bulk.data.frame <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
-                                 doc_ids = NULL, 
-                                 es_ids = TRUE, raw = FALSE, quiet = FALSE, ...) {
+  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, ...) {
 
   is_conn(conn)
   assert(quiet, "logical")

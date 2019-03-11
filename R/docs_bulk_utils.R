@@ -7,23 +7,44 @@ make_bulk <- function(df, index, type, counter, es_ids, path = NULL) {
     }
   }
   metadata_fmt <- if (es_ids) {
-    '{"index":{"_index":"%s","_type":"%s"}}'
+    '{"%s":{"_index":"%s","_type":"%s"}}'
   } else {
     if (is.character(counter)) {
-      '{"index":{"_index":"%s","_type":"%s","_id":"%s"}}'
+      '{"%s":{"_index":"%s","_type":"%s","_id":"%s"}}'
     } else {
-      '{"index":{"_index":"%s","_type":"%s","_id":%s}}'
+      '{"%s":{"_index":"%s","_type":"%s","_id":%s}}'
     }
   }
-  metadata <- sprintf(
-    metadata_fmt,
-    index,
-    type,
-    counter
-  )
-  data <- jsonlite::toJSON(df, collapse = FALSE, na = "null", auto_unbox = TRUE)
+  if (!"es_action" %in% names(df)) {
+    action <- "index"
+    metadata <- sprintf(
+      metadata_fmt,
+      action,
+      index,
+      type,
+      counter
+    )
+    data <- jsonlite::toJSON(df, collapse = FALSE, na = "null", auto_unbox = TRUE)
+    towrite <- paste(metadata, data, sep = "\n")
+  } else {
+    towrite <- unlist(unname(Map(function(a, b) {
+      tmp <- sprintf(
+        metadata_fmt,
+        a$es_action,
+        index,
+        type,
+        b
+      )
+      if (a$es_action == "delete") return(tmp)
+      is_update <- a$es_action == "update"
+      a$es_action <- NULL
+      dat <- jsonlite::toJSON(a, collapse = FALSE, na = "null", auto_unbox = TRUE)
+      if (is_update) dat <- sprintf('{"doc": %s, "doc_as_upsert": true}', dat)
+      c(tmp, dat)
+    }, split(df, seq_along(df)), counter)))
+  }
   tmpf <- if (is.null(path)) tempfile("elastic__") else path
-  write_utf8(paste(metadata, data, sep = "\n"), tmpf)
+  write_utf8(towrite, tmpf)
   invisible(tmpf)
 }
 
