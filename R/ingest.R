@@ -1,7 +1,8 @@
 #' Ingest API operations
 #'
 #' @references
-#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/ingest-apis.html>
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/ingest-apis.html>,
+#' <https://www.elastic.co/guide/en/elasticsearch/plugins/current/using-ingest-attachment.html>
 #' @name ingest
 #'
 #' @param conn an Elasticsearch connection object, see [connect()]
@@ -9,12 +10,21 @@
 #' a wildcard match
 #' @param body body describing pipeline, see examples and Elasticsearch docs
 #' @param filter_path (character) fields to return. deafults to all if not given
+#' @param index (character) an index. only used in `pipeline_attachment`
+#' @param type (character) a type. only used in `pipeline_attachment`
+#' @param pipeline (character) a pipeline name. only used in `pipeline_attachment`
 #' @param ... Curl args passed on to [crul::verb-POST], [crul::verb-GET],
 #' [crul::verb-PUT], or [crul::verb-DELETE]
 #' 
 #' @return a named list
 #' 
-#' @details ingest/pipeline functions available in Elasticsearch v5 and greater
+#' @details ingest/pipeline functions available in Elasticsearch v5 and
+#' greater
+#' 
+#' @section Attachments:
+#' See https://www.elastic.co/guide/en/elasticsearch/plugins/current/ingest-attachment.html
+#' You need to install the attachment processor plugin to be able to use
+#' attachments in pipelines
 #'
 #' @examples \dontrun{
 #' # connection setup
@@ -85,6 +95,28 @@
 #'   ]
 #' }'
 #' pipeline_simulate(x, body, id = "foo")
+#' 
+#' # attchments - Note: you need the attachment plugin for this, see above
+#' body1 <- '{
+#'   "description" : "do a thing",
+#'   "version" : 123,
+#'   "processors" : [
+#'     {
+#'       "attachment" : {
+#'         "field" : "data"
+#'       }
+#'     }
+#'   ]
+#' }'
+#' pipeline_create(x, "baz", body1)
+#' body_attach <- '{
+#'   "data": "e1xydGYxXGFuc2kNCkxvcmVtIGlwc3VtIGRvbG9yIHNpdCBhbWV0DQpccGFyIH0="
+#' }'
+#' if (!index_exists(x, "boomarang")) index_create(x, "boomarang")
+#' docs_create(x, 'boomarang', 'boomarang', id = 1, 
+#'   body = list(title = "New title"))
+#' pipeline_attachment(x, "boomarang", "boomarang", "1", "baz", body_attach)
+#' pipeline_get(x, id = 'baz')
 #' }
 NULL
 
@@ -95,6 +127,16 @@ pipeline_create <- function(conn, id, body, ...) {
   pipeline_ver(conn)
   url <- conn$make_url()
   es_PUT(conn, file.path(url, "_ingest/pipeline", esc(id)), body = body, ...)
+}
+
+#' @export
+#' @rdname ingest
+pipeline_attachment <- function(conn, index, type, id, pipeline, body, ...) {
+  is_conn(conn)
+  pipeline_ver(conn)
+  url <- conn$make_url()
+  es_PUT(conn, file.path(url, index, type, esc(id)),
+    body = body, args = list(pipeline = pipeline), ...)
 }
 
 #' @export

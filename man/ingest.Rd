@@ -3,12 +3,15 @@
 \name{ingest}
 \alias{ingest}
 \alias{pipeline_create}
+\alias{pipeline_attachment}
 \alias{pipeline_get}
 \alias{pipeline_delete}
 \alias{pipeline_simulate}
 \title{Ingest API operations}
 \usage{
 pipeline_create(conn, id, body, ...)
+
+pipeline_attachment(conn, index, type, id, pipeline, body, ...)
 
 pipeline_get(conn, id, filter_path = NULL, ...)
 
@@ -27,6 +30,12 @@ a wildcard match}
 \item{...}{Curl args passed on to \link[crul:verb-POST]{crul::verb-POST}, \link[crul:verb-GET]{crul::verb-GET},
 \link[crul:verb-PUT]{crul::verb-PUT}, or \link[crul:verb-DELETE]{crul::verb-DELETE}}
 
+\item{index}{(character) an index. only used in \code{pipeline_attachment}}
+
+\item{type}{(character) a type. only used in \code{pipeline_attachment}}
+
+\item{pipeline}{(character) a pipeline name. only used in \code{pipeline_attachment}}
+
 \item{filter_path}{(character) fields to return. deafults to all if not given}
 }
 \value{
@@ -36,8 +45,16 @@ a named list
 Ingest API operations
 }
 \details{
-ingest/pipeline functions available in Elasticsearch v5 and greater
+ingest/pipeline functions available in Elasticsearch v5 and
+greater
 }
+\section{Attachments}{
+
+See https://www.elastic.co/guide/en/elasticsearch/plugins/current/ingest-attachment.html
+You need to install the attachment processor plugin to be able to use
+attachments in pipelines
+}
+
 \examples{
 \dontrun{
 # connection setup
@@ -108,8 +125,31 @@ body <- '{
   ]
 }'
 pipeline_simulate(x, body, id = "foo")
+
+# attchments - Note: you need the attachment plugin for this, see above
+body1 <- '{
+  "description" : "do a thing",
+  "version" : 123,
+  "processors" : [
+    {
+      "attachment" : {
+        "field" : "data"
+      }
+    }
+  ]
+}'
+pipeline_create(x, "baz", body1)
+body_attach <- '{
+  "data": "e1xydGYxXGFuc2kNCkxvcmVtIGlwc3VtIGRvbG9yIHNpdCBhbWV0DQpccGFyIH0="
+}'
+if (!index_exists(x, "boomarang")) index_create(x, "boomarang")
+docs_create(x, 'boomarang', 'boomarang', id = 1, 
+  body = list(title = "New title"))
+pipeline_attachment(x, "boomarang", "boomarang", "1", "baz", body_attach)
+pipeline_get(x, id = 'baz')
 }
 }
 \references{
-\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/ingest-apis.html}
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/ingest-apis.html},
+\url{https://www.elastic.co/guide/en/elasticsearch/plugins/current/using-ingest-attachment.html}
 }
