@@ -27,7 +27,7 @@ You can of course manually modify these files as an alternative.
 \dontrun{
 z <- system.file("examples/omdb.json", package = "elastic")
 readLines(z, 6)
-ff <- remove_type(z)
+ff <- type_remover(z)
 readLines(ff, 6)
 unlink(ff)
 }

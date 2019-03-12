@@ -837,4 +837,18 @@
 #' NROW(df)
 #' unlink(file)
 #' 
+#' 
+#' # get profile data
+#' body <- '{
+#'   "profile": true,
+#'   "query" : {
+#'     "match" : { "text_entry" : "war" }
+#'   }
+#' }'
+#' res <- Search(x, "shakespeare", body = body)
+#' res$profile
+#' # time in nanoseconds across each of the shards
+#' vapply(res$profile$shards, function(w) {
+#'   w$searches[[1]]$query[[1]]$time_in_nanos
+#' }, 1)
 #' }

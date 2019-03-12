@@ -131,6 +131,26 @@ This function name has the "S" capitalized to avoid conflict with the function
 \code{base::search}. I hate mixing cases, as I think it confuses users, but in this case
 it seems neccessary.
 }
+\section{profile}{
+
+The Profile API provides detailed timing information about the execution of
+individual components in a search request. See
+https://www.elastic.co/guide/en/elasticsearch/reference/current/search-profile.html
+for more information
+
+In a body query, you can set to \code{profile: true} to enable profiling
+results. e.g.
+
+\preformatted{
+{
+  "profile": true,
+  "query" : {
+    "match" : { "message" : "some number" }
+  }
+}
+}
+}
+
 \examples{
 \dontrun{
 # make connection object
@@ -965,6 +985,20 @@ head(df <- jsonlite::stream_in(file(file)))
 NROW(df)
 unlink(file)
 
+
+# get profile data
+body <- '{
+  "profile": true,
+  "query" : {
+    "match" : { "text_entry" : "war" }
+  }
+}'
+res <- Search(x, "shakespeare", body = body)
+res$profile
+# time in nanoseconds across each of the shards
+vapply(res$profile$shards, function(w) {
+  w$searches[[1]]$query[[1]]$time_in_nanos
+}, 1)
 }
 }
 \references{

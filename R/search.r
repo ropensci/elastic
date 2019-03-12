@@ -3,6 +3,7 @@
 #' @export
 #' @name Search
 #' @template search_par
+#' @template search_extra
 #' @template search_egs
 #' @param body Query, either a list or json.
 #' @param time_scroll (character) Specify how long a consistent view of the 
