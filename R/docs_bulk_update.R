@@ -114,7 +114,7 @@ make_bulk_update <- function(df, index, type, counter, path = NULL) {
   df$id <- NULL
   
   data <- lapply(seq_len(nrow(df)), function(i) {
-    z <- list(doc = unbox(df[i,]), doc_as_upsert = TRUE)
+    z <- list(doc = jsonlite::unbox(df[i,]), doc_as_upsert = TRUE)
     jsonlite::toJSON(z, auto_unbox = TRUE, na = "null", null = "null")
   })
 
