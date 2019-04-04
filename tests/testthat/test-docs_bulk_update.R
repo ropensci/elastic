@@ -103,6 +103,60 @@ test_that("docs_bulk_update - works with data.frame where ids are factors", {
   )
 })
 
+test_that("docs_bulk_update - works with data.frame with boolean types", {
+  # remove index if it exists
+  if (index_exists("mixed")) {
+    index_delete("mixed")
+  }
+
+  # create a data frame with mixed bool and non-bool types
+  mixed <- data.frame(
+    id = as.character(1:3),
+    x = c(TRUE, FALSE, TRUE),
+    y = c("a", "b", "c"),
+    stringsAsFactors = FALSE
+  )
+
+  mixed_mapping <- '{
+    "mappings": {
+      "mixed": {
+        "properties": {
+          "x": { "type": "boolean" },
+          "y": { "type": "keyword" }
+        }
+      }
+    }
+  }'
+
+  # use 'string' or 'text' depending on ES version
+  string_text <- if (es_ver() < 500) "string" else "text"
+  index_create("mixed", sprintf(mixed_mapping, string_text))
+
+  # load via bulk update
+  invisible(docs_bulk(mixed, index = "mixed", type = "mixed", quiet = TRUE, es_ids = FALSE))
+
+  # add a new row
+  mixed <- rbind(mixed, data.frame(id = 4, x = TRUE, y = "d"))
+
+  # update data
+  update_res <- docs_bulk_update(mixed, index = "mixed", type = "mixed", quiet = TRUE)
+  Sys.sleep(1) # sleep a bit to wait for data to be there
+
+  # get data frame back from search
+  mixed_es <- Search('mixed', asdf = TRUE)$hits$hits
+  mixed_es <- mixed_es[order(mixed_es$`_id`),]
+
+  # ensure bulk update succeeded
+  expect_is(update_res, "list")
+  expect_equal(length(update_res), 1)
+  expect_named(update_res[[1]], c('took', 'errors', 'items'))
+  expect_equal(length(update_res[[1]]$items), nrow(mixed))
+
+  # ensure search result types and values match original
+  expect_equal(mixed$id, mixed_es$`_id`)
+  expect_equal(mixed$x, mixed_es$`_source.x`)
+  expect_equal(mixed$y, mixed_es$`_source.y`)
+})
 
 test_that("docs_bulk_update fails well", {
   # certain classes not supported
