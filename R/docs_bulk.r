@@ -91,6 +91,9 @@
 #' you need those files again. Your own tempfile's will be cleaned up/delete 
 #' when the R session ends. Non-tempfile's won't be cleaned up/deleted after
 #' the R session ends. 
+#' 
+#' @section Elasticsearch versions that don't support type:
+#' See the [type_remover()] function.
 #'
 #' @return A list
 #' @family bulk-functions

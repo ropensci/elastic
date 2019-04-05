@@ -127,6 +127,11 @@ when the R session ends. Non-tempfile's won't be cleaned up/deleted after
 the R session ends.
 }
 
+\section{Elasticsearch versions that don't support type}{
+
+See the \code{\link[=type_remover]{type_remover()}} function.
+}
+
 \examples{
 \dontrun{
 # connection setup

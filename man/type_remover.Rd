@@ -21,7 +21,8 @@ files. See Details.
 Looks for any lines that have an "index" key, then drops
 any "_type" keys in the hash given by the "index" key.
 
-You can of course manually modify these files as an alternative.
+You can of course manually modify these files as an alternative,
+in a text editor or with command line tools like sed, etc.
 }
 \examples{
 \dontrun{
