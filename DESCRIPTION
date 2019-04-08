@@ -28,7 +28,7 @@ Suggests:
     roxygen2 (>= 6.1.0),
     knitr,
     testthat
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 X-schema.org-applicationCategory: Databases
 X-schema.org-keywords: database, Elasticsearch, HTTP, API, search, NoSQL, Java, JSON, documents
 X-schema.org-isPartOf: https://ropensci.org
