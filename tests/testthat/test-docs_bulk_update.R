@@ -105,8 +105,8 @@ test_that("docs_bulk_update - works with data.frame where ids are factors", {
 
 test_that("docs_bulk_update - works with data.frame with boolean types", {
   # remove index if it exists
-  if (index_exists("mixed")) {
-    index_delete("mixed")
+  if (index_exists(x, "mixed")) {
+    index_delete(x, "mixed")
   }
 
   # create a data frame with mixed bool and non-bool types
@@ -129,21 +129,21 @@ test_that("docs_bulk_update - works with data.frame with boolean types", {
   }'
 
   # use 'string' or 'text' depending on ES version
-  string_text <- if (es_ver() < 500) "string" else "text"
-  index_create("mixed", sprintf(mixed_mapping, string_text))
+  string_text <- if (x$es_ver() < 500) "string" else "text"
+  index_create(x, "mixed", sprintf(mixed_mapping, string_text))
 
   # load via bulk update
-  invisible(docs_bulk(mixed, index = "mixed", type = "mixed", quiet = TRUE, es_ids = FALSE))
+  invisible(docs_bulk(x, mixed, index = "mixed", type = "mixed", quiet = TRUE, es_ids = FALSE))
 
   # add a new row
   mixed <- rbind(mixed, data.frame(id = 4, x = TRUE, y = "d"))
 
   # update data
-  update_res <- docs_bulk_update(mixed, index = "mixed", type = "mixed", quiet = TRUE)
+  update_res <- docs_bulk_update(x, mixed, index = "mixed", type = "mixed", quiet = TRUE)
   Sys.sleep(1) # sleep a bit to wait for data to be there
 
   # get data frame back from search
-  mixed_es <- Search('mixed', asdf = TRUE)$hits$hits
+  mixed_es <- Search(x, 'mixed', asdf = TRUE)$hits$hits
   mixed_es <- mixed_es[order(mixed_es$`_id`),]
 
   # ensure bulk update succeeded
