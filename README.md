@@ -24,7 +24,7 @@ Also check out `elasticdsl` - an R DSL for Elasticsearch - [https://github.com/r
 
 ## Compatibility
 
-This client is developed following the latest stable releases, currently `v6.5.3`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
+This client is developed following the latest stable releases, currently `v6.7.1`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
 
 ## Security
 
@@ -79,12 +79,12 @@ If you're using boot2docker, you'll need to use the IP address in place of local
 
 __on OSX__
 
-+ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.5.3.tar.gz`
-+ Extract: `tar -zxvf elasticsearch-6.5.3.tar.gz`
-+ Move it: `sudo mv elasticsearch-6.5.3 /usr/local`
++ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.7.1.tar.gz`
++ Extract: `tar -zxvf elasticsearch-6.7.1.tar.gz`
++ Move it: `sudo mv elasticsearch-6.7.1 /usr/local`
 + Navigate to /usr/local: `cd /usr/local`
 + Delete symlinked `elasticsearch` directory: `rm -rf elasticsearch`
-+ Add shortcut: `sudo ln -s elasticsearch-6.5.3 elasticsearch` (replace version with your version)
++ Add shortcut: `sudo ln -s elasticsearch-6.7.1 elasticsearch` (replace version with your version)
 
 You can also install via Homebrew: `brew install elasticsearch`
 
@@ -179,6 +179,7 @@ A dataset inluded in the `elastic` package is metadata for PLOS scholarly articl
 
 
 ```r
+if (index_exists(x, "plos")) index_delete(x, "plos")
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 invisible(docs_bulk(x, plosdat))
 ```
@@ -189,6 +190,7 @@ A dataset inluded in the `elastic` package is data for GBIF species occurrence r
 
 
 ```r
+if (index_exists(x, "gbif")) index_delete(x, "gbif")
 gbifdat <- system.file("examples", "gbif_data.json", package = "elastic")
 invisible(docs_bulk(x, gbifdat))
 ```
@@ -197,6 +199,7 @@ GBIF geo data with a coordinates element to allow `geo_shape` queries
 
 
 ```r
+if (index_exists(x, "gbifgeo")) index_delete(x, "gbifgeo")
 gbifgeo <- system.file("examples", "gbif_geo.json", package = "elastic")
 invisible(docs_bulk(x, gbifgeo))
 ```
@@ -281,6 +284,12 @@ docs_get(x, index = 'plos', type = 'article', id = 4)
 #> $`_version`
 #> [1] 1
 #> 
+#> $`_seq_no`
+#> [1] 1
+#> 
+#> $`_primary_term`
+#> [1] 1
+#> 
 #> $found
 #> [1] TRUE
 #> 
@@ -309,6 +318,12 @@ docs_get(x, index = 'plos', type = 'article', id = 4, fields = 'id')
 #> $`_version`
 #> [1] 1
 #> 
+#> $`_seq_no`
+#> [1] 1
+#> 
+#> $`_primary_term`
+#> [1] 1
+#> 
 #> $found
 #> [1] TRUE
 ```
@@ -335,6 +350,12 @@ docs_mget(x, index = "plos", type = "article", id = 1:2)
 #> $docs[[1]]$`_version`
 #> [1] 1
 #> 
+#> $docs[[1]]$`_seq_no`
+#> [1] 0
+#> 
+#> $docs[[1]]$`_primary_term`
+#> [1] 1
+#> 
 #> $docs[[1]]$found
 #> [1] TRUE
 #> 
@@ -358,6 +379,12 @@ docs_mget(x, index = "plos", type = "article", id = 1:2)
 #> [1] "2"
 #> 
 #> $docs[[2]]$`_version`
+#> [1] 1
+#> 
+#> $docs[[2]]$`_seq_no`
+#> [1] 0
+#> 
+#> $docs[[2]]$`_primary_term`
 #> [1] 1
 #> 
 #> $docs[[2]]$found
@@ -388,6 +415,12 @@ docs_mget(x, index_type_id = list(c("plos", "article", 1), c("gbif", "record", 1
 #> $`_version`
 #> [1] 1
 #> 
+#> $`_seq_no`
+#> [1] 0
+#> 
+#> $`_primary_term`
+#> [1] 1
+#> 
 #> $found
 #> [1] TRUE
 #> 
@@ -408,7 +441,7 @@ For example:
 
 ```r
 (out <- docs_mget(x, index = "plos", type = "article", id = 1:2, raw = TRUE))
-#> [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"1\",\"_version\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098602\",\"title\":\"Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar\"}},{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"2\",\"_version\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0107757\",\"title\":\"Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition\"}}]}"
+#> [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"1\",\"_version\":1,\"_seq_no\":0,\"_primary_term\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098602\",\"title\":\"Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar\"}},{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"2\",\"_version\":1,\"_seq_no\":0,\"_primary_term\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0107757\",\"title\":\"Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition\"}}]}"
 #> attr(,"class")
 #> [1] "elastic_mget"
 ```
@@ -419,9 +452,12 @@ Then parse
 ```r
 jsonlite::fromJSON(out)
 #> $docs
-#>   _index   _type _id _version found                   _source.id
-#> 1   plos article   1        1  TRUE 10.1371/journal.pone.0098602
-#> 2   plos article   2        1  TRUE 10.1371/journal.pone.0107757
+#>   _index   _type _id _version _seq_no _primary_term found
+#> 1   plos article   1        1       0             1  TRUE
+#> 2   plos article   2        1       0             1  TRUE
+#>                     _source.id
+#> 1 10.1371/journal.pone.0098602
+#> 2 10.1371/journal.pone.0107757
 #>                                                                                                                                                _source.title
 #> 1 Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar
 #> 2                                     Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition

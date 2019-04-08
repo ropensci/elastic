@@ -31,7 +31,7 @@ Also check out `elasticdsl` - an R DSL for Elasticsearch - [https://github.com/r
 
 ## Compatibility
 
-This client is developed following the latest stable releases, currently `v6.5.3`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
+This client is developed following the latest stable releases, currently `v6.7.1`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
 
 ## Security
 
@@ -83,12 +83,12 @@ If you're using boot2docker, you'll need to use the IP address in place of local
 
 __on OSX__
 
-+ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.5.3.tar.gz`
-+ Extract: `tar -zxvf elasticsearch-6.5.3.tar.gz`
-+ Move it: `sudo mv elasticsearch-6.5.3 /usr/local`
++ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.7.1.tar.gz`
++ Extract: `tar -zxvf elasticsearch-6.7.1.tar.gz`
++ Move it: `sudo mv elasticsearch-6.7.1 /usr/local`
 + Navigate to /usr/local: `cd /usr/local`
 + Delete symlinked `elasticsearch` directory: `rm -rf elasticsearch`
-+ Add shortcut: `sudo ln -s elasticsearch-6.5.3 elasticsearch` (replace version with your version)
++ Add shortcut: `sudo ln -s elasticsearch-6.7.1 elasticsearch` (replace version with your version)
 
 You can also install via Homebrew: `brew install elasticsearch`
 
@@ -175,7 +175,8 @@ curl -XPUT localhost:9200/_bulk --data-binary @shakespeare.json
 
 A dataset inluded in the `elastic` package is metadata for PLOS scholarly articles. Get the file path, then load:
 
-```{r eval=FALSE}
+```{r}
+if (index_exists(x, "plos")) index_delete(x, "plos")
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 invisible(docs_bulk(x, plosdat))
 ```
@@ -184,14 +185,16 @@ invisible(docs_bulk(x, plosdat))
 
 A dataset inluded in the `elastic` package is data for GBIF species occurrence records. Get the file path, then load:
 
-```{r eval=FALSE}
+```{r}
+if (index_exists(x, "gbif")) index_delete(x, "gbif")
 gbifdat <- system.file("examples", "gbif_data.json", package = "elastic")
 invisible(docs_bulk(x, gbifdat))
 ```
 
 GBIF geo data with a coordinates element to allow `geo_shape` queries
 
-```{r eval=FALSE}
+```{r}
+if (index_exists(x, "gbifgeo")) index_delete(x, "gbifgeo")
 gbifgeo <- system.file("examples", "gbif_geo.json", package = "elastic")
 invisible(docs_bulk(x, gbifgeo))
 ```
