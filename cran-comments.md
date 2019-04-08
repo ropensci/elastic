@@ -1,7 +1,7 @@
 ## Test environments
 
-* local OS X install, R 3.5.0 patched
-* ubuntu 12.04 (on travis-ci), R 3.5.0
+* local OS X install, R 3.5.3
+* ubuntu 12.04 (on travis-ci), R 3.5.3
 * win-builder (devel and release)
 
 ## R CMD check results
@@ -11,16 +11,18 @@
 License components with restrictions and base license permitting such:
      MIT + file LICENSE
    File 'LICENSE':
-     YEAR: 2018
+     YEAR: 2019
      COPYRIGHT HOLDER: Scott Chamberlain
 
 ## Reverse dependencies
 
-* There are no reverse dependencies
+* I have run R CMD check on the 1 downstream dependency
+(<https://github.com/ropensci/elastic/blob/master/revdep/README.md>).
+There were no problems.
 
 -------
 
-This version includes one new function, a series of new parameters for a single function (docs_bulk), and many bug fixes.
+This version xxx.
 
 Thanks! 
 Scott Chamberlain
