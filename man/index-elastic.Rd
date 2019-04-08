@@ -2,8 +2,6 @@
 % Please edit documentation in R/index.R
 \name{index}
 \alias{index}
-\alias{index_get}
-\alias{index_exists}
 \alias{index_delete}
 \alias{index_create}
 \alias{index_recreate}
@@ -22,11 +20,6 @@
 \alias{index_clear_cache}
 \title{Index API operations}
 \usage{
-index_get(index = NULL, features = NULL, raw = FALSE,
-  verbose = TRUE, ...)
-
-index_exists(index, ...)
-
 index_delete(index, raw = FALSE, verbose = TRUE, ...)
 
 index_create(index = NULL, body = NULL, raw = FALSE,
@@ -73,9 +66,6 @@ index_clear_cache(index = NULL, filter = FALSE, filter_keys = NULL,
 }
 \arguments{
 \item{index}{(character) A character vector of index names}
-
-\item{features}{(character) A single feature. One of settings, mappings, or
-aliases}
 
 \item{raw}{If \code{TRUE} (default), data is parsed to list. If FALSE, then raw JSON.}
 
@@ -156,6 +146,9 @@ parameter (default: all)}
 \item{query_cache}{(logical) Clear query caches}
 
 \item{id_cache}{(logical) Clear ID caches for parent/child}
+
+\item{features}{(character) A single feature. One of settings, mappings, or
+aliases}
 }
 \description{
 Index API operations
