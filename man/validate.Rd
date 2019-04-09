@@ -4,9 +4,11 @@
 \alias{validate}
 \title{Validate a search}
 \usage{
-validate(index, type = NULL, ...)
+validate(conn, index, type = NULL, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{index}{Index name. Required.}
 
 \item{type}{Document type. Optional.}
@@ -18,15 +20,17 @@ Validate a search
 }
 \examples{
 \dontrun{
-if (!index_exists("twitter")) index_create("twitter")
-docs_create('twitter', type='tweet', id=1, body = list(
+x <- connect()
+
+if (!index_exists(x, "twitter")) index_create(x, "twitter")
+docs_create(x, 'twitter', type='tweet', id=1, body = list(
    "user" = "foobar", 
    "post_date" = "2014-01-03",
    "message" = "trying out Elasticsearch"
  )
 )
-validate("twitter", q='user:foobar')
-validate("twitter", "tweet", q='user:foobar')
+validate(x, "twitter", q='user:foobar')
+validate(x, "twitter", "tweet", q='user:foobar')
 
 body <- '{
 "query" : {
@@ -42,7 +46,7 @@ body <- '{
   }
 }
 }'
-validate("twitter", body = body)
+validate(x, "twitter", body = body)
 }
 }
 \seealso{

@@ -2,9 +2,9 @@
 % Please edit documentation in R/searchapis.R
 \name{searchapis}
 \alias{searchapis}
-\title{Search functions.}
+\title{Overview of search functions}
 \description{
-Search functions.
+Overview of search functions
 }
 \details{
 Elasticsearch search APIs include the following functions:

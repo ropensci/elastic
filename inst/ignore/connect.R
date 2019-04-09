@@ -67,74 +67,74 @@
 #' ## or
 #' connect(headers = add_headers(a = 5))
 #' }
-connect <- function(es_host = "127.0.0.1", es_port = 9200, es_path = NULL, 
-                    es_transport_schema = "http", es_user = NULL,
-                    es_pwd = NULL, force = FALSE, errors = "simple", 
-                    es_base = NULL, headers = NULL, ...) {
+# connect <- function(es_host = "127.0.0.1", es_port = 9200, es_path = NULL, 
+#                     es_transport_schema = "http", es_user = NULL,
+#                     es_pwd = NULL, force = FALSE, errors = "simple", 
+#                     es_base = NULL, headers = NULL, ...) {
 
-  calls <- names(sapply(match.call(), deparse))[-1]
-  calls_vec <- "es_base" %in% calls
-  if (any(calls_vec)) {
-    es_host <- es_base
-    warning(
-      paste("'es_base' will be removed in a future version of",
-             "this pkg.\nuse 'es_host' going forward"), call. = FALSE)
-  }
+#   calls <- names(sapply(match.call(), deparse))[-1]
+#   calls_vec <- "es_base" %in% calls
+#   if (any(calls_vec)) {
+#     es_host <- es_base
+#     warning(
+#       paste("'es_base' will be removed in a future version of",
+#              "this pkg.\nuse 'es_host' going forward"), call. = FALSE)
+#   }
   
-  # reset ping result in elastic_env
-  elastic_env$ping_result <- NULL
+#   # reset ping result in elastic_env
+#   elastic_env$ping_result <- NULL
   
-  # strip off transport if found
-  if (grepl("^http[s]?://", es_host)) {
-    message("Found http or https on es_host, stripping off, see the docs")
-    es_host <- sub("^http[s]?://", "", es_host)
-  }
+#   # strip off transport if found
+#   if (grepl("^http[s]?://", es_host)) {
+#     message("Found http or https on es_host, stripping off, see the docs")
+#     es_host <- sub("^http[s]?://", "", es_host)
+#   }
   
-  # normalize es_path
-  if (!is.null(es_path)) {
-    if (grepl("/$", es_path)) {
-      message("Normalizing path: stripping trailing slash")
-      es_path <- sub("/$", "", es_path)
-    }
-  }
+#   # normalize es_path
+#   if (!is.null(es_path)) {
+#     if (grepl("/$", es_path)) {
+#       message("Normalizing path: stripping trailing slash")
+#       es_path <- sub("/$", "", es_path)
+#     }
+#   }
   
-  auth <- es_auth(es_host = es_host, es_port = es_port, es_path = es_path,
-                  es_transport_schema = es_transport_schema, es_user = es_user,
-                  es_pwd = es_pwd, force = force)
-  if (is.null(auth$port) || nchar(auth$port) == 0) {
-    baseurl <- sprintf("%s://%s", auth$transport, auth$host)
-  } else {
-    baseurl <- sprintf("%s://%s:%s", auth$transport, auth$host, auth$port)
-  }
-  if (!is.null(auth$path)) {
-    baseurl <- file.path(baseurl, auth$path)
-  }
-  userpwd <- if (!is.null(es_user) && !is.null(es_pwd)) {
-    authenticate(es_user, es_pwd)
-  } else {
-    NULL
-  }
+#   auth <- es_auth(es_host = es_host, es_port = es_port, es_path = es_path,
+#                   es_transport_schema = es_transport_schema, es_user = es_user,
+#                   es_pwd = es_pwd, force = force)
+#   if (is.null(auth$port) || nchar(auth$port) == 0) {
+#     baseurl <- sprintf("%s://%s", auth$transport, auth$host)
+#   } else {
+#     baseurl <- sprintf("%s://%s:%s", auth$transport, auth$host, auth$port)
+#   }
+#   if (!is.null(auth$path)) {
+#     baseurl <- file.path(baseurl, auth$path)
+#   }
+#   userpwd <- if (!is.null(es_user) && !is.null(es_pwd)) {
+#     authenticate(es_user, es_pwd)
+#   } else {
+#     NULL
+#   }
   
-  # errors
-  errors <- match.arg(errors, c('simple', 'complete'))
-  Sys.setenv("ELASTIC_RCLIENT_ERRORS" = errors)
+#   # errors
+#   errors <- match.arg(errors, c('simple', 'complete'))
+#   Sys.setenv("ELASTIC_RCLIENT_ERRORS" = errors)
   
-  # cache headers in an environment
-  rm(list = ls(envir = es_env), envir = es_env)
-  es_env$headers <- as_headers(headers)
+#   # cache headers in an environment
+#   rm(list = ls(envir = es_env), envir = es_env)
+#   es_env$headers <- as_headers(headers)
   
-  structure(list(
-    host = auth$host,
-    port = auth$port,
-    path = auth$path,
-    transport = auth$transport,
-    user = es_user,
-    pwd = "<secret>",
-    # es_deets = out,
-    headers = es_env$headers,
-    errors = Sys.getenv("ELASTIC_RCLIENT_ERRORS")),
-    class = 'es_conn')
-}
+#   structure(list(
+#     host = auth$host,
+#     port = auth$port,
+#     path = auth$path,
+#     transport = auth$transport,
+#     user = es_user,
+#     pwd = "<secret>",
+#     # es_deets = out,
+#     headers = es_env$headers,
+#     errors = Sys.getenv("ELASTIC_RCLIENT_ERRORS")),
+#     class = 'es_conn')
+# }
 
 #' @export
 #' @rdname connect

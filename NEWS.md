@@ -1,3 +1,44 @@
+elastic 1.0
+=============
+
+### BREAKING CHANGE
+
+(#87) The `connect()` function is essentially the same, with some changes, but now you pass the connection object to each function all. This indeed will break code. That's why this is a major version bump. 
+
+There is one very big downside to this: breaks existing code. That's the big one. I do apologize for this, but I believe that is outweighed by the upsides: passing the connection object matches behavior in similar R packages (e.g., all the SQL database clients); you can now manage as many different connection objects as you like in the same R session; having the connection object as an R6 class allows us to have some simple methods on that object to ping the server, etc. In addition, all functions will error with an informative message if you don't pass the connection object as the first thing.
+
+### NEW FEATURES
+
+* gains new ingest functions `pipeline_create`, `pipeline_delete`, `pipeline_get`, `pipeline_simulate`, and `pipeline_attachment()` (#191) (#226) 
+* gains new function `docs_delete_by_query()` and `docs_update_by_query()` to delete or update multiple documents at once, respectively; and new function `reindex()` to reindex all documents from one index to another (#237) (#195)
+* now using `crul` for HTTP requests. this only should matter with respect to passing in curl options  (#168)
+* recent versions of Elasticsearch are starting to include warnings in response headers for deprecations and other things. These can now be turned on or off with `connect()` (#241)
+* gains new functions for the bulk API: `docs_bulk_create()`, `docs_bulk_delete()`, `docs_bulk_index()`. each of which are tailored to doing the operation in the function name: creating docs, deleting docs, or indexing docs (#183)
+* gains new function `type_remover()` as a utility function to help users remove types from their files to use for bulk loading; could be used on example files in this package or user supplied files (#180)
+* gains function `alias_rename()` to rename aliases
+
+### MINOR IMPROVEMENTS
+
+* fixed `scroll()` example that wasn't working (#228)
+* rework `alias_create()` (#230)
+* move initialize Elasticsearch connection section of README higher up to emphasize it in the right place (#231) thanks @mbannert
+* whether you want "simple" or "complete" errors no longer sets env vars internally, but is passed through the internal error checker so that choices about type of errors for different connection objects do not affect one another (#242)
+* `docs_get` gains new parameters `source_includes` and `source_excludes` to include or exclude certain fields in the returned document (#246) thanks @Jensxy
+* added more examples to `index_create()` (#211)
+* add examples to `Search()` and `Search_uri()` docs of how to use profiles (https://www.elastic.co/guide/en/elasticsearch/reference/current/search-profile.html) (#194)
+* additional example added to `docs_bulk_prep()` for doing a mix of actions (i.e., delete, create, etc.)
+* improved examples throughout package docs so that examples are more self-contained
+
+### BUG FIXES
+
+* `docs_bulk_update()` was not handling boolean values correctly. now fixed (#239) (#240) thanks to @dpmccabe
+
+## DEPRECATED AND DEFUNCT
+
+* the `info()` method has been moved inside of the connection object. after calling `x = connect()` you can call `x$info()`
+* the `ping()` method has been marked as deprecated; instead, call `ping()` on the connection object created by a call to `connect()`
+
+
 elastic 0.8.4
 =============
 

@@ -1,6 +1,7 @@
 #' Multi Termvectors
 #'
 #' @export
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param index (character) The index in which the document resides.
 #' @param type (character) The type of the document.
 #' @param ids (character) One or more document ids
@@ -28,7 +29,7 @@
 #' @param version_type (character) Specific version type, valid choices are: 
 #' 'internal', 'external', 'external_gte', 'force'
 #' @param pretty (logical) pretty print. Default: `TRUE`
-#' @param ... Curl args passed on to [httr::POST()]
+#' @param ... Curl args passed on to [crul::verb-POST]
 #'
 #' @references
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-multi-termvectors.html>
@@ -36,11 +37,14 @@
 #' @details Multi termvectors API allows to get multiple termvectors based on an 
 #' index, type and id.
 #' 
+#' @seealso [termvectors()]
+#' 
 #' @examples \dontrun{
-#' connect()
-#' if (!index_exists('omdb')) {
+#' x <- connect()
+#' 
+#' if (!index_exists(x, 'omdb')) {
 #'   omdb <- system.file("examples", "omdb.json", package = "elastic")
-#'   docs_bulk(omdb)
+#'   docs_bulk(x, omdb)
 #' }
 #' 
 #' # no index or type given
@@ -62,7 +66,7 @@
 #'       }
 #'    ]
 #' }'
-#' mtermvectors(body = body)
+#' mtermvectors(x, body = body)
 #'
 #' # index given, but not type
 #' body <- '{
@@ -84,7 +88,7 @@
 #'       }
 #'    ]
 #' }'
-#' mtermvectors('omdb', body = body)
+#' mtermvectors(x, 'omdb', body = body)
 #' 
 #' # index and type given
 #' body <- '{
@@ -101,7 +105,7 @@
 #'       }
 #'    ]
 #' }'
-#' mtermvectors('omdb', 'omdb', body = body)
+#' mtermvectors(x, 'omdb', 'omdb', body = body)
 #' 
 #' # index and type given, parameters same, so can simplify
 #' body <- '{
@@ -113,7 +117,7 @@
 #'         "term_statistics": true
 #'     }
 #' }'
-#' mtermvectors('omdb', 'omdb', body = body)
+#' mtermvectors(x, 'omdb', 'omdb', body = body)
 #' 
 #' # you can give user provided documents via the 'docs' parameter
 #' ## though you have to give index and type that exist in your Elasticsearch 
@@ -138,15 +142,16 @@
 #'       }
 #'    ]
 #' }'
-#' mtermvectors(body = body)
+#' mtermvectors(x, body = body)
 #' }
-mtermvectors <- function(
+mtermvectors <- function(conn,
   index = NULL, type = NULL, ids = NULL, body = list(), pretty = TRUE,
   field_statistics = TRUE, fields = NULL, offsets = TRUE, parent = NULL,
   payloads = TRUE, positions = TRUE, preference = 'random', realtime = TRUE,
   routing = NULL, term_statistics = FALSE, version = NULL, version_type = NULL, 
   ...) {
   
+  is_conn(conn)
   args <- ec(list(pretty = as_log(pretty), realtime = as_log(realtime), 
                   preference = preference, routing = routing, version = version, 
                   version_type = version_type))
@@ -156,5 +161,5 @@ mtermvectors <- function(
                     positions = as_log(positions), 
                     term_statistics = as_log(term_statistics), ids = ids))
   }
-  tv_POST("_mtermvectors", index, type, id = NULL, args, body, ...)
+  tv_POST(conn, "_mtermvectors", index, type, id = NULL, args, body, ...)
 }

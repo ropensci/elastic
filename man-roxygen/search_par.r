@@ -1,5 +1,7 @@
+#' @param conn an Elasticsearch connection object, see \code{\link{connect}}
 #' @param index Index name, one or more
-#' @param type Document type
+#' @param type Document type. Note that \code{type} is deprecated in 
+#' Elasticsearch v7 and greater
 #' @param q The query string (maps to the query_string query, see Query String 
 #' Query for more details). See 
 #'https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
@@ -68,4 +70,4 @@
 #' that's the data that's streamed out, and pass a file path instead of a 
 #' connection to \code{con}. \code{pagesize} param doesn't do much as 
 #' that's more or less controlled by paging with ES.
-#' @param ... Curl args passed on to \code{\link[httr]{POST}}
+#' @param ... Curl args passed on to \code{\link[crul]{verb-POST}}

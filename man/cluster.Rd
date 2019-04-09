@@ -10,31 +10,34 @@
 \alias{cluster_pending_tasks}
 \title{Elasticsearch cluster endpoints}
 \usage{
-cluster_settings(index = NULL, raw = FALSE, callopts = list(),
+cluster_settings(conn, index = NULL, raw = FALSE, callopts = list(),
   verbose = TRUE, ...)
 
-cluster_health(index = NULL, level = NULL, wait_for_status = NULL,
-  wait_for_relocating_shards = NULL, wait_for_active_shards = NULL,
-  wait_for_nodes = NULL, timeout = NULL, raw = FALSE,
+cluster_health(conn, index = NULL, level = NULL,
+  wait_for_status = NULL, wait_for_relocating_shards = NULL,
+  wait_for_active_shards = NULL, wait_for_nodes = NULL,
+  timeout = NULL, raw = FALSE, callopts = list(), verbose = TRUE,
+  ...)
+
+cluster_state(conn, index = NULL, metrics = NULL, raw = FALSE,
   callopts = list(), verbose = TRUE, ...)
 
-cluster_state(index = NULL, metrics = NULL, raw = FALSE,
+cluster_stats(conn, index = NULL, raw = FALSE, callopts = list(),
+  verbose = TRUE, ...)
+
+cluster_reroute(conn, body, raw = FALSE, callopts = list(), ...)
+
+cluster_pending_tasks(conn, index = NULL, raw = FALSE,
   callopts = list(), verbose = TRUE, ...)
-
-cluster_stats(index = NULL, raw = FALSE, callopts = list(),
-  verbose = TRUE, ...)
-
-cluster_reroute(body, raw = FALSE, callopts = list(), ...)
-
-cluster_pending_tasks(index = NULL, raw = FALSE, callopts = list(),
-  verbose = TRUE, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{index}{Index}
 
 \item{raw}{If \code{TRUE} (default), data is parsed to list. If \code{FALSE}, then raw JSON.}
 
-\item{callopts}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}}
+\item{callopts}{Curl args passed on to \link[crul:verb-POST]{crul::verb-POST}}
 
 \item{verbose}{If \code{TRUE} (default) the url call used printed to console.}
 
@@ -112,38 +115,41 @@ or 'shards', default: 'indices')
 }
 \examples{
 \dontrun{
-cluster_settings()
-cluster_health()
+# connection setup
+(x <- connect())
 
-cluster_state()
-cluster_state(metrics = "version")
-cluster_state(metrics = "nodes")
-cluster_state(metrics = c("version", "nodes"))
-cluster_state(metrics = c("version", "nodes", 'blocks'))
-cluster_state("shakespeare", metrics = "metadata")
-cluster_state(c("shakespeare", "flights"), metrics = "metadata")
+cluster_settings(x)
+cluster_health(x)
 
-cluster_stats()
-cluster_pending_tasks()
+cluster_state(x)
+cluster_state(x, metrics = "version")
+cluster_state(x, metrics = "nodes")
+cluster_state(x, metrics = c("version", "nodes"))
+cluster_state(x, metrics = c("version", "nodes", 'blocks'))
+cluster_state(x, "shakespeare", metrics = "metadata")
+cluster_state(x, c("shakespeare", "flights"), metrics = "metadata")
+
+cluster_stats(x)
+cluster_pending_tasks(x)
 
 body <- '{
-  "commands" : [ {
-    "move" :
-      {
+  "commands": [ 
+    {
+      "move": {
         "index" : "test", "shard" : 0,
         "from_node" : "node1", "to_node" : "node2"
       }
     },
     {
-      "allocate" : {
-          "index" : "test", "shard" : 1, "node" : "node3"
+      "allocate_replica" : {
+        "index" : "test", "shard" : 1, "node" : "node3"
       }
     }
   ]
 }'
-# cluster_reroute(body =  body)
+# cluster_reroute(x, body =  body)
 
-cluster_health()
-# cluster_health(wait_for_status = "yellow", timeout = "3s")
+cluster_health(x)
+# cluster_health(x, wait_for_status = "yellow", timeout = "3s")
 }
 }

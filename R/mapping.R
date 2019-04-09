@@ -1,6 +1,7 @@
 #' Mapping management
 #'
 #' @name mapping
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param index (character) An index
 #' @param type (character) A document type
 #' @param body (list) Either a list or json, representing the query.
@@ -9,8 +10,8 @@
 #' @param update_all_types (logical) update all types. default: `FALSE`. 
 #' This parameter is deprecated in ES v6.3.0 and higher, see 
 #' https://github.com/elastic/elasticsearch/pull/28284
-#' @param ... Curl options passed on to [httr::HEAD()] or other 
-#' http verbs
+#' @param ... Curl options passed on to [crul::verb-PUT], [crul::verb-GET], 
+#' or [crul::verb-HEAD]
 #' @details
 #' Find documentation for each function at:
 #' 
@@ -26,10 +27,13 @@
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-field-mapping.html>
 #'
 #' @examples \dontrun{
+#' # connection setup
+#' (x <- connect())
+#' 
 #' # Used to check if a type/types exists in an index/indices
-#' type_exists(index = "plos", type = "article")
-#' type_exists(index = "plos", type = "articles")
-#' type_exists(index = "shakespeare", type = "line")
+#' type_exists(x, index = "plos", type = "article")
+#' type_exists(x, index = "plos", type = "articles")
+#' type_exists(x, index = "shakespeare", type = "line")
 #'
 #' # The put mapping API allows to register specific mapping definition for a specific type.
 #' ## a good mapping body
@@ -37,8 +41,8 @@
 #'  journal = list(type="text"),
 #'  year = list(type="long")
 #' )))
-#' if (!index_exists("plos")) index_create("plos")
-#' mapping_create(index = "plos", type = "citation", body=body)
+#' if (!index_exists(x, "plos")) index_create(x, "plos")
+#' mapping_create(x, index = "plos", type = "citation", body=body)
 #'
 #' ### or as json
 #' body <- '{
@@ -47,47 +51,47 @@
 #'       "journal": { "type": "text" },
 #'       "year": { "type": "long" }
 #' }}}'
-#' mapping_create(index = "plos", type = "citation", body=body)
-#' mapping_get("plos", "citation")
+#' mapping_create(x, index = "plos", type = "citation", body=body)
+#' mapping_get(x, "plos", "citation")
 #'
 #' ## A bad mapping body
 #' body <- list(things = list(properties = list(
 #'   journal = list("text")
 #' )))
-#' # mapping_create(index = "plos", type = "things", body=body)
+#' # mapping_create(x, index = "plos", type = "things", body=body)
 #'
 #' # Get mappings
-#' mapping_get('_all')
-#' mapping_get(index = "plos")
-#' mapping_get(index = c("shakespeare","plos"))
-#' mapping_get(index = "shakespeare", type = "act")
-#' mapping_get(index = "shakespeare", type = c("act","line"))
+#' mapping_get(x, '_all')
+#' mapping_get(x, index = "plos")
+#' mapping_get(x, index = c("shakespeare","plos"))
+#' # mapping_get(x, index = "shakespeare", type = "act")
+#' # mapping_get(x, index = "shakespeare", type = c("act","line"))
 #'
 #' # Get field mappings
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-#' invisible(docs_bulk(plosdat))
-#' field_mapping_get(index = "_all", type=c('article', 'line'), field = "text")
-#' field_mapping_get(index = "plos", type = "article", field = "title")
-#' field_mapping_get(index = "plos", type = "article", field = "*")
-#' field_mapping_get(index = "plos", type = "article", field = "title", include_defaults = TRUE)
-#' field_mapping_get(type = c("article","record"), field = c("title","class"))
-#' field_mapping_get(type = "a*", field = "t*")
+#' invisible(docs_bulk(x, plosdat))
+#' field_mapping_get(x, index = "_all", type=c('article', 'line'), field = "text")
+#' field_mapping_get(x, index = "plos", type = "article", field = "title")
+#' field_mapping_get(x, index = "plos", type = "article", field = "*")
+#' field_mapping_get(x, index = "plos", type = "article", field = "title", include_defaults = TRUE)
+#' field_mapping_get(x, type = c("article","record"), field = c("title","class"))
+#' field_mapping_get(x, type = "a*", field = "t*")
 #'
 #' # Create geospatial mapping
-#' if (index_exists("gbifgeopoint")) index_delete("gbifgeopoint")
+#' if (index_exists(x, "gbifgeopoint")) index_delete(x, "gbifgeopoint")
 #' file <- system.file("examples", "gbif_geopoint.json", package = "elastic")
-#' index_create("gbifgeopoint")
+#' index_create(x, "gbifgeopoint")
 #' body <- '{
 #'  "properties" : {
 #'    "location" : { "type" : "geo_point" }
 #'  }
 #' }'
-#' mapping_create("gbifgeopoint", "record", body = body)
-#' invisible(docs_bulk(file))
+#' mapping_create(x, "gbifgeopoint", "record", body = body)
+#' invisible(docs_bulk(x, file))
 #' 
 #' # update_all_fields, see also ?fielddata
-#' if (es_ver() < 603) {
-#'  mapping_create("shakespeare", "record", update_all_types=TRUE, body = '{
+#' if (x$es_ver() < 603) {
+#'  mapping_create(x, "shakespeare", "record", update_all_types=TRUE, body = '{
 #'    "properties": {
 #'      "speaker": { 
 #'        "type":     "text",
@@ -96,8 +100,8 @@
 #'    }
 #'  }')
 #' } else {
-#'  index_create('brownchair')
-#'  mapping_create('brownchair', 'brown', body = '{
+#'  index_create(x, 'brownchair')
+#'  mapping_create(x, 'brownchair', 'brown', body = '{
 #'    "properties": {
 #'      "foo": { 
 #'        "type":     "text",
@@ -111,20 +115,22 @@
 
 #' @export
 #' @rdname mapping
-mapping_create <- function(index, type, body, update_all_types = FALSE, ...) {
-  url <- make_url(es_get_auth())
+mapping_create <- function(conn, index, type, body, update_all_types = FALSE, ...) {
+  is_conn(conn)
+  url <- conn$make_url()
   url <- file.path(url, esc(index), "_mapping", esc(type))
   args <- list()
-  if (es_ver() < 603) { 
+  if (conn$es_ver() < 603) { 
     args <- ec(list(update_all_types = as_log(update_all_types)))
   }
-  es_PUT(url, body, args, ...)
+  es_PUT(conn, url, body, args, ...)
 }
 
 #' @export
 #' @rdname mapping
-mapping_get <- function(index = NULL, type = NULL, ...){
-  url <- make_url(es_get_auth())
+mapping_get <- function(conn, index = NULL, type = NULL, ...) {
+  is_conn(conn)
+  url <- conn$make_url()
   if (any(index == "_all")) {
     url <- file.path(url, "_mapping")
   } else {
@@ -137,16 +143,17 @@ mapping_get <- function(index = NULL, type = NULL, ...){
       url <- file.path(url, esc(index), "_mapping", esc(cl(type)))
     }
   }
-  es_GET_(url, ...)
+  es_GET_(conn, url, ...)
 }
 
 #' @export
 #' @rdname mapping
-field_mapping_get <- function(index = NULL, type = NULL, field, include_defaults=FALSE, ...){
+field_mapping_get <- function(conn, index = NULL, type = NULL, field, include_defaults=FALSE, ...) {
+  is_conn(conn)
   stopifnot(!is.null(field))
-  url <- make_url(es_get_auth())
+  url <- conn$make_url()
   if (any(index == "_all")){
-    stop_es_version(110, "field_mapping_get")
+    conn$stop_es_version(110, "field_mapping_get")
     stopifnot(!is.null(type))
     url <- file.path(url, "_all/_mapping", esc(cl(type)), "field", cl(field))
   } else {
@@ -159,19 +166,20 @@ field_mapping_get <- function(index = NULL, type = NULL, field, include_defaults
       url <- file.path(url, esc(index), "_mapping", esc(cl(type)), "field", cl(field))
     }
   }
-  es_GET_(url, query=list(include_defaults=as_log(include_defaults)), ...)
+  es_GET_(conn, url, query=list(include_defaults=as_log(include_defaults)), ...)
 }
 
 #' @export
 #' @rdname mapping
-type_exists <- function(index, type, ...){
+type_exists <- function(conn, index, type, ...) {
+  is_conn(conn)
   # seems to not work in v1, so don't try cause would give false result
-  if (es_ver() <= 100) {
+  if (conn$es_ver() <= 100) {
     stop("type exists not available in this ES version", call. = FALSE)
   }
-  url <- make_url(es_get_auth())
+  url <- conn$make_url()
   
-  if (es_ver() >= 500) {
+  if (conn$es_ver() >= 500) {
     # in ES >= v5, new URL format
     url <- file.path(url, esc(index), "_mapping", esc(type))
   } else {
@@ -179,6 +187,6 @@ type_exists <- function(index, type, ...){
     url <- file.path(url, esc(index), esc(type))
   }
   
-  res <- HEAD(url, make_up(), es_env$headers, ...)
+  res <- conn$make_conn(url, ...)$head()
   if (res$status_code == 200) TRUE else FALSE
 }

@@ -1,6 +1,7 @@
 #' Create a document
 #'
 #' @export
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param index (character) The name of the index. Required
 #' @param type (character) The type of the document. Required
 #' @param id (numeric/character) The document ID. Can be numeric or character. 
@@ -22,42 +23,44 @@
 #' @param refresh (logical) Refresh the index after performing the operation
 #' @param timeout (character) Explicit operation timeout, e.g,. 5m (for 
 #' 5 minutes)
-#' @param callopts Curl options passed on to [httr::PUT()]
+#' @param callopts Curl options passed on to [crul::HttpClient]
 #' @param ... Further args to query DSL
 #' @references
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html>
 #' @examples \dontrun{
-#' connect()
-#' if (!index_exists('plos')) {
+#' (x <- connect())
+#' 
+#' if (!index_exists(x, 'plos')) {
 #'   plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-#'   invisible(docs_bulk(plosdat))
+#'   invisible(docs_bulk(x, plosdat))
 #' }
 #' 
 #' # give a document id
-#' x <- docs_create(index='plos', type='article', id=1002, 
+#' z <- docs_create(x, index='plos', type='article', id=1002, 
 #'   body=list(id="12345", title="New title"))
-#' x
+#' z
 #' # and the document is there now
-#' docs_get(index='plos', type='article', id=1002)
+#' docs_get(x, index='plos', type='article', id=1002)
 #' 
 #' # let Elasticsearch create the document id for you
-#' x <- docs_create(index='plos', type='article', 
+#' z <- docs_create(x, index='plos', type='article', 
 #'   body=list(id="6789", title="Some title"))
-#' x
+#' z
 #' # and the document is there now
-#' docs_get(index='plos', type='article', id=x$`_id`)
+#' docs_get(x, index='plos', type='article', id=z$`_id`)
 #' }
 
-docs_create <- function(index, type, id = NULL, body, version=NULL, 
+docs_create <- function(conn, index, type, id = NULL, body, version=NULL, 
   version_type=NULL, op_type=NULL, routing=NULL, parent=NULL, timestamp=NULL, 
   ttl=NULL, refresh=NULL, timeout=NULL, callopts=list(), ...) {
 
-  url <- make_url(es_get_auth())
+  is_conn(conn)
+  url <- conn$make_url()
   if (is.null(id)) {
-    method <- POST
+    method <- 'POST'
     url <- sprintf("%s/%s/%s", url, esc(index), esc(type))
   } else {
-    method <- PUT
+    method <- 'PUT'
     url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), esc(id))
   }
   query <- ec(list(version=version, version_type=version_type, op_type=op_type, 
@@ -65,13 +68,12 @@ docs_create <- function(index, type, id = NULL, body, version=NULL,
                    refresh=refresh, timeout=timeout,
                   ...))
   if (length(query) == 0) query <- NULL
-  create_docs(method, url, query, body, callopts)
+  create_docs(conn, method, url, query, body, callopts)
 }
 
-create_docs <- function(method, url, query=NULL, body=NULL, callopts) {
-  tt <- method(url, es_env$headers, content_type_json(),
-            mc(make_up(), callopts), query = query, 
-            body = body, encode = "json")
-  geterror(tt)
-  jsonlite::fromJSON(cont_utf8(tt), FALSE)
+create_docs <- function(conn, method, url, query=NULL, body=NULL, callopts) {
+  cli <- conn$make_conn(url, json_type(), callopts)
+  tt <- cli$verb(method, query = query, body = body, encode = "json")
+  geterror(conn, tt)
+  jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }

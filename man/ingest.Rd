@@ -3,27 +3,38 @@
 \name{ingest}
 \alias{ingest}
 \alias{pipeline_create}
+\alias{pipeline_attachment}
 \alias{pipeline_get}
 \alias{pipeline_delete}
 \alias{pipeline_simulate}
 \title{Ingest API operations}
 \usage{
-pipeline_create(id, body, ...)
+pipeline_create(conn, id, body, ...)
 
-pipeline_get(id, filter_path = NULL, ...)
+pipeline_attachment(conn, index, type, id, pipeline, body, ...)
 
-pipeline_delete(id, body, ...)
+pipeline_get(conn, id, filter_path = NULL, ...)
 
-pipeline_simulate(body, id = NULL, ...)
+pipeline_delete(conn, id, body, ...)
+
+pipeline_simulate(conn, body, id = NULL, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{id}{(character) one or more pipeline id's. with delete, you can use
 a wildcard match}
 
 \item{body}{body describing pipeline, see examples and Elasticsearch docs}
 
-\item{...}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}, \code{\link[httr:GET]{httr::GET()}},
-\code{\link[httr:PUT]{httr::PUT()}}, or \code{\link[httr:DELETE]{httr::DELETE()}}}
+\item{...}{Curl args passed on to \link[crul:verb-POST]{crul::verb-POST}, \link[crul:verb-GET]{crul::verb-GET},
+\link[crul:verb-PUT]{crul::verb-PUT}, or \link[crul:verb-DELETE]{crul::verb-DELETE}}
+
+\item{index}{(character) an index. only used in \code{pipeline_attachment}}
+
+\item{type}{(character) a type. only used in \code{pipeline_attachment}}
+
+\item{pipeline}{(character) a pipeline name. only used in \code{pipeline_attachment}}
 
 \item{filter_path}{(character) fields to return. deafults to all if not given}
 }
@@ -34,10 +45,21 @@ a named list
 Ingest API operations
 }
 \details{
-ingest/pipeline functions available in Elasticsearch v5 and greater
+ingest/pipeline functions available in Elasticsearch v5 and
+greater
 }
+\section{Attachments}{
+
+See https://www.elastic.co/guide/en/elasticsearch/plugins/current/ingest-attachment.html
+You need to install the attachment processor plugin to be able to use
+attachments in pipelines
+}
+
 \examples{
 \dontrun{
+# connection setup
+(x <- connect())
+
 # create
 body1 <- '{
   "description" : "do a thing",
@@ -62,17 +84,17 @@ body2 <- '{
     }
   ]
 }'
-pipeline_create(id = 'foo', body = body1)
-pipeline_create(id = 'bar', body = body2)
+pipeline_create(x, id = 'foo', body = body1)
+pipeline_create(x, id = 'bar', body = body2)
 
 # get
-pipeline_get(id = 'foo')
-pipeline_get(id = 'bar')
-pipeline_get(id = 'foo', filter_path = "*.version")
-pipeline_get(id = c('foo', 'bar')) # get >1
+pipeline_get(x, id = 'foo')
+pipeline_get(x, id = 'bar')
+pipeline_get(x, id = 'foo', filter_path = "*.version")
+pipeline_get(x, id = c('foo', 'bar')) # get >1
 
 # delete
-pipeline_delete(id = 'foo')
+pipeline_delete(x, id = 'foo')
 
 # simulate
 ## with pipeline included
@@ -93,7 +115,7 @@ body <- '{
     { "_source": {"foo": "world"} }
   ]
 }'
-pipeline_simulate(body)
+pipeline_simulate(x, body)
 
 ## referencing existing pipeline
 body <- '{
@@ -102,9 +124,32 @@ body <- '{
     { "_source": {"foo": "world"} }
   ]
 }'
-pipeline_simulate(body, id = "foo")
+pipeline_simulate(x, body, id = "foo")
+
+# attchments - Note: you need the attachment plugin for this, see above
+body1 <- '{
+  "description" : "do a thing",
+  "version" : 123,
+  "processors" : [
+    {
+      "attachment" : {
+        "field" : "data"
+      }
+    }
+  ]
+}'
+pipeline_create(x, "baz", body1)
+body_attach <- '{
+  "data": "e1xydGYxXGFuc2kNCkxvcmVtIGlwc3VtIGRvbG9yIHNpdCBhbWV0DQpccGFyIH0="
+}'
+if (!index_exists(x, "boomarang")) index_create(x, "boomarang")
+docs_create(x, 'boomarang', 'boomarang', id = 1, 
+  body = list(title = "New title"))
+pipeline_attachment(x, "boomarang", "boomarang", "1", "baz", body_attach)
+pipeline_get(x, id = 'baz')
 }
 }
 \references{
-\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/ingest-apis.html}
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/ingest-apis.html},
+\url{https://www.elastic.co/guide/en/elasticsearch/plugins/current/using-ingest-attachment.html}
 }

@@ -8,16 +8,18 @@
 \alias{type_exists}
 \title{Mapping management}
 \usage{
-mapping_create(index, type, body, update_all_types = FALSE, ...)
+mapping_create(conn, index, type, body, update_all_types = FALSE, ...)
 
-mapping_get(index = NULL, type = NULL, ...)
+mapping_get(conn, index = NULL, type = NULL, ...)
 
-field_mapping_get(index = NULL, type = NULL, field,
+field_mapping_get(conn, index = NULL, type = NULL, field,
   include_defaults = FALSE, ...)
 
-type_exists(index, type, ...)
+type_exists(conn, index, type, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{index}{(character) An index}
 
 \item{type}{(character) A document type}
@@ -28,8 +30,8 @@ type_exists(index, type, ...)
 This parameter is deprecated in ES v6.3.0 and higher, see
 https://github.com/elastic/elasticsearch/pull/28284}
 
-\item{...}{Curl options passed on to \code{\link[httr:HEAD]{httr::HEAD()}} or other
-http verbs}
+\item{...}{Curl options passed on to \link[crul:verb-PUT]{crul::verb-PUT}, \link[crul:verb-GET]{crul::verb-GET},
+or \link[crul:verb-HEAD]{crul::verb-HEAD}}
 
 \item{field}{(character) One or more field names}
 
@@ -55,10 +57,13 @@ index and recreate index with new mapping
 }
 \examples{
 \dontrun{
+# connection setup
+(x <- connect())
+
 # Used to check if a type/types exists in an index/indices
-type_exists(index = "plos", type = "article")
-type_exists(index = "plos", type = "articles")
-type_exists(index = "shakespeare", type = "line")
+type_exists(x, index = "plos", type = "article")
+type_exists(x, index = "plos", type = "articles")
+type_exists(x, index = "shakespeare", type = "line")
 
 # The put mapping API allows to register specific mapping definition for a specific type.
 ## a good mapping body
@@ -66,8 +71,8 @@ body <- list(citation = list(properties = list(
  journal = list(type="text"),
  year = list(type="long")
 )))
-if (!index_exists("plos")) index_create("plos")
-mapping_create(index = "plos", type = "citation", body=body)
+if (!index_exists(x, "plos")) index_create(x, "plos")
+mapping_create(x, index = "plos", type = "citation", body=body)
 
 ### or as json
 body <- '{
@@ -76,47 +81,47 @@ body <- '{
       "journal": { "type": "text" },
       "year": { "type": "long" }
 }}}'
-mapping_create(index = "plos", type = "citation", body=body)
-mapping_get("plos", "citation")
+mapping_create(x, index = "plos", type = "citation", body=body)
+mapping_get(x, "plos", "citation")
 
 ## A bad mapping body
 body <- list(things = list(properties = list(
   journal = list("text")
 )))
-# mapping_create(index = "plos", type = "things", body=body)
+# mapping_create(x, index = "plos", type = "things", body=body)
 
 # Get mappings
-mapping_get('_all')
-mapping_get(index = "plos")
-mapping_get(index = c("shakespeare","plos"))
-mapping_get(index = "shakespeare", type = "act")
-mapping_get(index = "shakespeare", type = c("act","line"))
+mapping_get(x, '_all')
+mapping_get(x, index = "plos")
+mapping_get(x, index = c("shakespeare","plos"))
+# mapping_get(x, index = "shakespeare", type = "act")
+# mapping_get(x, index = "shakespeare", type = c("act","line"))
 
 # Get field mappings
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-invisible(docs_bulk(plosdat))
-field_mapping_get(index = "_all", type=c('article', 'line'), field = "text")
-field_mapping_get(index = "plos", type = "article", field = "title")
-field_mapping_get(index = "plos", type = "article", field = "*")
-field_mapping_get(index = "plos", type = "article", field = "title", include_defaults = TRUE)
-field_mapping_get(type = c("article","record"), field = c("title","class"))
-field_mapping_get(type = "a*", field = "t*")
+invisible(docs_bulk(x, plosdat))
+field_mapping_get(x, index = "_all", type=c('article', 'line'), field = "text")
+field_mapping_get(x, index = "plos", type = "article", field = "title")
+field_mapping_get(x, index = "plos", type = "article", field = "*")
+field_mapping_get(x, index = "plos", type = "article", field = "title", include_defaults = TRUE)
+field_mapping_get(x, type = c("article","record"), field = c("title","class"))
+field_mapping_get(x, type = "a*", field = "t*")
 
 # Create geospatial mapping
-if (index_exists("gbifgeopoint")) index_delete("gbifgeopoint")
+if (index_exists(x, "gbifgeopoint")) index_delete(x, "gbifgeopoint")
 file <- system.file("examples", "gbif_geopoint.json", package = "elastic")
-index_create("gbifgeopoint")
+index_create(x, "gbifgeopoint")
 body <- '{
  "properties" : {
    "location" : { "type" : "geo_point" }
  }
 }'
-mapping_create("gbifgeopoint", "record", body = body)
-invisible(docs_bulk(file))
+mapping_create(x, "gbifgeopoint", "record", body = body)
+invisible(docs_bulk(x, file))
 
 # update_all_fields, see also ?fielddata
-if (es_ver() < 603) {
- mapping_create("shakespeare", "record", update_all_types=TRUE, body = '{
+if (x$es_ver() < 603) {
+ mapping_create(x, "shakespeare", "record", update_all_types=TRUE, body = '{
    "properties": {
      "speaker": { 
        "type":     "text",
@@ -125,8 +130,8 @@ if (es_ver() < 603) {
    }
  }')
 } else {
- index_create('brownchair')
- mapping_create('brownchair', 'brown', body = '{
+ index_create(x, 'brownchair')
+ mapping_create(x, 'brownchair', 'brown', body = '{
    "properties": {
      "foo": { 
        "type":     "text",

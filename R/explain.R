@@ -1,6 +1,7 @@
 #' Explain a search query.
 #'
 #' @export
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param index Only one index
 #' @param type Only one document type
 #' @param id Document id, only one
@@ -30,48 +31,51 @@
 #' @param body The query definition using the Query DSL. This is passed in the body of the
 #' request.
 #' @param raw If `TRUE` (default), data is parsed to list. If `FALSE`, then raw JSON.
-#' @param ... Curl args passed on to [httr::GET()]
+#' @param ... Curl args passed on to [crul::HttpClient]
 #' @references
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-explain.html>
 #' @examples \dontrun{
-#' explain(index = "plos", type = "article", id = 14, q = "title:Germ")
+#' (x <- connect())
+#' 
+#' explain(x, index = "plos", type = "article", id = 14, q = "title:Germ")
 #'
 #' body <- '{
 #'  "query": {
 #'    "term": { "title": "Germ" }
 #'  }
 #' }'
-#' explain(index = "plos", type = "article", id = 14, body=body)
+#' explain(x, index = "plos", type = "article", id = 14, body=body)
 #' }
 
-explain <- function(index=NULL, type=NULL, id=NULL, source2=NULL, fields=NULL, routing=NULL,
+explain <- function(conn, index=NULL, type=NULL, id=NULL, source2=NULL, fields=NULL, routing=NULL,
   parent=NULL, preference=NULL, source=NULL, q=NULL, df=NULL, analyzer=NULL, analyze_wildcard=NULL,
   lowercase_expanded_terms=NULL, lenient=NULL, default_operator=NULL, source_exclude=NULL,
   source_include=NULL, body=NULL, raw=FALSE, ...) {
 
-  #checkconn(...)
+  is_conn(conn)
   args <- ec(list(`_source`=source2, fields=fields, routing=routing, parent=parent,
     preference=preference, source=source, q=q, df=df, analyzer=analyzer,
     analyze_wildcard=as_log(analyze_wildcard),
     lowercase_expanded_terms=as_log(lowercase_expanded_terms),
     lenient=as_log(lenient), default_operator=default_operator,
     `_source_exclude`=source_exclude, `_source_include`=source_include))
-  explain_POST(esc(index), esc(type), id, args, body, raw, ...)
+  explain_POST(conn, esc(index), esc(type), id, args, body, raw, ...)
 }
 
-explain_POST <- function(index, type, id, args, body, raw, ...) {
-  url <- make_url(es_get_auth())
+explain_POST <- function(conn, index, type, id, args, body, raw, ...) {
+  url <- conn$make_url()
   url <- if (is.null(id)) {
     file.path(url, index, type, "_explain") 
   } else {
     file.path(url, index, type, id, "_explain")
   }
+  cli <- conn$make_conn(url, json_type(), ...)
   tt <- if (is.null(body)) {
-    POST(url, query = args, make_up(), content_type_json(), es_env$headers, ...) 
+    cli$post(query = args)
   } else {
-    POST(url, query = args, body = body, make_up(), content_type_json(), 
-         es_env$headers, ...)
+    cli$post(query = args, body = body)
   }
-  geterror(tt)
-  if (raw) cont_utf8(tt) else jsonlite::fromJSON(cont_utf8(tt), FALSE)
+  geterror(conn, tt)
+  txt <- tt$parse("UTF-8")
+  if (raw) txt else jsonlite::fromJSON(txt, FALSE)
 }

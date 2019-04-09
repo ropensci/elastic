@@ -4,11 +4,13 @@
 \alias{reindex}
 \title{Reindex}
 \usage{
-reindex(body, refresh = NULL, requests_per_second = NULL,
+reindex(conn, body, refresh = NULL, requests_per_second = NULL,
   slices = NULL, timeout = NULL, wait_for_active_shards = NULL,
   wait_for_completion = NULL, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{body}{(list/character/json) The search definition using the Query DSL
 and the prototype for the index request.}
 
@@ -32,15 +34,17 @@ copies for the shard (number of replicas + 1)}
 \item{wait_for_completion}{(logical) Should the request block until the
 reindex is complete? Default: \code{TRUE}}
 
-\item{...}{Curl options, passed on to \code{\link[httr:POST]{httr::POST()}}}
+\item{...}{Curl options, passed on to \link[crul:verb-POST]{crul::verb-POST}}
 }
 \description{
 Reindex all documents from one index to another.
 }
 \examples{
 \dontrun{
-if (!index_exists("twitter")) index_create("twitter")
-if (!index_exists("new_twitter")) index_create("new_twitter")
+x <- connect()
+
+if (!index_exists(x, "twitter")) index_create(x, "twitter")
+if (!index_exists(x, "new_twitter")) index_create(x, "new_twitter")
 body <- '{
   "source": {
     "index": "twitter"
@@ -49,7 +53,7 @@ body <- '{
     "index": "new_twitter"
   }
 }'
-reindex(body = body)
+reindex(x, body = body)
 }
 }
 \references{

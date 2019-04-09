@@ -4,13 +4,15 @@
 \alias{termvectors}
 \title{Termvectors}
 \usage{
-termvectors(index, type, id = NULL, body = list(), pretty = TRUE,
-  field_statistics = TRUE, fields = NULL, offsets = TRUE,
-  parent = NULL, payloads = TRUE, positions = TRUE,
+termvectors(conn, index, type, id = NULL, body = list(),
+  pretty = TRUE, field_statistics = TRUE, fields = NULL,
+  offsets = TRUE, parent = NULL, payloads = TRUE, positions = TRUE,
   realtime = TRUE, preference = "random", routing = NULL,
   term_statistics = FALSE, version = NULL, version_type = NULL, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{index}{(character) The index in which the document resides.}
 
 \item{type}{(character) The type of the document.}
@@ -56,7 +58,7 @@ document frequency should be returned. Default: \code{FALSE}}
 \item{version_type}{(character) Specific version type, valid choices are:
 'internal', 'external', 'external_gte', 'force'}
 
-\item{...}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}}
+\item{...}{Curl args passed on to \link[crul:verb-POST]{crul::verb-POST}}
 }
 \description{
 Termvectors
@@ -70,14 +72,15 @@ vectors are not available until the next refresh.
 }
 \examples{
 \dontrun{
-connect()
-if (!index_exists('plos')) {
+x <- connect()
+
+if (!index_exists(x, 'plos')) {
   plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-  invisible(docs_bulk(plosdat))
+  invisible(docs_bulk(x, plosdat))
 }
-if (!index_exists('omdb')) {
+if (!index_exists(x, 'omdb')) {
   omdb <- system.file("examples", "omdb.json", package = "elastic")
-  invisible(docs_bulk(omdb))
+  invisible(docs_bulk(x, omdb))
 }
 
 body <- '{
@@ -87,7 +90,7 @@ body <- '{
   "term_statistics" : true,
   "field_statistics" : true
 }'
-termvectors('plos', 'article', 29, body = body)
+termvectors(x, 'plos', 'article', 29, body = body)
 
 body <- '{
   "fields" : ["Plot"],
@@ -96,9 +99,12 @@ body <- '{
   "term_statistics" : true,
   "field_statistics" : true
 }'
-termvectors('omdb', 'omdb', 'AVXdx8Eqg_0Z_tpMDyP_', body = body)
+termvectors(x, 'omdb', 'omdb', 'AVXdx8Eqg_0Z_tpMDyP_', body = body)
 }
 }
 \references{
 \url{http://www.elastic.co/guide/en/elasticsearch/reference/current/docs-termvectors.html}
+}
+\seealso{
+\code{\link[=mtermvectors]{mtermvectors()}}
 }

@@ -4,7 +4,7 @@
 \alias{Search}
 \title{Full text search of Elasticsearch}
 \usage{
-Search(index = NULL, type = NULL, q = NULL, df = NULL,
+Search(conn, index = NULL, type = NULL, q = NULL, df = NULL,
   analyzer = NULL, default_operator = NULL, explain = NULL,
   source = NULL, fields = NULL, sort = NULL, track_scores = NULL,
   timeout = NULL, terminate_after = NULL, from = NULL, size = NULL,
@@ -14,9 +14,12 @@ Search(index = NULL, type = NULL, q = NULL, df = NULL,
   search_path = "_search", stream_opts = list(), ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link{connect}}}
+
 \item{index}{Index name, one or more}
 
-\item{type}{Document type}
+\item{type}{Document type. Note that \code{type} is deprecated in
+Elasticsearch v7 and greater}
 
 \item{q}{The query string (maps to the query_string query, see Query String
 Query for more details). See
@@ -118,7 +121,7 @@ that's the data that's streamed out, and pass a file path instead of a
 connection to \code{con}. \code{pagesize} param doesn't do much as
 that's more or less controlled by paging with ES.}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}}}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}}}
 }
 \description{
 Full text search of Elasticsearch
@@ -128,53 +131,86 @@ This function name has the "S" capitalized to avoid conflict with the function
 \code{base::search}. I hate mixing cases, as I think it confuses users, but in this case
 it seems neccessary.
 }
-\examples{
-\dontrun{
-if (!index_exists("shakespeare")) {
-  shakespeare <- system.file("examples", "shakespeare_data.json", package = "elastic")
-  invisible(docs_bulk(shakespeare))
+\section{profile}{
+
+The Profile API provides detailed timing information about the execution of
+individual components in a search request. See
+https://www.elastic.co/guide/en/elasticsearch/reference/current/search-profile.html
+for more information
+
+In a body query, you can set to \code{profile: true} to enable profiling
+results. e.g.
+
+\preformatted{
+{
+  "profile": true,
+  "query" : {
+    "match" : { "message" : "some number" }
+  }
+}
+}
 }
 
+\examples{
+\dontrun{
+# make connection object
+(x <- connect())
+
+# load some data
+if (!index_exists(x, "shakespeare")) {
+  shakespeare <- system.file("examples", "shakespeare_data.json", package = "elastic")
+  invisible(docs_bulk(x, shakespeare))
+}
+if (!index_exists(x, "gbif")) {
+  gbif <- system.file("examples", "gbif_data.json", package = "elastic")
+  invisible(docs_bulk(x, gbif))
+}
+if (!index_exists(x, "plos")) {
+  plos <- system.file("examples", "plos_data.json", package = "elastic")
+  invisible(docs_bulk(x, plos))
+}
+
+
 # URI string queries
-Search(index="shakespeare")
-Search(index="shakespeare", type="act")
-Search(index="shakespeare", type="scene")
-Search(index="shakespeare", type="line")
+Search(x, index="shakespeare")
+Search(x, index="shakespeare", type="act")
+Search(x, index="shakespeare", type="scene")
+Search(x, index="shakespeare", type="line")
 
 ## Return certain fields
-if (gsub("\\\\.", "", ping()$version$number) < 500) {
+if (gsub("\\\\.", "", x$ping()$version$number) < 500) {
   ### ES < v5
-  Search(index="shakespeare", fields=c('play_name','speaker'))
+  Search(x, index="shakespeare", fields=c('play_name','speaker'))
 } else {
   ### ES > v5
-  Search(index="shakespeare", body = '{
+  Search(x, index="shakespeare", body = '{
    "_source": ["play_name", "speaker"]
   }')
 }
 
 ## Search multiple indices
-Search(index = "gbif")$hits$total
-Search(index = "shakespeare")$hits$total
-Search(index = c("gbif", "shakespeare"))$hits$total
+Search(x, index = "gbif")$hits$total
+Search(x, index = "shakespeare")$hits$total
+Search(x, index = c("gbif", "shakespeare"))$hits$total
 
 ## search_type
-Search(index="shakespeare", search_type = "query_then_fetch")
-Search(index="shakespeare", search_type = "dfs_query_then_fetch")
+Search(x, index="shakespeare", search_type = "query_then_fetch")
+Search(x, index="shakespeare", search_type = "dfs_query_then_fetch")
 ### search type "scan" is gone - use time_scroll instead
-Search(index="shakespeare", time_scroll = "2m")
+Search(x, index="shakespeare", time_scroll = "2m")
 ### search type "count" is gone - use size=0 instead
-Search(index="shakespeare", size = 0)$hits$total
+Search(x, index="shakespeare", size = 0)$hits$total
 
 ## search exists check
 ### use size set to 0 and terminate_after set to 1
 ### if there are > 0 hits, then there are matching documents
-Search(index="shakespeare", type="act", size = 0, terminate_after = 1)
+Search(x, index="shakespeare", type="act", size = 0, terminate_after = 1)
 
 ## sorting
 ### if ES >5, we need to make sure fielddata is turned on for a field 
 ### before using it for sort 
-if (gsub("\\\\.", "", ping()$version$number) >= 500) {
-  mapping_create("shakespeare", "act", update_all_types = TRUE, body = '{
+if (gsub("\\\\.", "", x$ping()$version$number) >= 500) {
+  mapping_create(x, "shakespeare", "line", update_all_types = TRUE, body = '{
     "properties": {
       "speaker": { 
       "type":     "text",
@@ -182,91 +218,85 @@ if (gsub("\\\\.", "", ping()$version$number) >= 500) {
     }
   }
  }')
- Search(index="shakespeare", type="act", sort="speaker")
+ Search(x, index="shakespeare", type="line", sort="speaker")
 }
 
-if (gsub("\\\\.", "", ping()$version$number) < 500) {
-  Search(index="shakespeare", type="act", sort="speaker:desc", 
+if (gsub("\\\\.", "", x$ping()$version$number) < 500) {
+  Search(x, index="shakespeare", type="line", sort="speaker:desc", 
     fields='speaker')
-  Search(index="shakespeare", type="act",
+  Search(x, index="shakespeare", type="line",
     sort=c("speaker:desc","play_name:asc"), fields=c('speaker','play_name'))
 }
 
 
 ## paging
-if (gsub("\\\\.", "", ping()$version$number) < 500) {
-  Search(index="shakespeare", size=1)$hits$hits
-  Search(index="shakespeare", size=1, from=1)$hits$hits
+if (gsub("\\\\.", "", x$ping()$version$number) < 500) {
+  Search(x, index="shakespeare", size=1)$hits$hits
+  Search(x, index="shakespeare", size=1, from=1)$hits$hits
 }
 
 ## queries
 ### Search in all fields
-Search(index="shakespeare", type="act", q="york")
+Search(x, index="shakespeare", type="act", q="york")
 
 ### Searchin specific fields
-Search(index="shakespeare", type="act", q="speaker:KING HENRY IV")$hits$total
+Search(x, index="shakespeare", type="act", q="speaker:KING HENRY IV")$hits$total
 
 ### Exact phrase search by wrapping in quotes
-Search(index="shakespeare", type="act", q='speaker:"KING HENRY IV"')$hits$total
+Search(x, index="shakespeare", type="act", q='speaker:"KING HENRY IV"')$hits$total
 
 ### can specify operators between multiple words parenthetically
-Search(index="shakespeare", type="act", q="speaker:(HENRY OR ARCHBISHOP)")$hits$total
+Search(x, index="shakespeare", type="act", q="speaker:(HENRY OR ARCHBISHOP)")$hits$total
 
 ### where the field line_number has no value (or is missing)
-Search(index="shakespeare", q="_missing_:line_number")$hits$total
+Search(x, index="shakespeare", q="_missing_:line_number")$hits$total
 
 ### where the field line_number has any non-null value
-Search(index="shakespeare", q="_exists_:line_number")$hits$total
+Search(x, index="shakespeare", q="_exists_:line_number")$hits$total
 
 ### wildcards, either * or ?
-Search(index="shakespeare", q="*ay")$hits$total
-Search(index="shakespeare", q="m?y")$hits$total
+Search(x, index="shakespeare", q="*ay")$hits$total
+Search(x, index="shakespeare", q="m?y")$hits$total
 
 ### regular expressions, wrapped in forward slashes
-Search(index="shakespeare", q="text_entry:/[a-z]/")$hits$total
+Search(x, index="shakespeare", q="text_entry:/[a-z]/")$hits$total
 
 ### fuzziness
-Search(index="shakespeare", q="text_entry:ma~")$hits$total
-Search(index="shakespeare", q="text_entry:the~2")$hits$total
-Search(index="shakespeare", q="text_entry:the~1")$hits$total
+Search(x, index="shakespeare", q="text_entry:ma~")$hits$total
+Search(x, index="shakespeare", q="text_entry:the~2")$hits$total
+Search(x, index="shakespeare", q="text_entry:the~1")$hits$total
 
 ### Proximity searches
-Search(index="shakespeare", q='text_entry:"as hath"~5')$hits$total
-Search(index="shakespeare", q='text_entry:"as hath"~10')$hits$total
+Search(x, index="shakespeare", q='text_entry:"as hath"~5')$hits$total
+Search(x, index="shakespeare", q='text_entry:"as hath"~10')$hits$total
 
 ### Ranges, here where line_id value is between 10 and 20
-Search(index="shakespeare", q="line_id:[10 TO 20]")$hits$total
+Search(x, index="shakespeare", q="line_id:[10 TO 20]")$hits$total
 
 ### Grouping
-Search(index="shakespeare", q="(hath OR as) AND the")$hits$total
+Search(x, index="shakespeare", q="(hath OR as) AND the")$hits$total
 
 # Limit number of hits returned with the size parameter
-Search(index="shakespeare", size=1)
+Search(x, index="shakespeare", size=1)
 
 # Give explanation of search in result
-Search(index="shakespeare", size=1, explain=TRUE)
+Search(x, index="shakespeare", size=1, explain=TRUE)
 
 ## terminate query after x documents found
 ## setting to 1 gives back one document for each shard
-Search(index="shakespeare", terminate_after=1)
+Search(x, index="shakespeare", terminate_after=1)
 ## or set to other number
-Search(index="shakespeare", terminate_after=2)
+Search(x, index="shakespeare", terminate_after=2)
 
 ## Get version number for each document
-Search(index="shakespeare", version=TRUE, size=2)
+Search(x, index="shakespeare", version=TRUE, size=2)
 
 ## Get raw data
-Search(index="shakespeare", type="scene", raw=TRUE)
+Search(x, index="shakespeare", type="scene", raw=TRUE)
 
-## Curl options
-library('httr')
-
+## Curl options 
 ### verbose 
-out <- Search(index="shakespeare", type="line", config = verbose())
-
-### print progress
-res <- Search(config = progress(), size = 5000)
-
+out <- Search(x, index="shakespeare", type="line", verbose = TRUE)
 
 
 # Query DSL searches - queries sent in the body of the request
@@ -274,8 +304,8 @@ res <- Search(config = progress(), size = 5000)
 
 ### if ES >5, we need to make sure fielddata is turned on for a field 
 ### before using it for aggregations 
-if (gsub("\\\\.", "", ping()$version$number) >= 500) {
-  mapping_create("shakespeare", "act", update_all_types = TRUE, body = '{
+if (gsub("\\\\.", "", x$ping()$version$number) >= 500) {
+  mapping_create(x, "shakespeare", "line", update_all_types = TRUE, body = '{
     "properties": {
       "text_entry": { 
         "type":     "text",
@@ -284,13 +314,13 @@ if (gsub("\\\\.", "", ping()$version$number) >= 500) {
    }
  }')
  aggs <- list(aggs = list(stats = list(terms = list(field = "text_entry"))))
- Search(index="shakespeare", body=aggs)
+ Search(x, index="shakespeare", body=aggs)
 }
 
 ### if ES >5, you don't need to worry about fielddata
-if (gsub("\\\\.", "", ping()$version$number) < 500) {
+if (gsub("\\\\.", "", x$ping()$version$number) < 500) {
    aggs <- list(aggs = list(stats = list(terms = list(field = "text_entry"))))
-   Search(index="shakespeare", body=aggs)
+   Search(x, index="shakespeare", body=aggs)
 }
 
 ## or pass in as json query with newlines, easy to read
@@ -303,11 +333,11 @@ aggs <- '{
         }
     }
 }'
-Search(index="shakespeare", body=aggs, asdf=TRUE, size = 0)
+Search(x, index="shakespeare", body=aggs, asdf=TRUE, size = 0)
 
 ## or pass in collapsed json string
 aggs <- '{"aggs":{"stats":{"terms":{"field":"text_entry"}}}}'
-Search(index="shakespeare", body=aggs)
+Search(x, index="shakespeare", body=aggs)
 
 
 ## Aggregations
@@ -322,7 +352,7 @@ aggs <- '{
         }
     }
 }'
-Search(index="gbif", body=aggs, size=0)
+Search(x, index="gbif", body=aggs, size=0)
 
 ### Histograms w/ more options
 aggs <- '{
@@ -340,7 +370,7 @@ aggs <- '{
         }
     }
 }'
-Search(index="gbif", body=aggs, size=0)
+Search(x, index="gbif", body=aggs, size=0)
 
 ### Ordering the buckets by their doc_count - ascending:
 aggs <- '{
@@ -361,7 +391,7 @@ aggs <- '{
         }
     }
 }'
-out <- Search(index="gbif", body=aggs, size=0)
+out <- Search(x, index="gbif", body=aggs, size=0)
 lapply(out$aggregations$latbuckets$buckets, data.frame)
 
 ### By default, the buckets are returned as an ordered array. It is also possible to
@@ -377,15 +407,15 @@ aggs <- '{
         }
     }
 }'
-Search(index="gbif", body=aggs, size=0)
+Search(x, index="gbif", body=aggs, size=0)
 
 # match query
 match <- '{"query": {"match" : {"text_entry" : "Two Gentlemen"}}}'
-Search(index="shakespeare", body=match)
+Search(x, index="shakespeare", body=match)
 
 # multi-match (multiple fields that is) query
 mmatch <- '{"query": {"multi_match" : {"query" : "henry", "fields": ["text_entry","play_name"]}}}'
-Search(index="shakespeare", body=mmatch)
+Search(x, index="shakespeare", body=mmatch)
 
 # bool query
 mmatch <- '{
@@ -396,7 +426,7 @@ mmatch <- '{
          "speech_number" : {
            "from" : 1, "to": 5
 }}}}}}'
-Search(index="shakespeare", body=mmatch)
+Search(x, index="shakespeare", body=mmatch)
 
 # Boosting query
 boost <- '{
@@ -416,14 +446,14 @@ boost <- '{
     }
  }
 }'
-Search(index="shakespeare", body=boost)
+Search(x, index="shakespeare", body=boost)
 
 # Fuzzy query
 ## fuzzy query on numerics
 fuzzy <- list(query = list(fuzzy = list(text_entry = "arms")))
-Search(index="shakespeare", body=fuzzy)$hits$total
+Search(x, index="shakespeare", body=fuzzy)$hits$total
 fuzzy <- list(query = list(fuzzy = list(text_entry = list(value = "arms", fuzziness = 4))))
-Search(index="shakespeare", body=fuzzy)$hits$total
+Search(x, index="shakespeare", body=fuzzy)$hits$total
 
 # geoshape query
 ## not working yets
@@ -441,47 +471,47 @@ geo <- '{
    }
  }
 }'
-# Search(index="gbifnewgeo", body=geo)
+# Search(x, index="gbifnewgeo", body=geo)
 
 # range query
 ## with numeric
 body <- list(query=list(range=list(decimalLongitude=list(gte=1, lte=3))))
-Search('gbif', body=body)$hits$total
+Search(x, 'gbif', body=body)$hits$total
 
 body <- list(query=list(range=list(decimalLongitude=list(gte=2.9, lte=10))))
-Search('gbif', body=body)$hits$total
+Search(x, 'gbif', body=body)$hits$total
 
 ## with dates
 body <- list(query=list(range=list(eventDate=list(gte="2012-01-01", lte="now"))))
-Search('gbif', body=body)$hits$total
+Search(x, 'gbif', body=body)$hits$total
 
 body <- list(query=list(range=list(eventDate=list(gte="2014-01-01", lte="now"))))
-Search('gbif', body=body)$hits$total
+Search(x, 'gbif', body=body)$hits$total
 
 # more like this query (more_like_this can be shortened to mlt)
 body <- '{
  "query": {
    "more_like_this": {
      "fields": ["title"],
-     "like_text": "and then",
+     "like": "and then",
      "min_term_freq": 1,
      "max_query_terms": 12
    }
  }
 }'
-Search('plos', body=body)$hits$total
+Search(x, 'plos', body=body)$hits$total
 
 body <- '{
  "query": {
    "more_like_this": {
      "fields": ["abstract","title"],
-     "like_text": "cell",
+     "like": "cell",
      "min_term_freq": 1,
      "max_query_terms": 12
    }
  }
 }'
-Search('plos', body=body)$hits$total
+Search(x, 'plos', body=body)$hits$total
 
 # Highlighting
 body <- '{
@@ -496,7 +526,7 @@ body <- '{
    }
  }
 }'
-out <- Search('plos', 'article', body=body)
+out <- Search(x, 'plos', 'article', body=body)
 out$hits$total
 sapply(out$hits$hits, function(x) x$`_source`$title[[1]])
 
@@ -511,17 +541,17 @@ body <- '{
      }
   }
 }'
-Search('shakespeare', 'line', body=body)
+Search(x, 'shakespeare', 'line', body=body)
 
 ## Scrolling search - instead of paging
-res <- Search(index = 'shakespeare', q="a*", time_scroll="1m")
-scroll(res$`_scroll_id`)
+res <- Search(x, index = 'shakespeare', q="a*", time_scroll="1m")
+scroll(x, res$`_scroll_id`)
 
-res <- Search(index = 'shakespeare', q="a*", time_scroll="5m")
+res <- Search(x, index = 'shakespeare', q="a*", time_scroll="5m")
 out <- list()
 hits <- 1
 while(hits != 0){
-  res <- scroll(res$`_scroll_id`)
+  res <- scroll(x, res$`_scroll_id`)
   hits <- length(res$hits$hits)
   if(hits > 0)
     out <- c(out, res$hits$hits)
@@ -554,15 +584,15 @@ body2 <- '{
   }
 }'
 
-res1 <- Search(index = 'shakespeare', time_scroll="1m", body = body1)
-res2 <- Search(index = 'shakespeare', time_scroll="1m", body = body2)
-scroll(res1$`_scroll_id`)
-scroll(res2$`_scroll_id`)
+res1 <- Search(x, index = 'shakespeare', time_scroll="1m", body = body1)
+res2 <- Search(x, index = 'shakespeare', time_scroll="1m", body = body2)
+scroll(x, res1$`_scroll_id`)
+scroll(x, res2$`_scroll_id`)
 
 out1 <- list()
 hits <- 1
 while(hits != 0){
-  tmp1 <- scroll(res1$`_scroll_id`)
+  tmp1 <- scroll(x, res1$`_scroll_id`)
   hits <- length(tmp1$hits$hits)
   if(hits > 0)
     out1 <- c(out1, tmp1$hits$hits)
@@ -570,8 +600,8 @@ while(hits != 0){
 
 out2 <- list()
 hits <- 1
-while(hits != 0){
-  tmp2 <- scroll(res2$`_scroll_id`)
+while(hits != 0) {
+  tmp2 <- scroll(x, res2$`_scroll_id`)
   hits <- length(tmp2$hits$hits)
   if(hits > 0)
     out2 <- c(out2, tmp2$hits$hits)
@@ -597,7 +627,7 @@ body <- '{
    }
  }
 }'
-Search('gbif', body = body)$hits$total
+Search(x, 'gbif', body = body)$hits$total
 
 ## Geo filters - fun!
 ### Note that filers have many geospatial filter options, but queries 
@@ -612,9 +642,9 @@ body <- '{
    }
  }
 }'
-index_recreate(index='gbifgeopoint', body=body)
+index_recreate(x, index='gbifgeopoint', body=body)
 path <- system.file("examples", "gbif_geopoint.json", package = "elastic")
-invisible(docs_bulk(path))
+invisible(docs_bulk(x, path))
 
 ### Points within a bounding box
 body <- '{
@@ -640,7 +670,7 @@ body <- '{
    }
  }
 }'
-out <- Search('gbifgeopoint', body = body, size = 300)
+out <- Search(x, 'gbifgeopoint', body = body, size = 300)
 out$hits$total
 do.call(rbind, lapply(out$hits$hits, function(x) x$`_source`$location))
 
@@ -661,7 +691,7 @@ body <- '{
      }
   }
 }}}'
-out <- Search('gbifgeopoint', body = body)
+out <- Search(x, 'gbifgeopoint', body = body)
 out$hits$total
 do.call(rbind, lapply(out$hits$hits, function(x) x$`_source`$location))
 
@@ -680,7 +710,7 @@ body <- '{
    }
  }
 }'
-out <- Search('gbifgeopoint', body = body)
+out <- Search(x, 'gbifgeopoint', body = body)
 out$hits$total
 do.call(rbind, lapply(out$hits$hits, function(x) x$`_source`$location))
 
@@ -703,7 +733,7 @@ body <- '{
      }
    }
 }'
-out <- Search('gbifgeopoint', body = body)
+out <- Search(x, 'gbifgeopoint', body = body)
 out$hits$total
 do.call(rbind, lapply(out$hits$hits, function(x) x$`_source`$location))
 
@@ -718,9 +748,9 @@ body <- '{
    }
  }
 }'
-index_recreate(index='geoshape', body=body)
+index_recreate(x, index='geoshape', body=body)
 path <- system.file("examples", "gbif_geoshape.json", package = "elastic")
-invisible(docs_bulk(path))
+invisible(docs_bulk(x, path))
 
 #### Get data with a square envelope, w/ point defining upper left and the other
 #### defining the lower right
@@ -736,7 +766,7 @@ body <- '{
      }
    }
 }'
-out <- Search('geoshape', body = body)
+out <- Search(x, 'geoshape', body = body)
 out$hits$total
 
 #### Get data with a circle, w/ point defining center, and radius
@@ -753,7 +783,7 @@ body <- '{
      }
    }
 }'
-out <- Search('geoshape', body = body)
+out <- Search(x, 'geoshape', body = body)
 out$hits$total
 
 #### Use a polygon, w/ point defining center, and radius
@@ -771,13 +801,13 @@ body <- '{
      }
    }
 }'
-out <- Search('geoshape', body = body)
+out <- Search(x, 'geoshape', body = body)
 out$hits$total
 
 
 # Geofilter with WKT
 # format follows "BBOX (minlon, maxlon, maxlat, minlat)"
-x <- '{
+body <- '{
     "query": {
         "bool" : {
             "must" : {
@@ -785,7 +815,7 @@ x <- '{
             },
             "filter" : {
                 "geo_bounding_box" : {
-                    "pin.location" : {
+                    "location" : {
                         "wkt" : "BBOX (1, 14, 60, 40)"
                     }
                 }
@@ -793,13 +823,13 @@ x <- '{
         }
     }
 }'
-out <- Search('gbifgeopoint', body = body)
+out <- Search(x, 'gbifgeopoint', body = body)
 out$hits$total
 
 
 
 # Missing filter
-if (gsub("\\\\.", "", ping()$version$number) < 500) {
+if (gsub("\\\\.", "", x$ping()$version$number) < 500) {
   ### ES < v5
   body <- '{
    "query":{
@@ -810,7 +840,7 @@ if (gsub("\\\\.", "", ping()$version$number) < 500) {
      }
     }
   }'
-  Search("shakespeare", body = body)
+  Search(x, "shakespeare", body = body)
 } else {
   ### ES => v5
   body <- '{
@@ -824,7 +854,7 @@ if (gsub("\\\\.", "", ping()$version$number) < 500) {
     }
    }
   }'
-  Search("shakespeare", body = body)
+  Search(x, "shakespeare", body = body)
 }
 
 # prefix filter
@@ -839,13 +869,13 @@ body <- '{
    }
  }
 }'
-x <- Search("shakespeare", body = body)
-x$hits$total
-vapply(x$hits$hits, "[[", "", c("_source", "speaker"))
+z <- Search(x, "shakespeare", body = body)
+z$hits$total
+vapply(z$hits$hits, "[[", "", c("_source", "speaker"))
 
 
 # ids filter
-if (gsub("\\\\.", "", ping()$version$number) < 500) {
+if (gsub("\\\\.", "", x$ping()$version$number) < 500) {
   ### ES < v5
   body <- '{
    "query":{
@@ -858,11 +888,11 @@ if (gsub("\\\\.", "", ping()$version$number) < 500) {
     }
    }
   }'
-  x <- Search("shakespeare", body = body)
-  x$hits$total
+  z <- Search(x, "shakespeare", body = body)
+  z$hits$total
   identical(
    c("1","2","10","2000"),
-   vapply(x$hits$hits, "[[", "", "_id")
+   vapply(z$hits$hits, "[[", "", "_id")
   )
 } else {
   body <- '{
@@ -872,16 +902,16 @@ if (gsub("\\\\.", "", ping()$version$number) < 500) {
      }
    }
   }'
-  x <- Search("shakespeare", body = body)
-  x$hits$total
+  z <- Search(x, "shakespeare", body = body)
+  z$hits$total
   identical(
    c("2000","10","2","1"),
-   vapply(x$hits$hits, "[[", "", "_id")
+   vapply(z$hits$hits, "[[", "", "_id")
   )
 }
 
 # combined prefix and ids filters
-if (gsub("\\\\.", "", ping()$version$number) < 500) {
+if (gsub("\\\\.", "", x$ping()$version$number) < 500) {
   ### ES < v5
   body <- '{
    "query":{
@@ -901,8 +931,8 @@ if (gsub("\\\\.", "", ping()$version$number) < 500) {
     }
    }
   }'
-  x <- Search("shakespeare", body = body)
-  x$hits$total
+  z <- Search(x, "shakespeare", body = body)
+  z$hits$total
 } else {
   ### ES => v5
   body <- '{
@@ -923,8 +953,8 @@ if (gsub("\\\\.", "", ping()$version$number) < 500) {
      }
     }
   }'
-  x <- Search("shakespeare", body = body)
-  x$hits$total
+  z <- Search(x, "shakespeare", body = body)
+  z$hits$total
 }
 
 # Suggestions
@@ -943,18 +973,32 @@ sugg <- '{
     }
   }
 }'
-Search(index = "shakespeare", "line", body = sugg, 
+Search(x, index = "shakespeare", "line", body = sugg, 
   asdf = TRUE, size = 0)$suggest$sugg$options
 
 
 
 # stream data out using jsonlite::stream_out
 file <- tempfile()
-res <- Search("shakespeare", size = 1000, stream_opts = list(file = file))
+res <- Search(x, "shakespeare", size = 1000, stream_opts = list(file = file))
 head(df <- jsonlite::stream_in(file(file)))
 NROW(df)
 unlink(file)
 
+
+# get profile data
+body <- '{
+  "profile": true,
+  "query" : {
+    "match" : { "text_entry" : "war" }
+  }
+}'
+res <- Search(x, "shakespeare", body = body)
+res$profile
+# time in nanoseconds across each of the shards
+vapply(res$profile$shards, function(w) {
+  w$searches[[1]]$query[[1]]$time_in_nanos
+}, 1)
 }
 }
 \references{

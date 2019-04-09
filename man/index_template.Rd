@@ -8,17 +8,19 @@
 \alias{index_template_delete}
 \title{Index templates}
 \usage{
-index_template_put(name, body = NULL, create = NULL,
+index_template_put(conn, name, body = NULL, create = NULL,
   flat_settings = NULL, master_timeout = NULL, order = NULL,
   timeout = NULL, ...)
 
-index_template_get(name = NULL, filter_path = NULL, ...)
+index_template_get(conn, name = NULL, filter_path = NULL, ...)
 
-index_template_exists(name, ...)
+index_template_exists(conn, name, ...)
 
-index_template_delete(name, ...)
+index_template_delete(conn, name, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{name}{(character) The name of the template}
 
 \item{body}{(character/list) The template definition}
@@ -49,6 +51,8 @@ will automatically be applied when new indices are created
 }
 \examples{
 \dontrun{
+(x <- connect())
+
 body <- '{
   "template": "te*",
   "settings": {
@@ -71,23 +75,23 @@ body <- '{
     }
   }
 }'
-index_template_put("template_1", body = body)
+index_template_put(x, "template_1", body = body)
 
 # get templates
-index_template_get()
-index_template_get("template_1")
-index_template_get(c("template_1", "template_2"))
-index_template_get("template_*")
+index_template_get(x)
+index_template_get(x, "template_1")
+index_template_get(x, c("template_1", "template_2"))
+index_template_get(x, "template_*")
 ## filter path
-index_template_get("template_1", filter_path = "*.template")
+index_template_get(x, "template_1", filter_path = "*.template")
 
 # template exists
-index_template_exists("template_1")
-index_template_exists("foobar")
+index_template_exists(x, "template_1")
+index_template_exists(x, "foobar")
 
 # delete a template
-index_template_delete("template_1")
-index_template_exists("template_1")
+index_template_delete(x, "template_1")
+index_template_exists(x, "template_1")
 }
 }
 \references{

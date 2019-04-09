@@ -24,7 +24,7 @@ Also check out `elasticdsl` - an R DSL for Elasticsearch - [https://github.com/r
 
 ## Compatibility
 
-This client is developed following the latest stable releases, currently `v6.5.3`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
+This client is developed following the latest stable releases, currently `v6.7.1`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
 
 ## Security
 
@@ -79,12 +79,12 @@ If you're using boot2docker, you'll need to use the IP address in place of local
 
 __on OSX__
 
-+ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.5.3.tar.gz`
-+ Extract: `tar -zxvf elasticsearch-6.5.3.tar.gz`
-+ Move it: `sudo mv elasticsearch-6.5.3 /usr/local`
++ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.7.1.tar.gz`
++ Extract: `tar -zxvf elasticsearch-6.7.1.tar.gz`
++ Move it: `sudo mv elasticsearch-6.7.1 /usr/local`
 + Navigate to /usr/local: `cd /usr/local`
 + Delete symlinked `elasticsearch` directory: `rm -rf elasticsearch`
-+ Add shortcut: `sudo ln -s elasticsearch-6.5.3 elasticsearch` (replace version with your version)
++ Add shortcut: `sudo ln -s elasticsearch-6.7.1 elasticsearch` (replace version with your version)
 
 You can also install via Homebrew: `brew install elasticsearch`
 
@@ -109,33 +109,36 @@ The function `connect()` is used before doing anything else to set the connectio
 
 
 ```r
-connect(es_port = 9200)
-#> transport:  http 
-#> host:       127.0.0.1 
-#> port:       9200 
-#> path:       NULL 
-#> username:   NULL 
-#> password:   <secret> 
-#> errors:     simple 
-#> headers (names):  NULL
+connect(port = 9200)
+#> <Elasticsearch Connection> 
+#>   transport:  http 
+#>   host:       127.0.0.1 
+#>   port:       9200 
+#>   path:       NULL 
+#>   username:   NULL 
+#>   password:   NULL 
+#>   errors:     simple 
+#>   headers (names):   
+#>   cainfo:  NULL
 ```
 
-For AWS hosted elasticsearch, make sure to specify es_path = "" and the correct port - transport schema pair.
+For AWS hosted elasticsearch, make sure to specify path = "" and the correct port - transport schema pair.
 
 
 ```r
-connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 80, es_transport_schema  = "http")
+connect(host = <aws_es_endpoint>, path = "", port = 80, transport_schema  = "http")
   # or
-connect(es_host = <aws_es_endpoint>, es_path = "", es_port = 443, es_transport_schema  = "https")
+connect(host = <aws_es_endpoint>, path = "", port = 443, transport_schema  = "https")
 ```
 
-If you are using Elastic Cloud or an installation with authentication (X-pack), make sure to specify es_path = "", es_user = "", es_pwd = "" and the correct port - transport schema pair.
+If you are using Elastic Cloud or an installation with authentication (X-pack), make sure to specify path = "", user = "", pwd = "" and the correct port - transport schema pair.
 
 
 ```r
-connect(es_host = <ec_endpoint>, es_path = "", es_user="test", es_pwd = "1234", es_port = 9243, es_transport_schema  = "https")
+connect(host = <ec_endpoint>, path = "", user="test", pwd = "1234", port = 9243, transport_schema  = "https")
 ```
 
+<br>
 
 ## Get some data
 
@@ -148,16 +151,6 @@ I have prepare a non-exported function useful for preparing the weird format tha
 Elasticsearch provides some data on Shakespeare plays. I've provided a subset of this data in this package. Get the path for the file specific to your machine:
 
 
-```
-#> transport:  http 
-#> host:       127.0.0.1 
-#> port:       9200 
-#> path:       NULL 
-#> username:   NULL 
-#> password:   <secret> 
-#> errors:     simple 
-#> headers (names):  NULL
-```
 
 
 ```r
@@ -170,7 +163,7 @@ Then load the data into Elasticsearch:
 
 
 ```r
-invisible(docs_bulk(shakespeare))
+invisible(docs_bulk(x, shakespeare))
 ```
 
 If you need some big data to play with, the shakespeare dataset is a good one to start with. You can get the whole thing and pop it into Elasticsearch (beware, may take up to 10 minutes or so.):
@@ -186,8 +179,9 @@ A dataset inluded in the `elastic` package is metadata for PLOS scholarly articl
 
 
 ```r
+if (index_exists(x, "plos")) index_delete(x, "plos")
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-invisible(docs_bulk(plosdat))
+invisible(docs_bulk(x, plosdat))
 ```
 
 ### Global Biodiversity Information Facility (GBIF) data
@@ -196,16 +190,18 @@ A dataset inluded in the `elastic` package is data for GBIF species occurrence r
 
 
 ```r
+if (index_exists(x, "gbif")) index_delete(x, "gbif")
 gbifdat <- system.file("examples", "gbif_data.json", package = "elastic")
-invisible(docs_bulk(gbifdat))
+invisible(docs_bulk(x, gbifdat))
 ```
 
 GBIF geo data with a coordinates element to allow `geo_shape` queries
 
 
 ```r
+if (index_exists(x, "gbifgeo")) index_delete(x, "gbifgeo")
 gbifgeo <- system.file("examples", "gbif_geo.json", package = "elastic")
-invisible(docs_bulk(gbifgeo))
+invisible(docs_bulk(x, gbifgeo))
 ```
 
 ### More data sets
@@ -213,13 +209,15 @@ invisible(docs_bulk(gbifgeo))
 There are more datasets formatted for bulk loading in the `ropensci/elastic_data` GitHub repository. Find it at <https://github.com/ropensci/elastic_data>
 
 
+<br>
+
 ## Search
 
 Search the `plos` index and only return 1 result
 
 
 ```r
-Search(index = "plos", size = 1)$hits$hits
+Search(x, index = "plos", size = 1)$hits$hits
 #> [[1]]
 #> [[1]]$`_index`
 #> [1] "plos"
@@ -245,7 +243,7 @@ Search the `plos` index, and the `article` document type, and query for _antibod
 
 
 ```r
-Search(index = "plos", type = "article", q = "antibody", size = 1)$hits$hits
+Search(x, index = "plos", type = "article", q = "antibody", size = 1)$hits$hits
 #> [[1]]
 #> [[1]]$`_index`
 #> [1] "plos"
@@ -273,7 +271,7 @@ Get document with id=4
 
 
 ```r
-docs_get(index = 'plos', type = 'article', id = 4)
+docs_get(x, index = 'plos', type = 'article', id = 4)
 #> $`_index`
 #> [1] "plos"
 #> 
@@ -284,6 +282,12 @@ docs_get(index = 'plos', type = 'article', id = 4)
 #> [1] "4"
 #> 
 #> $`_version`
+#> [1] 1
+#> 
+#> $`_seq_no`
+#> [1] 1
+#> 
+#> $`_primary_term`
 #> [1] 1
 #> 
 #> $found
@@ -301,7 +305,7 @@ Get certain fields
 
 
 ```r
-docs_get(index = 'plos', type = 'article', id = 4, fields = 'id')
+docs_get(x, index = 'plos', type = 'article', id = 4, fields = 'id')
 #> $`_index`
 #> [1] "plos"
 #> 
@@ -312,6 +316,12 @@ docs_get(index = 'plos', type = 'article', id = 4, fields = 'id')
 #> [1] "4"
 #> 
 #> $`_version`
+#> [1] 1
+#> 
+#> $`_seq_no`
+#> [1] 1
+#> 
+#> $`_primary_term`
 #> [1] 1
 #> 
 #> $found
@@ -325,7 +335,7 @@ Same index and type, different document ids
 
 
 ```r
-docs_mget(index = "plos", type = "article", id = 1:2)
+docs_mget(x, index = "plos", type = "article", id = 1:2)
 #> $docs
 #> $docs[[1]]
 #> $docs[[1]]$`_index`
@@ -338,6 +348,12 @@ docs_mget(index = "plos", type = "article", id = 1:2)
 #> [1] "1"
 #> 
 #> $docs[[1]]$`_version`
+#> [1] 1
+#> 
+#> $docs[[1]]$`_seq_no`
+#> [1] 0
+#> 
+#> $docs[[1]]$`_primary_term`
 #> [1] 1
 #> 
 #> $docs[[1]]$found
@@ -365,6 +381,12 @@ docs_mget(index = "plos", type = "article", id = 1:2)
 #> $docs[[2]]$`_version`
 #> [1] 1
 #> 
+#> $docs[[2]]$`_seq_no`
+#> [1] 0
+#> 
+#> $docs[[2]]$`_primary_term`
+#> [1] 1
+#> 
 #> $docs[[2]]$found
 #> [1] TRUE
 #> 
@@ -380,7 +402,7 @@ Different indeces, types, and ids
 
 
 ```r
-docs_mget(index_type_id = list(c("plos", "article", 1), c("gbif", "record", 1)))$docs[[1]]
+docs_mget(x, index_type_id = list(c("plos", "article", 1), c("gbif", "record", 1)))$docs[[1]]
 #> $`_index`
 #> [1] "plos"
 #> 
@@ -391,6 +413,12 @@ docs_mget(index_type_id = list(c("plos", "article", 1), c("gbif", "record", 1)))
 #> [1] "1"
 #> 
 #> $`_version`
+#> [1] 1
+#> 
+#> $`_seq_no`
+#> [1] 0
+#> 
+#> $`_primary_term`
 #> [1] 1
 #> 
 #> $found
@@ -412,8 +440,8 @@ For example:
 
 
 ```r
-(out <- docs_mget(index = "plos", type = "article", id = 1:2, raw = TRUE))
-#> [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"1\",\"_version\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098602\",\"title\":\"Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar\"}},{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"2\",\"_version\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0107757\",\"title\":\"Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition\"}}]}"
+(out <- docs_mget(x, index = "plos", type = "article", id = 1:2, raw = TRUE))
+#> [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"1\",\"_version\":1,\"_seq_no\":0,\"_primary_term\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098602\",\"title\":\"Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar\"}},{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"2\",\"_version\":1,\"_seq_no\":0,\"_primary_term\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0107757\",\"title\":\"Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition\"}}]}"
 #> attr(,"class")
 #> [1] "elastic_mget"
 ```
@@ -424,9 +452,12 @@ Then parse
 ```r
 jsonlite::fromJSON(out)
 #> $docs
-#>   _index   _type _id _version found                   _source.id
-#> 1   plos article   1        1  TRUE 10.1371/journal.pone.0098602
-#> 2   plos article   2        1  TRUE 10.1371/journal.pone.0107757
+#>   _index   _type _id _version _seq_no _primary_term found
+#> 1   plos article   1        1       0             1  TRUE
+#> 2   plos article   2        1       0             1  TRUE
+#>                     _source.id
+#> 1 10.1371/journal.pone.0098602
+#> 2 10.1371/journal.pone.0107757
 #>                                                                                                                                                _source.title
 #> 1 Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar
 #> 2                                     Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition

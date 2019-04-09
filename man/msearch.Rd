@@ -4,9 +4,11 @@
 \alias{msearch}
 \title{Multi-search}
 \usage{
-msearch(x, raw = FALSE, asdf = FALSE, ...)
+msearch(conn, x, raw = FALSE, asdf = FALSE, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{x}{(character) A file path}
 
 \item{raw}{(logical) Get raw JSON back or not.}
@@ -15,7 +17,7 @@ msearch(x, raw = FALSE, asdf = FALSE, ...)
 to parse JSON directly to a data.frame. If \code{FALSE} (Default), list
 output is given.}
 
-\item{...}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}}
+\item{...}{Curl args passed on to \link[crul:verb-POST]{crul::verb-POST}}
 }
 \description{
 Performs multiple searches, defined in a file
@@ -26,15 +28,18 @@ performs searches based on queries defined in a file.
 }
 \examples{
 \dontrun{
-connect()
+x <- connect()
+
 msearch1 <- system.file("examples", "msearch_eg1.json", package = "elastic")
 readLines(msearch1)
-msearch(msearch1)
+msearch(x, msearch1)
 
-cat('{"index" : "shakespeare"}', file = "~/mysearch.json", sep = "\\n")
+tf <- tempfile(fileext = ".json")
+cat('{"index" : "shakespeare"}', file = tf, sep = "\\n")
 cat('{"query" : {"match_all" : {}}, "from" : 0, "size" : 5}',  sep = "\\n",
-   file = "~/mysearch.json", append = TRUE)
-msearch("~/mysearch.json")
+   file = tf, append = TRUE)
+readLines(tf)
+msearch(x, tf)
 }
 }
 \seealso{

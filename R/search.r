@@ -3,6 +3,7 @@
 #' @export
 #' @name Search
 #' @template search_par
+#' @template search_extra
 #' @template search_egs
 #' @param body Query, either a list or json.
 #' @param time_scroll (character) Specify how long a consistent view of the 
@@ -15,16 +16,17 @@
 #' @seealso  [Search_uri()] [Search_template()] [scroll()] [count()] 
 #' [validate()] [fielddata()]
 
-Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, 
+Search <- function(conn, index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL, 
   default_operator=NULL, explain=NULL, source=NULL, fields=NULL, sort=NULL, 
   track_scores=NULL, timeout=NULL, terminate_after=NULL, from=NULL, size=NULL, 
   search_type=NULL, lowercase_expanded_terms=NULL, analyze_wildcard=NULL, 
   version=NULL, lenient=FALSE, body=list(), raw=FALSE, asdf=FALSE, 
   time_scroll=NULL, search_path="_search", stream_opts=list(), ...) {
 
-  tmp <- search_POST(search_path, cl(index), type,
+  is_conn(conn)
+  tmp <- search_POST(conn, search_path, cl(index), cl(type),
     args = ec(list(df = df, analyzer = analyzer, 
-      default_operator = default_operator, explain = explain, 
+      default_operator = default_operator, explain = as_log(explain), 
       `_source` = cl(source), fields = cl(fields), sort = cl(sort), 
       track_scores = track_scores, timeout = cn(timeout), 
       terminate_after = cn(terminate_after), from = cn(from), size = cn(size), 
@@ -37,7 +39,7 @@ Search <- function(index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL,
   return(tmp)
 }
 
-search_POST <- function(path, index=NULL, type=NULL, args, body, raw, 
+search_POST <- function(conn, path, index=NULL, type=NULL, args, body, raw, 
                         asdf, stream_opts, ...) {
   if (!inherits(raw, "logical")) {
     stop("'raw' parameter must be `TRUE` or `FALSE`", call. = FALSE)
@@ -46,23 +48,27 @@ search_POST <- function(path, index=NULL, type=NULL, args, body, raw,
     stop("'asdf' parameter must be `TRUE` or `FALSE`", call. = FALSE)
   }
   
-  conn <- es_get_auth()
-  url <- make_url(conn)
+  url <- conn$make_url()
   url <- construct_url(url, path, index, type)
   url <- prune_trailing_slash(url)
   body <- check_inputs(body)
   # in ES >= v5, lenient param droppped
-  if (es_ver() >= 500) args$lenient <- NULL
+  if (conn$es_ver() >= 500) args$lenient <- NULL
   # in ES >= v5, fields param changed to stored_fields
-  if (es_ver() >= 500) {
+  if (conn$es_ver() >= 500) {
     if ("fields" %in% names(args)) {
       stop('"fields" parameter is deprecated in ES >= v5. Use "_source" in body\nSee also "fields" parameter in ?Search', call. = FALSE)
     }
   }
-  tt <- POST(url, make_up(), es_env$headers, 
-             content_type_json(), ..., query = args, body = body)
-  geterror(tt)
-  res <- cont_utf8(tt)
+  cli <- crul::HttpClient$new(url = url,
+    headers = c(conn$headers, json_type()), 
+    opts = c(conn$opts, ...),
+    auth = crul::auth(conn$user, conn$pwd)
+  )
+  tt <- cli$post(query = args, body = body)
+  geterror(conn, tt)
+  if (conn$warn) catch_warnings(tt)
+  res <- tt$parse("UTF-8")
   
   if (raw) {
     res 

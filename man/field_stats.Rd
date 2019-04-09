@@ -4,10 +4,12 @@
 \alias{field_stats}
 \title{Search field statistics}
 \usage{
-field_stats(fields = NULL, index = NULL, level = "cluster",
+field_stats(conn, fields = NULL, index = NULL, level = "cluster",
   body = list(), raw = FALSE, asdf = FALSE, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{fields}{A list of fields to compute stats for. optional}
 
 \item{index}{Index name, one or more}
@@ -24,7 +26,7 @@ or on a cluster wide level. Valid values are 'indices' and 'cluster'
 to parse JSON directly to a data.frame. If \code{FALSE} (Default), list
 output is given.}
 
-\item{...}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}}
+\item{...}{Curl args passed on to \link[crul:HttpClient]{crul::HttpClient}}
 }
 \description{
 Search field statistics
@@ -45,26 +47,26 @@ Deprecated in Elasticsearch versions equal to/greater than 5.4.0
 }
 \examples{
 \dontrun{
-connect()
+x <- connect()
 
-if (gsub("\\\\.", "", ping()$version$number) < 500) {
-  field_stats(body = '{ "fields": ["speaker"] }', index = "shakespeare")
+if (gsub("\\\\.", "", x$ping()$version$number) < 500) {
+  field_stats(x, body = '{ "fields": ["speaker"] }', index = "shakespeare")
   ff <- c("scientificName", "continent", "decimalLatitude", "play_name", 
     "speech_number")
-  field_stats("play_name")
-  field_stats("play_name", level = "cluster")
-  field_stats(ff, level = "indices")
-  field_stats(ff)
-  field_stats(ff, index = c("gbif", "shakespeare"))
+  field_stats(x, "play_name")
+  field_stats(x, "play_name", level = "cluster")
+  field_stats(x, ff, level = "indices")
+  field_stats(x, ff)
+  field_stats(x, ff, index = c("gbif", "shakespeare"))
 
   # can also pass a body, just as with Search()
-  # field_stats(body = list(fields = "rating")) # doesn't work
-  field_stats(body = '{ "fields": ["scientificName"] }', index = "gbif")
+  # field_stats(x, body = list(fields = "rating")) # doesn't work
+  field_stats(x, body = '{ "fields": ["scientificName"] }', index = "gbif")
 
   body <- '{
     "fields" : ["scientificName", "decimalLatitude"]
   }'
-  field_stats(body = body, level = "indices", index = "gbif")
+  field_stats(x, body = body, level = "indices", index = "gbif")
 }
 }
 }

@@ -4,10 +4,12 @@
 \alias{docs_bulk_update}
 \title{Use the bulk API to update documents}
 \usage{
-docs_bulk_update(x, index = NULL, type = NULL, chunk_size = 1000,
-  doc_ids = NULL, raw = FALSE, ...)
+docs_bulk_update(conn, x, index = NULL, type = NULL,
+  chunk_size = 1000, doc_ids = NULL, raw = FALSE, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{x}{A list, data.frame, or character path to a file. required.}
 
 \item{index}{(character) The index name to use. Required for data.frame
@@ -31,7 +33,7 @@ character. Default: not passed}
 \item{raw}{(logical) Get raw JSON back or not. If \code{TRUE}
 you get JSON; if \code{FALSE} you get a list. Default: \code{FALSE}}
 
-\item{...}{Pass on curl options to \code{\link[httr:POST]{httr::POST()}}}
+\item{...}{Pass on curl options to \link[crul:HttpClient]{crul::HttpClient}}
 }
 \description{
 Use the bulk API to update documents
@@ -48,28 +50,33 @@ Only data.frame's are supported for now.
 }
 \examples{
 \dontrun{
-connect()
-if (index_exists("foobar")) index_delete("foobar")
+x <- connect()
+if (index_exists(x, "foobar")) index_delete(x, "foobar")
 
 df <- data.frame(name = letters[1:3], size = 1:3, id = 100:102)
-invisible(docs_bulk(df, 'foobar', 'foobar', es_ids = FALSE))
+invisible(docs_bulk(x, df, 'foobar', 'foobar', es_ids = FALSE))
 
 # add new rows in existing fields
 (df2 <- data.frame(size = c(45, 56), id = 100:101))
-Search("foobar", asdf = TRUE)$hits$hits
-invisible(docs_bulk_update(df2, index = 'foobar', type = 'foobar'))
-Search("foobar", asdf = TRUE)$hits$hits
+Search(x, "foobar", asdf = TRUE)$hits$hits
+invisible(docs_bulk_update(x, df2, index = 'foobar', type = 'foobar'))
+Search(x, "foobar", asdf = TRUE)$hits$hits
 
 # add new fields (and new rows by extension)
 (df3 <- data.frame(color = c("blue", "red", "green"), id = 100:102))
-Search("foobar", asdf = TRUE)$hits$hits
-invisible(docs_bulk_update(df3, index = 'foobar', type = 'foobar'))
-Search("foobar", asdf = TRUE)$hits$hits
+Search(x, "foobar", asdf = TRUE)$hits$hits
+invisible(docs_bulk_update(x, df3, index = 'foobar', type = 'foobar'))
+Sys.sleep(2) # wait for a few sec to make sure you see changes reflected
+Search(x, "foobar", asdf = TRUE)$hits$hits
 }
 }
 \references{
-\url{https://www.elastic.co/guide/en/elasticsearch/reference/6.2/docs-bulk.html#bulk-update}
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html#bulk-update}
 }
 \seealso{
-\code{\link[=docs_bulk]{docs_bulk()}} \code{\link[=docs_bulk_prep]{docs_bulk_prep()}}
+Other bulk-functions: \code{\link{docs_bulk_create}},
+  \code{\link{docs_bulk_delete}},
+  \code{\link{docs_bulk_index}},
+  \code{\link{docs_bulk_prep}}, \code{\link{docs_bulk}}
 }
+\concept{bulk-functions}

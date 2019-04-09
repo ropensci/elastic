@@ -71,11 +71,10 @@
 #'
 #' @importFrom utils read.table read.delim txtProgressBar 
 #' setTxtProgressBar URLdecode modifyList
-#' @importFrom methods is
-#' @importFrom httr HEAD GET POST PUT DELETE content authenticate 
-#' stop_for_status upload_file http_status add_headers content_type_json
+#' @importFrom crul upload HttpClient
 #' @importFrom curl curl_escape
 #' @importFrom jsonlite fromJSON toJSON
+#' @importFrom R6 R6Class
 #' @docType package
 #' @aliases elastic-package
 #' @author Scott Chamberlain \email{myrmecocystus@@gmail.com}

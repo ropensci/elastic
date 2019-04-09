@@ -1,19 +1,19 @@
 library('testthat')
 library('elastic')
 
-invisible(elastic::connect())
+x <- elastic::connect()
 
-if (elastic:::es_ver() < 600) {
+if (x$es_ver() < 600) {
   shakespeare <- system.file("examples", "shakespeare_data.json", package = "elastic")
 } else {
   shakespeare <- system.file("examples", "shakespeare_data_.json", package = "elastic")
 }
-invisible(elastic::docs_bulk(shakespeare))
+invisible(elastic::docs_bulk(x, shakespeare))
 
 plos <- system.file("examples", "plos_data.json", package = "elastic")
-invisible(elastic::docs_bulk(plos))
+invisible(elastic::docs_bulk(x, plos))
 
 omdb <- system.file("examples", "omdb.json", package = "elastic")
-invisible(elastic::docs_bulk(omdb))
+invisible(elastic::docs_bulk(x, omdb))
 
 test_check('elastic')

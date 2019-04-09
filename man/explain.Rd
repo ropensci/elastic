@@ -4,7 +4,7 @@
 \alias{explain}
 \title{Explain a search query.}
 \usage{
-explain(index = NULL, type = NULL, id = NULL, source2 = NULL,
+explain(conn, index = NULL, type = NULL, id = NULL, source2 = NULL,
   fields = NULL, routing = NULL, parent = NULL, preference = NULL,
   source = NULL, q = NULL, df = NULL, analyzer = NULL,
   analyze_wildcard = NULL, lowercase_expanded_terms = NULL,
@@ -12,6 +12,8 @@ explain(index = NULL, type = NULL, id = NULL, source2 = NULL,
   source_include = NULL, body = NULL, raw = FALSE, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{index}{Only one index}
 
 \item{type}{Only one document type}
@@ -61,21 +63,23 @@ request.}
 
 \item{raw}{If \code{TRUE} (default), data is parsed to list. If \code{FALSE}, then raw JSON.}
 
-\item{...}{Curl args passed on to \code{\link[httr:GET]{httr::GET()}}}
+\item{...}{Curl args passed on to \link[crul:HttpClient]{crul::HttpClient}}
 }
 \description{
 Explain a search query.
 }
 \examples{
 \dontrun{
-explain(index = "plos", type = "article", id = 14, q = "title:Germ")
+(x <- connect())
+
+explain(x, index = "plos", type = "article", id = 14, q = "title:Germ")
 
 body <- '{
  "query": {
    "term": { "title": "Germ" }
  }
 }'
-explain(index = "plos", type = "article", id = 14, body=body)
+explain(x, index = "plos", type = "article", id = 14, body=body)
 }
 }
 \references{

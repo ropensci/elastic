@@ -1,6 +1,7 @@
 #' Use the bulk API to create, index, update, or delete documents.
 #'
 #' @export
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param x A list, data.frame, or character path to a file. required.
 #' @param index (character) The index name to use. Required for data.frame
 #' input, but optional for file inputs.
@@ -22,12 +23,7 @@
 #' @param raw (logical) Get raw JSON back or not. If `TRUE` 
 #' you get JSON; if `FALSE` you get a list. Default: `FALSE`
 #' @param quiet (logical) Suppress progress bar. Default: `FALSE`
-#' @param ... Pass on curl options to [httr::POST()]
-#'
-#' @seealso [docs_bulk_prep()] for prepping a newline delimited 
-#' JSON file that you can load into Elasticsearch yourself. See 
-#' [docs_bulk_update()] for updating documents from an R data.frame
-#' or list.
+#' @param ... Pass on curl options to [crul::HttpClient]
 #'
 #' @details More on the Bulk API:
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html>
@@ -95,33 +91,40 @@
 #' you need those files again. Your own tempfile's will be cleaned up/delete 
 #' when the R session ends. Non-tempfile's won't be cleaned up/deleted after
 #' the R session ends. 
+#' 
+#' @section Elasticsearch versions that don't support type:
+#' See the [type_remover()] function.
 #'
 #' @return A list
-#'
+#' @family bulk-functions
+#' 
 #' @examples \dontrun{
+#' # connection setup
+#' (x <- connect())
+#' 
 #' # From a file already in newline delimited JSON format
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-#' docs_bulk(plosdat)
-#' aliases_get()
-#' index_delete(index='plos')
-#' aliases_get()
+#' docs_bulk(x, plosdat)
+#' aliases_get(x)
+#' index_delete(x, index='plos')
+#' aliases_get(x)
 #'
 #' # From a data.frame
-#' docs_bulk(mtcars, index = "hello", type = "world")
+#' docs_bulk(x, mtcars, index = "hello", type = "world")
 #' ## field names cannot contain dots
 #' names(iris) <- gsub("\\.", "_", names(iris))
-#' docs_bulk(iris, "iris", "flowers")
+#' docs_bulk(x, iris, "iris", "flowers")
 #' ## type can be missing, but index can not
-#' docs_bulk(iris, "flowers")
+#' docs_bulk(x, iris, "flowers")
 #' ## big data.frame, 53K rows, load ggplot2 package first
-#' # res <- docs_bulk(diamonds, "diam")
-#' # Search("diam")$hits$total
+#' # res <- docs_bulk(x, diamonds, "diam")
+#' # Search(x, "diam")$hits$total
 #'
 #' # From a list
-#' docs_bulk(apply(iris, 1, as.list), index="iris", type="flowers")
-#' docs_bulk(apply(USArrests, 1, as.list), index="arrests")
+#' docs_bulk(x, apply(iris, 1, as.list), index="iris", type="flowers")
+#' docs_bulk(x, apply(USArrests, 1, as.list), index="arrests")
 #' # dim_list <- apply(diamonds, 1, as.list)
-#' # out <- docs_bulk(dim_list, index="diamfromlist")
+#' # out <- docs_bulk(x, dim_list, index="diamfromlist")
 #'
 #' # When using in a loop
 #' ## We internally get last _id counter to know where to start on next bulk
@@ -132,15 +135,15 @@
 #'            system.file("examples", "test3.csv", package = "elastic"))
 #' for (i in seq_along(files)) {
 #'   d <- read.csv(files[[i]])
-#'   docs_bulk(d, index = "testes", type = "docs")
+#'   docs_bulk(x, d, index = "testes", type = "docs")
 #'   Sys.sleep(1)
 #' }
-#' count("testes", "docs")
-#' index_delete("testes")
+#' count(x, "testes", "docs")
+#' index_delete(x, "testes")
 #'
 #' # You can include your own document id numbers
 #' ## Either pass in as an argument
-#' index_create("testes")
+#' index_create(x, "testes")
 #' files <- c(system.file("examples", "test1.csv", package = "elastic"),
 #'            system.file("examples", "test2.csv", package = "elastic"),
 #'            system.file("examples", "test3.csv", package = "elastic"))
@@ -150,78 +153,94 @@
 #'            (tt[1] + tt[2] + 1):sum(tt))
 #' for (i in seq_along(files)) {
 #'   d <- read.csv(files[[i]])
-#'   docs_bulk(d, index = "testes", type = "docs", doc_ids = ids[[i]],
+#'   docs_bulk(x, d, index = "testes", type = "docs", doc_ids = ids[[i]],
 #'     es_ids = FALSE)
 #' }
-#' count("testes", "docs")
-#' index_delete("testes")
+#' count(x, "testes", "docs")
+#' index_delete(x, "testes")
 #'
 #' ## or include in the input data
 #' ### from data.frame's
-#' index_create("testes")
+#' index_create(x, "testes")
 #' files <- c(system.file("examples", "test1_id.csv", package = "elastic"),
 #'            system.file("examples", "test2_id.csv", package = "elastic"),
 #'            system.file("examples", "test3_id.csv", package = "elastic"))
 #' readLines(files[[1]])
 #' for (i in seq_along(files)) {
 #'   d <- read.csv(files[[i]])
-#'   docs_bulk(d, index = "testes", type = "docs")
+#'   docs_bulk(x, d, index = "testes", type = "docs")
 #' }
-#' count("testes", "docs")
-#' index_delete("testes")
+#' count(x, "testes", "docs")
+#' index_delete(x, "testes")
 #'
 #' ### from lists via file inputs
-#' index_create("testes")
+#' index_create(x, "testes")
 #' for (i in seq_along(files)) {
 #'   d <- read.csv(files[[i]])
 #'   d <- apply(d, 1, as.list)
-#'   docs_bulk(d, index = "testes", type = "docs")
+#'   docs_bulk(x, d, index = "testes", type = "docs")
 #' }
-#' count("testes", "docs")
-#' index_delete("testes")
+#' count(x, "testes", "docs")
+#' index_delete(x, "testes")
 #'
 #' # data.frame's with a single column
 #' ## this didn't use to work, but now should work
 #' db <- paste0(sample(letters, 10), collapse = "")
-#' index_create(db)
+#' index_create(x, db)
 #' res <- data.frame(foo = 1:10)
-#' out <- docs_bulk(x = res, index = db)
-#' count(db)
-#' index_delete(db)
+#' out <- docs_bulk(x, res, index = db)
+#' count(x, db)
+#' index_delete(x, db)
 #' 
+#' 
+#' # data.frame with a mix of actions
+#' ## make sure you use a column named 'es_action' or this won't work
+#' ## if you need to delete or update you need document IDs
+#' if (index_exists("baz")) index_delete("baz")
+#' df <- data.frame(a = 1:5, b = 6:10, c = letters[1:5], stringsAsFactors = FALSE) 
+#' invisible(docs_bulk(df, "baz"))
+#' (res <- Search('baz', asdf=TRUE)$hits$hits)
+#' df[1, "a"] <- 99
+#' df[1, "c"] <- "aa"
+#' df[3, "c"] <- 33
+#' df[3, "c"] <- "cc"
+#' df$es_action <- c('update', 'delete', 'update', 'delete', 'delete')
+#' df$id <- res$`_id`
+#' df
+#' invisible(docs_bulk(df, "baz", es_ids = FALSE))
+#' ### or es_ids = FALSE and pass in document ids to doc_ids
+#' # invisible(docs_bulk(df, "baz", es_ids = FALSE, doc_ids = df$id))
+#' Search('baz', asdf=TRUE)$hits$hits
 #' 
 #' 
 #' # Curl options
-#' library("httr")
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-#' docs_bulk(plosdat, config=verbose())
+#' docs_bulk(x, plosdat, verbose = TRUE)
 #' 
 #' 
 #' # suppress progress bar
-#' x <- docs_bulk(mtcars, index = "hello", type = "world", quiet = TRUE)
+#' invisible(docs_bulk(x, mtcars, index = "hello", type = "world", quiet = TRUE))
 #' ## vs. 
-#' x <- docs_bulk(mtcars, index = "hello", type = "world", quiet = FALSE)
+#' invisible(docs_bulk(x, mtcars, index = "hello", type = "world", quiet = FALSE))
 #' }
-docs_bulk <- function(x, index = NULL, type = NULL, chunk_size = 1000,
-                      doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
-                      quiet = FALSE, ...) {
+docs_bulk <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
+  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, ...) {
 
-  UseMethod("docs_bulk")
+  UseMethod("docs_bulk", x)
 }
 
 #' @export
-docs_bulk.default <- function(x, index = NULL, type = NULL, chunk_size = 1000,
-                      doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
-                      quiet = FALSE, ...) {
+docs_bulk.default <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
+  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, ...) {
 
   stop("no 'docs_bulk' method for class ", class(x), call. = FALSE)
 }
 
 #' @export
-docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000,
-                                 doc_ids = NULL, 
-                                 es_ids = TRUE, raw = FALSE, quiet = FALSE, ...) {
+docs_bulk.data.frame <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
+  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, ...) {
 
+  is_conn(conn)
   assert(quiet, "logical")
   if (is.null(index)) {
     stop("index can't be NULL when passing a data.frame",
@@ -250,17 +269,18 @@ docs_bulk.data.frame <- function(x, index = NULL, type = NULL, chunk_size = 1000
   resl <- vector(mode = "list", length = length(data_chks))
   for (i in seq_along(data_chks)) {
     if (!quiet) setTxtProgressBar(pb, i)
-    resl[[i]] <- docs_bulk(make_bulk(x[data_chks[[i]], , drop = FALSE], 
+    resl[[i]] <- docs_bulk(conn, make_bulk(x[data_chks[[i]], , drop = FALSE], 
                                      index, type, id_chks[[i]], es_ids), ...)
   }
   return(resl)
 }
 
 #' @export
-docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
+docs_bulk.list <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
                            doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
                            quiet = FALSE, ...) {
 
+  is_conn(conn)
   assert(quiet, "logical")
   if (is.null(index)) {
     stop("index can't be NULL when passing a list",
@@ -291,26 +311,30 @@ docs_bulk.list <- function(x, index = NULL, type = NULL, chunk_size = 1000,
   resl <- vector(mode = "list", length = length(data_chks))
   for (i in seq_along(data_chks)) {
     if (!quiet) setTxtProgressBar(pb, i)
-    resl[[i]] <- docs_bulk(make_bulk(x[data_chks[[i]]], index, 
+    resl[[i]] <- docs_bulk(conn, make_bulk(x[data_chks[[i]]], index, 
                                      type, id_chks[[i]], es_ids), ...)
   }
   return(resl)
 }
 
 #' @export
-docs_bulk.character <- function(x, index = NULL, type = NULL, chunk_size = 1000,
+docs_bulk.character <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
                                 doc_ids = NULL, es_ids = TRUE, raw=FALSE, 
                                 quiet = FALSE, ...) {
 
+  is_conn(conn)
   stopifnot(file.exists(x))
   on.exit(close_conns())
   on.exit(cleanup_file(x), add = TRUE)
-  url <- paste0(make_url(es_get_auth()), '/_bulk')
-  tt <- POST(url, make_up(), es_env$headers, ..., 
-             body = upload_file(x, type = "application/x-ndjson"), 
-             encode = "json")
-  geterror(tt)
-  res <- cont_utf8(tt)
+  url <- file.path(conn$make_url(), '_bulk')
+  cli <- crul::HttpClient$new(url = url,
+    headers = conn$headers, 
+    opts = c(conn$opts, ...),
+    auth = crul::auth(conn$user, conn$pwd)
+  )
+  tt <- cli$post(body = crul::upload(x, type = "application/x-ndjson"), encode = "json")
+  geterror(conn, tt)
+  res <- tt$parse("UTF-8")
   res <- structure(res, class = "bulk_make")
   if (raw) res else es_parse(res)
 }

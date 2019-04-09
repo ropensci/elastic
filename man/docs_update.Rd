@@ -4,7 +4,7 @@
 \alias{docs_update}
 \title{Update a document}
 \usage{
-docs_update(index, type, id, body, fields = NULL, source = NULL,
+docs_update(conn, index, type, id, body, fields = NULL, source = NULL,
   version = NULL, version_type = NULL, routing = NULL,
   parent = NULL, timestamp = NULL, ttl = NULL, refresh = NULL,
   timeout = NULL, retry_on_conflict = NULL,
@@ -12,6 +12,8 @@ docs_update(index, type, id, body, fields = NULL, source = NULL,
   callopts = list(), ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{index}{(character) The name of the index. Required}
 
 \item{type}{(character) The type of the document. Required}
@@ -63,7 +65,7 @@ See \url{http://bit.ly/2fbqkZ1} for details.}
 to check if there are changes and, if there aren't, turn the update request
 into a noop.}
 
-\item{callopts}{Curl options passed on to \code{\link[httr:POST]{httr::POST()}}}
+\item{callopts}{Curl options passed on to \link[crul:HttpClient]{crul::HttpClient}}
 
 \item{...}{Further args to query DSL}
 }
@@ -72,28 +74,28 @@ Update a document
 }
 \examples{
 \dontrun{
-connect()
-if (!index_exists('plos')) {
+(x <- connect())
+if (!index_exists(x, 'plos')) {
   plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-  invisible(docs_bulk(plosdat))
+  invisible(docs_bulk(x, plosdat))
 }
 
-docs_create(index='plos', type='article', id=1002, 
+docs_create(x, index='plos', type='article', id=1002, 
   body=list(id="12345", title="New title"))
 # and the document is there now
-docs_get(index='plos', type='article', id=1002) 
+docs_get(x, index='plos', type='article', id=1002) 
 # update the document
-docs_update(index='plos', type='article', id=1002, 
+docs_update(x, index='plos', type='article', id=1002, 
   body = list(doc = list(title = "Even newer title again")))
 # get it again, notice changes
-docs_get(index='plos', type='article', id=1002) 
+docs_get(x, index='plos', type='article', id=1002) 
 
-if (!index_exists('stuffthings')) {
-  index_create("stuffthings")
+if (!index_exists(x, 'stuffthings')) {
+  index_create(x, "stuffthings")
 }
-docs_create(index='stuffthings', type='thing', id=1, 
+docs_create(x, index='stuffthings', type='thing', id=1, 
   body=list(name = "foo", what = "bar"))
-docs_update(index='stuffthings', type='thing', id=1, 
+docs_update(x, index='stuffthings', type='thing', id=1, 
   body = list(doc = list(name = "hello", what = "bar")), 
   source = 'name')
 }

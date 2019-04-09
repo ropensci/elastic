@@ -3,33 +3,38 @@
 #' @description Performs multiple searches, defined in a file
 #'
 #' @export
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param x (character) A file path
 #' @param raw (logical) Get raw JSON back or not.
 #' @param asdf (logical) If `TRUE`, use [jsonlite::fromJSON()]
 #' to parse JSON directly to a data.frame. If `FALSE` (Default), list 
 #' output is given.
-#' @param ... Curl args passed on to [httr::POST()]
+#' @param ... Curl args passed on to [crul::verb-POST]
 #'
 #' @details This function behaves similarly to [docs_bulk()] - 
 #' performs searches based on queries defined in a file.
 #' @seealso [Search_uri()] [Search()]
 #' @examples \dontrun{
-#' connect()
+#' x <- connect()
+#' 
 #' msearch1 <- system.file("examples", "msearch_eg1.json", package = "elastic")
 #' readLines(msearch1)
-#' msearch(msearch1)
+#' msearch(x, msearch1)
 #'
-#' cat('{"index" : "shakespeare"}', file = "~/mysearch.json", sep = "\n")
+#' tf <- tempfile(fileext = ".json")
+#' cat('{"index" : "shakespeare"}', file = tf, sep = "\n")
 #' cat('{"query" : {"match_all" : {}}, "from" : 0, "size" : 5}',  sep = "\n",
-#'    file = "~/mysearch.json", append = TRUE)
-#' msearch("~/mysearch.json")
+#'    file = tf, append = TRUE)
+#' readLines(tf)
+#' msearch(x, tf)
 #' }
-msearch <- function(x, raw = FALSE, asdf = FALSE, ...) {
+msearch <- function(conn, x, raw = FALSE, asdf = FALSE, ...) {
+  is_conn(conn)
   if (!file.exists(x)) stop("file ", x, " does not exist", call. = FALSE)
-  url <- paste0(make_url(es_get_auth()), '/_msearch')
-  tt <- POST(url, make_up(), es_env$headers, ..., 
-             body = upload_file(x, type = "application/json"), encode = "json")
-  geterror(tt)
-  res <- cont_utf8(tt)
+  url <- file.path(conn$make_url(), '_msearch')
+  cli <- conn$make_conn(url)
+  tt <- cli$post(body = crul::upload(x, "application/json"), encode = "json")
+  geterror(conn, tt)
+  res <- tt$parse("UTF-8")
   if (raw) res else jsonlite::fromJSON(res, asdf)
 }

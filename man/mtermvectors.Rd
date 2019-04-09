@@ -4,13 +4,16 @@
 \alias{mtermvectors}
 \title{Multi Termvectors}
 \usage{
-mtermvectors(index = NULL, type = NULL, ids = NULL, body = list(),
-  pretty = TRUE, field_statistics = TRUE, fields = NULL,
-  offsets = TRUE, parent = NULL, payloads = TRUE, positions = TRUE,
-  preference = "random", realtime = TRUE, routing = NULL,
-  term_statistics = FALSE, version = NULL, version_type = NULL, ...)
+mtermvectors(conn, index = NULL, type = NULL, ids = NULL,
+  body = list(), pretty = TRUE, field_statistics = TRUE,
+  fields = NULL, offsets = TRUE, parent = NULL, payloads = TRUE,
+  positions = TRUE, preference = "random", realtime = TRUE,
+  routing = NULL, term_statistics = FALSE, version = NULL,
+  version_type = NULL, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{index}{(character) The index in which the document resides.}
 
 \item{type}{(character) The type of the document.}
@@ -55,7 +58,7 @@ document frequency should be returned. Default: \code{FALSE}}
 \item{version_type}{(character) Specific version type, valid choices are:
 'internal', 'external', 'external_gte', 'force'}
 
-\item{...}{Curl args passed on to \code{\link[httr:POST]{httr::POST()}}}
+\item{...}{Curl args passed on to \link[crul:verb-POST]{crul::verb-POST}}
 }
 \description{
 Multi Termvectors
@@ -66,10 +69,11 @@ index, type and id.
 }
 \examples{
 \dontrun{
-connect()
-if (!index_exists('omdb')) {
+x <- connect()
+
+if (!index_exists(x, 'omdb')) {
   omdb <- system.file("examples", "omdb.json", package = "elastic")
-  docs_bulk(omdb)
+  docs_bulk(x, omdb)
 }
 
 # no index or type given
@@ -91,7 +95,7 @@ body <- '{
       }
    ]
 }'
-mtermvectors(body = body)
+mtermvectors(x, body = body)
 
 # index given, but not type
 body <- '{
@@ -113,7 +117,7 @@ body <- '{
       }
    ]
 }'
-mtermvectors('omdb', body = body)
+mtermvectors(x, 'omdb', body = body)
 
 # index and type given
 body <- '{
@@ -130,7 +134,7 @@ body <- '{
       }
    ]
 }'
-mtermvectors('omdb', 'omdb', body = body)
+mtermvectors(x, 'omdb', 'omdb', body = body)
 
 # index and type given, parameters same, so can simplify
 body <- '{
@@ -142,7 +146,7 @@ body <- '{
         "term_statistics": true
     }
 }'
-mtermvectors('omdb', 'omdb', body = body)
+mtermvectors(x, 'omdb', 'omdb', body = body)
 
 # you can give user provided documents via the 'docs' parameter
 ## though you have to give index and type that exist in your Elasticsearch 
@@ -167,9 +171,12 @@ body <- '{
       }
    ]
 }'
-mtermvectors(body = body)
+mtermvectors(x, body = body)
 }
 }
 \references{
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-multi-termvectors.html}
+}
+\seealso{
+\code{\link[=termvectors]{termvectors()}}
 }

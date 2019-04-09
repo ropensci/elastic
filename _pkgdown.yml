@@ -1,0 +1,83 @@
+reference:
+  - title: "elastic"
+    desc: >
+      High level overview of package
+    contents:
+      - elastic
+      - elastic-defunct
+  - title: "Connect"
+    contents:
+      - connect
+      - ping
+  - title: "Cat"
+    contents:
+      - starts_with("cat_")
+  - title: "Search"
+    desc: >
+      Various search APIs
+    contents:
+      - starts_with("Search")
+      - starts_with("search")
+      - msearch
+      - count
+      - explain
+      - validate
+      - field_stats
+      - field_caps
+      - fielddata
+      - percolate
+      - scroll
+      - preference
+  - title: "Documents"
+    desc: >
+      Work with document APIs
+    contents:
+      - starts_with("docs_")
+      - matches("documents")
+      - termvectors
+      - mtermvectors
+  - title: "Indices"
+    desc: >
+      Index APIs
+    contents:
+      - starts_with("index_")
+      - starts_with("alias_")
+      - starts_with("mapping_")
+      - field_mapping_get
+      - type_exists
+      - reindex
+  - title: "Analysis"
+    desc: >
+      Analysis APIs
+    contents:
+      - starts_with("tokenizer_")
+  - title: "Ingest"
+    desc: >
+      Ingest APIs
+    contents:
+      - ingest
+      - starts_with("pipeline_")
+  - title: "Cluster"
+    desc: >
+      Cluster/Nodes APIs
+    contents:
+      - nodes
+      - cluster
+      - tasks
+      - starts_with("nodes_")
+      - starts_with("cluster_")
+      - starts_with("tasks")
+  - title: "Utilities"
+    desc: >
+      Various utility functions
+    contents:
+      - units-distance
+      - units-time
+      - type_remover
+articles:
+  - title: elastic introduction
+    contents:
+    - elastic
+  - title: elastic searching
+    contents:
+    - search

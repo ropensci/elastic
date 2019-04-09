@@ -1,0 +1,12 @@
+{"index":{"_index":"foo","_type":"foo","_id":0}}
+{"item": 1, "message":"things"}
+{"index":{"_index":"foo","_type":"foo","_id":1}}
+{"item": 2, "message":"stuff"}
+{"index":{"_index":"foo","_type":"foo","_id":2}}
+{"item": 3, "message":"apples"}
+{"index":{"_index":"foo","_type":"foo","_id":3}}
+{"item": 4, "message":"pears"}
+{"index":{"_index":"foo","_type":"foo","_id":4}}
+{"item": 5, "message":"things"}
+{"index":{"_index":"foo","_type":"foo","_id":5}}
+{"item": 6, "message":"pears"}

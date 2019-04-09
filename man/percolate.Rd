@@ -9,24 +9,26 @@
 \alias{percolate_delete}
 \title{Percolater}
 \usage{
-percolate_register(index, type = NULL, id, body = list(),
+percolate_register(conn, index, type, id, body = list(),
   routing = NULL, preference = NULL, ignore_unavailable = NULL,
   percolate_format = NULL, refresh = NULL, ...)
 
-percolate_match(index, type = NULL, body, routing = NULL,
+percolate_match(conn, index, type = NULL, body, routing = NULL,
   preference = NULL, ignore_unavailable = NULL,
   percolate_format = NULL, ...)
 
-percolate_list(index, ...)
+percolate_list(conn, index, ...)
 
-percolate_count(index, type, body, ...)
+percolate_count(conn, index, type, body, ...)
 
-percolate_delete(index, id)
+percolate_delete(conn, index, id, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{index}{Index name. Required}
 
-\item{type}{Document type}
+\item{type}{Document type. Required}
 
 \item{id}{A precolator id. Required}
 
@@ -108,10 +110,13 @@ version, then use the appropriate APIs
 
 \examples{
 \dontrun{
+x <- connect(errors = "complete")
+
 ##### Elasticsearch < v5
+if (x$es_ver() < 500) {
 # typical usage
 ## create an index first
-if (index_exists("myindex")) index_delete("myindex")
+if (index_exists(x, "myindex")) index_delete(x, "myindex")
 mapping <- '{
   "mappings": {
     "mytype": {
@@ -119,14 +124,14 @@ mapping <- '{
         "message": {
            "type": "text"
         },
-        "name": {
-           "type": "text"
+        "query": {
+           "type": "percolator"
         }
       }
     }
   }
 }'
-index_create("myindex", body = mapping)
+index_create(x, "myindex", body = mapping)
 
 ## register a percolator
 perc_body = '{
@@ -136,55 +141,57 @@ perc_body = '{
     }
  }
 }'
-percolate_register(index = "myindex", id = 1, body = perc_body)
+percolate_register(x, index = "myindex", type = "mytype", 
+  id = 1, body = perc_body)
 
 ## register another
 perc_body2 <- '{
   "query" : {
     "match" : {
-      "name" : "jane doe"
+      "message" : "jane doe"
     }
   }
 }'
-percolate_register(index = "myindex", id = 2, body = perc_body2)
+percolate_register(x, index = "myindex", type = "mytype", 
+  id = 2, body = perc_body2)
 
 ## match a document to a percolator
 doc <- '{
-  "doc" : {
-    "message" : "A new bonsai tree in the office"
-  }
+ "query": {
+   "percolate": {
+     "field": "query",
+     "document": {
+       "message" : "A new bonsai tree in the office"
+     }
+   }
+ }
 }'
-percolate_match(index = "myindex", type = "mytype", body = doc, config = verbose())
+percolate_match(x, index = "myindex", type = "mytype", body = doc)
 
 ## List percolators - for an index, no type, can't do across indices
-percolate_list(index = "myindex")$hits$hits
+percolate_list(x, index = "myindex")$hits$hits
 
 ## Percolate counter
-percolate_count(index = "myindex", type = "mytype", body = doc)$total
+percolate_count(x, index = "myindex", type = "mytype", body = doc)$total
 
 ## delete a percolator
-percolate_delete(index = "myindex", id = 2)
-
-# multi percolate
-## not working yet
-
+percolate_delete(x, index = "myindex", id = 2)
+} # end ES < 5
 
 
 ##### Elasticsearch >= v5
-if (index_exists("myindex")) index_delete("myindex")
+if (x$es_ver() >= 500) {
+if (index_exists(x, "myindex")) index_delete(x, "myindex")
+
 body <- '{
   "mappings": {
-    "doctype": {
+    "mytype": {
       "properties": {
         "message": {
-          "type": "text"
-        }
-      }
-    },
-    "queries": {
-      "properties": {
+           "type": "text"
+        },
         "query": {
-          "type": "percolator"
+           "type": "percolator"
         }
       }
     }
@@ -192,17 +199,17 @@ body <- '{
 }'
 
 # create the index with mapping
-index_create("myindex", body = body)
+index_create(x, "myindex", body = body)
 
 ## register a percolator
-x <- '{
+z <- '{
   "query" : {
      "match" : {
        "message" : "bonsai tree"
      }
   }
 }'
-percolate_register(index = "myindex", type = "queries", id = 1, body = x)
+percolate_register(x, index = "myindex", type = "mytype", id = 1, body = z)
 
 ## register another
 x2 <- '{
@@ -212,21 +219,23 @@ x2 <- '{
     }
   }
 }'
-percolate_register(index = "myindex", type = "queries", id = 2, body = x2)
+percolate_register(x, index = "myindex", type = "mytype", id = 2, body = x2)
 
 ## match a document to a percolator
 query <- '{
   "query" : {
     "percolate" : {
       "field": "query",
-      "document_type": "doctype",
       "document": {
         "message": "A new bonsai tree in the office"
       }
     }
   }
 }'
-percolate_match(index = "myindex", body = query)
+percolate_match(x, index = "myindex", body = query)
+} # end ES >= 5
+
+
 }
 }
 \references{

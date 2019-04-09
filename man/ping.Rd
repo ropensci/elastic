@@ -4,17 +4,22 @@
 \alias{ping}
 \title{Ping an Elasticsearch server.}
 \usage{
-ping(...)
+ping(conn, ...)
 }
 \arguments{
-\item{...}{Curl args passed on to \code{\link[httr:GET]{httr::GET()}}}
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
+\item{...}{Curl args passed on to \link[crul:verb-GET]{crul::verb-GET}}
 }
 \description{
 Ping an Elasticsearch server.
 }
 \examples{
 \dontrun{
-ping()
+x <- connect()
+ping(x)
+# ideally call ping on the connetion object itself
+x$ping()
 }
 }
 \seealso{

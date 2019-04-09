@@ -47,3 +47,11 @@ index_status <- function(...) {
 mapping_delete <- function(...){
   .Defunct(msg = "This function is defunct. Instead of deleting a mapping\ndelete the index and recreate with a new mapping")
 }
+
+#' This function is defunct
+#' @export
+#' @rdname info-defunct
+#' @keywords internal
+info <- function(...){
+  .Defunct(msg = "See `?connect` for the `info()` method")
+}

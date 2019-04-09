@@ -1,7 +1,5 @@
 ec <- function(l) Filter(Negate(is.null), l)
 
-cont_utf8 <- function(x) content(x, as = "text", encoding = "UTF-8")
-
 as_log <- function(x){
   if (is.null(x)) {
     x
@@ -16,42 +14,6 @@ cl <- function(x) if (is.null(x)) NULL else paste0(x, collapse = ",")
 
 cw <- function(x) if (is.null(x)) x else paste(x, collapse = ",")
 
-scroll_POST <- function(path, args = list(), body, raw, asdf, stream_opts, ...) {
-  url <- make_url(es_get_auth())
-  tt <- POST(file.path(url, path), make_up(), 
-             es_env$headers, content_type_json(), ..., encode = "json",
-             query = args, body = body)
-  geterror(tt)
-  res <- cont_utf8(tt)
-  if (raw) {
-    res 
-  } else {
-    if (length(stream_opts) != 0) {
-      dat <- jsonlite::fromJSON(res, flatten = TRUE)
-      stream_opts$x <- dat$hits$hits
-      if (length(stream_opts$x) != 0) {
-        stream_opts$con <- file(stream_opts$file, open = "ab")
-        stream_opts$file <- NULL
-        do.call(jsonlite::stream_out, stream_opts)
-        close(stream_opts$con)
-      } else {
-        warning("no scroll results remain", call. = FALSE)
-      }
-      return(list(`_scroll_id` = dat$`_scroll_id`))
-    } else {
-      jsonlite::fromJSON(res, asdf, flatten = TRUE)
-    }
-  }
-}
-
-scroll_DELETE <- function(path, body, ...) {
-  url <- make_url(es_get_auth())
-  tt <- DELETE(file.path(url, path), make_up(), es_env$headers, ..., 
-               body = body, encode = "json")
-  geterror(tt)
-  tt$status_code == 200
-}
-
 esc <- function(x) {
   if (is.null(x)) {
     NULL
@@ -65,15 +27,6 @@ pluck <- function(x, name, type) {
     lapply(x, "[[", name)
   } else {
     vapply(x, "[[", name, FUN.VALUE = type)
-  }
-}
-
-make_up <- function() {
-  up <- es_get_user_pwd()
-  if (nchar(up$user) != 0 && nchar(up$pwd) != 0) {
-    authenticate(up$user, up$pwd)
-  } else {
-    list()
   }
 }
 
@@ -122,46 +75,63 @@ construct_url <- function(url, path, index, type = NULL, id = NULL) {
 
 extractr <- function(x, y) regmatches(x, gregexpr(y, x))
 
-elastic_env <- new.env()
-
-es_ver <- function() {
-  pinged <- elastic_env$ping_result
-  if (is.null(pinged)) {
-    elastic_env$ping_result <- pinged <- ping()
-  }
-  ver <- pinged$version$number
-  
-  # get only 1st 3 digits, so major:minor:patch
-  as.numeric(
-    paste(
-      stats::na.omit(
-        extractr(ver, "[[:digit:]]+")[[1]][1:3]
-      ), 
-      collapse = ""
-    )
-  )
-}
-
-stop_es_version <- function(ver_check, fxn) {
-  if (es_ver() < ver_check) {
-    stop(fxn, " is not available for this Elasticsearch version", 
-         call. = FALSE)
-  }
-}
-
 assert <- function(x, y) {
   if (!is.null(x)) {
-    if (!class(x) %in% y) {
+    if (!inherits(x, y)) {
       stop(deparse(substitute(x)), " must be of class ",
            paste0(y, collapse = ", "), call. = FALSE)
     }
   }
 }
 
-
 write_utf8 = function(text, con, ...) {
   # prevent re-encoding the text in the file() connection in writeLines()
   # https://kevinushey.github.io/blog/2018/02/21/string-encoding-and-r/
   opts = options(encoding = 'native.enc'); on.exit(options(opts), add = TRUE)
   writeLines(enc2utf8(text), con, ..., useBytes = TRUE)
+}
+
+json_type <- function() list(`Content-Type` = "application/json")
+
+is_conn <- function(x) {
+  if (!inherits(x, "Elasticsearch")) {
+    stop("'conn' must be an elastic connection object; see ?connect", 
+      call. = FALSE)
+  }
+}
+
+ph <- function(x) {
+  if (is.null(x)) {
+    'NULL'
+  } else {
+    str <- paste0(names(x$headers), collapse = ", ")
+    if (nchar(str) > 30) paste0(substring(str, 1, 30), " ...") else str
+  }
+}
+
+es_get_user_pwd <- function() {
+  user <- Sys.getenv("ES_USER")
+  pwd <- Sys.getenv("ES_PWD")
+  list(user = user, pwd = pwd)
+}
+
+type_deprecated <- function(conn, type = NULL) { 
+  z <- "Types in search queries are deprecated, filter on a field instead"
+  if (conn$es_ver() >= 700) {
+    if (!is.null(type)) warning(z)
+  }  
+}
+
+catch_warnings <- function(z) {
+  assert(z, "HttpResponse")
+  hds <- z$response_headers
+  if ("warning" %in% names(hds)) {
+    hds_warn <- hds[names(hds) %in% "warning"]
+    mssg <- unname(vapply(hds_warn, parse_es_warning, ""))
+    for (i in seq_along(mssg)) warning(mssg[i], call. = FALSE)
+  }
+}
+
+parse_es_warning <- function(w) {
+  strsplit(w, "\"")[[1]][2]
 }

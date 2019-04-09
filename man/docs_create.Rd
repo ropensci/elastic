@@ -4,12 +4,14 @@
 \alias{docs_create}
 \title{Create a document}
 \usage{
-docs_create(index, type, id = NULL, body, version = NULL,
+docs_create(conn, index, type, id = NULL, body, version = NULL,
   version_type = NULL, op_type = NULL, routing = NULL,
   parent = NULL, timestamp = NULL, ttl = NULL, refresh = NULL,
   timeout = NULL, callopts = list(), ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{index}{(character) The name of the index. Required}
 
 \item{type}{(character) The type of the document. Required}
@@ -44,7 +46,7 @@ a number (in milliseconds) or any valid time value (e.g, 86400000, 1d).}
 \item{timeout}{(character) Explicit operation timeout, e.g,. 5m (for
 5 minutes)}
 
-\item{callopts}{Curl options passed on to \code{\link[httr:PUT]{httr::PUT()}}}
+\item{callopts}{Curl options passed on to \link[crul:HttpClient]{crul::HttpClient}}
 
 \item{...}{Further args to query DSL}
 }
@@ -53,25 +55,26 @@ Create a document
 }
 \examples{
 \dontrun{
-connect()
-if (!index_exists('plos')) {
+(x <- connect())
+
+if (!index_exists(x, 'plos')) {
   plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-  invisible(docs_bulk(plosdat))
+  invisible(docs_bulk(x, plosdat))
 }
 
 # give a document id
-x <- docs_create(index='plos', type='article', id=1002, 
+z <- docs_create(x, index='plos', type='article', id=1002, 
   body=list(id="12345", title="New title"))
-x
+z
 # and the document is there now
-docs_get(index='plos', type='article', id=1002)
+docs_get(x, index='plos', type='article', id=1002)
 
 # let Elasticsearch create the document id for you
-x <- docs_create(index='plos', type='article', 
+z <- docs_create(x, index='plos', type='article', 
   body=list(id="6789", title="Some title"))
-x
+z
 # and the document is there now
-docs_get(index='plos', type='article', id=x$`_id`)
+docs_get(x, index='plos', type='article', id=z$`_id`)
 }
 }
 \references{

@@ -4,6 +4,7 @@
 #'
 #' @export
 #' @name reindex
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param body (list/character/json) The search definition using the Query DSL 
 #' and the prototype for the index request.
 #' @param refresh (logical) Should the effected indexes be refreshed?
@@ -20,14 +21,16 @@
 #' copies for the shard (number of replicas + 1)
 #' @param wait_for_completion (logical) Should the request block until the 
 #' reindex is complete? Default: `TRUE`
-#' @param ... Curl options, passed on to [httr::POST()]
+#' @param ... Curl options, passed on to [crul::verb-POST]
 #'
 #' @references
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-reindex.html>
 #'
 #' @examples \dontrun{
-#' if (!index_exists("twitter")) index_create("twitter")
-#' if (!index_exists("new_twitter")) index_create("new_twitter")
+#' x <- connect()
+#' 
+#' if (!index_exists(x, "twitter")) index_create(x, "twitter")
+#' if (!index_exists(x, "new_twitter")) index_create(x, "new_twitter")
 #' body <- '{
 #'   "source": {
 #'     "index": "twitter"
@@ -36,25 +39,27 @@
 #'     "index": "new_twitter"
 #'   }
 #' }'
-#' reindex(body = body)
+#' reindex(x, body = body)
 #' }
-reindex <- function(body, refresh = NULL, requests_per_second = NULL,
+reindex <- function(conn, body, refresh = NULL, requests_per_second = NULL,
                     slices = NULL, timeout = NULL, 
                     wait_for_active_shards = NULL,
                     wait_for_completion = NULL, ...) {
   
-  url <- file.path(make_url(es_get_auth()), "_reindex")
+  is_conn(conn)
+  url <- file.path(conn$make_url(), "_reindex")
   args <- ec(list(refresh = refresh, requests_per_second = requests_per_second,
                   slices = slices, timeout = timeout, 
                   wait_for_active_shards = wait_for_active_shards,
                   wait_for_completion = wait_for_completion))
-  reindex_POST(url, args, body, ...)
+  reindex_POST(conn, url, args, body, ...)
 }
 
-reindex_POST <- function(url, args = NULL, body = list(), ...) {
+reindex_POST <- function(conn, url, args = NULL, body = list(), ...) {
   body <- check_inputs(body)
-  tt <- POST(url, body = body, query = args, encode = 'json', 
-             make_up(), content_type_json(), es_env$headers, ...)
-  geterror(tt)
-  jsonlite::fromJSON(cont_utf8(tt), FALSE)
+  tt <- conn$make_conn(url, json_type(), ...)$post(
+    body = body, query = args, encode = 'json'
+  )
+  geterror(conn, tt)
+  jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }

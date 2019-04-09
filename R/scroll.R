@@ -2,6 +2,7 @@
 #'
 #' @export
 #'
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param x (character) For `scroll`, a single scroll id; for
 #' `scroll_clear`, one or more scroll id's
 #' @param time_scroll (character) Specify how long a consistent view of the
@@ -19,7 +20,7 @@
 #' that's more or less controlled by paging with ES.
 #' @param all (logical) If `TRUE` (default) then all search contexts
 #' cleared.  If `FALSE`, scroll id's must be passed to `x`
-#' @param ... Curl args passed on to [httr::POST()]
+#' @param ... Curl args passed on to [crul::verb-POST]
 #'
 #' @seealso [Search()]
 #' @references
@@ -74,29 +75,32 @@
 #' will contain the aggregations results.
 #'
 #' @examples \dontrun{
+#' # connection setup
+#' (con <- connect())
+#' 
 #' # Basic usage - can use across all indices
-#' res <- Search(time_scroll="1m")
-#' scroll(res)$`_scroll_id`
+#' res <- Search(con, time_scroll="1m")
+#' scroll(con, res)$`_scroll_id`
 #'
 #' # use on a specific index - and specify a query
-#' res <- Search(index = 'shakespeare', q="a*", time_scroll="1m")
+#' res <- Search(con, index = 'shakespeare', q="a*", time_scroll="1m")
 #' res$`_scroll_id`
 #'
 #' # Setting "sort=_doc" to turn off sorting of results - faster
-#' res <- Search(index = 'shakespeare', q="a*", time_scroll="1m",
+#' res <- Search(con, index = 'shakespeare', q="a*", time_scroll="1m",
 #'   body = '{"sort": ["_doc"]}')
 #' res$`_scroll_id`
 #'
 #' # Pass scroll_id to scroll function
-#' scroll(res$`_scroll_id`)
+#' scroll(con, res$`_scroll_id`)
 #'
 #' # Get all results - one approach is to use a while loop
-#' res <- Search(index = 'shakespeare', q="a*", time_scroll="5m",
+#' res <- Search(con, index = 'shakespeare', q="a*", time_scroll="5m",
 #'   body = '{"sort": ["_doc"]}')
 #' out <- res$hits$hits
 #' hits <- 1
 #' while(hits != 0){
-#'   res <- scroll(res$`_scroll_id`, time_scroll="5m")
+#'   res <- scroll(con, res$`_scroll_id`, time_scroll="5m")
 #'   hits <- length(res$hits$hits)
 #'   if(hits > 0)
 #'     out <- c(out, res$hits$hits)
@@ -107,27 +111,27 @@
 #'
 #' # clear scroll
 #' ## individual scroll id
-#' res <- Search(index = 'shakespeare', q="a*", time_scroll="5m",
+#' res <- Search(con, index = 'shakespeare', q="a*", time_scroll="5m",
 #'   body = '{"sort": ["_doc"]}')
-#' scroll_clear(res$`_scroll_id`)
+#' scroll_clear(con, res$`_scroll_id`)
 #'
 #' ## many scroll ids
-#' res1 <- Search(index = 'shakespeare', q="c*", time_scroll="5m",
+#' res1 <- Search(con, index = 'shakespeare', q="c*", time_scroll="5m",
 #'   body = '{"sort": ["_doc"]}')
-#' res2 <- Search(index = 'shakespeare', q="d*", time_scroll="5m",
+#' res2 <- Search(con, index = 'shakespeare', q="d*", time_scroll="5m",
 #'   body = '{"sort": ["_doc"]}')
-#' nodes_stats(metric = "indices")$nodes[[1]]$indices$search$open_contexts
-#' scroll_clear(c(res1$`_scroll_id`, res2$`_scroll_id`))
-#' nodes_stats(metric = "indices")$nodes[[1]]$indices$search$open_contexts
+#' nodes_stats(con, metric = "indices")$nodes[[1]]$indices$search$open_contexts
+#' scroll_clear(con, c(res1$`_scroll_id`, res2$`_scroll_id`))
+#' nodes_stats(con, metric = "indices")$nodes[[1]]$indices$search$open_contexts
 #'
 #' ## all scroll ids
-#' res1 <- Search(index = 'shakespeare', q="f*", time_scroll="1m",
+#' res1 <- Search(con, index = 'shakespeare', q="f*", time_scroll="1m",
 #'   body = '{"sort": ["_doc"]}')
-#' res2 <- Search(index = 'shakespeare', q="g*", time_scroll="1m",
+#' res2 <- Search(con, index = 'shakespeare', q="g*", time_scroll="1m",
 #'   body = '{"sort": ["_doc"]}')
-#' res3 <- Search(index = 'shakespeare', q="k*", time_scroll="1m",
+#' res3 <- Search(con, index = 'shakespeare', q="k*", time_scroll="1m",
 #'   body = '{"sort": ["_doc"]}')
-#' scroll_clear(all = TRUE)
+#' scroll_clear(con, all = TRUE)
 #'
 #' ## sliced scrolling
 #' body1 <- '{
@@ -154,15 +158,15 @@
 #'   }
 #' }'
 #'
-#' res1 <- Search(index = 'shakespeare', time_scroll="1m", body = body1)
-#' res2 <- Search(index = 'shakespeare', time_scroll="1m", body = body2)
-#' scroll(res1$`_scroll_id`)
-#' scroll(res2$`_scroll_id`)
+#' res1 <- Search(con, index = 'shakespeare', time_scroll="1m", body = body1)
+#' res2 <- Search(con, index = 'shakespeare', time_scroll="1m", body = body2)
+#' scroll(con, res1$`_scroll_id`)
+#' scroll(con, res2$`_scroll_id`)
 #'
 #' out1 <- list()
 #' hits <- 1
 #' while(hits != 0){
-#'   tmp1 <- scroll(res1$`_scroll_id`)
+#'   tmp1 <- scroll(con, res1$`_scroll_id`)
 #'   hits <- length(tmp1$hits$hits)
 #'   if(hits > 0)
 #'     out1 <- c(out1, tmp1$hits$hits)
@@ -171,7 +175,7 @@
 #' out2 <- list()
 #' hits <- 1
 #' while(hits != 0){
-#'   tmp2 <- scroll(res2$`_scroll_id`)
+#'   tmp2 <- scroll(con, res2$`_scroll_id`)
 #'   hits <- length(tmp2$hits$hits)
 #'   if(hits > 0)
 #'     out2 <- c(out2, tmp2$hits$hits)
@@ -184,10 +188,9 @@
 #'
 #'
 #' # using jsonlite::stream_out
-#' connect()
-#' res <- Search(time_scroll = "1m")
+#' res <- Search(con, time_scroll = "1m")
 #' file <- tempfile()
-#' scroll(
+#' scroll(con, 
 #'   x = res$`_scroll_id`,
 #'   stream_opts = list(file = file)
 #' )
@@ -195,12 +198,12 @@
 #' unlink(file)
 #'
 #' ## stream_out and while loop
-#' connect()
 #' (file <- tempfile())
-#' res <- Search(index = "shakespeare", time_scroll = "5m",
+#' res <- Search(con, index = "shakespeare", time_scroll = "5m",
 #'   size = 1000, stream_opts = list(file = file))
 #' while(!inherits(res, "warning")) {
 #'   res <- tryCatch(scroll(
+#'     conn = con,
 #'     x = res$`_scroll_id`,
 #'     time_scroll = "5m",
 #'     stream_opts = list(file = file)
@@ -209,20 +212,21 @@
 #' NROW(df <- jsonlite::stream_in(file(file)))
 #' head(df)
 #' }
-scroll <- function(x, time_scroll = "1m", raw = FALSE, asdf = FALSE,
+scroll <- function(conn, x, time_scroll = "1m", raw = FALSE, asdf = FALSE,
                    stream_opts = list(), ...) {
-  UseMethod("scroll")
+  UseMethod("scroll", x)
 }
 
 #' @export
-scroll.default <- function(x, time_scroll = "1m", raw = FALSE, asdf = FALSE,
+scroll.default <- function(conn, x, time_scroll = "1m", raw = FALSE, asdf = FALSE,
                            stream_opts = list(), ...) {
   stop("no 'scroll()' method for ", class(x), call. = FALSE)
 }
 
 #' @export
-scroll.list <- function(x, time_scroll = "1m", raw = FALSE, asdf = FALSE,
+scroll.list <- function(conn, x, time_scroll = "1m", raw = FALSE, asdf = FALSE,
                         stream_opts = list(), force_scroll = FALSE, ...) {
+  is_conn(conn)
   scroll_ <- NULL
   if (!is.null(x$`_scroll_id`)) {
     scroll_ <- attr(x, "scroll")
@@ -235,19 +239,20 @@ scroll.list <- function(x, time_scroll = "1m", raw = FALSE, asdf = FALSE,
     scroll_ <- time_scroll
   }
   if (force_scroll) scroll_ <- time_scroll
-  scroll(x$`_scroll_id`, time_scroll = scroll_, raw = raw,
+  scroll(conn, x$`_scroll_id`, time_scroll = scroll_, raw = raw,
                    asdf = asdf, stream_opts = stream_opts, ...)
 }
 
 #' @export
-scroll.character <- function(x, time_scroll = "1m", raw = FALSE, asdf = FALSE,
+scroll.character <- function(conn, x, time_scroll = "1m", raw = FALSE, asdf = FALSE,
                              stream_opts = list(), ...) {
 
+  is_conn(conn)
   calls <- names(list(...))
   if ("scroll" %in% calls) {
     stop("The parameter `scroll` has been removed - use `time_scroll`")
   }
-  if (es_ver() < 200) {
+  if (conn$es_ver() < 200) {
     body <- x
     args <- list(scroll = time_scroll)
   } else {
@@ -255,6 +260,7 @@ scroll.character <- function(x, time_scroll = "1m", raw = FALSE, asdf = FALSE,
     args <- list()
   }
   tmp <- scroll_POST(
+    conn = conn,
     path = "_search/scroll",
     args = args,
     body = body,
@@ -267,7 +273,8 @@ scroll.character <- function(x, time_scroll = "1m", raw = FALSE, asdf = FALSE,
 
 #' @export
 #' @rdname scroll
-scroll_clear <- function(x = NULL, all = FALSE, ...) {
+scroll_clear <- function(conn, x = NULL, all = FALSE, ...) {
+  is_conn(conn)
   if (all) {
     path <- "_search/scroll/_all"
     body <- NULL
@@ -277,5 +284,5 @@ scroll_clear <- function(x = NULL, all = FALSE, ...) {
     path <- "_search/scroll"
     body <- list(scroll_id = x)
   }
-  scroll_DELETE(path, body = body, ...)
+  scroll_DELETE(conn, path, body = body, ...)
 }

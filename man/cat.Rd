@@ -20,57 +20,59 @@
 \alias{cat_fielddata}
 \title{Use the cat Elasticsearch api.}
 \usage{
-cat_(parse = FALSE, ...)
+cat_(conn, parse = FALSE, ...)
 
-cat_aliases(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
-  bytes = FALSE, parse = FALSE, ...)
-
-cat_allocation(verbose = FALSE, h = NULL, help = FALSE,
-  bytes = FALSE, parse = FALSE, ...)
-
-cat_count(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
-  bytes = FALSE, parse = FALSE, ...)
-
-cat_segments(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
-  bytes = FALSE, parse = FALSE, ...)
-
-cat_health(verbose = FALSE, h = NULL, help = FALSE, bytes = FALSE,
-  parse = FALSE, ...)
-
-cat_indices(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
-  bytes = FALSE, parse = FALSE, ...)
-
-cat_master(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
-  bytes = FALSE, parse = FALSE, ...)
-
-cat_nodes(verbose = FALSE, h = NULL, help = FALSE, bytes = FALSE,
-  parse = FALSE, ...)
-
-cat_nodeattrs(verbose = FALSE, h = NULL, help = FALSE,
-  bytes = FALSE, parse = FALSE, ...)
-
-cat_pending_tasks(verbose = FALSE, h = NULL, help = FALSE,
-  bytes = FALSE, parse = FALSE, ...)
-
-cat_plugins(verbose = FALSE, h = NULL, help = FALSE, bytes = FALSE,
-  parse = FALSE, ...)
-
-cat_recovery(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
-  bytes = FALSE, parse = FALSE, ...)
-
-cat_thread_pool(verbose = FALSE, index = NULL, h = NULL,
+cat_aliases(conn, verbose = FALSE, index = NULL, h = NULL,
   help = FALSE, bytes = FALSE, parse = FALSE, ...)
 
-cat_shards(verbose = FALSE, index = NULL, h = NULL, help = FALSE,
+cat_allocation(conn, verbose = FALSE, h = NULL, help = FALSE,
   bytes = FALSE, parse = FALSE, ...)
 
-cat_fielddata(verbose = FALSE, index = NULL, fields = NULL,
+cat_count(conn, verbose = FALSE, index = NULL, h = NULL,
+  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+
+cat_segments(conn, verbose = FALSE, index = NULL, h = NULL,
+  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+
+cat_health(conn, verbose = FALSE, h = NULL, help = FALSE,
+  bytes = FALSE, parse = FALSE, ...)
+
+cat_indices(conn, verbose = FALSE, index = NULL, h = NULL,
+  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+
+cat_master(conn, verbose = FALSE, index = NULL, h = NULL,
+  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+
+cat_nodes(conn, verbose = FALSE, h = NULL, help = FALSE,
+  bytes = FALSE, parse = FALSE, ...)
+
+cat_nodeattrs(conn, verbose = FALSE, h = NULL, help = FALSE,
+  bytes = FALSE, parse = FALSE, ...)
+
+cat_pending_tasks(conn, verbose = FALSE, h = NULL, help = FALSE,
+  bytes = FALSE, parse = FALSE, ...)
+
+cat_plugins(conn, verbose = FALSE, h = NULL, help = FALSE,
+  bytes = FALSE, parse = FALSE, ...)
+
+cat_recovery(conn, verbose = FALSE, index = NULL, h = NULL,
+  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+
+cat_thread_pool(conn, verbose = FALSE, index = NULL, h = NULL,
+  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+
+cat_shards(conn, verbose = FALSE, index = NULL, h = NULL,
+  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+
+cat_fielddata(conn, verbose = FALSE, index = NULL, fields = NULL,
   h = NULL, help = FALSE, bytes = FALSE, parse = FALSE, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{parse}{(logical) Parse to a data.frame or not. Default: \code{FALSE}}
 
-\item{...}{Curl args passed on to \code{\link[httr:GET]{httr::GET()}}}
+\item{...}{Curl args passed on to \link[crul:HttpClient]{crul::HttpClient}}
 
 \item{verbose}{(logical) If \code{TRUE} (default) the url call used printed to console}
 
@@ -96,60 +98,62 @@ Note how \code{\link[=cat_]{cat_()}} has an underscore at the end to avoid confl
 }
 \examples{
 \dontrun{
+# connection setup
+(x <- connect())
+
 # list Elasticsearch cat endpoints
-cat_()
+cat_(x)
 
 # Do other cat operations
-cat_aliases()
-cat_aliases(index='plos')
-cat_allocation()
-cat_allocation(verbose=TRUE)
-cat_count()
-cat_count(index='plos')
-cat_count(index='gbif')
-cat_segments()
-cat_segments(index='gbif')
-cat_health()
-cat_indices()
-cat_master()
-cat_nodes()
-# cat_nodeattrs() # not available in older ES versions
-cat_pending_tasks()
-cat_plugins()
-cat_recovery(verbose=TRUE)
-cat_recovery(index='gbif')
-cat_thread_pool()
-cat_thread_pool(verbose=TRUE)
-cat_shards()
-cat_fielddata()
-cat_fielddata(fields='body')
+cat_aliases(x)
+cat_aliases(x, index='plos')
+cat_allocation(x)
+cat_allocation(x, verbose=TRUE)
+cat_count(x)
+cat_count(x, index='plos')
+cat_count(x, index='gbif')
+cat_segments(x)
+cat_segments(x, index='gbif')
+cat_health(x)
+cat_indices(x)
+cat_master(x)
+cat_nodes(x)
+# cat_nodeattrs(x) # not available in older ES versions
+cat_pending_tasks(x)
+cat_plugins(x)
+cat_recovery(x, verbose=TRUE)
+cat_recovery(x, index='gbif')
+cat_thread_pool(x)
+cat_thread_pool(x, verbose=TRUE)
+cat_shards(x)
+cat_fielddata(x)
+cat_fielddata(x, fields='body')
 
 # capture cat data into a data.frame
-cat_(parse = TRUE)
-cat_indices(parse = TRUE)
-cat_indices(parse = TRUE, verbose = TRUE)
-cat_count(parse = TRUE)
-cat_count(parse = TRUE, verbose = TRUE)
-cat_health(parse = TRUE)
-cat_health(parse = TRUE, verbose = TRUE)
+cat_(x, parse = TRUE)
+cat_indices(x, parse = TRUE)
+cat_indices(x, parse = TRUE, verbose = TRUE)
+cat_count(x, parse = TRUE)
+cat_count(x, parse = TRUE, verbose = TRUE)
+cat_health(x, parse = TRUE)
+cat_health(x, parse = TRUE, verbose = TRUE)
 
 # Get help - what does each column mean
-head(cat_indices(help = TRUE, parse = TRUE))
-cat_health(help = TRUE, parse = TRUE)
-head(cat_nodes(help = TRUE, parse = TRUE))
+head(cat_indices(x, help = TRUE, parse = TRUE))
+cat_health(x, help = TRUE, parse = TRUE)
+head(cat_nodes(x, help = TRUE, parse = TRUE))
 
 # Get back only certain fields
-cat_nodes()
-cat_nodes(h = c('ip','port','heapPercent','name'))
-cat_nodes(h = c('id', 'ip', 'port', 'v', 'm'))
-cat_indices(verbose = TRUE)
-cat_indices(verbose = TRUE, h = c('index','docs.count','store.size'))
+cat_nodes(x)
+cat_nodes(x, h = c('ip','port','heapPercent','name'))
+cat_nodes(x, h = c('id', 'ip', 'port', 'v', 'm'))
+cat_indices(x, verbose = TRUE)
+cat_indices(x, verbose = TRUE, h = c('index','docs.count','store.size'))
 
 # Get back machine friendly numbers instead of the normal human friendly
-cat_indices(verbose = TRUE, bytes = TRUE)
+cat_indices(x, verbose = TRUE, bytes = TRUE)
 
 # Curl options
-library("httr")
-cat_count(config=verbose())
+# cat_count(x, timeout_ms = 1)
 }
 }

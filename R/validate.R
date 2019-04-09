@@ -1,20 +1,23 @@
 #' Validate a search
 #'
 #' @export
+#' @param conn an Elasticsearch connection object, see [connect()]
 #' @param index Index name. Required.
 #' @param type Document type. Optional.
 #' @param ... Additional args passed on to [Search()]
 #' @seealso [Search()]
 #' @examples \dontrun{
-#' if (!index_exists("twitter")) index_create("twitter")
-#' docs_create('twitter', type='tweet', id=1, body = list(
+#' x <- connect()
+#' 
+#' if (!index_exists(x, "twitter")) index_create(x, "twitter")
+#' docs_create(x, 'twitter', type='tweet', id=1, body = list(
 #'    "user" = "foobar", 
 #'    "post_date" = "2014-01-03",
 #'    "message" = "trying out Elasticsearch"
 #'  )
 #' )
-#' validate("twitter", q='user:foobar')
-#' validate("twitter", "tweet", q='user:foobar')
+#' validate(x, "twitter", q='user:foobar')
+#' validate(x, "twitter", "tweet", q='user:foobar')
 #' 
 #' body <- '{
 #' "query" : {
@@ -30,8 +33,9 @@
 #'   }
 #' }
 #' }'
-#' validate("twitter", body = body)
+#' validate(x, "twitter", body = body)
 #' }
-validate <- function(index, type = NULL, ...) {
-  Search(index, type, search_path = "_validate/query", ...)
+validate <- function(conn, index, type = NULL, ...) {
+  is_conn(conn)
+  Search(conn, index, type, search_path = "_validate/query", ...)
 }

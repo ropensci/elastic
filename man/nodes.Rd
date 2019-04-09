@@ -7,17 +7,17 @@
 \alias{nodes_hot_threads}
 \title{Elasticsearch nodes endpoints.}
 \usage{
-nodes_stats(node = NULL, metric = NULL, raw = FALSE, fields = NULL,
-  verbose = TRUE, ...)
+nodes_stats(conn, node = NULL, metric = NULL, raw = FALSE,
+  fields = NULL, ...)
 
-nodes_info(node = NULL, metric = NULL, raw = FALSE, verbose = TRUE,
-  ...)
+nodes_info(conn, node = NULL, metric = NULL, raw = FALSE, ...)
 
-nodes_hot_threads(node = NULL, metric = NULL, threads = 3,
-  interval = "500ms", type = NULL, raw = FALSE, verbose = TRUE,
-  ...)
+nodes_hot_threads(conn, node = NULL, metric = NULL, threads = 3,
+  interval = "500ms", type = NULL, raw = FALSE, ...)
 }
 \arguments{
+\item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
+
 \item{node}{The node}
 
 \item{metric}{A metric to get. See Details.}
@@ -28,9 +28,7 @@ raw JSON.}
 \item{fields}{You can get information about field data memory usage on
 node level or on index level}
 
-\item{verbose}{If TRUE (default) the url call used printed to console}
-
-\item{...}{Curl args passed on to \code{\link[httr]{GET}}}
+\item{...}{Curl args passed on to \link[crul:verb-GET]{crul::verb-GET}}
 
 \item{threads}{(character) Number of hot threads to provide. Default: 3}
 
@@ -74,15 +72,18 @@ is used to print to the console.
 }
 \examples{
 \dontrun{
-(out <- nodes_stats())
-nodes_stats(node = names(out$nodes))
-nodes_stats(metric='get')
-nodes_stats(metric='jvm')
-nodes_stats(metric=c('os','process'))
-nodes_info()
-nodes_info(metric='process')
-nodes_info(metric='jvm')
-nodes_info(metric='http')
-nodes_info(metric='network')
+# connection setup
+(x <- connect())
+
+(out <- nodes_stats(x))
+nodes_stats(x, node = names(out$nodes))
+nodes_stats(x, metric='get')
+nodes_stats(x, metric='jvm')
+nodes_stats(x, metric=c('os','process'))
+nodes_info(x)
+nodes_info(x, metric='process')
+nodes_info(x, metric='jvm')
+nodes_info(x, metric='http')
+nodes_info(x, metric='network')
 }
 }
