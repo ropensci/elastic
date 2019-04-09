@@ -3,19 +3,19 @@
 #' @references
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/indices.html>
 #' @author Scott Chamberlain <myrmecocystus@@gmail.com>
-#' @name index
+#' @name indices
 #'
 #' @param conn an Elasticsearch connection object, see [connect()]
 #' @param index (character) A character vector of index names
-#' @param features (character) A single feature. One of settings, mappings, or 
+#' @param features (character) A single feature. One of settings, mappings, or
 #' aliases
 #' @param raw If `TRUE` (default), data is parsed to list. If FALSE, then raw JSON.
 #' @param ... Curl args passed on to [crul::HttpClient]
 #' @param verbose If `TRUE` (default) the url call used printed to console.
 #' @param fields (character) Fields to add.
-#' @param metric (character) A character vector of metrics to display. Possible 
-#' values: "_all", "completion", "docs", "fielddata", "filter_cache", "flush", 
-#' "get", "id_cache", "indexing", "merge", "percolate", "refresh", "search", 
+#' @param metric (character) A character vector of metrics to display. Possible
+#' values: "_all", "completion", "docs", "fielddata", "filter_cache", "flush",
+#' "get", "id_cache", "indexing", "merge", "percolate", "refresh", "search",
 #' "segments", "store", "warmer".
 #' @param completion_fields (character) A character vector of fields for completion metric
 #' (supports wildcards)
@@ -83,7 +83,7 @@
 #' function. See
 #' https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html
 #' for all the options.
-#' 
+#'
 #' **index settings**: See
 #' https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules.html
 #' for the *static* and *dynamic* settings you can set on indices.
@@ -91,7 +91,7 @@
 #' @examples \dontrun{
 #' # connection setup
 #' (x <- connect())
-#' 
+#'
 #' # get information on an index
 #' index_get(x, index='shakespeare')
 #' ## this one is the same as running index_settings('shakespeare')
@@ -208,18 +208,18 @@
 #'   index_upgrade(x, c('plos','gbif'))
 #' }
 #'
-#' # Performs the analysis process on a text and return the tokens breakdown 
+#' # Performs the analysis process on a text and return the tokens breakdown
 #' # of the text
 #' index_analyze(x, text = 'this is a test', analyzer='standard')
 #' index_analyze(x, text = 'this is a test', analyzer='whitespace')
 #' index_analyze(x, text = 'this is a test', analyzer='stop')
-#' index_analyze(x, text = 'this is a test', tokenizer='keyword', 
+#' index_analyze(x, text = 'this is a test', tokenizer='keyword',
 #'   filters='lowercase')
-#' index_analyze(x, text = 'this is a test', tokenizer='keyword', 
+#' index_analyze(x, text = 'this is a test', tokenizer='keyword',
 #'   filters='lowercase', char_filters='html_strip')
-#' index_analyze(x, text = 'this is a test', index = 'plos', 
+#' index_analyze(x, text = 'this is a test', index = 'plos',
 #'   analyzer="standard")
-#' index_analyze(x, text = 'this is a test', index = 'shakespeare', 
+#' index_analyze(x, text = 'this is a test', index = 'shakespeare',
 #'   analyzer="standard")
 #'
 #' ## NGram tokenizer
@@ -244,7 +244,7 @@
 #' }'
 #' if (index_exists(x, "shakespeare2")) index_delete(x, "shakespeare2")
 #' tokenizer_set(x, index = "shakespeare2", body=body)
-#' index_analyze(x, text = "art thouh", index = "shakespeare2", 
+#' index_analyze(x, text = "art thouh", index = "shakespeare2",
 #'   analyzer='my_ngram_analyzer')
 #'
 #' # Explicitly flush one or more indices.
@@ -278,7 +278,7 @@
 NULL
 
 #' @export
-#' @rdname index
+#' @rdname indices
 index_get <- function(conn, index=NULL, features=NULL, raw=FALSE, verbose=TRUE, ...) {
   is_conn(conn)
   conn$stop_es_version(120, "index_get")
@@ -287,7 +287,7 @@ index_get <- function(conn, index=NULL, features=NULL, raw=FALSE, verbose=TRUE, 
 }
 
 #' @export
-#' @rdname index
+#' @rdname indices
 index_exists <- function(conn, index, ...) {
   is_conn(conn)
   url <- file.path(conn$make_url(), esc(index))
@@ -296,7 +296,7 @@ index_exists <- function(conn, index, ...) {
 }
 
 #' @export
-#' @rdname index
+#' @rdname indices
 index_delete <- function(conn, index, raw=FALSE, verbose=TRUE, ...) {
   is_conn(conn)
   url <- paste0(conn$make_url(), "/", esc(index))
@@ -308,7 +308,7 @@ index_delete <- function(conn, index, raw=FALSE, verbose=TRUE, ...) {
 }
 
 #' @export
-#' @rdname index
+#' @rdname indices
 index_create <- function(conn, index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...) {
   is_conn(conn)
   url <- conn$make_url()
@@ -316,8 +316,8 @@ index_create <- function(conn, index=NULL, body=NULL, raw=FALSE, verbose=TRUE, .
 }
 
 #' @export
-#' @rdname index
-index_recreate <- function(conn, index=NULL, body=NULL, raw=FALSE, verbose=TRUE, 
+#' @rdname indices
+index_recreate <- function(conn, index=NULL, body=NULL, raw=FALSE, verbose=TRUE,
                            ...) {
   is_conn(conn)
   if (index_exists(conn, index, ...)) {
@@ -329,40 +329,40 @@ index_recreate <- function(conn, index=NULL, body=NULL, raw=FALSE, verbose=TRUE,
 }
 
 #' @export
-#' @rdname index
+#' @rdname indices
 index_close <- function(conn, index, ...) {
   is_conn(conn)
   close_open(conn, index, "_close", ...)
 }
 
 #' @export
-#' @rdname index
+#' @rdname indices
 index_open <- function(conn, index, ...) {
   is_conn(conn)
   close_open(conn, index, "_open", ...)
 }
 
 #' @export
-#' @rdname index
-index_stats <- function(conn, index=NULL, metric=NULL, completion_fields=NULL, 
-                        fielddata_fields=NULL, fields=NULL, groups=NULL, 
+#' @rdname indices
+index_stats <- function(conn, index=NULL, metric=NULL, completion_fields=NULL,
+                        fielddata_fields=NULL, fields=NULL, groups=NULL,
                         level='indices', ...) {
   is_conn(conn)
   url <- conn$make_url()
   url <- if (is.null(index)) {
-    file.path(url, "_stats") 
+    file.path(url, "_stats")
   } else {
     file.path(url, esc(cl(index)), "_stats")
   }
   url <- if (!is.null(metric)) file.path(url, cl(metric)) else url
-  args <- ec(list(completion_fields = completion_fields, 
+  args <- ec(list(completion_fields = completion_fields,
                   fielddata_fields = fielddata_fields,
                   fields = fields, groups = groups, level = level))
   es_GET_(conn, url, args, ...)
 }
 
 #' @export
-#' @rdname index
+#' @rdname indices
 index_settings <- function(conn, index="_all", ...) {
   is_conn(conn)
   url <- conn$make_url()
@@ -375,12 +375,12 @@ index_settings <- function(conn, index="_all", ...) {
 }
 
 #' @export
-#' @rdname index
+#' @rdname indices
 index_settings_update <- function(conn, index=NULL, body, ...) {
   is_conn(conn)
   url <- conn$make_url()
   url <- if (is.null(index)) {
-    file.path(url, "_settings") 
+    file.path(url, "_settings")
   } else {
     file.path(url, esc(cl(index)), "_settings")
   }
@@ -389,29 +389,29 @@ index_settings_update <- function(conn, index=NULL, body, ...) {
 }
 
 #' @export
-#' @rdname index
+#' @rdname indices
 index_segments <- function(conn, index = NULL, ...) {
   is_conn(conn)
   es_GET_wrap1(conn, index, "_segments", ...)
 }
 
 #' @export
-#' @rdname index
-index_recovery <- function(conn, index = NULL, detailed = FALSE, active_only = FALSE, 
+#' @rdname indices
+index_recovery <- function(conn, index = NULL, detailed = FALSE, active_only = FALSE,
                            ...) {
   is_conn(conn)
   conn$stop_es_version(110, "index_recovery")
-  args <- ec(list(detailed = as_log(detailed), 
+  args <- ec(list(detailed = as_log(detailed),
                   active_only = as_log(active_only)))
   es_GET_wrap1(conn, index, "_recovery", args, ...)
 }
 
 #' @export
-#' @rdname index
-index_optimize <- function(conn, index = NULL, max_num_segments = NULL, 
+#' @rdname indices
+index_optimize <- function(conn, index = NULL, max_num_segments = NULL,
   only_expunge_deletes = FALSE,
   flush = TRUE, wait_for_merge = TRUE, ...) {
-  
+
   is_conn(conn)
   if (conn$es_ver() >= 500) {
     stop("optimize is gone in ES >= v5, see ?index_forcemerge")
@@ -425,10 +425,10 @@ index_optimize <- function(conn, index = NULL, max_num_segments = NULL,
 }
 
 #' @export
-#' @rdname index
-index_forcemerge <- function(conn, index = NULL, max_num_segments = NULL, 
+#' @rdname indices
+index_forcemerge <- function(conn, index = NULL, max_num_segments = NULL,
                            only_expunge_deletes = FALSE, flush = TRUE, ...) {
-  
+
   is_conn(conn)
   if (conn$es_ver() < 500) {
     stop("forcemerge is only in ES >= v5, see ?index_optimize")
@@ -442,7 +442,7 @@ index_forcemerge <- function(conn, index = NULL, max_num_segments = NULL,
 }
 
 #' @export
-#' @rdname index
+#' @rdname indices
 index_upgrade <- function(conn, index = NULL, wait_for_completion = FALSE, ...) {
   is_conn(conn)
   conn$stop_es_version(120, "index_get")
@@ -455,9 +455,9 @@ https://www.elastic.co/guide/en/elasticsearch/reference/current/reindex-upgrade.
 }
 
 #' @export
-#' @rdname index
-index_analyze <- function(conn, text=NULL, field=NULL, index=NULL, analyzer=NULL, 
-                          tokenizer=NULL, filters=NULL, char_filters=NULL, 
+#' @rdname indices
+index_analyze <- function(conn, text=NULL, field=NULL, index=NULL, analyzer=NULL,
+                          tokenizer=NULL, filters=NULL, char_filters=NULL,
                           body=list(), ...) {
   is_conn(conn)
   url <- conn$make_url()
@@ -466,27 +466,27 @@ index_analyze <- function(conn, text=NULL, field=NULL, index=NULL, analyzer=NULL
   } else {
     url <- sprintf("%s/_analyze", url)
   }
-  
+
   if (conn$es_ver() >= 500) {
-    body <- ec(list(text = text, analyzer = analyzer, tokenizer = tokenizer, 
-                 filter = I(filters), char_filter = I(char_filters), 
+    body <- ec(list(text = text, analyzer = analyzer, tokenizer = tokenizer,
+                 filter = I(filters), char_filter = I(char_filters),
                  field = field))
     args <- list()
   } else {
     body <- list()
-    args <- ec(list(text = text, analyzer = analyzer, tokenizer = tokenizer, 
-                    filters = I(filters), char_filters = I(char_filters), 
+    args <- ec(list(text = text, analyzer = analyzer, tokenizer = tokenizer,
+                    filters = I(filters), char_filters = I(char_filters),
                     field = field))
   }
-  
+
   analyze_POST(conn, url, args, body, ...)$tokens
 }
 
 #' @export
-#' @rdname index
-index_flush <- function(conn, index=NULL, force=FALSE, full=FALSE, 
+#' @rdname indices
+index_flush <- function(conn, index=NULL, force=FALSE, full=FALSE,
                         wait_if_ongoing=FALSE, ...) {
-  
+
   is_conn(conn)
   url <- conn$make_url()
   if (!is.null(index)) {
@@ -494,15 +494,15 @@ index_flush <- function(conn, index=NULL, force=FALSE, full=FALSE,
   } else {
     url <- sprintf("%s/_flush", url)
   }
-  args <- ec(list(force = as_log(force), full = as_log(full), 
+  args <- ec(list(force = as_log(force), full = as_log(full),
                   wait_if_ongoing = as_log(wait_if_ongoing)))
   cc_POST(conn, url, args, ...)
 }
 
 #' @export
-#' @rdname index
-index_clear_cache <- function(conn, index=NULL, filter=FALSE, filter_keys=NULL, 
-                              fielddata=FALSE, query_cache=FALSE, 
+#' @rdname indices
+index_clear_cache <- function(conn, index=NULL, filter=FALSE, filter_keys=NULL,
+                              fielddata=FALSE, query_cache=FALSE,
                               id_cache=FALSE, ...) {
 
   is_conn(conn)
@@ -512,9 +512,9 @@ index_clear_cache <- function(conn, index=NULL, filter=FALSE, filter_keys=NULL,
   } else {
     url <- sprintf("%s/_cache/clear", url)
   }
-  args <- ec(list(filter = as_log(filter), filter_keys = filter_keys, 
-                  fielddata = as_log(fielddata), 
-                  query_cache = as_log(query_cache), 
+  args <- ec(list(filter = as_log(filter), filter_keys = filter_keys,
+                  fielddata = as_log(fielddata),
+                  query_cache = as_log(query_cache),
                   id_cache = as_log(id_cache)))
   cc_POST(conn, url, args, ...)
 }
@@ -533,7 +533,7 @@ close_open <- function(conn, index, which, ...) {
 es_GET_wrap1 <- function(conn, index, which, args=NULL, ...) {
   url <- conn$make_url()
   url <- if (is.null(index)) {
-    file.path(url, which) 
+    file.path(url, which)
   } else {
     file.path(url, esc(cl(index)), which)
   }
@@ -543,7 +543,7 @@ es_GET_wrap1 <- function(conn, index, which, args=NULL, ...) {
 es_POST_ <- function(conn, index, which, args=NULL, ...) {
   url <- conn$make_url()
   url <- if (is.null(index)) {
-    file.path(url, which) 
+    file.path(url, which)
   } else {
     file.path(url, esc(cl(index)), which)
   }
