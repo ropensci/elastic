@@ -16,4 +16,5 @@ notes-v2.md
 .github
 ^codemeta\.json$
 ^LICENSE\.md$
-
+^_pkgdown\.yml$
+^docs$

@@ -6,6 +6,9 @@
 #' @param index (character) A character vector of index names
 #' @param body Query, either a list or json.
 #' @param ... Curl options passed on to [crul::HttpClient]
+#' 
+#' @references 
+#' https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-tokenizers.html
 #'
 #' @author Scott Chamberlain <myrmecocystus@@gmail.com>
 #' @examples \dontrun{

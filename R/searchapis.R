@@ -1,4 +1,4 @@
-#' Search functions.
+#' Overview of search functions
 #'
 #' @name searchapis
 #' @details

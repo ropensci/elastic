@@ -51,6 +51,9 @@ index_analyze(text = "hello world", index = "test1",
   analyzer='my_ngram_analyzer')
 }
 }
+\references{
+https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-tokenizers.html
+}
 \author{
 Scott Chamberlain \href{mailto:myrmecocystus@gmail.com}{myrmecocystus@gmail.com}
 }
