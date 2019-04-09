@@ -1,6 +1,6 @@
 #' Index API operations
 #'
-#' @rdname index-elastic
+#' @rdname indices
 #' @references
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/indices.html>
 #' @author Scott Chamberlain <myrmecocystus@@gmail.com>
@@ -279,7 +279,7 @@ index_exists <- function(index, ...) {
 }
 
 #' @export
-#' @rdname index-elastic
+#' @rdname indices
 index_delete <- function(index, raw=FALSE, verbose=TRUE, ...) {
   url <- paste0(make_url(es_get_auth()), "/", esc(index))
   out <- DELETE(url, make_up(), ...)
@@ -290,14 +290,14 @@ index_delete <- function(index, raw=FALSE, verbose=TRUE, ...) {
 }
 
 #' @export
-#' @rdname index-elastic
+#' @rdname indices
 index_create <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, ...) {
   url <- make_url(es_get_auth())
   es_PUT(paste0(url, "/", esc(index)), body = body, ...)
 }
 
 #' @export
-#' @rdname index-elastic
+#' @rdname indices
 index_recreate <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE, 
                            ...) {
   
@@ -310,19 +310,19 @@ index_recreate <- function(index=NULL, body=NULL, raw=FALSE, verbose=TRUE,
 }
 
 #' @export
-#' @rdname index-elastic
+#' @rdname indices
 index_close <- function(index, ...) {
   close_open(index, "_close", ...)
 }
 
 #' @export
-#' @rdname index-elastic
+#' @rdname indices
 index_open <- function(index, ...) {
   close_open(index, "_open", ...)
 }
 
 #' @export
-#' @rdname index-elastic
+#' @rdname indices
 index_stats <- function(index=NULL, metric=NULL, completion_fields=NULL, 
                         fielddata_fields=NULL, fields=NULL, groups=NULL, 
                         level='indices', ...) {
@@ -341,7 +341,7 @@ index_stats <- function(index=NULL, metric=NULL, completion_fields=NULL,
 }
 
 #' @export
-#' @rdname index-elastic
+#' @rdname indices
 index_settings <- function(index="_all", ...) {
   url <- make_url(es_get_auth())
   url <- if (is.null(index) || index == "_all") {
@@ -353,7 +353,7 @@ index_settings <- function(index="_all", ...) {
 }
 
 #' @export
-#' @rdname index-elastic
+#' @rdname indices
 index_settings_update <- function(index=NULL, body, ...) {
   url <- make_url(es_get_auth())
   url <- if (is.null(index)) {
@@ -369,13 +369,13 @@ index_settings_update <- function(index=NULL, body, ...) {
 }
 
 #' @export
-#' @rdname index-elastic
+#' @rdname indices
 index_segments <- function(index = NULL, ...) {
   es_GET_wrap1(index, "_segments", ...)
 }
 
 #' @export
-#' @rdname index-elastic
+#' @rdname indices
 index_recovery <- function(index = NULL, detailed = FALSE, active_only = FALSE, 
                            ...) {
   
@@ -386,7 +386,7 @@ index_recovery <- function(index = NULL, detailed = FALSE, active_only = FALSE,
 }
 
 #' @export
-#' @rdname index-elastic
+#' @rdname indices
 index_optimize <- function(index = NULL, max_num_segments = NULL, 
   only_expunge_deletes = FALSE,
   flush = TRUE, wait_for_merge = TRUE, ...) {
@@ -403,7 +403,7 @@ index_optimize <- function(index = NULL, max_num_segments = NULL,
 }
 
 #' @export
-#' @rdname index-elastic
+#' @rdname indices
 index_forcemerge <- function(index = NULL, max_num_segments = NULL, 
                            only_expunge_deletes = FALSE, flush = TRUE, ...) {
   
@@ -419,7 +419,7 @@ index_forcemerge <- function(index = NULL, max_num_segments = NULL,
 }
 
 #' @export
-#' @rdname index-elastic
+#' @rdname indices
 index_upgrade <- function(index = NULL, wait_for_completion = FALSE, ...) {
   stop_es_version(120, "index_get")
   if (es_ver() >= 500) {
@@ -431,7 +431,7 @@ https://www.elastic.co/guide/en/elasticsearch/reference/current/reindex-upgrade.
 }
 
 #' @export
-#' @rdname index-elastic
+#' @rdname indices
 index_analyze <- function(text=NULL, field=NULL, index=NULL, analyzer=NULL, 
                           tokenizer=NULL, filters=NULL, char_filters=NULL, 
                           body=list(), ...) {
@@ -458,7 +458,7 @@ index_analyze <- function(text=NULL, field=NULL, index=NULL, analyzer=NULL,
 }
 
 #' @export
-#' @rdname index-elastic
+#' @rdname indices
 index_flush <- function(index=NULL, force=FALSE, full=FALSE, 
                         wait_if_ongoing=FALSE, ...) {
   
@@ -474,7 +474,7 @@ index_flush <- function(index=NULL, force=FALSE, full=FALSE,
 }
 
 #' @export
-#' @rdname index-elastic
+#' @rdname indices
 index_clear_cache <- function(index=NULL, filter=FALSE, filter_keys=NULL, 
                               fielddata=FALSE, query_cache=FALSE, 
                               id_cache=FALSE, ...) {
