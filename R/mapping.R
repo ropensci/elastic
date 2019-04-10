@@ -7,6 +7,8 @@
 #' @param body (list) Either a list or json, representing the query.
 #' @param field (character) One or more field names
 #' @param include_defaults (logical) Whether to return default values
+#' @param include_type_name (logical) If set to `TRUE`, you can include a type
+#' name, if not an error will occur. default: not set. See Details.
 #' @param update_all_types (logical) update all types. default: `FALSE`. 
 #' This parameter is deprecated in ES v6.3.0 and higher, see 
 #' https://github.com/elastic/elasticsearch/pull/28284
@@ -25,6 +27,9 @@
 #'  <https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-mapping.html>
 #' - `field_mapping_get` -
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-field-mapping.html>
+#' 
+#' See <https://www.elastic.co/guide/en/elasticsearch/reference/current/removal-of-types.html>
+#' for information on type removal
 #'
 #' @examples \dontrun{
 #' # connection setup
@@ -115,11 +120,12 @@
 
 #' @export
 #' @rdname mapping
-mapping_create <- function(conn, index, type, body, update_all_types = FALSE, ...) {
+mapping_create <- function(conn, index, type, body, update_all_types = FALSE,
+  include_type_name = NULL, ...) {
   is_conn(conn)
   url <- conn$make_url()
   url <- file.path(url, esc(index), "_mapping", esc(type))
-  args <- list()
+  args <- list(include_type_name = as_log(include_type_name))
   if (conn$es_ver() < 603) { 
     args <- ec(list(update_all_types = as_log(update_all_types)))
   }
@@ -128,7 +134,8 @@ mapping_create <- function(conn, index, type, body, update_all_types = FALSE, ..
 
 #' @export
 #' @rdname mapping
-mapping_get <- function(conn, index = NULL, type = NULL, ...) {
+mapping_get <- function(conn, index = NULL, type = NULL,
+  include_type_name = NULL, ...) {
   is_conn(conn)
   url <- conn$make_url()
   if (any(index == "_all")) {
@@ -139,16 +146,19 @@ mapping_get <- function(conn, index = NULL, type = NULL, ...) {
     } else if (is.null(index) && !is.null(type)) {
       url <- file.path(url, "_mapping", esc(cl(type)))
     } else if (!is.null(index) && !is.null(type)) {
-      if (length(index) > 1) stop("You can only pass one index if you also pass a type", call. = FALSE)
+      if (length(index) > 1) stop("You can only pass one index if you also pass a type",
+        call. = FALSE)
       url <- file.path(url, esc(index), "_mapping", esc(cl(type)))
     }
   }
-  es_GET_(conn, url, ...)
+  es_GET_(conn, url, ec(list(include_type_name = as_log(include_type_name))),
+    ...)
 }
 
 #' @export
 #' @rdname mapping
-field_mapping_get <- function(conn, index = NULL, type = NULL, field, include_defaults=FALSE, ...) {
+field_mapping_get <- function(conn, index = NULL, type = NULL, field,
+  include_defaults = FALSE, include_type_name = NULL, ...) {
   is_conn(conn)
   stopifnot(!is.null(field))
   url <- conn$make_url()
@@ -166,7 +176,9 @@ field_mapping_get <- function(conn, index = NULL, type = NULL, field, include_de
       url <- file.path(url, esc(index), "_mapping", esc(cl(type)), "field", cl(field))
     }
   }
-  es_GET_(conn, url, query=list(include_defaults=as_log(include_defaults)), ...)
+  args <- ec(list(include_defaults = as_log(include_defaults),
+    include_type_name = as_log(include_type_name)))
+  es_GET_(conn, url, query = args, ...)
 }
 
 #' @export

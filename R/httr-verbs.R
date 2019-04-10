@@ -97,7 +97,7 @@ es_PUT <- function(conn, url, body = list(), args = list(), ...) {
 }
 
 es_GET_ <- function(conn, url, query = NULL, ...) {
-  cli <- conn$make_conn(url)
+  cli <- conn$make_conn(url, list(), ...)
   tt <- cli$get(query = query)
   geterror(conn, tt)
   jsonlite::fromJSON(tt$parse('UTF-8'), FALSE)

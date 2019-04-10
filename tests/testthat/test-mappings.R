@@ -96,16 +96,22 @@ invisible(docs_bulk(x, plosdat))
 test_that("field_mapping_get works", {
   
   if (!es_version(x) < 110) {
+
+    include_type_name <- if (es_version(x) >= 700) TRUE else NULL
     
     # Get field mappings
     # get all indices
-    fmg1 <- field_mapping_get(x, index = "_all", type = "omdb", field = "Country")
+    fmg1 <- field_mapping_get(x, index = "_all", type = "omdb", field = "Country",
+      include_type_name = include_type_name)
     # fuzzy field get
-    fmg2 <- field_mapping_get(x, index = "plos", type = "article", field = "*")
+    fmg2 <- field_mapping_get(x, index = "plos", type = "article", field = "*",
+      include_type_name = include_type_name)
     # get defaults
-    fmg3 <- field_mapping_get(x, index = "plos", type = "article", field = "title", include_defaults = TRUE)
+    fmg3 <- field_mapping_get(x, index = "plos", type = "article", field = "title",
+      include_defaults = TRUE, include_type_name = include_type_name)
     # get many
-    fmg4 <- field_mapping_get(x, type = "article", field = c("title", "id"))
+    fmg4 <- field_mapping_get(x, type = "article", field = c("title", "id"),
+      include_type_name = include_type_name)
     
     expect_is(fmg1, "list")
     expect_is(fmg2, "list")

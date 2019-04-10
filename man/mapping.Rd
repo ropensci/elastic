@@ -8,12 +8,14 @@
 \alias{type_exists}
 \title{Mapping management}
 \usage{
-mapping_create(conn, index, type, body, update_all_types = FALSE, ...)
+mapping_create(conn, index, type, body, update_all_types = FALSE,
+  include_type_name = NULL, ...)
 
-mapping_get(conn, index = NULL, type = NULL, ...)
+mapping_get(conn, index = NULL, type = NULL,
+  include_type_name = NULL, ...)
 
 field_mapping_get(conn, index = NULL, type = NULL, field,
-  include_defaults = FALSE, ...)
+  include_defaults = FALSE, include_type_name = NULL, ...)
 
 type_exists(conn, index, type, ...)
 }
@@ -29,6 +31,9 @@ type_exists(conn, index, type, ...)
 \item{update_all_types}{(logical) update all types. default: \code{FALSE}.
 This parameter is deprecated in ES v6.3.0 and higher, see
 https://github.com/elastic/elasticsearch/pull/28284}
+
+\item{include_type_name}{(logical) If set to \code{TRUE}, you can include a type
+name, if not an error will occur. default: not set. See Details.}
 
 \item{...}{Curl options passed on to \link[crul:verb-PUT]{crul::verb-PUT}, \link[crul:verb-GET]{crul::verb-GET},
 or \link[crul:verb-HEAD]{crul::verb-HEAD}}
@@ -54,6 +59,9 @@ index and recreate index with new mapping
 \item \code{field_mapping_get} -
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-field-mapping.html}
 }
+
+See \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/removal-of-types.html}
+for information on type removal
 }
 \examples{
 \dontrun{

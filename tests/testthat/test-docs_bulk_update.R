@@ -6,41 +6,68 @@ test_that("docs_bulk_update - works with data.frame input", {
   # remove index if it exists
   if (index_exists(x, "world")) index_delete(x, "world")
 
-  iris_mapping <- '{
-   "mappings": {
-     "world": {
-       "properties": {
-          "Petal_Length": {
-            "type": "float"
-          },
-          "Petal_Width": {
-            "type": "float"
-          },
-          "Sepal_Length": {
-            "type": "float"
-          },
-          "Sepal_Width": {
-            "type": "float"
-          },
-          "Species": {
-            "type": "%s"
-          },
-          "id": {
-            "type": "long"
-          }
-        }
-     }
-   }
-  }'
+  # iris_mapping <- '{
+  #  "mappings": {
+  #    "world": {
+  #      "properties": {
+  #         "Petal_Length": {
+  #           "type": "float"
+  #         },
+  #         "Petal_Width": {
+  #           "type": "float"
+  #         },
+  #         "Sepal_Length": {
+  #           "type": "float"
+  #         },
+  #         "Sepal_Width": {
+  #           "type": "float"
+  #         },
+  #         "Species": {
+  #           "type": "%s"
+  #         },
+  #         "id": {
+  #           "type": "long"
+  #         }
+  #       }
+  #    }
+  #  }
+  # }'
 
-  # use 'string' or 'text' depending on ES version
-  string_text <- if (x$es_ver() < 500) "string" else "text"
-  index_create(x, 'world', sprintf(iris_mapping, string_text))
+  # iris_mapping2 <- '{
+  #  "mappings": {
+  #    "properties": {
+  #       "Petal_Length": {
+  #         "type": "float"
+  #       },
+  #       "Petal_Width": {
+  #         "type": "float"
+  #       },
+  #       "Sepal_Length": {
+  #         "type": "float"
+  #       },
+  #       "Sepal_Width": {
+  #         "type": "float"
+  #       },
+  #       "Species": {
+  #         "type": "%s"
+  #       },
+  #       "id": {
+  #         "type": "long"
+  #       }
+  #     }
+  #  }
+  # }'
+
+  # # use 'string' or 'text' depending on ES version
+  # string_text <- if (x$es_ver() < 500) "string" else "text"
+  # # use mapping without type if ES >= 7
+  # mapping <- if (x$es_ver() >= 700) iris_mapping2 else iris_mapping
+  # index_create(x, 'world', sprintf(mapping, string_text))
 
   # load bulk
   iris <- stats::setNames(iris, gsub("\\.", "_", names(iris)))
   iris$id <- seq_len(NROW(iris))
-  invisible(docs_bulk(x, iris, "world", "world", quiet = TRUE,
+  invisible(docs_bulk(x, iris, "world", quiet = TRUE,
     es_ids = FALSE))
 
   # get data
@@ -51,7 +78,7 @@ test_that("docs_bulk_update - works with data.frame input", {
   iris$Sepal_Length <- iris$Sepal_Length / 10
 
   # load again
-  invisible(a <- docs_bulk_update(x, iris, index = "world", type = "world",
+  invisible(a <- docs_bulk_update(x, iris, index = "world",
     quiet = TRUE))
 
   # get data again
@@ -71,7 +98,7 @@ test_that("docs_bulk_update - works with data.frame input", {
   )
 
   # ES version sensitive test of body results
-  if (gsub("\\.", "", x$ping()$version$number) >= 500) {
+  if (x$es_ver() >= 500) {
     expect_equal(a[[1]]$items[[1]]$update$`_index`, "world")
   } else {
     expect_equal(a[[1]]$items[[1]]$update$`_index`, "world")
@@ -105,9 +132,7 @@ test_that("docs_bulk_update - works with data.frame where ids are factors", {
 
 test_that("docs_bulk_update - works with data.frame with boolean types", {
   # remove index if it exists
-  if (index_exists(x, "mixed")) {
-    index_delete(x, "mixed")
-  }
+  if (index_exists(x, "mixed")) index_delete(x, "mixed")
 
   # create a data frame with mixed bool and non-bool types
   mixed <- data.frame(
@@ -117,40 +142,54 @@ test_that("docs_bulk_update - works with data.frame with boolean types", {
     stringsAsFactors = FALSE
   )
 
-  mixed_mapping_gt_v5 <- '{
-    "mappings": {
-      "mixed": {
-        "properties": {
-          "x": { "type": "boolean" },
-          "y": { "type": "keyword" }
-        }
-      }
-    }
-  }'
-  mixed_mapping_lt_v5 <- '{
-    "mappings": {
-      "mixed": {
-        "properties": {
-          "x": { "type": "boolean" },
-          "y": { "type": "string" }
-        }
-      }
-    }
-  }'
+  # mixed_mapping_gt_v5 <- '{
+  #   "mappings": {
+  #     "mixed": {
+  #       "properties": {
+  #         "x": { "type": "boolean" },
+  #         "y": { "type": "keyword" }
+  #       }
+  #     }
+  #   }
+  # }'
+  # mixed_mapping_lt_v5 <- '{
+  #   "mappings": {
+  #     "mixed": {
+  #       "properties": {
+  #         "x": { "type": "boolean" },
+  #         "y": { "type": "string" }
+  #       }
+  #     }
+  #   }
+  # }'
+  # mixed_mapping_lt_v7<- '{
+  #   "mappings": {
+  #     "properties": {
+  #       "x": { "type": "boolean" },
+  #       "y": { "type": "text" }
+  #     }
+  #   }
+  # }'
 
-  # toggle mapping types based on ES version
-  mixed_mapping <- if (x$es_ver() < 500) mixed_mapping_lt_v5 else mixed_mapping_gt_v5
-  index_create(x, "mixed", mixed_mapping)
+  # # toggle mapping types based on ES version
+  # mixed_mapping <- if (x$es_ver() < 500) {
+  #   mixed_mapping_lt_v5 
+  # } else if (x$es_ver() >= 700) {
+  #   mixed_mapping_lt_v7
+  # } else {
+  #   mixed_mapping_gt_v5
+  # }
+  # index_create(x, "mixed", mixed_mapping)
 
   # load via bulk update
-  invisible(docs_bulk(x, mixed, index = "mixed", type = "mixed", quiet = TRUE,
+  invisible(docs_bulk(x, mixed, index = "mixed", quiet = TRUE,
     es_ids = FALSE))
 
   # add a new row
   mixed <- rbind(mixed, data.frame(id = 4, x = TRUE, y = "d"))
 
   # update data
-  update_res <- docs_bulk_update(x, mixed, index = "mixed", type = "mixed",
+  update_res <- docs_bulk_update(x, mixed, index = "mixed",
     quiet = TRUE)
   Sys.sleep(1) # sleep a bit to wait for data to be there
 

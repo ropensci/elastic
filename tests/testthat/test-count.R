@@ -3,6 +3,9 @@ context("count")
 x <- connect()
 load_shakespeare(x)
 
+# sleep to make sure data is available as expected
+Sys.sleep(2)
+
 test_that("count", {
   a <- count(x)
   b <- count(x, index = 'shakespeare')

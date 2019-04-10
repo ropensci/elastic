@@ -66,6 +66,7 @@ test_that("Search_template pre-registration works", {
   invisible(docs_bulk(x, iris2, "iris"))
 
   if (x$es_ver() < 600) {
+    if (x$es_ver() == 566) skip('Search_template_register not working in this ES version')
     a <- Search_template_register(x, 'foobar', body = body2)
     expect_is(a, "list")
     if (x$es_ver() >= 500) {
