@@ -18,3 +18,4 @@ notes-v2.md
 ^LICENSE\.md$
 ^_pkgdown\.yml$
 ^docs$
+^revdep$

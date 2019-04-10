@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/ropensci/elastic",
   "issueTracker": "https://github.com/ropensci/elastic/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.9.9.9100",
+  "version": "1.0.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -140,7 +140,7 @@
   "contIntegration": "https://travis-ci.org/ropensci/elastic",
   "releaseNotes": "https://github.com/ropensci/elastic/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/elastic/blob/master/README.md",
-  "fileSize": "1207.158KB",
+  "fileSize": "1208.077KB",
   "applicationCategory": "Databases",
   "isPartOf": "https://ropensci.org",
   "keywords": ["database", "Elasticsearch", "HTTP", "API", "search", "NoSQL", "Java", "JSON", "documents", "elasticsearch", "http", "database-wrapper", "json", "rstats", "r", "r-package", "data-science", "etl"],

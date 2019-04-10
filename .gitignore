@@ -4,3 +4,6 @@
 inst/ignore/notes*
 notes-v2.md
 .httr-oauth
+revdep/checks.noindex
+revdep/data.sqlite
+revdep/library.noindex
