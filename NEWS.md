@@ -28,6 +28,7 @@ There is one very big downside to this: breaks existing code. That's the big one
 * add examples to `Search()` and `Search_uri()` docs of how to use profiles (https://www.elastic.co/guide/en/elasticsearch/reference/current/search-profile.html) (#194)
 * additional example added to `docs_bulk_prep()` for doing a mix of actions (i.e., delete, create, etc.)
 * improved examples throughout package docs so that examples are more self-contained
+* add `include_type_name` param in mappings fxns (#250)
 
 ### BUG FIXES
 
