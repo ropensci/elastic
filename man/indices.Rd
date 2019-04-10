@@ -188,6 +188,12 @@ for all the options.
 https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules.html
 for the \emph{static} and \emph{dynamic} settings you can set on indices.
 }
+\section{Mappings}{
+
+The "keyword" type is not supported in Elasticsearch < v5. If you do use a mapping
+with "keyword" type in Elasticsearch < v5 \code{\link[=index_create]{index_create()}} should fail.
+}
+
 \examples{
 \dontrun{
 # connection setup
