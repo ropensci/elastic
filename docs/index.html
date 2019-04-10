@@ -231,20 +231,26 @@
 <a href="#public-library-of-science-plos-data" class="anchor"></a>Public Library of Science (PLOS) data</h3>
 <p>A dataset inluded in the <code>elastic</code> package is metadata for PLOS scholarly articles. Get the file path, then load:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="cf">if</span> (<span class="kw"><a href="reference/indices.html">index_exists</a></span>(x, <span class="st">"plos"</span>)) <span class="kw"><a href="reference/indices.html">index_delete</a></span>(x, <span class="st">"plos"</span>)</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">plosdat &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"examples"</span>, <span class="st">"plos_data.json"</span>, <span class="dt">package =</span> <span class="st">"elastic"</span>)</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/invisible">invisible</a></span>(<span class="kw"><a href="reference/docs_bulk.html">docs_bulk</a></span>(x, plosdat))</a></code></pre></div>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#&gt; $acknowledged</span></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#&gt; [1] TRUE</span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">plosdat &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"examples"</span>, <span class="st">"plos_data.json"</span>, <span class="dt">package =</span> <span class="st">"elastic"</span>)</a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/invisible">invisible</a></span>(<span class="kw"><a href="reference/docs_bulk.html">docs_bulk</a></span>(x, plosdat))</a></code></pre></div>
 </div>
 <div id="global-biodiversity-information-facility-gbif-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#global-biodiversity-information-facility-gbif-data" class="anchor"></a>Global Biodiversity Information Facility (GBIF) data</h3>
 <p>A dataset inluded in the <code>elastic</code> package is data for GBIF species occurrence records. Get the file path, then load:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="cf">if</span> (<span class="kw"><a href="reference/indices.html">index_exists</a></span>(x, <span class="st">"gbif"</span>)) <span class="kw"><a href="reference/indices.html">index_delete</a></span>(x, <span class="st">"gbif"</span>)</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">gbifdat &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"examples"</span>, <span class="st">"gbif_data.json"</span>, <span class="dt">package =</span> <span class="st">"elastic"</span>)</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/invisible">invisible</a></span>(<span class="kw"><a href="reference/docs_bulk.html">docs_bulk</a></span>(x, gbifdat))</a></code></pre></div>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co">#&gt; $acknowledged</span></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="co">#&gt; [1] TRUE</span></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">gbifdat &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"examples"</span>, <span class="st">"gbif_data.json"</span>, <span class="dt">package =</span> <span class="st">"elastic"</span>)</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/invisible">invisible</a></span>(<span class="kw"><a href="reference/docs_bulk.html">docs_bulk</a></span>(x, gbifdat))</a></code></pre></div>
 <p>GBIF geo data with a coordinates element to allow <code>geo_shape</code> queries</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="cf">if</span> (<span class="kw"><a href="reference/indices.html">index_exists</a></span>(x, <span class="st">"gbifgeo"</span>)) <span class="kw"><a href="reference/indices.html">index_delete</a></span>(x, <span class="st">"gbifgeo"</span>)</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">gbifgeo &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"examples"</span>, <span class="st">"gbif_geo.json"</span>, <span class="dt">package =</span> <span class="st">"elastic"</span>)</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/invisible">invisible</a></span>(<span class="kw"><a href="reference/docs_bulk.html">docs_bulk</a></span>(x, gbifgeo))</a></code></pre></div>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co">#&gt; $acknowledged</span></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="co">#&gt; [1] TRUE</span></a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">gbifgeo &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"examples"</span>, <span class="st">"gbif_geo.json"</span>, <span class="dt">package =</span> <span class="st">"elastic"</span>)</a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/invisible">invisible</a></span>(<span class="kw"><a href="reference/docs_bulk.html">docs_bulk</a></span>(x, gbifgeo))</a></code></pre></div>
 </div>
 <div id="more-data-sets" class="section level3">
 <h3 class="hasAnchor">
