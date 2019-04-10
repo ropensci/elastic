@@ -39,6 +39,11 @@ matrix:
     - os: linux
       r: release
       env: ES_VERSION=6.5.3 R_CODECOV=true
+      before_deploy: Rscript -e 'remotes::install_cran("pkgdown");remotes::install_github("ropensci/rotemplate")'
+      deploy:
+        provider: script
+        script: Rscript -e 'pkgdown::deploy_site_github()'
+        skip_cleanup: true
     - os: linux
       r: release
       env: ES_VERSION=7.0.0-alpha2
