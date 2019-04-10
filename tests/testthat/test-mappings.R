@@ -98,6 +98,8 @@ test_that("field_mapping_get works", {
   if (!es_version(x) < 110) {
 
     include_type_name <- if (es_version(x) >= 700) TRUE else NULL
+    # temporary hack for v7alpha
+    if (x$info()$version$number == "7.0.0-alpha2") include_type_name <- NULL
     
     # Get field mappings
     # get all indices
