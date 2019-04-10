@@ -97,7 +97,7 @@ before_install:
 
     "7.0.0")
       export ES_VERSION=7.0.0 ;
-      curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ES_VERSION.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION.deb && sudo service elasticsearch start
+      curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ES_VERSION-amd64.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION-amd64.deb && sudo service elasticsearch start
       ;;
    esac
 
