@@ -360,6 +360,12 @@ for all the options.</p>
 https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules.html
 for the <em>static</em> and <em>dynamic</em> settings you can set on indices.</p>
     
+    <h2 class="hasAnchor" id="mappings"><a class="anchor" href="#mappings"></a>Mappings</h2>
+
+    
+    <p>The "keyword" type is not supported in Elasticsearch &lt; v5. If you do use a mapping
+with "keyword" type in Elasticsearch &lt; v5 <code>index_create()</code> should fail.</p>
+    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><a href='https://www.elastic.co/guide/en/elasticsearch/reference/current/indices.html'>https://www.elastic.co/guide/en/elasticsearch/reference/current/indices.html</a></p>
@@ -560,6 +566,8 @@ for the <em>static</em> and <em>dynamic</em> settings you can set on indices.</p
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#mappings">Mappings</a></li>
 
       <li><a href="#references">References</a></li>
       

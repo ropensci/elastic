@@ -114,7 +114,7 @@
 <div id="compatibility" class="section level2">
 <h2 class="hasAnchor">
 <a href="#compatibility" class="anchor"></a>Compatibility</h2>
-<p>This client is developed following the latest stable releases, currently <code>v6.7.1</code>. It is generally compatible with older versions of Elasticsearch. Unlike the <a href="https://github.com/elastic/elasticsearch-py#compatibility">Python client</a>, we try to keep as much compatibility as possible within a single version of this client, as that’s an easier setup in R world.</p>
+<p>This client is developed following the latest stable releases, currently <code>v7.0.0</code>. It is generally compatible with older versions of Elasticsearch. Unlike the <a href="https://github.com/elastic/elasticsearch-py#compatibility">Python client</a>, we try to keep as much compatibility as possible within a single version of this client, as that’s an easier setup in R world.</p>
 </div>
 <div id="security" class="section level2">
 <h2 class="hasAnchor">
@@ -151,17 +151,17 @@
 <p>If you’re using boot2docker, you’ll need to use the IP address in place of localhost. Get it by doing <code>boot2docker ip</code>.</p>
 <p><strong>on OSX</strong></p>
 <ul>
-<li>Download zip or tar file from Elasticsearch <a href="https://www.elastic.co/downloads">see here for download</a>, e.g., <code>curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.7.1.tar.gz</code>
+<li>Download zip or tar file from Elasticsearch <a href="https://www.elastic.co/downloads">see here for download</a>, e.g., <code>curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.0.0-darwin-x86_64.tar.gz</code>
 </li>
-<li>Extract: <code>tar -zxvf elasticsearch-6.7.1.tar.gz</code>
+<li>Extract: <code>tar -zxvf elasticsearch-7.0.0-darwin-x86_64.tar.gz</code>
 </li>
-<li>Move it: <code>sudo mv elasticsearch-6.7.1 /usr/local</code>
+<li>Move it: <code>sudo mv elasticsearch-7.0.0 /usr/local</code>
 </li>
 <li>Navigate to /usr/local: <code>cd /usr/local</code>
 </li>
 <li>Delete symlinked <code>elasticsearch</code> directory: <code>rm -rf elasticsearch</code>
 </li>
-<li>Add shortcut: <code>sudo ln -s elasticsearch-6.7.1 elasticsearch</code> (replace version with your version)</li>
+<li>Add shortcut: <code>sudo ln -s elasticsearch-7.0.0 elasticsearch</code> (replace version with your version)</li>
 </ul>
 <p>You can also install via Homebrew: <code>brew install elasticsearch</code></p>
 <blockquote>
@@ -231,26 +231,20 @@
 <a href="#public-library-of-science-plos-data" class="anchor"></a>Public Library of Science (PLOS) data</h3>
 <p>A dataset inluded in the <code>elastic</code> package is metadata for PLOS scholarly articles. Get the file path, then load:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="cf">if</span> (<span class="kw"><a href="reference/indices.html">index_exists</a></span>(x, <span class="st">"plos"</span>)) <span class="kw"><a href="reference/indices.html">index_delete</a></span>(x, <span class="st">"plos"</span>)</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#&gt; $acknowledged</span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#&gt; [1] TRUE</span></a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">plosdat &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"examples"</span>, <span class="st">"plos_data.json"</span>, <span class="dt">package =</span> <span class="st">"elastic"</span>)</a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/invisible">invisible</a></span>(<span class="kw"><a href="reference/docs_bulk.html">docs_bulk</a></span>(x, plosdat))</a></code></pre></div>
+<a class="sourceLine" id="cb12-2" data-line-number="2">plosdat &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"examples"</span>, <span class="st">"plos_data.json"</span>, <span class="dt">package =</span> <span class="st">"elastic"</span>)</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/invisible">invisible</a></span>(<span class="kw"><a href="reference/docs_bulk.html">docs_bulk</a></span>(x, plosdat))</a></code></pre></div>
 </div>
 <div id="global-biodiversity-information-facility-gbif-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#global-biodiversity-information-facility-gbif-data" class="anchor"></a>Global Biodiversity Information Facility (GBIF) data</h3>
 <p>A dataset inluded in the <code>elastic</code> package is data for GBIF species occurrence records. Get the file path, then load:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="cf">if</span> (<span class="kw"><a href="reference/indices.html">index_exists</a></span>(x, <span class="st">"gbif"</span>)) <span class="kw"><a href="reference/indices.html">index_delete</a></span>(x, <span class="st">"gbif"</span>)</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co">#&gt; $acknowledged</span></a>
-<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="co">#&gt; [1] TRUE</span></a>
-<a class="sourceLine" id="cb13-4" data-line-number="4">gbifdat &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"examples"</span>, <span class="st">"gbif_data.json"</span>, <span class="dt">package =</span> <span class="st">"elastic"</span>)</a>
-<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/invisible">invisible</a></span>(<span class="kw"><a href="reference/docs_bulk.html">docs_bulk</a></span>(x, gbifdat))</a></code></pre></div>
+<a class="sourceLine" id="cb13-2" data-line-number="2">gbifdat &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"examples"</span>, <span class="st">"gbif_data.json"</span>, <span class="dt">package =</span> <span class="st">"elastic"</span>)</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/invisible">invisible</a></span>(<span class="kw"><a href="reference/docs_bulk.html">docs_bulk</a></span>(x, gbifdat))</a></code></pre></div>
 <p>GBIF geo data with a coordinates element to allow <code>geo_shape</code> queries</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="cf">if</span> (<span class="kw"><a href="reference/indices.html">index_exists</a></span>(x, <span class="st">"gbifgeo"</span>)) <span class="kw"><a href="reference/indices.html">index_delete</a></span>(x, <span class="st">"gbifgeo"</span>)</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co">#&gt; $acknowledged</span></a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="co">#&gt; [1] TRUE</span></a>
-<a class="sourceLine" id="cb14-4" data-line-number="4">gbifgeo &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"examples"</span>, <span class="st">"gbif_geo.json"</span>, <span class="dt">package =</span> <span class="st">"elastic"</span>)</a>
-<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/invisible">invisible</a></span>(<span class="kw"><a href="reference/docs_bulk.html">docs_bulk</a></span>(x, gbifgeo))</a></code></pre></div>
+<a class="sourceLine" id="cb14-2" data-line-number="2">gbifgeo &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"examples"</span>, <span class="st">"gbif_geo.json"</span>, <span class="dt">package =</span> <span class="st">"elastic"</span>)</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/invisible">invisible</a></span>(<span class="kw"><a href="reference/docs_bulk.html">docs_bulk</a></span>(x, gbifgeo))</a></code></pre></div>
 </div>
 <div id="more-data-sets" class="section level3">
 <h3 class="hasAnchor">
@@ -293,17 +287,17 @@
 <a class="sourceLine" id="cb16-7" data-line-number="7"><span class="co">#&gt; [1] "article"</span></a>
 <a class="sourceLine" id="cb16-8" data-line-number="8"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb16-9" data-line-number="9"><span class="co">#&gt; [[1]]$`_id`</span></a>
-<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co">#&gt; [1] "216"</span></a>
+<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co">#&gt; [1] "813"</span></a>
 <a class="sourceLine" id="cb16-11" data-line-number="11"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb16-12" data-line-number="12"><span class="co">#&gt; [[1]]$`_score`</span></a>
-<a class="sourceLine" id="cb16-13" data-line-number="13"><span class="co">#&gt; [1] 4.423327</span></a>
+<a class="sourceLine" id="cb16-13" data-line-number="13"><span class="co">#&gt; [1] 5.18676</span></a>
 <a class="sourceLine" id="cb16-14" data-line-number="14"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb16-15" data-line-number="15"><span class="co">#&gt; [[1]]$`_source`</span></a>
 <a class="sourceLine" id="cb16-16" data-line-number="16"><span class="co">#&gt; [[1]]$`_source`$id</span></a>
-<a class="sourceLine" id="cb16-17" data-line-number="17"><span class="co">#&gt; [1] "10.1371/journal.pone.0107664"</span></a>
+<a class="sourceLine" id="cb16-17" data-line-number="17"><span class="co">#&gt; [1] "10.1371/journal.pone.0107638"</span></a>
 <a class="sourceLine" id="cb16-18" data-line-number="18"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb16-19" data-line-number="19"><span class="co">#&gt; [[1]]$`_source`$title</span></a>
-<a class="sourceLine" id="cb16-20" data-line-number="20"><span class="co">#&gt; [1] "Antibody-Validated Proteins in Inflamed Islets of Fulminant Type 1 Diabetes Profiled by Laser-Capture Microdissection Followed by Mass Spectrometry"</span></a></code></pre></div>
+<a class="sourceLine" id="cb16-20" data-line-number="20"><span class="co">#&gt; [1] "Sortase A Induces Th17-Mediated and Antibody-Independent Immunity to Heterologous Serotypes of Group A Streptococci"</span></a></code></pre></div>
 </div>
 <div id="get-documents" class="section level2">
 <h2 class="hasAnchor">
@@ -323,7 +317,7 @@
 <a class="sourceLine" id="cb17-12" data-line-number="12"><span class="co">#&gt; [1] 1</span></a>
 <a class="sourceLine" id="cb17-13" data-line-number="13"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb17-14" data-line-number="14"><span class="co">#&gt; $`_seq_no`</span></a>
-<a class="sourceLine" id="cb17-15" data-line-number="15"><span class="co">#&gt; [1] 1</span></a>
+<a class="sourceLine" id="cb17-15" data-line-number="15"><span class="co">#&gt; [1] 4</span></a>
 <a class="sourceLine" id="cb17-16" data-line-number="16"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb17-17" data-line-number="17"><span class="co">#&gt; $`_primary_term`</span></a>
 <a class="sourceLine" id="cb17-18" data-line-number="18"><span class="co">#&gt; [1] 1</span></a>
@@ -352,7 +346,7 @@
 <a class="sourceLine" id="cb18-12" data-line-number="12"><span class="co">#&gt; [1] 1</span></a>
 <a class="sourceLine" id="cb18-13" data-line-number="13"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb18-14" data-line-number="14"><span class="co">#&gt; $`_seq_no`</span></a>
-<a class="sourceLine" id="cb18-15" data-line-number="15"><span class="co">#&gt; [1] 1</span></a>
+<a class="sourceLine" id="cb18-15" data-line-number="15"><span class="co">#&gt; [1] 4</span></a>
 <a class="sourceLine" id="cb18-16" data-line-number="16"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb18-17" data-line-number="17"><span class="co">#&gt; $`_primary_term`</span></a>
 <a class="sourceLine" id="cb18-18" data-line-number="18"><span class="co">#&gt; [1] 1</span></a>
@@ -380,7 +374,7 @@
 <a class="sourceLine" id="cb19-14" data-line-number="14"><span class="co">#&gt; [1] 1</span></a>
 <a class="sourceLine" id="cb19-15" data-line-number="15"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb19-16" data-line-number="16"><span class="co">#&gt; $docs[[1]]$`_seq_no`</span></a>
-<a class="sourceLine" id="cb19-17" data-line-number="17"><span class="co">#&gt; [1] 0</span></a>
+<a class="sourceLine" id="cb19-17" data-line-number="17"><span class="co">#&gt; [1] 1</span></a>
 <a class="sourceLine" id="cb19-18" data-line-number="18"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb19-19" data-line-number="19"><span class="co">#&gt; $docs[[1]]$`_primary_term`</span></a>
 <a class="sourceLine" id="cb19-20" data-line-number="20"><span class="co">#&gt; [1] 1</span></a>
@@ -411,7 +405,7 @@
 <a class="sourceLine" id="cb19-45" data-line-number="45"><span class="co">#&gt; [1] 1</span></a>
 <a class="sourceLine" id="cb19-46" data-line-number="46"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb19-47" data-line-number="47"><span class="co">#&gt; $docs[[2]]$`_seq_no`</span></a>
-<a class="sourceLine" id="cb19-48" data-line-number="48"><span class="co">#&gt; [1] 0</span></a>
+<a class="sourceLine" id="cb19-48" data-line-number="48"><span class="co">#&gt; [1] 2</span></a>
 <a class="sourceLine" id="cb19-49" data-line-number="49"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb19-50" data-line-number="50"><span class="co">#&gt; $docs[[2]]$`_primary_term`</span></a>
 <a class="sourceLine" id="cb19-51" data-line-number="51"><span class="co">#&gt; [1] 1</span></a>
@@ -440,7 +434,7 @@
 <a class="sourceLine" id="cb20-12" data-line-number="12"><span class="co">#&gt; [1] 1</span></a>
 <a class="sourceLine" id="cb20-13" data-line-number="13"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb20-14" data-line-number="14"><span class="co">#&gt; $`_seq_no`</span></a>
-<a class="sourceLine" id="cb20-15" data-line-number="15"><span class="co">#&gt; [1] 0</span></a>
+<a class="sourceLine" id="cb20-15" data-line-number="15"><span class="co">#&gt; [1] 1</span></a>
 <a class="sourceLine" id="cb20-16" data-line-number="16"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb20-17" data-line-number="17"><span class="co">#&gt; $`_primary_term`</span></a>
 <a class="sourceLine" id="cb20-18" data-line-number="18"><span class="co">#&gt; [1] 1</span></a>
@@ -461,15 +455,15 @@
 <p>You can optionally get back raw <code>json</code> from <code><a href="reference/Search.html">Search()</a></code>, <code><a href="reference/docs_get.html">docs_get()</a></code>, and <code><a href="reference/docs_mget.html">docs_mget()</a></code> setting parameter <code>raw=TRUE</code>.</p>
 <p>For example:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">(out &lt;-<span class="st"> </span><span class="kw"><a href="reference/docs_mget.html">docs_mget</a></span>(x, <span class="dt">index =</span> <span class="st">"plos"</span>, <span class="dt">type =</span> <span class="st">"article"</span>, <span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="dt">raw =</span> <span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="co">#&gt; [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"1\",\"_version\":1,\"_seq_no\":0,\"_primary_term\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098602\",\"title\":\"Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar\"}},{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"2\",\"_version\":1,\"_seq_no\":0,\"_primary_term\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0107757\",\"title\":\"Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition\"}}]}"</span></a>
+<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="co">#&gt; [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"1\",\"_version\":1,\"_seq_no\":1,\"_primary_term\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098602\",\"title\":\"Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar\"}},{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"2\",\"_version\":1,\"_seq_no\":2,\"_primary_term\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0107757\",\"title\":\"Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition\"}}]}"</span></a>
 <a class="sourceLine" id="cb21-3" data-line-number="3"><span class="co">#&gt; attr(,"class")</span></a>
 <a class="sourceLine" id="cb21-4" data-line-number="4"><span class="co">#&gt; [1] "elastic_mget"</span></a></code></pre></div>
 <p>Then parse</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">jsonlite<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/jsonlite/topics/fromJSON">fromJSON</a></span>(out)</a>
 <a class="sourceLine" id="cb22-2" data-line-number="2"><span class="co">#&gt; $docs</span></a>
 <a class="sourceLine" id="cb22-3" data-line-number="3"><span class="co">#&gt;   _index   _type _id _version _seq_no _primary_term found</span></a>
-<a class="sourceLine" id="cb22-4" data-line-number="4"><span class="co">#&gt; 1   plos article   1        1       0             1  TRUE</span></a>
-<a class="sourceLine" id="cb22-5" data-line-number="5"><span class="co">#&gt; 2   plos article   2        1       0             1  TRUE</span></a>
+<a class="sourceLine" id="cb22-4" data-line-number="4"><span class="co">#&gt; 1   plos article   1        1       1             1  TRUE</span></a>
+<a class="sourceLine" id="cb22-5" data-line-number="5"><span class="co">#&gt; 2   plos article   2        1       2             1  TRUE</span></a>
 <a class="sourceLine" id="cb22-6" data-line-number="6"><span class="co">#&gt;                     _source.id</span></a>
 <a class="sourceLine" id="cb22-7" data-line-number="7"><span class="co">#&gt; 1 10.1371/journal.pone.0098602</span></a>
 <a class="sourceLine" id="cb22-8" data-line-number="8"><span class="co">#&gt; 2 10.1371/journal.pone.0107757</span></a>
