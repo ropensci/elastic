@@ -40,7 +40,7 @@ test_that("docs_bulk_update - works with data.frame input", {
   # load bulk
   iris <- stats::setNames(iris, gsub("\\.", "_", names(iris)))
   iris$id <- seq_len(NROW(iris))
-  invisible(docs_bulk(x, iris, "world", "world", quiet = TRUE, 
+  invisible(docs_bulk(x, iris, "world", "world", quiet = TRUE,
     es_ids = FALSE))
 
   # get data
@@ -51,13 +51,13 @@ test_that("docs_bulk_update - works with data.frame input", {
   iris$Sepal_Length <- iris$Sepal_Length / 10
 
   # load again
-  invisible(a <- docs_bulk_update(x, iris, index = "world", type = "world", 
+  invisible(a <- docs_bulk_update(x, iris, index = "world", type = "world",
     quiet = TRUE))
 
   # get data again
   Sys.sleep(2) # sleep a bit to wait for data to be updated
   res_after <- Search(x, "world", asdf = TRUE)
-  
+
   expect_is(a, "list")
   expect_equal(length(a), 1)
   expect_named(a[[1]], c('took', 'errors', 'items'))
@@ -66,7 +66,7 @@ test_that("docs_bulk_update - works with data.frame input", {
   expect_is(res_before, "list")
   expect_is(res_after, "list")
   expect_gt(
-    mean(as.numeric(res_before$hits$hits$`_source.Sepal_Length`)), 
+    mean(as.numeric(res_before$hits$hits$`_source.Sepal_Length`)),
     mean(as.numeric(res_after$hits$hits$`_source.Sepal_Length`))
   )
 
@@ -83,7 +83,7 @@ test_that("docs_bulk_update - works with data.frame where ids are factors", {
   if (index_exists(x, "mars")) {
     index_delete(x, "mars")
   }
-  
+
   df <- data.frame(name = letters[1:3], size = 1:3, id =c("AB", "CD", "EF"))
   invisible(docs_bulk(x ,df, index = "mars", type = "mars", quiet = TRUE, es_ids = FALSE))
   # alter data.frame
@@ -91,14 +91,14 @@ test_that("docs_bulk_update - works with data.frame where ids are factors", {
   # update data
   a <- docs_bulk_update(x, df, index = "mars", type = "mars", quiet = TRUE)
   Sys.sleep(1)
-  
+
   expect_is(df$id, "factor")
   expect_is(a, "list")
   expect_equal(length(a), 1)
   expect_named(a[[1]], c('took', 'errors', 'items'))
   expect_equal(length(a[[1]]$items), NROW(df))
   expect_equal(
-    sort(Search(x, 'mars', asdf = TRUE)$hits$hits$`_id`), 
+    sort(Search(x, 'mars', asdf = TRUE)$hits$hits$`_id`),
     sort(c("CD", "AB", "EF"))
   )
 })
@@ -117,7 +117,7 @@ test_that("docs_bulk_update - works with data.frame with boolean types", {
     stringsAsFactors = FALSE
   )
 
-  mixed_mapping <- '{
+  mixed_mapping_gt_v5 <- '{
     "mappings": {
       "mixed": {
         "properties": {
@@ -127,19 +127,31 @@ test_that("docs_bulk_update - works with data.frame with boolean types", {
       }
     }
   }'
+  mixed_mapping_lt_v5 <- '{
+    "mappings": {
+      "mixed": {
+        "properties": {
+          "x": { "type": "boolean" },
+          "y": { "type": "string" }
+        }
+      }
+    }
+  }'
 
-  # use 'string' or 'text' depending on ES version
-  string_text <- if (x$es_ver() < 500) "string" else "text"
-  index_create(x, "mixed", sprintf(mixed_mapping, string_text))
+  # toggle mapping types based on ES version
+  mixed_mapping <- if (x$es_ver() < 500) mixed_mapping_lt_v5 else mixed_mapping_gt_v5
+  index_create(x, "mixed", mixed_mapping)
 
   # load via bulk update
-  invisible(docs_bulk(x, mixed, index = "mixed", type = "mixed", quiet = TRUE, es_ids = FALSE))
+  invisible(docs_bulk(x, mixed, index = "mixed", type = "mixed", quiet = TRUE,
+    es_ids = FALSE))
 
   # add a new row
   mixed <- rbind(mixed, data.frame(id = 4, x = TRUE, y = "d"))
 
   # update data
-  update_res <- docs_bulk_update(x, mixed, index = "mixed", type = "mixed", quiet = TRUE)
+  update_res <- docs_bulk_update(x, mixed, index = "mixed", type = "mixed",
+    quiet = TRUE)
   Sys.sleep(1) # sleep a bit to wait for data to be there
 
   # get data frame back from search
@@ -160,11 +172,11 @@ test_that("docs_bulk_update - works with data.frame with boolean types", {
 
 test_that("docs_bulk_update fails well", {
   # certain classes not supported
-  expect_error(docs_bulk_update(x, 5, quiet = TRUE), 
+  expect_error(docs_bulk_update(x, 5, quiet = TRUE),
     "no 'docs_bulk_update' method for class numeric")
-  expect_error(docs_bulk_update(x, matrix(1), quiet = TRUE), 
+  expect_error(docs_bulk_update(x, matrix(1), quiet = TRUE),
     "no 'docs_bulk_update' method for class matrix")
-  expect_error(docs_bulk_update(x, TRUE, quiet = TRUE), 
+  expect_error(docs_bulk_update(x, TRUE, quiet = TRUE),
     "no 'docs_bulk_update' method for class logical")
 })
 
@@ -178,7 +190,7 @@ test_that("docs_bulk_update cleans up temp files", {
 
   df <- data.frame(name = letters[1:3], size = 1:3, id = 100:102)
   invisible(docs_bulk(x ,df, "googoo", "googoo", quiet = TRUE, es_ids = FALSE))
-  aa <- docs_bulk_update(x, df, index="googoo", type="googoo", 
+  aa <- docs_bulk_update(x, df, index="googoo", type="googoo",
     quiet = TRUE)
 
   expect_equal(length(list.files(curr_tempdir, pattern = "elastic__")), 0)
