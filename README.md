@@ -57,7 +57,7 @@ library('elastic')
 
 ## Install Elasticsearch
 
-* [Elasticsearch installation help](https://www.elastic.co/guide/en/elasticsearch/reference/current/_installation.html)
+* [Elasticsearch installation help](https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html)
 
 __w/ Docker__
 
