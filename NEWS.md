@@ -1,4 +1,4 @@
-elastic 1.0
+elastic 1.0.0
 =============
 
 ### BREAKING CHANGE
