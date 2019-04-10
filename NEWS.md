@@ -34,7 +34,7 @@ There is one very big downside to this: breaks existing code. That's the big one
 
 * `docs_bulk_update()` was not handling boolean values correctly. now fixed (#239) (#240) thanks to @dpmccabe
 
-## DEPRECATED AND DEFUNCT
+### DEPRECATED AND DEFUNCT
 
 * the `info()` method has been moved inside of the connection object. after calling `x = connect()` you can call `x$info()`
 * the `ping()` method has been marked as deprecated; instead, call `ping()` on the connection object created by a call to `connect()`
