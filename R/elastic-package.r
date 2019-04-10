@@ -20,7 +20,7 @@
 #'  (replace version with your version)
 #'
 #' For help on other platforms, see
-#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/_installation.html>
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html>
 #'
 #' **Start Elasticsearch**
 #'

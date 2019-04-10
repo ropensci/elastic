@@ -32,7 +32,7 @@ Install Elasticsearch (on OSX)
 }
 
 For help on other platforms, see
-\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/_installation.html}
+\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html}
 
 \strong{Start Elasticsearch}
 \itemize{
