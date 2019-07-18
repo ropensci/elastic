@@ -1,6 +1,6 @@
 context("Search_template")
 
-x <- connect()
+x <- connect(warn = FALSE)
 load_shakespeare(x)
 
 body1 <- '{

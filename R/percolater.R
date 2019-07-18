@@ -279,6 +279,7 @@ percolate_PUT <- function(conn, url, args, body = list(), ...) {
   cli <- conn$make_conn(url, json_type(), ...)
   tt <- cli$put(body = body, query = args, encode = 'json')
   geterror(conn, tt)
+  if (conn$warn) catch_warnings(tt)
   jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }
 
@@ -287,6 +288,7 @@ percolate_POST <- function(conn, url, args = NULL, body = list(), ...) {
   cli <- conn$make_conn(url, json_type(), ...)
   tt <- cli$post(body = body, query = args, encode = 'json')
   geterror(conn, tt)
+  if (conn$warn) catch_warnings(tt)
   jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }
 

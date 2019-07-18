@@ -87,9 +87,11 @@ docs_get <- function(conn, index, type, id, source = NULL, fields = NULL,
   cli <- conn$make_conn(url, list(), callopts)
   if (exists) {
     out <- cli$head(query = args)
+    if (conn$warn) catch_warnings(out)
     if (out$status_code == 200) TRUE else FALSE
   } else {
     out <- cli$get(query = args)
+    if (conn$warn) catch_warnings(out)
     geterror(conn, out)
     if (verbose) message(URLdecode(out$url))
     if (raw) {

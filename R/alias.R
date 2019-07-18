@@ -100,6 +100,7 @@ aliases_get <- function(conn, index=NULL, alias=NULL, ignore_unavailable=FALSE, 
 alias_exists <- function(conn, index=NULL, alias=NULL, ...) {
   is_conn(conn)
   res <- conn$make_conn(alias_url(conn, index, alias), ...)$head()
+  if (conn$warn) catch_warnings(res)
   if (res$status_code == 200) TRUE else FALSE
 }
 
@@ -123,6 +124,7 @@ alias_create <- function(conn, index, alias, filter=NULL, routing=NULL,
   )
   body <- jsonlite::toJSON(body, auto_unbox = TRUE)
   out <- conn$make_conn(aliases_url(conn), json_type(), ...)$post(body = body)
+  if (conn$warn) catch_warnings(out)
   geterror(conn, out)
   jsonlite::fromJSON(out$parse('UTF-8'), FALSE)
 }
@@ -137,6 +139,7 @@ alias_rename <- function(conn, index, alias, alias_new, ...) {
   ))
   body <- jsonlite::toJSON(body, auto_unbox = TRUE)
   out <- conn$make_conn(aliases_url(conn), json_type(), ...)$post(body = body)
+  if (conn$warn) catch_warnings(out)
   geterror(conn, out)
   jsonlite::fromJSON(out$parse('UTF-8'), FALSE)
 }
@@ -146,6 +149,7 @@ alias_rename <- function(conn, index, alias, alias_new, ...) {
 alias_delete <- function(conn, index=NULL, alias, ...) {
   is_conn(conn)
   out <- conn$make_conn(alias_url(conn, index, alias), ...)$delete()
+  if (conn$warn) catch_warnings(out)
   geterror(conn, out)
   jsonlite::fromJSON(out$parse('UTF-8'), FALSE)
 }
@@ -156,6 +160,7 @@ alias_delete <- function(conn, index=NULL, alias, ...) {
 alias_GET <- function(conn, index, alias, ignore, ...) {
   cli <- conn$make_conn(alias_url(conn, index, alias), ...)
   tt <- cli$get(query = ec(list(ignore_unavailable = as_log(ignore))))
+  if (conn$warn) catch_warnings(tt)
   geterror(conn, tt)
   jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }

@@ -1,6 +1,6 @@
 context("cat")
 
-x <- connect()
+x <- connect(warn = FALSE)
 load_shakespeare(x)
 
 test_that("cat_", {

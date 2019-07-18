@@ -117,22 +117,26 @@ indtemp_PUT <- function(conn, url, args, body = list(), ...) {
   cli <- conn$make_conn(url, json_type(), ...)
   tt <- cli$put(body = body, query = args, encode = 'json')
   geterror(conn, tt)
+  if (conn$warn) catch_warnings(tt)
   tt$status_code == 200
 }
 
 indtemp_GET <- function(conn, url, args, ...) {
   tt <- conn$make_conn(url, json_type(), ...)$get(query = args)
   geterror(conn, tt)
+  if (conn$warn) catch_warnings(tt)
   jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }
 
 indtemp_HEAD <- function(conn, url, ...) {
   tt <- conn$make_conn(url, json_type(), ...)$head()
+  if (conn$warn) catch_warnings(tt)
   tt$status_code == 200
 }
 
 indtemp_DELETE <- function(conn, url, ...) {
   tt <- conn$make_conn(url, json_type(), ...)$delete()
   geterror(conn, tt)
+  if (conn$warn) catch_warnings(tt)
   tt$status_code == 200
 }

@@ -61,5 +61,6 @@ reindex_POST <- function(conn, url, args = NULL, body = list(), ...) {
     body = body, query = args, encode = 'json'
   )
   geterror(conn, tt)
+  if (conn$warn) catch_warnings(tt)
   jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }

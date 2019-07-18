@@ -1,6 +1,6 @@
 context("mappings")
 
-x <- connect()
+x <- connect(warn = FALSE)
 load_omdb(x)
 
 ## create plos index first -----------------------------------

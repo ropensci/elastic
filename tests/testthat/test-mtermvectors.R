@@ -1,6 +1,6 @@
 context("mtermvectors")
 
-x <- connect()
+x <- connect(warn = FALSE)
 load_omdb(x)
 
 ids <- vapply(Search(x, "omdb", size = 2)$hits$hits, "[[", "", "_id")

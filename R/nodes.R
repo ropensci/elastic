@@ -101,6 +101,7 @@ node_GET <- function(conn, path, metric, node, raw, args, ...) {
   if (length(args) == 0) args <- NULL
   tt <- conn$make_conn(url, ...)$get(query = args)
   if (tt$status_code > 202) geterror(conn, tt)
+  if (conn$warn) catch_warnings(tt)
   res <- tt$parse("UTF-8")
   if (raw) res else jsonlite::fromJSON(res, FALSE)
 }

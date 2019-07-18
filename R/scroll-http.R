@@ -7,6 +7,7 @@ scroll_POST <- function(conn, path, args = list(), body, raw, asdf, stream_opts,
   )
   tt <- cli$post(query = args, body = body, encode = "json")
   geterror(conn, tt)
+  if (conn$warn) catch_warnings(tt)
   res <- tt$parse("UTF-8")
   if (raw) {
     res 
@@ -38,5 +39,6 @@ scroll_DELETE <- function(conn, path, body, ...) {
   )
   tt <- cli$delete(body = body, encode = "json")
   geterror(conn, tt)
+  if (conn$warn) catch_warnings(tt)
   tt$status_code == 200
 }

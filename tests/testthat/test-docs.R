@@ -1,6 +1,6 @@
 context("docs")
 
-x <- connect()
+x <- connect(warn = FALSE)
 
 ## create indices first -----------------------------------
 ind <- "stuff_l"

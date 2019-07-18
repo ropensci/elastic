@@ -200,5 +200,6 @@ type_exists <- function(conn, index, type, ...) {
   }
   
   res <- conn$make_conn(url, ...)$head()
+  if (conn$warn) catch_warnings(res)
   if (res$status_code == 200) TRUE else FALSE
 }

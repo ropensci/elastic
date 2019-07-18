@@ -1,6 +1,6 @@
 context("search_uri")
 
-x <- connect()
+x <- connect(warn = FALSE)
 load_shakespeare(x)
 
 test_that("basic search_uri works", {

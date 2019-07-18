@@ -35,6 +35,7 @@ msearch <- function(conn, x, raw = FALSE, asdf = FALSE, ...) {
   cli <- conn$make_conn(url)
   tt <- cli$post(body = crul::upload(x, "application/json"), encode = "json")
   geterror(conn, tt)
+  if (conn$warn) catch_warnings(tt)
   res <- tt$parse("UTF-8")
   if (raw) res else jsonlite::fromJSON(res, asdf)
 }

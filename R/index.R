@@ -296,6 +296,7 @@ index_exists <- function(conn, index, ...) {
   is_conn(conn)
   url <- file.path(conn$make_url(), esc(index))
   res <- conn$make_conn(url, ...)$head()
+  if (conn$warn) catch_warnings(res)
   if (res$status_code == 200) TRUE else FALSE
 }
 
@@ -307,6 +308,7 @@ index_delete <- function(conn, index, raw=FALSE, verbose=TRUE, ...) {
   out <- conn$make_conn(url, ...)$delete()
   if (verbose) message(URLdecode(out$url))
   geterror(conn, out)
+  if (conn$warn) catch_warnings(out)
   tt <- structure(out$parse('UTF-8'), class = "index_delete")
   if (raw) tt else es_parse(tt)
 }
@@ -531,6 +533,7 @@ close_open <- function(conn, index, which, ...) {
   url <- sprintf("%s/%s/%s", url, esc(index), which)
   out <- conn$make_conn(url, ...)$post()
   geterror(conn, out)
+  if (conn$warn) catch_warnings(out)
   jsonlite::fromJSON(out$parse("UTF-8"), FALSE)
 }
 
@@ -553,6 +556,7 @@ es_POST_ <- function(conn, index, which, args=NULL, ...) {
   }
   tt <- conn$make_conn(url, ...)$post(query = args)
   geterror(conn, tt)
+  if (conn$warn) catch_warnings(tt)
   jsonlite::fromJSON(tt$parse('UTF-8'), FALSE)
 }
 
@@ -560,11 +564,13 @@ analyze_POST <- function(conn, url, args = NULL, body, ...) {
   body <- check_inputs(body)
   out <- conn$make_conn(url, json_type(), ...)$post(query = args, body = body)
   geterror(conn, out)
+  if (conn$warn) catch_warnings(out)
   jsonlite::fromJSON(out$parse("UTF-8"))
 }
 
 cc_POST <- function(conn, url, args = NULL, ...) {
   tt <- conn$make_conn(url, ...)$post(body = args, encode = "json")
   if (tt$status_code > 202) geterror(conn, tt)
+  if (conn$warn) catch_warnings(tt)
   jsonlite::fromJSON(res <- tt$parse("UTF-8"), FALSE)
 }

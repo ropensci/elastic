@@ -1,6 +1,6 @@
 context("docs_bulk")
 
-x <- connect()
+x <- connect(warn = FALSE)
 
 test_that("docs_bulk - works with bulk format file", {
   # remove index if it exists

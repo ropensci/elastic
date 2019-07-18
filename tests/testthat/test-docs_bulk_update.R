@@ -1,6 +1,6 @@
 context("docs_bulk_update")
 
-x <- connect()
+x <- connect(warn = FALSE)
 
 test_that("docs_bulk_update - works with data.frame input", {
   # remove index if it exists

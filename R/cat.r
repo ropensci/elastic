@@ -233,6 +233,7 @@ cat_helper <- function(conn, what='', v=FALSE, i=NULL, f=NULL, h=NULL, help=FALS
     auth = crul::auth(conn$user, conn$pwd)
   )
   out <- cli$get(query = args)
+  if (conn$warn) catch_warnings(out)
   if (out$status_code > 202) geterror(conn, out)
   dat <- out$parse("UTF-8")
   if (identical(dat, "")) {

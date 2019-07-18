@@ -59,6 +59,7 @@ index_GET <- function(conn, index, features, raw, ...) {
     opts = c(conn$opts, ...), auth = crul::auth(conn$user, conn$pwd)
   )$get()
   if (tt$status_code > 202) geterror(conn, tt)
+  if (conn$warn) catch_warnings(tt)
   jsonlite::fromJSON(tt$parse('UTF-8'), FALSE)
 }
 
@@ -71,6 +72,7 @@ es_POST <- function(conn, path, index=NULL, type=NULL, clazz=NULL, raw,
   if (length(body) == 0) body <- NULL
   cli <- conn$make_conn(url, json_type(), ...)
   tt <- cli$post(body = body, query = args, encode = "json")
+  if (conn$warn) catch_warnings(tt)
   geterror(conn, tt)
   res <- tt$parse("UTF-8")
   if (!is.null(clazz)) {
@@ -85,6 +87,7 @@ es_DELETE <- function(conn, url, query = NULL, ...) {
   cli <- conn$make_conn(url, ...)
   tt <- cli$delete(query = query)
   geterror(conn, tt)
+  if (conn$warn) catch_warnings(tt)
   jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }
 
@@ -93,12 +96,14 @@ es_PUT <- function(conn, url, body = list(), args = list(), ...) {
   cli <- conn$make_conn(url, headers = json_type(), ...)
   tt <- cli$put(body = body, query = args, encode = "json")
   geterror(conn, tt)
+  if (conn$warn) catch_warnings(tt)
   jsonlite::fromJSON(tt$parse("UTF-8"), FALSE)
 }
 
 es_GET_ <- function(conn, url, query = NULL, ...) {
   cli <- conn$make_conn(url, list(), ...)
   tt <- cli$get(query = query)
+  if (conn$warn) catch_warnings(tt)
   geterror(conn, tt)
   jsonlite::fromJSON(tt$parse('UTF-8'), FALSE)
 }

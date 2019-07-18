@@ -73,6 +73,7 @@ task_GET <- function(conn, task_id = NULL, raw, args, ...) {
   if (length(args) == 0) args <- NULL
   tt <- conn$make_conn(url, list(), ...)$get(query = args)
   if (tt$status_code > 202) geterror(conn, tt)
+  if (conn$warn) catch_warnings(tt)
   res <- tt$parse("UTF-8")
   if (raw) res else jsonlite::fromJSON(res, FALSE)
 }
@@ -89,6 +90,7 @@ task_POST <- function(conn, node_id = NULL, task_id = NULL, raw, args, ...) {
   if (length(args) == 0) args <- NULL
   tt <- conn$make_conn(url, list(), ...)$post(query = args)
   if (tt$status_code > 202) geterror(conn, tt)
+  if (conn$warn) catch_warnings(tt)
   res <- tt$parse("UTF-8")
   if (raw) res else jsonlite::fromJSON(res, FALSE)
 }
