@@ -58,9 +58,13 @@
 #' @param analyze_wildcard (logical) Should wildcard and prefix queries be 
 #' analyzed or not. Default: \code{FALSE}.
 #' @param version (logical) Print the document version with each document.
-#' @param lenient If \code{TRUE} will cause format based failures (like 
+#' @param lenient (logical) If \code{TRUE} will cause format based failures (like 
 #' providing text to a numeric field) to be ignored. Default: \code{FALSE}
-#' @param raw (logical) If \code{FALSE} (default), data is parsed to list. 
+#' @param track_total_hits (logical, numeric) If \code{TRUE} will always track 
+#' the number of hits that match the query accurately. If \code{FALSE} will 
+#' count documents accurately up to 10000 documents. If \code{is.integer} will 
+#' count documents accurately up to the number. Default: \code{TRUE}
+#' @param raw (logical) If \code{FALSE} (default), data is parsed to list.
 #' If \code{TRUE}, then raw JSON returned
 #' @param asdf (logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}} 
 #' to parse JSON directly to a data.frame. If \code{FALSE} (Default), list 

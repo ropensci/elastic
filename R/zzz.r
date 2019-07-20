@@ -8,6 +8,14 @@ as_log <- function(x){
   }
 }
 
+ck <- function(x){
+  if (is.null(x) || is.numeric(x)) {
+    x
+  } else if (is.logical(x)) {
+    as_log(x)
+  }
+}
+
 `%|||%` <- function(x, y) if (x == "false") y else x
 
 cl <- function(x) if (is.null(x)) NULL else paste0(x, collapse = ",")
