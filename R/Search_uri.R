@@ -14,7 +14,7 @@ Search_uri <- function(conn, index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NU
   default_operator=NULL, explain=NULL, source=NULL, fields=NULL, sort=NULL,
   track_scores=NULL, timeout=NULL, terminate_after=NULL, from=NULL, size=NULL,
   search_type=NULL, lowercase_expanded_terms=NULL, analyze_wildcard=NULL,
-  version=NULL, lenient=FALSE, raw=FALSE, asdf=FALSE,
+  version=NULL, lenient=FALSE, raw=FALSE, asdf=FALSE, track_total_hits = TRUE,
   search_path="_search", stream_opts=list(), ...) {
 
   is_conn(conn)
@@ -27,7 +27,7 @@ Search_uri <- function(conn, index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NU
       search_type = search_type,
       lowercase_expanded_terms = lowercase_expanded_terms,
       analyze_wildcard = analyze_wildcard, version = as_log(version), q = q,
-      lenient = as_log(lenient))), raw, asdf, stream_opts, ...)
+      lenient = as_log(lenient), track_total_hits = ck(track_total_hits))), raw, asdf, stream_opts, ...)
 }
 
 search_GET <- function(conn, path, index=NULL, type=NULL, args, raw, asdf, 
@@ -35,6 +35,8 @@ search_GET <- function(conn, path, index=NULL, type=NULL, args, raw, asdf,
   url <- conn$make_url()
   url <- construct_url(url, path, index, type)
   url <- prune_trailing_slash(url)
+  # track_total_hits introduced in ES >= 7.0
+  if (conn$es_ver() < 700) args$track_total_hits <- NULL
   # in ES >= v5, lenient param droppped
   if (conn$es_ver() >= 500) args$lenient <- NULL
   # in ES >= v5, fields param changed to stored_fields
