@@ -37,5 +37,6 @@
 #' }
 validate <- function(conn, index, type = NULL, ...) {
   is_conn(conn)
-  Search(conn, index, type, search_path = "_validate/query", ...)
+  Search(conn, index, type, search_path = "_validate/query",
+    track_total_hits = NULL, ...)
 }
