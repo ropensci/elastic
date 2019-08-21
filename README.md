@@ -14,7 +14,7 @@ elastic
 
 ## Elasticsearch DSL
 
-Also check out `elasticdsl` - an R DSL for Elasticsearch - [https://github.com/ropensci/elasticdsl](https://github.com/ropensci/elasticdsl)
+Also check out `elasticdsl` - an R DSL for Elasticsearch - [https://github.com/ropensci/elasticdsl](https://github.com/ropensci/elasticdsl) - It's not currently maintained, but if you'd like to contribute le'me know
 
 ## Elasticsearch info
 
@@ -176,8 +176,6 @@ A dataset inluded in the `elastic` package is metadata for PLOS scholarly articl
 
 ```r
 if (index_exists(x, "plos")) index_delete(x, "plos")
-#> $acknowledged
-#> [1] TRUE
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 invisible(docs_bulk(x, plosdat))
 ```
@@ -189,8 +187,6 @@ A dataset inluded in the `elastic` package is data for GBIF species occurrence r
 
 ```r
 if (index_exists(x, "gbif")) index_delete(x, "gbif")
-#> $acknowledged
-#> [1] TRUE
 gbifdat <- system.file("examples", "gbif_data.json", package = "elastic")
 invisible(docs_bulk(x, gbifdat))
 ```
@@ -200,8 +196,6 @@ GBIF geo data with a coordinates element to allow `geo_shape` queries
 
 ```r
 if (index_exists(x, "gbifgeo")) index_delete(x, "gbifgeo")
-#> $acknowledged
-#> [1] TRUE
 gbifgeo <- system.file("examples", "gbif_geo.json", package = "elastic")
 invisible(docs_bulk(x, gbifgeo))
 ```
@@ -483,7 +477,9 @@ A screencast introducing the package: <a href="https://vimeo.com/124659179">vime
 * Please [report any issues or bugs](https://github.com/ropensci/elastic/issues)
 * License: MIT
 * Get citation information for `elastic` in R doing `citation(package = 'elastic')`
-* Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md).
+* Please note that this project is released with a [Contributor Code of Conduct][coc].
 By participating in this project you agree to abide by its terms.
 
 [![rofooter](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)
+
+[coc]: https://github.com/ropensci/elastic/blob/master/CODE_OF_CONDUCT.md
