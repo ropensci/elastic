@@ -10,8 +10,8 @@ Search_uri(conn, index = NULL, type = NULL, q = NULL, df = NULL,
   timeout = NULL, terminate_after = NULL, from = NULL, size = NULL,
   search_type = NULL, lowercase_expanded_terms = NULL,
   analyze_wildcard = NULL, version = NULL, lenient = FALSE,
-  raw = FALSE, asdf = FALSE, search_path = "_search",
-  stream_opts = list(), ...)
+  raw = FALSE, asdf = FALSE, track_total_hits = TRUE,
+  search_path = "_search", stream_opts = list(), ...)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link{connect}}}
@@ -94,7 +94,7 @@ analyzed or not. Default: \code{FALSE}.}
 
 \item{version}{(logical) Print the document version with each document.}
 
-\item{lenient}{If \code{TRUE} will cause format based failures (like
+\item{lenient}{(logical) If \code{TRUE} will cause format based failures (like
 providing text to a numeric field) to be ignored. Default: \code{FALSE}}
 
 \item{raw}{(logical) If \code{FALSE} (default), data is parsed to list.
@@ -103,6 +103,11 @@ If \code{TRUE}, then raw JSON returned}
 \item{asdf}{(logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}}
 to parse JSON directly to a data.frame. If \code{FALSE} (Default), list
 output is given.}
+
+\item{track_total_hits}{(logical, numeric) If \code{TRUE} will always track
+the number of hits that match the query accurately. If \code{FALSE} will
+count documents accurately up to 10000 documents. If \code{is.integer} will
+count documents accurately up to the number. Default: \code{TRUE}}
 
 \item{search_path}{(character) The path to use for searching. Default
 to \code{_search}, but in some cases you may already have that in the base

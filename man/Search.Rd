@@ -10,7 +10,8 @@ Search(conn, index = NULL, type = NULL, q = NULL, df = NULL,
   timeout = NULL, terminate_after = NULL, from = NULL, size = NULL,
   search_type = NULL, lowercase_expanded_terms = NULL,
   analyze_wildcard = NULL, version = NULL, lenient = FALSE,
-  body = list(), raw = FALSE, asdf = FALSE, time_scroll = NULL,
+  body = list(), raw = FALSE, asdf = FALSE,
+  track_total_hits = TRUE, time_scroll = NULL,
   search_path = "_search", stream_opts = list(), ...)
 }
 \arguments{
@@ -94,7 +95,7 @@ analyzed or not. Default: \code{FALSE}.}
 
 \item{version}{(logical) Print the document version with each document.}
 
-\item{lenient}{If \code{TRUE} will cause format based failures (like
+\item{lenient}{(logical) If \code{TRUE} will cause format based failures (like
 providing text to a numeric field) to be ignored. Default: \code{FALSE}}
 
 \item{body}{Query, either a list or json.}
@@ -105,6 +106,11 @@ If \code{TRUE}, then raw JSON returned}
 \item{asdf}{(logical) If \code{TRUE}, use \code{\link[jsonlite]{fromJSON}}
 to parse JSON directly to a data.frame. If \code{FALSE} (Default), list
 output is given.}
+
+\item{track_total_hits}{(logical, numeric) If \code{TRUE} will always track
+the number of hits that match the query accurately. If \code{FALSE} will
+count documents accurately up to 10000 documents. If \code{is.integer} will
+count documents accurately up to the number. Default: \code{TRUE}}
 
 \item{time_scroll}{(character) Specify how long a consistent view of the
 index should be maintained for scrolled search, e.g., "30s", "1m". See
