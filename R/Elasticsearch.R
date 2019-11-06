@@ -195,14 +195,9 @@ Elasticsearch <- R6::R6Class(
       ver <- pinged$version$number
 
       # get only 1st 3 digits, so major:minor:patch
-      as.numeric(
-        paste(
-          stats::na.omit(
-            extractr(ver, "[[:digit:]]+")[[1]][1:3]
-          ),
-          collapse = ""
-        )
-      )
+      digs <- stats::na.omit(extractr(ver, "[[:digit:]]+")[[1]][1:3])
+      if (length(digs) == 3) digs[3] <- extractr(digs[3], "[0-9]{1}")[[1]][1]
+      as.numeric(paste(digs, collapse = ""))
     },
 
     stop_es_version = function(ver_check, fxn) {
