@@ -2,6 +2,9 @@ language: r
 cache: packages
 dist: trusty
 
+r_github_packages:
+  - ropensci/crul
+
 addons:
   apt:
     packages: oracle-java8-set-default

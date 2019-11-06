@@ -21,7 +21,7 @@ Language: en-US
 Imports:
     utils,
     curl (>= 2.2),
-    crul (>= 0.7.0),
+    crul (>= 0.8.6.9310),
     jsonlite (>= 1.1),
     R6
 Suggests:
@@ -29,6 +29,7 @@ Suggests:
     knitr,
     testthat
 RoxygenNote: 6.1.1
+Remotes: ropensci/crul
 X-schema.org-applicationCategory: Databases
 X-schema.org-keywords: database, Elasticsearch, HTTP, API, search, NoSQL, Java, JSON, documents
 X-schema.org-isPartOf: https://ropensci.org
