@@ -12,7 +12,8 @@ Version: 1.0.0.9325
 License: MIT + file LICENSE
 Authors@R: person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "myrmecocystus@gmail.com")
-URL: https://github.com/ropensci/elastic
+URL: https://docs.ropensci.org/elastic (website),
+    https://github.com/ropensci/elastic
 BugReports: https://github.com/ropensci/elastic/issues
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
