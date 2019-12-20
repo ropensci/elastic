@@ -3,6 +3,22 @@
 \name{connect}
 \alias{connect}
 \title{Set connection details to an Elasticsearch engine.}
+\usage{
+connect(
+  host = "127.0.0.1",
+  port = 9200,
+  path = NULL,
+  transport_schema = "http",
+  user = NULL,
+  pwd = NULL,
+  headers = NULL,
+  cainfo = NULL,
+  force = FALSE,
+  errors = "simple",
+  warn = TRUE,
+  ...
+)
+}
 \arguments{
 \item{host}{(character) The base host, defaults to \verb{127.0.0.1}}
 
@@ -55,6 +71,20 @@ store them in various env vars, but are now contained within the object
 so you can have any number of connection objects and they shouldn't
 conflict with one another.
 }
+\section{What is the connection object?}{
+
+Creating a connection object with \code{connect()} does not create
+a DBI-like connection object. DBI-like objects have externalptr, etc.,
+while \code{connect()} simply holds details about your Elasticsearch
+instance (host, port, authentication, etc.) that is used by other
+methods in this package to interact with your instances' ES API.
+\code{connect()} is more or less a fancy list.
+
+You can connect to different Elasticsearch intances within the same
+R session by creating a separate connection object for each instance;
+then pass the appropriate connection object to each \code{elastic} method.
+}
+
 \examples{
 \dontrun{
 # the default is set to 127.0.0.1 (i.e., localhost) and port 9200
