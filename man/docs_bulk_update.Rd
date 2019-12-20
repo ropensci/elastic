@@ -4,8 +4,16 @@
 \alias{docs_bulk_update}
 \title{Use the bulk API to update documents}
 \usage{
-docs_bulk_update(conn, x, index = NULL, type = NULL,
-  chunk_size = 1000, doc_ids = NULL, raw = FALSE, ...)
+docs_bulk_update(
+  conn,
+  x,
+  index = NULL,
+  type = NULL,
+  chunk_size = 1000,
+  doc_ids = NULL,
+  raw = FALSE,
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
@@ -74,9 +82,11 @@ Search(x, "foobar", asdf = TRUE)$hits$hits
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html#bulk-update}
 }
 \seealso{
-Other bulk-functions: \code{\link{docs_bulk_create}},
-  \code{\link{docs_bulk_delete}},
-  \code{\link{docs_bulk_index}},
-  \code{\link{docs_bulk_prep}}, \code{\link{docs_bulk}}
+Other bulk-functions: 
+\code{\link{docs_bulk_create}()},
+\code{\link{docs_bulk_delete}()},
+\code{\link{docs_bulk_index}()},
+\code{\link{docs_bulk_prep}()},
+\code{\link{docs_bulk}()}
 }
 \concept{bulk-functions}

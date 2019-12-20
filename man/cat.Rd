@@ -22,50 +22,165 @@
 \usage{
 cat_(conn, parse = FALSE, ...)
 
-cat_aliases(conn, verbose = FALSE, index = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_aliases(
+  conn,
+  verbose = FALSE,
+  index = NULL,
+  h = NULL,
+  help = FALSE,
+  bytes = FALSE,
+  parse = FALSE,
+  ...
+)
 
-cat_allocation(conn, verbose = FALSE, h = NULL, help = FALSE,
-  bytes = FALSE, parse = FALSE, ...)
+cat_allocation(
+  conn,
+  verbose = FALSE,
+  h = NULL,
+  help = FALSE,
+  bytes = FALSE,
+  parse = FALSE,
+  ...
+)
 
-cat_count(conn, verbose = FALSE, index = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_count(
+  conn,
+  verbose = FALSE,
+  index = NULL,
+  h = NULL,
+  help = FALSE,
+  bytes = FALSE,
+  parse = FALSE,
+  ...
+)
 
-cat_segments(conn, verbose = FALSE, index = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_segments(
+  conn,
+  verbose = FALSE,
+  index = NULL,
+  h = NULL,
+  help = FALSE,
+  bytes = FALSE,
+  parse = FALSE,
+  ...
+)
 
-cat_health(conn, verbose = FALSE, h = NULL, help = FALSE,
-  bytes = FALSE, parse = FALSE, ...)
+cat_health(
+  conn,
+  verbose = FALSE,
+  h = NULL,
+  help = FALSE,
+  bytes = FALSE,
+  parse = FALSE,
+  ...
+)
 
-cat_indices(conn, verbose = FALSE, index = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_indices(
+  conn,
+  verbose = FALSE,
+  index = NULL,
+  h = NULL,
+  help = FALSE,
+  bytes = FALSE,
+  parse = FALSE,
+  ...
+)
 
-cat_master(conn, verbose = FALSE, index = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_master(
+  conn,
+  verbose = FALSE,
+  index = NULL,
+  h = NULL,
+  help = FALSE,
+  bytes = FALSE,
+  parse = FALSE,
+  ...
+)
 
-cat_nodes(conn, verbose = FALSE, h = NULL, help = FALSE,
-  bytes = FALSE, parse = FALSE, ...)
+cat_nodes(
+  conn,
+  verbose = FALSE,
+  h = NULL,
+  help = FALSE,
+  bytes = FALSE,
+  parse = FALSE,
+  ...
+)
 
-cat_nodeattrs(conn, verbose = FALSE, h = NULL, help = FALSE,
-  bytes = FALSE, parse = FALSE, ...)
+cat_nodeattrs(
+  conn,
+  verbose = FALSE,
+  h = NULL,
+  help = FALSE,
+  bytes = FALSE,
+  parse = FALSE,
+  ...
+)
 
-cat_pending_tasks(conn, verbose = FALSE, h = NULL, help = FALSE,
-  bytes = FALSE, parse = FALSE, ...)
+cat_pending_tasks(
+  conn,
+  verbose = FALSE,
+  h = NULL,
+  help = FALSE,
+  bytes = FALSE,
+  parse = FALSE,
+  ...
+)
 
-cat_plugins(conn, verbose = FALSE, h = NULL, help = FALSE,
-  bytes = FALSE, parse = FALSE, ...)
+cat_plugins(
+  conn,
+  verbose = FALSE,
+  h = NULL,
+  help = FALSE,
+  bytes = FALSE,
+  parse = FALSE,
+  ...
+)
 
-cat_recovery(conn, verbose = FALSE, index = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_recovery(
+  conn,
+  verbose = FALSE,
+  index = NULL,
+  h = NULL,
+  help = FALSE,
+  bytes = FALSE,
+  parse = FALSE,
+  ...
+)
 
-cat_thread_pool(conn, verbose = FALSE, index = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_thread_pool(
+  conn,
+  verbose = FALSE,
+  index = NULL,
+  h = NULL,
+  help = FALSE,
+  bytes = FALSE,
+  parse = FALSE,
+  ...
+)
 
-cat_shards(conn, verbose = FALSE, index = NULL, h = NULL,
-  help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_shards(
+  conn,
+  verbose = FALSE,
+  index = NULL,
+  h = NULL,
+  help = FALSE,
+  bytes = FALSE,
+  parse = FALSE,
+  ...
+)
 
-cat_fielddata(conn, verbose = FALSE, index = NULL, fields = NULL,
-  h = NULL, help = FALSE, bytes = FALSE, parse = FALSE, ...)
+cat_fielddata(
+  conn,
+  verbose = FALSE,
+  index = NULL,
+  fields = NULL,
+  h = NULL,
+  help = FALSE,
+  bytes = FALSE,
+  parse = FALSE,
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}

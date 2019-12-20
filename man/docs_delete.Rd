@@ -4,9 +4,19 @@
 \alias{docs_delete}
 \title{Delete a document}
 \usage{
-docs_delete(conn, index, type, id, refresh = NULL, routing = NULL,
-  timeout = NULL, version = NULL, version_type = NULL,
-  callopts = list(), ...)
+docs_delete(
+  conn,
+  index,
+  type,
+  id,
+  refresh = NULL,
+  routing = NULL,
+  timeout = NULL,
+  version = NULL,
+  version_type = NULL,
+  callopts = list(),
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}

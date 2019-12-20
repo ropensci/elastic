@@ -22,26 +22,45 @@
 \alias{index_clear_cache}
 \title{Index API operations}
 \usage{
-index_get(conn, index = NULL, features = NULL, raw = FALSE,
-  verbose = TRUE, ...)
+index_get(
+  conn,
+  index = NULL,
+  features = NULL,
+  raw = FALSE,
+  verbose = TRUE,
+  ...
+)
 
 index_exists(conn, index, ...)
 
 index_delete(conn, index, raw = FALSE, verbose = TRUE, ...)
 
-index_create(conn, index = NULL, body = NULL, raw = FALSE,
-  verbose = TRUE, ...)
+index_create(conn, index = NULL, body = NULL, raw = FALSE, verbose = TRUE, ...)
 
-index_recreate(conn, index = NULL, body = NULL, raw = FALSE,
-  verbose = TRUE, ...)
+index_recreate(
+  conn,
+  index = NULL,
+  body = NULL,
+  raw = FALSE,
+  verbose = TRUE,
+  ...
+)
 
 index_close(conn, index, ...)
 
 index_open(conn, index, ...)
 
-index_stats(conn, index = NULL, metric = NULL,
-  completion_fields = NULL, fielddata_fields = NULL, fields = NULL,
-  groups = NULL, level = "indices", ...)
+index_stats(
+  conn,
+  index = NULL,
+  metric = NULL,
+  completion_fields = NULL,
+  fielddata_fields = NULL,
+  fields = NULL,
+  groups = NULL,
+  level = "indices",
+  ...
+)
 
 index_settings(conn, index = "_all", ...)
 
@@ -49,28 +68,61 @@ index_settings_update(conn, index = NULL, body, ...)
 
 index_segments(conn, index = NULL, ...)
 
-index_recovery(conn, index = NULL, detailed = FALSE,
-  active_only = FALSE, ...)
+index_recovery(conn, index = NULL, detailed = FALSE, active_only = FALSE, ...)
 
-index_optimize(conn, index = NULL, max_num_segments = NULL,
-  only_expunge_deletes = FALSE, flush = TRUE, wait_for_merge = TRUE,
-  ...)
+index_optimize(
+  conn,
+  index = NULL,
+  max_num_segments = NULL,
+  only_expunge_deletes = FALSE,
+  flush = TRUE,
+  wait_for_merge = TRUE,
+  ...
+)
 
-index_forcemerge(conn, index = NULL, max_num_segments = NULL,
-  only_expunge_deletes = FALSE, flush = TRUE, ...)
+index_forcemerge(
+  conn,
+  index = NULL,
+  max_num_segments = NULL,
+  only_expunge_deletes = FALSE,
+  flush = TRUE,
+  ...
+)
 
 index_upgrade(conn, index = NULL, wait_for_completion = FALSE, ...)
 
-index_analyze(conn, text = NULL, field = NULL, index = NULL,
-  analyzer = NULL, tokenizer = NULL, filters = NULL,
-  char_filters = NULL, body = list(), ...)
+index_analyze(
+  conn,
+  text = NULL,
+  field = NULL,
+  index = NULL,
+  analyzer = NULL,
+  tokenizer = NULL,
+  filters = NULL,
+  char_filters = NULL,
+  body = list(),
+  ...
+)
 
-index_flush(conn, index = NULL, force = FALSE, full = FALSE,
-  wait_if_ongoing = FALSE, ...)
+index_flush(
+  conn,
+  index = NULL,
+  force = FALSE,
+  full = FALSE,
+  wait_if_ongoing = FALSE,
+  ...
+)
 
-index_clear_cache(conn, index = NULL, filter = FALSE,
-  filter_keys = NULL, fielddata = FALSE, query_cache = FALSE,
-  id_cache = FALSE, ...)
+index_clear_cache(
+  conn,
+  index = NULL,
+  filter = FALSE,
+  filter_keys = NULL,
+  fielddata = FALSE,
+  query_cache = FALSE,
+  id_cache = FALSE,
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}

@@ -35,8 +35,8 @@ readLines(msearch1)
 msearch(x, msearch1)
 
 tf <- tempfile(fileext = ".json")
-cat('{"index" : "shakespeare"}', file = tf, sep = "\\n")
-cat('{"query" : {"match_all" : {}}, "from" : 0, "size" : 5}',  sep = "\\n",
+cat('{"index" : "shakespeare"}', file = tf, sep = "\n")
+cat('{"query" : {"match_all" : {}}, "from" : 0, "size" : 5}',  sep = "\n",
    file = tf, append = TRUE)
 readLines(tf)
 msearch(x, tf)

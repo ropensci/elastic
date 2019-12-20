@@ -4,8 +4,16 @@
 \alias{field_stats}
 \title{Search field statistics}
 \usage{
-field_stats(conn, fields = NULL, index = NULL, level = "cluster",
-  body = list(), raw = FALSE, asdf = FALSE, ...)
+field_stats(
+  conn,
+  fields = NULL,
+  index = NULL,
+  level = "cluster",
+  body = list(),
+  raw = FALSE,
+  asdf = FALSE,
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}

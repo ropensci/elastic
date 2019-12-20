@@ -9,13 +9,31 @@
 \alias{percolate_delete}
 \title{Percolater}
 \usage{
-percolate_register(conn, index, type, id, body = list(),
-  routing = NULL, preference = NULL, ignore_unavailable = NULL,
-  percolate_format = NULL, refresh = NULL, ...)
+percolate_register(
+  conn,
+  index,
+  type,
+  id,
+  body = list(),
+  routing = NULL,
+  preference = NULL,
+  ignore_unavailable = NULL,
+  percolate_format = NULL,
+  refresh = NULL,
+  ...
+)
 
-percolate_match(conn, index, type = NULL, body, routing = NULL,
-  preference = NULL, ignore_unavailable = NULL,
-  percolate_format = NULL, ...)
+percolate_match(
+  conn,
+  index,
+  type = NULL,
+  body,
+  routing = NULL,
+  preference = NULL,
+  ignore_unavailable = NULL,
+  percolate_format = NULL,
+  ...
+)
 
 percolate_list(conn, index, ...)
 

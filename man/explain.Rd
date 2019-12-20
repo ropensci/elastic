@@ -4,12 +4,30 @@
 \alias{explain}
 \title{Explain a search query.}
 \usage{
-explain(conn, index = NULL, type = NULL, id = NULL, source2 = NULL,
-  fields = NULL, routing = NULL, parent = NULL, preference = NULL,
-  source = NULL, q = NULL, df = NULL, analyzer = NULL,
-  analyze_wildcard = NULL, lowercase_expanded_terms = NULL,
-  lenient = NULL, default_operator = NULL, source_exclude = NULL,
-  source_include = NULL, body = NULL, raw = FALSE, ...)
+explain(
+  conn,
+  index = NULL,
+  type = NULL,
+  id = NULL,
+  source2 = NULL,
+  fields = NULL,
+  routing = NULL,
+  parent = NULL,
+  preference = NULL,
+  source = NULL,
+  q = NULL,
+  df = NULL,
+  analyzer = NULL,
+  analyze_wildcard = NULL,
+  lowercase_expanded_terms = NULL,
+  lenient = NULL,
+  default_operator = NULL,
+  source_exclude = NULL,
+  source_include = NULL,
+  body = NULL,
+  raw = FALSE,
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
@@ -22,7 +40,7 @@ explain(conn, index = NULL, type = NULL, id = NULL, source2 = NULL,
 
 \item{source2}{(logical) Set to TRUE to retrieve the _source of the document explained. You can
 also retrieve part of the document by using source_include & source_exclude (see Get API
-for more details). This matches the \code{_source} term, but we want to avoid the leading
+for more details). This matches the \verb{_source} term, but we want to avoid the leading
 underscore.}
 
 \item{fields}{Allows to control which stored fields to return as part of the document explained.}

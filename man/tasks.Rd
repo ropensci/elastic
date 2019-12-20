@@ -5,14 +5,34 @@
 \alias{tasks_cancel}
 \title{Elasticsearch tasks endpoints}
 \usage{
-tasks(conn, task_id = NULL, nodes = NULL, actions = NULL,
-  parent_task_id = NULL, detailed = FALSE, group_by = NULL,
-  wait_for_completion = FALSE, timeout = NULL, raw = FALSE, ...)
+tasks(
+  conn,
+  task_id = NULL,
+  nodes = NULL,
+  actions = NULL,
+  parent_task_id = NULL,
+  detailed = FALSE,
+  group_by = NULL,
+  wait_for_completion = FALSE,
+  timeout = NULL,
+  raw = FALSE,
+  ...
+)
 
-tasks_cancel(conn, node_id = NULL, task_id = NULL, nodes = NULL,
-  actions = NULL, parent_task_id = NULL, detailed = FALSE,
-  group_by = NULL, wait_for_completion = FALSE, timeout = NULL,
-  raw = FALSE, ...)
+tasks_cancel(
+  conn,
+  node_id = NULL,
+  task_id = NULL,
+  nodes = NULL,
+  actions = NULL,
+  parent_task_id = NULL,
+  detailed = FALSE,
+  group_by = NULL,
+  wait_for_completion = FALSE,
+  timeout = NULL,
+  raw = FALSE,
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}

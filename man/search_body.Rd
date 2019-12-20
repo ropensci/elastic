@@ -4,8 +4,15 @@
 \alias{search_body}
 \title{Full text search of Elasticsearch - body requests.}
 \usage{
-search_body(conn, index = NULL, type = NULL, raw = FALSE,
-  callopts = list(), query = list(), ...)
+search_body(
+  conn,
+  index = NULL,
+  type = NULL,
+  raw = FALSE,
+  callopts = list(),
+  query = list(),
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}

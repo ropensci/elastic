@@ -4,9 +4,18 @@
 \alias{docs_bulk_index}
 \title{Use the bulk API to index documents}
 \usage{
-docs_bulk_index(conn, x, index = NULL, type = NULL,
-  chunk_size = 1000, doc_ids = NULL, es_ids = TRUE, raw = FALSE,
-  quiet = FALSE, ...)
+docs_bulk_index(
+  conn,
+  x,
+  index = NULL,
+  type = NULL,
+  chunk_size = 1000,
+  doc_ids = NULL,
+  es_ids = TRUE,
+  raw = FALSE,
+  quiet = FALSE,
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
@@ -77,9 +86,11 @@ docs_bulk_index(x, iris, "flowers")
 \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html}
 }
 \seealso{
-Other bulk-functions: \code{\link{docs_bulk_create}},
-  \code{\link{docs_bulk_delete}},
-  \code{\link{docs_bulk_prep}},
-  \code{\link{docs_bulk_update}}, \code{\link{docs_bulk}}
+Other bulk-functions: 
+\code{\link{docs_bulk_create}()},
+\code{\link{docs_bulk_delete}()},
+\code{\link{docs_bulk_prep}()},
+\code{\link{docs_bulk_update}()},
+\code{\link{docs_bulk}()}
 }
 \concept{bulk-functions}

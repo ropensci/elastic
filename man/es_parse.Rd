@@ -22,47 +22,33 @@ es_parse(input, parsetype, verbose)
 
 \method{es_parse}{es_GET}(input, parsetype = "list", verbose = FALSE)
 
-\method{es_parse}{index_delete}(input, parsetype = "list",
-  verbose = FALSE)
+\method{es_parse}{index_delete}(input, parsetype = "list", verbose = FALSE)
 
-\method{es_parse}{bulk_make}(input, parsetype = "list",
-  verbose = FALSE)
+\method{es_parse}{bulk_make}(input, parsetype = "list", verbose = FALSE)
 
-\method{es_parse}{elastic_mget}(input, parsetype = "list",
-  verbose = FALSE)
+\method{es_parse}{elastic_mget}(input, parsetype = "list", verbose = FALSE)
 
-\method{es_parse}{elastic_search}(input, parsetype = "list",
-  verbose = FALSE)
+\method{es_parse}{elastic_search}(input, parsetype = "list", verbose = FALSE)
 
-\method{es_parse}{elastic_status}(input, parsetype = "list",
-  verbose = FALSE)
+\method{es_parse}{elastic_status}(input, parsetype = "list", verbose = FALSE)
 
-\method{es_parse}{elastic_stats}(input, parsetype = "list",
-  verbose = FALSE)
+\method{es_parse}{elastic_stats}(input, parsetype = "list", verbose = FALSE)
 
-\method{es_parse}{elastic_cluster_health}(input, parsetype = "list",
-  verbose = TRUE)
+\method{es_parse}{elastic_cluster_health}(input, parsetype = "list", verbose = TRUE)
 
-\method{es_parse}{elastic_cluster_health}(input, parsetype = "list",
-  verbose = TRUE)
+\method{es_parse}{elastic_cluster_health}(input, parsetype = "list", verbose = TRUE)
 
-\method{es_parse}{elastic_cluster_state}(input, parsetype = "list",
-  verbose = TRUE)
+\method{es_parse}{elastic_cluster_state}(input, parsetype = "list", verbose = TRUE)
 
-\method{es_parse}{elastic_cluster_settings}(input, parsetype = "list",
-  verbose = TRUE)
+\method{es_parse}{elastic_cluster_settings}(input, parsetype = "list", verbose = TRUE)
 
-\method{es_parse}{elastic_cluster_stats}(input, parsetype = "list",
-  verbose = TRUE)
+\method{es_parse}{elastic_cluster_stats}(input, parsetype = "list", verbose = TRUE)
 
-\method{es_parse}{elastic_cluster_pending_tasks}(input,
-  parsetype = "list", verbose = TRUE)
+\method{es_parse}{elastic_cluster_pending_tasks}(input, parsetype = "list", verbose = TRUE)
 
-\method{es_parse}{elastic_nodes_stats}(input, parsetype = "list",
-  verbose = TRUE)
+\method{es_parse}{elastic_nodes_stats}(input, parsetype = "list", verbose = TRUE)
 
-\method{es_parse}{elastic_nodes_info}(input, parsetype = "list",
-  verbose = TRUE)
+\method{es_parse}{elastic_nodes_info}(input, parsetype = "list", verbose = TRUE)
 }
 \arguments{
 \item{input}{Output from solr_facet}

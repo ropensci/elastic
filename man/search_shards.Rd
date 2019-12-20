@@ -4,8 +4,15 @@
 \alias{search_shards}
 \title{Search shards}
 \usage{
-search_shards(conn, index = NULL, raw = FALSE, routing = NULL,
-  preference = NULL, local = NULL, ...)
+search_shards(
+  conn,
+  index = NULL,
+  raw = FALSE,
+  routing = NULL,
+  preference = NULL,
+  local = NULL,
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}

@@ -4,12 +4,27 @@
 \alias{mtermvectors}
 \title{Multi Termvectors}
 \usage{
-mtermvectors(conn, index = NULL, type = NULL, ids = NULL,
-  body = list(), pretty = TRUE, field_statistics = TRUE,
-  fields = NULL, offsets = TRUE, parent = NULL, payloads = TRUE,
-  positions = TRUE, preference = "random", realtime = TRUE,
-  routing = NULL, term_statistics = FALSE, version = NULL,
-  version_type = NULL, ...)
+mtermvectors(
+  conn,
+  index = NULL,
+  type = NULL,
+  ids = NULL,
+  body = list(),
+  pretty = TRUE,
+  field_statistics = TRUE,
+  fields = NULL,
+  offsets = TRUE,
+  parent = NULL,
+  payloads = TRUE,
+  positions = TRUE,
+  preference = "random",
+  realtime = TRUE,
+  routing = NULL,
+  term_statistics = FALSE,
+  version = NULL,
+  version_type = NULL,
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}

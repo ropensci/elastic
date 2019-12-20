@@ -8,14 +8,27 @@
 \alias{type_exists}
 \title{Mapping management}
 \usage{
-mapping_create(conn, index, type, body, update_all_types = FALSE,
-  include_type_name = NULL, ...)
+mapping_create(
+  conn,
+  index,
+  type,
+  body,
+  update_all_types = FALSE,
+  include_type_name = NULL,
+  ...
+)
 
-mapping_get(conn, index = NULL, type = NULL,
-  include_type_name = NULL, ...)
+mapping_get(conn, index = NULL, type = NULL, include_type_name = NULL, ...)
 
-field_mapping_get(conn, index = NULL, type = NULL, field,
-  include_defaults = FALSE, include_type_name = NULL, ...)
+field_mapping_get(
+  conn,
+  index = NULL,
+  type = NULL,
+  field,
+  include_defaults = FALSE,
+  include_type_name = NULL,
+  ...
+)
 
 type_exists(conn, index, type, ...)
 }

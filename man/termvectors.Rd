@@ -4,11 +4,27 @@
 \alias{termvectors}
 \title{Termvectors}
 \usage{
-termvectors(conn, index, type, id = NULL, body = list(),
-  pretty = TRUE, field_statistics = TRUE, fields = NULL,
-  offsets = TRUE, parent = NULL, payloads = TRUE, positions = TRUE,
-  realtime = TRUE, preference = "random", routing = NULL,
-  term_statistics = FALSE, version = NULL, version_type = NULL, ...)
+termvectors(
+  conn,
+  index,
+  type,
+  id = NULL,
+  body = list(),
+  pretty = TRUE,
+  field_statistics = TRUE,
+  fields = NULL,
+  offsets = TRUE,
+  parent = NULL,
+  payloads = TRUE,
+  positions = TRUE,
+  realtime = TRUE,
+  preference = "random",
+  routing = NULL,
+  term_statistics = FALSE,
+  version = NULL,
+  version_type = NULL,
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}

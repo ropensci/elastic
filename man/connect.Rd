@@ -4,7 +4,7 @@
 \alias{connect}
 \title{Set connection details to an Elasticsearch engine.}
 \arguments{
-\item{host}{(character) The base host, defaults to \code{127.0.0.1}}
+\item{host}{(character) The base host, defaults to \verb{127.0.0.1}}
 
 \item{port}{(character) port to connect to, defaults to \code{9200}
 (optional)}

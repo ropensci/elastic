@@ -4,9 +4,21 @@
 \alias{docs_get}
 \title{Get documents}
 \usage{
-docs_get(conn, index, type, id, source = NULL, fields = NULL,
-  source_includes = NULL, source_excludes = NULL, exists = FALSE,
-  raw = FALSE, callopts = list(), verbose = TRUE, ...)
+docs_get(
+  conn,
+  index,
+  type,
+  id,
+  source = NULL,
+  fields = NULL,
+  source_includes = NULL,
+  source_excludes = NULL,
+  exists = FALSE,
+  raw = FALSE,
+  callopts = list(),
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}

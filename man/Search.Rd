@@ -4,15 +4,37 @@
 \alias{Search}
 \title{Full text search of Elasticsearch}
 \usage{
-Search(conn, index = NULL, type = NULL, q = NULL, df = NULL,
-  analyzer = NULL, default_operator = NULL, explain = NULL,
-  source = NULL, fields = NULL, sort = NULL, track_scores = NULL,
-  timeout = NULL, terminate_after = NULL, from = NULL, size = NULL,
-  search_type = NULL, lowercase_expanded_terms = NULL,
-  analyze_wildcard = NULL, version = NULL, lenient = FALSE,
-  body = list(), raw = FALSE, asdf = FALSE,
-  track_total_hits = TRUE, time_scroll = NULL,
-  search_path = "_search", stream_opts = list(), ...)
+Search(
+  conn,
+  index = NULL,
+  type = NULL,
+  q = NULL,
+  df = NULL,
+  analyzer = NULL,
+  default_operator = NULL,
+  explain = NULL,
+  source = NULL,
+  fields = NULL,
+  sort = NULL,
+  track_scores = NULL,
+  timeout = NULL,
+  terminate_after = NULL,
+  from = NULL,
+  size = NULL,
+  search_type = NULL,
+  lowercase_expanded_terms = NULL,
+  analyze_wildcard = NULL,
+  version = NULL,
+  lenient = FALSE,
+  body = list(),
+  raw = FALSE,
+  asdf = FALSE,
+  track_total_hits = TRUE,
+  time_scroll = NULL,
+  search_path = "_search",
+  stream_opts = list(),
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link{connect}}}
@@ -117,7 +139,7 @@ index should be maintained for scrolled search, e.g., "30s", "1m". See
 \link{units-time}}
 
 \item{search_path}{(character) The path to use for searching. Default
-to \code{_search}, but in some cases you may already have that in the base
+to \verb{_search}, but in some cases you may already have that in the base
 url set using \code{\link[=connect]{connect()}}, in which case you can set this
 to \code{NULL}}
 

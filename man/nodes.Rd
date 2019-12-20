@@ -7,13 +7,20 @@
 \alias{nodes_hot_threads}
 \title{Elasticsearch nodes endpoints.}
 \usage{
-nodes_stats(conn, node = NULL, metric = NULL, raw = FALSE,
-  fields = NULL, ...)
+nodes_stats(conn, node = NULL, metric = NULL, raw = FALSE, fields = NULL, ...)
 
 nodes_info(conn, node = NULL, metric = NULL, raw = FALSE, ...)
 
-nodes_hot_threads(conn, node = NULL, metric = NULL, threads = 3,
-  interval = "500ms", type = NULL, raw = FALSE, ...)
+nodes_hot_threads(
+  conn,
+  node = NULL,
+  metric = NULL,
+  threads = 3,
+  interval = "500ms",
+  type = NULL,
+  raw = FALSE,
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}

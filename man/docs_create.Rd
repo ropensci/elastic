@@ -4,10 +4,24 @@
 \alias{docs_create}
 \title{Create a document}
 \usage{
-docs_create(conn, index, type, id = NULL, body, version = NULL,
-  version_type = NULL, op_type = NULL, routing = NULL,
-  parent = NULL, timestamp = NULL, ttl = NULL, refresh = NULL,
-  timeout = NULL, callopts = list(), ...)
+docs_create(
+  conn,
+  index,
+  type,
+  id = NULL,
+  body,
+  version = NULL,
+  version_type = NULL,
+  op_type = NULL,
+  routing = NULL,
+  parent = NULL,
+  timestamp = NULL,
+  ttl = NULL,
+  refresh = NULL,
+  timeout = NULL,
+  callopts = list(),
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}

@@ -23,11 +23,11 @@ Install Elasticsearch (on OSX)
 \itemize{
 \item Download zip or tar file from Elasticsearch see here for download:
 \url{https://www.elastic.co/downloads/elasticsearch}
-\item Unzip it: \code{untar elasticsearch-2.3.5.tar.gz}
-\item Move it: \code{sudo mv elasticsearch-2.3.5 /usr/local}
+\item Unzip it: \verb{untar elasticsearch-2.3.5.tar.gz}
+\item Move it: \verb{sudo mv elasticsearch-2.3.5 /usr/local}
 (replace version with your version)
 \item Navigate to /usr/local: \code{cd /usr/local}
-\item Add shortcut: \code{sudo ln -s elasticsearch-2.3.5 elasticsearch}
+\item Add shortcut: \verb{sudo ln -s elasticsearch-2.3.5 elasticsearch}
 (replace version with your version)
 }
 
@@ -87,7 +87,7 @@ examples in \code{\link[=Search]{Search()}} or \code{\link[=Search_uri]{Search_u
 \section{index names}{
 
 The following are illegal characters, and can not be used in index names or types:
-\code{\\}, \code{/}, \code{*}, \code{?}, \code{<}, \code{>}, \code{|}, \code{,} (comma). double quote and whitespace are
+\verb{\\\\}, \code{/}, \code{*}, \verb{?}, \code{<}, \code{>}, \code{|}, \verb{,} (comma). double quote and whitespace are
 also illegal.
 }
 

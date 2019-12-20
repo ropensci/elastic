@@ -4,9 +4,17 @@
 \alias{reindex}
 \title{Reindex}
 \usage{
-reindex(conn, body, refresh = NULL, requests_per_second = NULL,
-  slices = NULL, timeout = NULL, wait_for_active_shards = NULL,
-  wait_for_completion = NULL, ...)
+reindex(
+  conn,
+  body,
+  refresh = NULL,
+  requests_per_second = NULL,
+  slices = NULL,
+  timeout = NULL,
+  wait_for_active_shards = NULL,
+  wait_for_completion = NULL,
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}

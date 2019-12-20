@@ -10,25 +10,59 @@
 \alias{cluster_pending_tasks}
 \title{Elasticsearch cluster endpoints}
 \usage{
-cluster_settings(conn, index = NULL, raw = FALSE, callopts = list(),
-  verbose = TRUE, ...)
+cluster_settings(
+  conn,
+  index = NULL,
+  raw = FALSE,
+  callopts = list(),
+  verbose = TRUE,
+  ...
+)
 
-cluster_health(conn, index = NULL, level = NULL,
-  wait_for_status = NULL, wait_for_relocating_shards = NULL,
-  wait_for_active_shards = NULL, wait_for_nodes = NULL,
-  timeout = NULL, raw = FALSE, callopts = list(), verbose = TRUE,
-  ...)
+cluster_health(
+  conn,
+  index = NULL,
+  level = NULL,
+  wait_for_status = NULL,
+  wait_for_relocating_shards = NULL,
+  wait_for_active_shards = NULL,
+  wait_for_nodes = NULL,
+  timeout = NULL,
+  raw = FALSE,
+  callopts = list(),
+  verbose = TRUE,
+  ...
+)
 
-cluster_state(conn, index = NULL, metrics = NULL, raw = FALSE,
-  callopts = list(), verbose = TRUE, ...)
+cluster_state(
+  conn,
+  index = NULL,
+  metrics = NULL,
+  raw = FALSE,
+  callopts = list(),
+  verbose = TRUE,
+  ...
+)
 
-cluster_stats(conn, index = NULL, raw = FALSE, callopts = list(),
-  verbose = TRUE, ...)
+cluster_stats(
+  conn,
+  index = NULL,
+  raw = FALSE,
+  callopts = list(),
+  verbose = TRUE,
+  ...
+)
 
 cluster_reroute(conn, body, raw = FALSE, callopts = list(), ...)
 
-cluster_pending_tasks(conn, index = NULL, raw = FALSE,
-  callopts = list(), verbose = TRUE, ...)
+cluster_pending_tasks(
+  conn,
+  index = NULL,
+  raw = FALSE,
+  callopts = list(),
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}

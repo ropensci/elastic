@@ -4,10 +4,20 @@
 \alias{docs_mget}
 \title{Get multiple documents via the multiple get API}
 \usage{
-docs_mget(conn, index = NULL, type = NULL, ids = NULL,
-  type_id = NULL, index_type_id = NULL, source = NULL,
-  fields = NULL, raw = FALSE, callopts = list(), verbose = TRUE,
-  ...)
+docs_mget(
+  conn,
+  index = NULL,
+  type = NULL,
+  ids = NULL,
+  type_id = NULL,
+  index_type_id = NULL,
+  source = NULL,
+  fields = NULL,
+  raw = FALSE,
+  callopts = list(),
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}

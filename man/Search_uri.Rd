@@ -4,14 +4,35 @@
 \alias{Search_uri}
 \title{Full text search of Elasticsearch with URI search}
 \usage{
-Search_uri(conn, index = NULL, type = NULL, q = NULL, df = NULL,
-  analyzer = NULL, default_operator = NULL, explain = NULL,
-  source = NULL, fields = NULL, sort = NULL, track_scores = NULL,
-  timeout = NULL, terminate_after = NULL, from = NULL, size = NULL,
-  search_type = NULL, lowercase_expanded_terms = NULL,
-  analyze_wildcard = NULL, version = NULL, lenient = FALSE,
-  raw = FALSE, asdf = FALSE, track_total_hits = TRUE,
-  search_path = "_search", stream_opts = list(), ...)
+Search_uri(
+  conn,
+  index = NULL,
+  type = NULL,
+  q = NULL,
+  df = NULL,
+  analyzer = NULL,
+  default_operator = NULL,
+  explain = NULL,
+  source = NULL,
+  fields = NULL,
+  sort = NULL,
+  track_scores = NULL,
+  timeout = NULL,
+  terminate_after = NULL,
+  from = NULL,
+  size = NULL,
+  search_type = NULL,
+  lowercase_expanded_terms = NULL,
+  analyze_wildcard = NULL,
+  version = NULL,
+  lenient = FALSE,
+  raw = FALSE,
+  asdf = FALSE,
+  track_total_hits = TRUE,
+  search_path = "_search",
+  stream_opts = list(),
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link{connect}}}
@@ -110,7 +131,7 @@ count documents accurately up to 10000 documents. If \code{is.integer} will
 count documents accurately up to the number. Default: \code{TRUE}}
 
 \item{search_path}{(character) The path to use for searching. Default
-to \code{_search}, but in some cases you may already have that in the base
+to \verb{_search}, but in some cases you may already have that in the base
 url set using \code{\link[=connect]{connect()}}, in which case you can set this
 to \code{NULL}}
 
@@ -151,7 +172,7 @@ Search_uri(x, index = "shakespeare")$hits$total
 Search_uri(x, index = c("gbif", "shakespeare"))$hits$total
 
 ## search_type
-## NOTE: If you're in ES V5 or greater, see \\code{?fielddata}
+## NOTE: If you're in ES V5 or greater, see \code{?fielddata}
 Search_uri(x, index="shakespeare", search_type = "query_then_fetch")
 Search_uri(x, index="shakespeare", search_type = "dfs_query_then_fetch")
 # Search_uri(x, index="shakespeare", search_type = "scan") # only when scrolling

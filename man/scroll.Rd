@@ -5,8 +5,15 @@
 \alias{scroll_clear}
 \title{Scroll search function}
 \usage{
-scroll(conn, x, time_scroll = "1m", raw = FALSE, asdf = FALSE,
-  stream_opts = list(), ...)
+scroll(
+  conn,
+  x,
+  time_scroll = "1m",
+  raw = FALSE,
+  asdf = FALSE,
+  stream_opts = list(),
+  ...
+)
 
 scroll_clear(conn, x = NULL, all = FALSE, ...)
 }
@@ -66,7 +73,7 @@ from a call to \code{\link[=Search]{Search()}}, accessed like \code{res$`_scroll
 
 All other classes passed to \code{scroll()} will fail with message
 
-Lists passed to \code{scroll()} without a \code{_scroll_id} element will
+Lists passed to \code{scroll()} without a \verb{_scroll_id} element will
 trigger an error.
 
 From lists output form \code{\link[=Search]{Search()}} there should be an attribute

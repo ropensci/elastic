@@ -10,8 +10,7 @@
 \usage{
 Search_template(conn, body = list(), raw = FALSE, ...)
 
-Search_template_register(conn, template, body = list(), raw = FALSE,
-  ...)
+Search_template_register(conn, template, body = list(), raw = FALSE, ...)
 
 Search_template_get(conn, template, ...)
 
@@ -56,7 +55,7 @@ You can also pre-register search templates by storing them in the
 \code{config/scripts} directory, in a file using the .mustache
 extension. In order to execute the stored template, reference it
 by it's name under the template key, like
-\code{"file": "templateName", ...}
+\verb{"file": "templateName", ...}
 }
 
 \examples{

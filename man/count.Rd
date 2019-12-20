@@ -4,8 +4,7 @@
 \alias{count}
 \title{Get counts of the number of records per index.}
 \usage{
-count(conn, index = NULL, type = NULL, callopts = list(),
-  verbose = TRUE, ...)
+count(conn, index = NULL, type = NULL, callopts = list(), verbose = TRUE, ...)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}

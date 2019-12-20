@@ -26,10 +26,10 @@ Imports:
     jsonlite (>= 1.1),
     R6
 Suggests:
-    roxygen2 (>= 6.1.1),
+    roxygen2 (>= 7.0.2),
     knitr,
     testthat
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Remotes: ropensci/crul
 X-schema.org-applicationCategory: Databases
 X-schema.org-keywords: database, Elasticsearch, HTTP, API, search, NoSQL, Java, JSON, documents

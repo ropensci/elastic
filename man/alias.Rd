@@ -10,16 +10,22 @@
 \alias{alias_delete}
 \title{Elasticsearch alias APIs}
 \usage{
-alias_get(conn, index = NULL, alias = NULL,
-  ignore_unavailable = FALSE, ...)
+alias_get(conn, index = NULL, alias = NULL, ignore_unavailable = FALSE, ...)
 
-aliases_get(conn, index = NULL, alias = NULL,
-  ignore_unavailable = FALSE, ...)
+aliases_get(conn, index = NULL, alias = NULL, ignore_unavailable = FALSE, ...)
 
 alias_exists(conn, index = NULL, alias = NULL, ...)
 
-alias_create(conn, index, alias, filter = NULL, routing = NULL,
-  search_routing = NULL, index_routing = NULL, ...)
+alias_create(
+  conn,
+  index,
+  alias,
+  filter = NULL,
+  routing = NULL,
+  search_routing = NULL,
+  index_routing = NULL,
+  ...
+)
 
 alias_rename(conn, index, alias, alias_new, ...)
 

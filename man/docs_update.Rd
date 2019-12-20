@@ -4,12 +4,28 @@
 \alias{docs_update}
 \title{Update a document}
 \usage{
-docs_update(conn, index, type, id, body, fields = NULL, source = NULL,
-  version = NULL, version_type = NULL, routing = NULL,
-  parent = NULL, timestamp = NULL, ttl = NULL, refresh = NULL,
-  timeout = NULL, retry_on_conflict = NULL,
-  wait_for_active_shards = NULL, detect_noop = NULL,
-  callopts = list(), ...)
+docs_update(
+  conn,
+  index,
+  type,
+  id,
+  body,
+  fields = NULL,
+  source = NULL,
+  version = NULL,
+  version_type = NULL,
+  routing = NULL,
+  parent = NULL,
+  timestamp = NULL,
+  ttl = NULL,
+  refresh = NULL,
+  timeout = NULL,
+  retry_on_conflict = NULL,
+  wait_for_active_shards = NULL,
+  detect_noop = NULL,
+  callopts = list(),
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}

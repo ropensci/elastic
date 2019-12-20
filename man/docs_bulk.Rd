@@ -4,8 +4,18 @@
 \alias{docs_bulk}
 \title{Use the bulk API to create, index, update, or delete documents.}
 \usage{
-docs_bulk(conn, x, index = NULL, type = NULL, chunk_size = 1000,
-  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, ...)
+docs_bulk(
+  conn,
+  x,
+  index = NULL,
+  type = NULL,
+  chunk_size = 1000,
+  doc_ids = NULL,
+  es_ids = TRUE,
+  raw = FALSE,
+  quiet = FALSE,
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
@@ -95,7 +105,7 @@ Until recently, if you had very large integers for document IDs,
 
 \section{Missing data}{
 
-As of \pkg{elastic} version \code{0.7.8.9515} we convert \code{NA} to
+As of \pkg{elastic} version \verb{0.7.8.9515} we convert \code{NA} to
 \code{null} before loading into Elasticsearch. Previously, fields that
 had an \code{NA} were dropped - but when you read data back from
 Elasticsearch into R, you retain those missing values as \pkg{jsonlite}
@@ -260,10 +270,11 @@ invisible(docs_bulk(x, mtcars, index = "hello", type = "world", quiet = FALSE))
 }
 }
 \seealso{
-Other bulk-functions: \code{\link{docs_bulk_create}},
-  \code{\link{docs_bulk_delete}},
-  \code{\link{docs_bulk_index}},
-  \code{\link{docs_bulk_prep}},
-  \code{\link{docs_bulk_update}}
+Other bulk-functions: 
+\code{\link{docs_bulk_create}()},
+\code{\link{docs_bulk_delete}()},
+\code{\link{docs_bulk_index}()},
+\code{\link{docs_bulk_prep}()},
+\code{\link{docs_bulk_update}()}
 }
 \concept{bulk-functions}

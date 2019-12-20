@@ -4,10 +4,22 @@
 \alias{docs_delete_by_query}
 \title{Delete documents by query}
 \usage{
-docs_delete_by_query(conn, index, body, type = NULL, conflicts = NULL,
-  routing = NULL, scroll_size = NULL, refresh = NULL,
-  wait_for_completion = NULL, wait_for_active_shards = NULL,
-  timeout = NULL, scroll = NULL, requests_per_second = NULL, ...)
+docs_delete_by_query(
+  conn,
+  index,
+  body,
+  type = NULL,
+  conflicts = NULL,
+  routing = NULL,
+  scroll_size = NULL,
+  refresh = NULL,
+  wait_for_completion = NULL,
+  wait_for_active_shards = NULL,
+  timeout = NULL,
+  scroll = NULL,
+  requests_per_second = NULL,
+  ...
+)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
@@ -43,10 +55,10 @@ shard must be active before proceeding with the request.}
 minutes)}
 
 \item{scroll}{(integer) control how long the "search context" is kept
-alive, eg \code{scroll='10m'}, by default it’s 5 minutes (\code{5m})}
+alive, eg \code{scroll='10m'}, by default it’s 5 minutes (\verb{5m})}
 
 \item{requests_per_second}{(integer) any positive decimal number
-(1.4, 6, 1000, etc); throttles rate at which \code{_delete_by_query} issues
+(1.4, 6, 1000, etc); throttles rate at which \verb{_delete_by_query} issues
 batches of delete operations by padding each batch with a wait time.
 The throttling can be disabled by setting \code{requests_per_second=-1}}
 

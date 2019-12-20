@@ -4,8 +4,15 @@
 \alias{docs_bulk_prep}
 \title{Use the bulk API to prepare bulk format data}
 \usage{
-docs_bulk_prep(x, index, path, type = NULL, chunk_size = 1000,
-  doc_ids = NULL, quiet = FALSE)
+docs_bulk_prep(
+  x,
+  index,
+  path,
+  type = NULL,
+  chunk_size = 1000,
+  doc_ids = NULL,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{x}{A data.frame or a list. required.}
@@ -138,7 +145,7 @@ if (index_exists("baz")) index_delete("baz")
 df <- data.frame(a = 1:5, b = 6:10, c = letters[1:5], stringsAsFactors = FALSE) 
 f <- tempfile(fileext = ".json")
 invisible(docs_bulk_prep(df, "baz", f))
-cat(readLines(f), sep = "\\n")
+cat(readLines(f), sep = "\n")
 docs_bulk(f)
 (res <- Search('baz', asdf=TRUE)$hits$hits)
 
@@ -151,7 +158,7 @@ df$id <- res$`_id`
 df
 f <- tempfile(fileext = ".json")
 invisible(docs_bulk_prep(df, "baz", path = f, doc_ids = df$id))
-cat(readLines(f), sep = "\\n")
+cat(readLines(f), sep = "\n")
 docs_bulk(f)
 
 
@@ -164,9 +171,11 @@ docs_bulk_prep(mtcars, index = "hello", type = "world",
 }
 }
 \seealso{
-Other bulk-functions: \code{\link{docs_bulk_create}},
-  \code{\link{docs_bulk_delete}},
-  \code{\link{docs_bulk_index}},
-  \code{\link{docs_bulk_update}}, \code{\link{docs_bulk}}
+Other bulk-functions: 
+\code{\link{docs_bulk_create}()},
+\code{\link{docs_bulk_delete}()},
+\code{\link{docs_bulk_index}()},
+\code{\link{docs_bulk_update}()},
+\code{\link{docs_bulk}()}
 }
 \concept{bulk-functions}
