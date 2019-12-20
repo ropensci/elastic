@@ -473,15 +473,17 @@ index_analyze <- function(conn, text=NULL, field=NULL, index=NULL, analyzer=NULL
     url <- sprintf("%s/_analyze", url)
   }
 
+  if (!is.null(filters)) filters <- I(filters)
+  if (!is.null(char_filters)) char_filters <- I(char_filters)
   if (conn$es_ver() >= 500) {
     body <- ec(list(text = text, analyzer = analyzer, tokenizer = tokenizer,
-                 filter = I(filters), char_filter = I(char_filters),
+                 filter = filters, char_filter = char_filters,
                  field = field))
     args <- list()
   } else {
     body <- list()
     args <- ec(list(text = text, analyzer = analyzer, tokenizer = tokenizer,
-                    filters = I(filters), char_filters = I(char_filters),
+                    filters = filters, char_filters = char_filters,
                     field = field))
   }
 

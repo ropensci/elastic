@@ -101,5 +101,12 @@ test_that("index_recovery", {
   }
 })
 
+test_that("index_analyze", {
+  expect_warning(
+    index_analyze(x, text = 'this is a test', analyzer='standard'),
+    NA
+  )
+})
+
 ## cleanup -----------------------------------
 invisible(index_delete(x, "stuff_yy", verbose = FALSE))
