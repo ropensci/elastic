@@ -1,7 +1,8 @@
 #' @param conn an Elasticsearch connection object, see \code{\link{connect}}
 #' @param index Index name, one or more
 #' @param type Document type. Note that \code{type} is deprecated in 
-#' Elasticsearch v7 and greater
+#' Elasticsearch v7 and greater, and removed in Elasticsearch v8. We will
+#' strive to support types for folks using older ES versions
 #' @param q The query string (maps to the query_string query, see Query String 
 #' Query for more details). See 
 #'https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html

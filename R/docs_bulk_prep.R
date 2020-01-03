@@ -23,18 +23,18 @@
 #' @examples \dontrun{
 #' # From a data.frame
 #' ff <- tempfile(fileext = ".json")
-#' docs_bulk_prep(mtcars, index = "hello", type = "world", path = ff)
+#' docs_bulk_prep(mtcars, index = "hello", path = ff)
 #' readLines(ff)
 #' 
 #' ## field names cannot contain dots
 #' names(iris) <- gsub("\\.", "_", names(iris))
-#' docs_bulk_prep(iris, "iris", "flowers", path = tempfile(fileext = ".json"))
+#' docs_bulk_prep(iris, "iris", path = tempfile(fileext = ".json"))
 #' 
 #' ## type can be missing, but index can not
 #' docs_bulk_prep(iris, "flowers", path = tempfile(fileext = ".json"))
 #'
 #' # From a list
-#' docs_bulk_prep(apply(iris, 1, as.list), index="iris", type="flowers",
+#' docs_bulk_prep(apply(iris, 1, as.list), index="iris",
 #'    path = tempfile(fileext = ".json"))
 #' docs_bulk_prep(apply(USArrests, 1, as.list), index="arrests",
 #'    path = tempfile(fileext = ".json"))
@@ -54,7 +54,7 @@
 #' paths <- vector("list", length = length(files))
 #' for (i in seq_along(files)) {
 #'   d <- read.csv(files[[i]])
-#'   paths[i] <- docs_bulk_prep(d, index = "stuff", type = "docs",
+#'   paths[i] <- docs_bulk_prep(d, index = "stuff",
 #'      path = tempfile(fileext = ".json"))
 #' }
 #' unlist(paths)
@@ -71,7 +71,7 @@
 #' paths <- vector("list", length = length(files))
 #' for (i in seq_along(files)) {
 #'   d <- read.csv(files[[i]])
-#'   paths[i] <- docs_bulk_prep(d, index = "testes", type = "docs",
+#'   paths[i] <- docs_bulk_prep(d, index = "testes",
 #'     doc_ids = ids[[i]], path = tempfile(fileext = ".json"))
 #' }
 #' unlist(paths)
@@ -84,7 +84,7 @@
 #' paths <- vector("list", length = length(files))
 #' for (i in seq_along(files)) {
 #'   d <- read.csv(files[[i]])
-#'   paths[i] <- docs_bulk_prep(d, index = "testes", type = "docs",
+#'   paths[i] <- docs_bulk_prep(d, index = "testes",
 #'      path = tempfile(fileext = ".json"))
 #' }
 #' unlist(paths)
@@ -94,7 +94,7 @@
 #' for (i in seq_along(files)) {
 #'   d <- read.csv(files[[i]])
 #'   d <- apply(d, 1, as.list)
-#'   paths[i] <- docs_bulk_prep(d, index = "testes", type = "docs",
+#'   paths[i] <- docs_bulk_prep(d, index = "testes",
 #'       path = tempfile(fileext = ".json"))
 #' }
 #' unlist(paths)
@@ -103,13 +103,14 @@
 #' # A mix of actions
 #' ## make sure you use a column named 'es_action' or this won't work
 #' ## if you need to delete or update you need document IDs
-#' if (index_exists("baz")) index_delete("baz")
+#' if (index_exists(x, "baz")) index_delete(x, "baz")
 #' df <- data.frame(a = 1:5, b = 6:10, c = letters[1:5], stringsAsFactors = FALSE) 
 #' f <- tempfile(fileext = ".json")
 #' invisible(docs_bulk_prep(df, "baz", f))
 #' cat(readLines(f), sep = "\n")
-#' docs_bulk(f)
-#' (res <- Search('baz', asdf=TRUE)$hits$hits)
+#' docs_bulk(x, f)
+#' Sys.sleep(2)
+#' (res <- Search(x, 'baz', asdf=TRUE)$hits$hits)
 #' 
 #' df[1, "a"] <- 99
 #' df[1, "c"] <- "aa"
@@ -121,14 +122,14 @@
 #' f <- tempfile(fileext = ".json")
 #' invisible(docs_bulk_prep(df, "baz", path = f, doc_ids = df$id))
 #' cat(readLines(f), sep = "\n")
-#' docs_bulk(f)
+#' docs_bulk(x, f)
 #' 
 #' 
 #' # suppress progress bar
-#' docs_bulk_prep(mtcars, index = "hello", type = "world", 
+#' docs_bulk_prep(mtcars, index = "hello",
 #'   path = tempfile(fileext = ".json"), quiet = TRUE)
 #' ## vs. 
-#' docs_bulk_prep(mtcars, index = "hello", type = "world", 
+#' docs_bulk_prep(mtcars, index = "hello",
 #'   path = tempfile(fileext = ".json"), quiet = FALSE)
 #' }
 docs_bulk_prep <- function(x, index, path, type = NULL, chunk_size = 1000,
@@ -149,7 +150,6 @@ docs_bulk_prep.data.frame <- function(x, index, path, type = NULL,
   chunk_size = 1000, doc_ids = NULL, quiet = FALSE) {
 
   assert(quiet, "logical")
-  if (is.null(type)) type <- index
   check_doc_ids(x, doc_ids)
   es_ids <- if (!is.null(doc_ids)) FALSE else TRUE
   if (is.factor(doc_ids)) doc_ids <- as.character(doc_ids)
@@ -174,7 +174,7 @@ docs_bulk_prep.data.frame <- function(x, index, path, type = NULL,
   for (i in seq_along(data_chks)) {
     if (!quiet) setTxtProgressBar(pb, i)
     resl[[i]] <- make_bulk(
-      x[data_chks[[i]], , drop = FALSE], index, type, id_chks[[i]], es_ids,
+      x[data_chks[[i]], , drop = FALSE], index, id_chks[[i]], es_ids, type,
       path = if (length(data_chks) > 1) adjust_path(path, i) else path
     )
   }
@@ -186,7 +186,6 @@ docs_bulk_prep.list <- function(x, index, path, type = NULL,
   chunk_size = 1000, doc_ids = NULL, quiet = FALSE) {
 
   assert(quiet, "logical")
-  if (is.null(type)) type <- index
   check_doc_ids(x, doc_ids)
   es_ids <- if (!is.null(doc_ids)) TRUE else FALSE
   if (is.factor(doc_ids)) doc_ids <- as.character(doc_ids)
@@ -213,7 +212,7 @@ docs_bulk_prep.list <- function(x, index, path, type = NULL,
   for (i in seq_along(data_chks)) {
     if (!quiet) setTxtProgressBar(pb, i)
     resl[[i]] <- make_bulk(
-      x[data_chks[[i]]], index, type, id_chks[[i]], es_ids,
+      x[data_chks[[i]]], index, id_chks[[i]], es_ids, type,
       path = if (length(data_chks) > 1) adjust_path(path, i) else path
     )
   }

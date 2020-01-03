@@ -7,7 +7,7 @@
 termvectors(
   conn,
   index,
-  type,
+  type = NULL,
   id = NULL,
   body = list(),
   pretty = TRUE,
@@ -31,7 +31,7 @@ termvectors(
 
 \item{index}{(character) The index in which the document resides.}
 
-\item{type}{(character) The type of the document.}
+\item{type}{(character) The type of the document. optional}
 
 \item{id}{(character) The id of the document, when not specified a doc
 param should be supplied.}
@@ -91,11 +91,12 @@ vectors are not available until the next refresh.
 x <- connect()
 
 if (!index_exists(x, 'plos')) {
-  plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+  plosdat <- system.file("examples", "plos_data_notypes.json",
+    package = "elastic")
   invisible(docs_bulk(x, plosdat))
 }
 if (!index_exists(x, 'omdb')) {
-  omdb <- system.file("examples", "omdb.json", package = "elastic")
+  omdb <- system.file("examples", "omdb_notypes.json", package = "elastic")
   invisible(docs_bulk(x, omdb))
 }
 
@@ -106,7 +107,7 @@ body <- '{
   "term_statistics" : true,
   "field_statistics" : true
 }'
-termvectors(x, 'plos', 'article', 29, body = body)
+termvectors(x, 'plos', id = 29, body = body)
 
 body <- '{
   "fields" : ["Plot"],
@@ -115,7 +116,8 @@ body <- '{
   "term_statistics" : true,
   "field_statistics" : true
 }'
-termvectors(x, 'omdb', 'omdb', 'AVXdx8Eqg_0Z_tpMDyP_', body = body)
+termvectors(x, 'omdb', id = Search(x, "omdb", size=1)$hits$hits[[1]]$`_id`,
+body = body)
 }
 }
 \references{

@@ -23,14 +23,14 @@ Validate a search
 x <- connect()
 
 if (!index_exists(x, "twitter")) index_create(x, "twitter")
-docs_create(x, 'twitter', type='tweet', id=1, body = list(
+docs_create(x, 'twitter', id=1, body = list(
    "user" = "foobar", 
    "post_date" = "2014-01-03",
    "message" = "trying out Elasticsearch"
  )
 )
 validate(x, "twitter", q='user:foobar')
-validate(x, "twitter", "tweet", q='user:foobar')
+validate(x, "twitter", q='user:foobar')
 
 body <- '{
 "query" : {

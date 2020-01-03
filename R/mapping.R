@@ -42,20 +42,24 @@
 #'
 #' # The put mapping API allows to register specific mapping definition for a specific type.
 #' ## a good mapping body
-#' body <- list(citation = list(properties = list(
+#' body <- list(properties = list(
 #'  journal = list(type="text"),
 #'  year = list(type="long")
-#' )))
+#' ))
 #' if (!index_exists(x, "plos")) index_create(x, "plos")
 #' mapping_create(x, index = "plos", type = "citation", body=body)
+#' ## OR if above fails, try
+#' mapping_create(x, index = "plos", type = "citation", body=body,
+#'   include_type_name=TRUE)
+#' ## ES >= 7, no type
+#' mapping_create(x, index = "plos", body=body)
 #'
 #' ### or as json
 #' body <- '{
-#'   "citation": {
-#'     "properties": {
-#'       "journal": { "type": "text" },
+#'   "properties": {
+#'     "journal": { "type": "text" },
 #'       "year": { "type": "long" }
-#' }}}'
+#' }}'
 #' mapping_create(x, index = "plos", type = "citation", body=body)
 #' mapping_get(x, "plos", "citation")
 #'
@@ -73,25 +77,27 @@
 #' # mapping_get(x, index = "shakespeare", type = c("act","line"))
 #'
 #' # Get field mappings
-#' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+#' plosdat <- system.file("examples", "plos_data_notypes.json",
+#'   package = "elastic")
 #' invisible(docs_bulk(x, plosdat))
-#' field_mapping_get(x, index = "_all", type=c('article', 'line'), field = "text")
-#' field_mapping_get(x, index = "plos", type = "article", field = "title")
-#' field_mapping_get(x, index = "plos", type = "article", field = "*")
-#' field_mapping_get(x, index = "plos", type = "article", field = "title", include_defaults = TRUE)
+#' field_mapping_get(x, index = "_all", field = "text")
+#' field_mapping_get(x, index = "plos", field = "title")
+#' field_mapping_get(x, index = "plos", field = "*")
+#' field_mapping_get(x, index = "plos", field = "title", include_defaults = TRUE)
 #' field_mapping_get(x, type = c("article","record"), field = c("title","class"))
 #' field_mapping_get(x, type = "a*", field = "t*")
 #'
 #' # Create geospatial mapping
 #' if (index_exists(x, "gbifgeopoint")) index_delete(x, "gbifgeopoint")
-#' file <- system.file("examples", "gbif_geopoint.json", package = "elastic")
+#' file <- system.file("examples", "gbif_geopoint_notypes.json",
+#'   package = "elastic")
 #' index_create(x, "gbifgeopoint")
 #' body <- '{
 #'  "properties" : {
 #'    "location" : { "type" : "geo_point" }
 #'  }
 #' }'
-#' mapping_create(x, "gbifgeopoint", "record", body = body)
+#' mapping_create(x, "gbifgeopoint", body = body)
 #' invisible(docs_bulk(x, file))
 #' 
 #' # update_all_fields, see also ?fielddata
@@ -106,7 +112,7 @@
 #'  }')
 #' } else {
 #'  index_create(x, 'brownchair')
-#'  mapping_create(x, 'brownchair', 'brown', body = '{
+#'  mapping_create(x, 'brownchair', body = '{
 #'    "properties": {
 #'      "foo": { 
 #'        "type":     "text",
@@ -120,12 +126,13 @@
 
 #' @export
 #' @rdname mapping
-mapping_create <- function(conn, index, type, body, update_all_types = FALSE,
+mapping_create <- function(conn, index, body, type = NULL, update_all_types = FALSE,
   include_type_name = NULL, ...) {
   is_conn(conn)
   url <- conn$make_url()
-  url <- file.path(url, esc(index), "_mapping", esc(type))
-  args <- list(include_type_name = as_log(include_type_name))
+  url <- file.path(url, esc(index), "_mapping")
+  if (!is.null(type)) url <- file.path(url, esc(type))
+  args <- ec(list(include_type_name = as_log(include_type_name)))
   if (conn$es_ver() < 603) { 
     args <- ec(list(update_all_types = as_log(update_all_types)))
   }
@@ -164,15 +171,21 @@ field_mapping_get <- function(conn, index = NULL, type = NULL, field,
   url <- conn$make_url()
   if (any(index == "_all")){
     conn$stop_es_version(110, "field_mapping_get")
-    stopifnot(!is.null(type))
-    url <- file.path(url, "_all/_mapping", esc(cl(type)), "field", cl(field))
-  } else {
-    if(is.null(type)){
-      url <- file.path(url, esc(cl(index)), "_mapping/field", cl(field))
-    } else if(is.null(index) && !is.null(type)) {
+    if (!is.null(type))
       url <- file.path(url, "_all/_mapping", esc(cl(type)), "field", cl(field))
-    } else if(!is.null(index) && !is.null(type)) {
-      if(length(index) > 1) stop("You can only pass one index if you also pass a type", call. = FALSE)
+    else
+      url <- file.path(url, "_all/_mapping/field", cl(field))
+  } else {
+    if (is.null(index) && is.null(type)) {
+      url <- file.path(url, "_mapping/field", cl(field))
+    } else if (!is.null(index) && is.null(type)) {
+      url <- file.path(url, esc(cl(index)), "_mapping/field", cl(field))
+    } else if (is.null(index) && !is.null(type)) {
+      url <- file.path(url, "_all/_mapping", esc(cl(type)), "field", cl(field))
+    } else if (!is.null(index) && !is.null(type)) {
+      if (length(index) > 1)
+        stop("You can only pass one index if you also pass a type",
+          call. = FALSE)
       url <- file.path(url, esc(index), "_mapping", esc(cl(type)), "field", cl(field))
     }
   }
@@ -187,7 +200,10 @@ type_exists <- function(conn, index, type, ...) {
   is_conn(conn)
   # seems to not work in v1, so don't try cause would give false result
   if (conn$es_ver() <= 100) {
-    stop("type exists not available in this ES version", call. = FALSE)
+    stop("type exists not available in ES <= v1", call. = FALSE)
+  }
+  if (conn$es_ver() >= 800) {
+    stop("types are defunct in ES >= v8", call. = FALSE)
   }
   url <- conn$make_url()
   

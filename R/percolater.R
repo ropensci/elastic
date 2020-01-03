@@ -145,7 +145,7 @@
 #' 
 #' 
 #' ##### Elasticsearch >= v5
-#' if (x$es_ver() >= 500) {
+#' if (x$es_ver() >= 500 && x$es_ver() <= 700) {
 #' if (index_exists(x, "myindex")) index_delete(x, "myindex")
 #' 
 #' body <- '{
@@ -201,8 +201,65 @@
 #' } # end ES >= 5
 #' 
 #' 
+#' 
+#' 
+#' ##### Elasticsearch >= v7
+#' if (x$es_ver() >= 700) {
+#' if (index_exists(x, "myindex")) index_delete(x, "myindex")
+#' 
+#' body <- '{
+#'   "mappings": {
+#'     "properties": {
+#'       "message": {
+#'         "type": "text"
+#'       },
+#'       "query": {
+#'         "type": "percolator"
+#'       }
+#'     }
+#'   }
+#' }'
+#' 
+#' # create the index with mapping
+#' index_create(x, "myindex", body = body)
+#'
+#' ## register a percolator
+#' z <- '{
+#'   "query" : {
+#'      "match" : {
+#'        "message" : "bonsai tree"
+#'      }
+#'   }
+#' }'
+#' percolate_register(x, index = "myindex", id = 1, body = z)
+#'
+#' ## register another
+#' x2 <- '{
+#'   "query" : {
+#'     "match" : {
+#'       "message" : "the office"
+#'     }
+#'   }
+#' }'
+#' percolate_register(x, index = "myindex", id = 2, body = x2)
+#'
+#' ## match a document to a percolator
+#' query <- '{
+#'   "query" : {
+#'     "percolate" : {
+#'       "field": "query",
+#'       "document": {
+#'         "message": "A new bonsai tree in the office"
+#'       }
+#'     }
+#'   }
+#' }'
+#' percolate_match(x, index = "myindex", body = query)
+#' } # end ES >= 7
+#' 
+#' 
 #' }
-percolate_register <- function(conn, index, type, id, body=list(),
+percolate_register <- function(conn, index, id, type = NULL, body=list(),
   routing = NULL, preference = NULL, ignore_unavailable = NULL,
   percolate_format = NULL, refresh = NULL, ...) {
 
@@ -210,7 +267,8 @@ percolate_register <- function(conn, index, type, id, body=list(),
   #percolate_check_ver(conn)
   url <- conn$make_url()
   if (conn$es_ver() >= 500) {
-    url <- file.path(url, esc(index), esc(type), id)
+    type <- if (!is.null(type)) esc(type) else "_doc"
+    url <- file.path(url, esc(index), type, id)
   } else {
     url <- sprintf("%s/%s/.percolator/%s", url, esc(index), id)
   }

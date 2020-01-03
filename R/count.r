@@ -3,7 +3,7 @@
 #' @export
 #' @param conn an Elasticsearch connection object, see [connect()]
 #' @param index Index, defaults to all indices
-#' @param type Document type
+#' @param type Document type, optional
 #' @param callopts Curl args passed on to [crul::verb-GET]
 #' @param verbose If `TRUE` (default) the url call used printed to console.
 #' @param ... Further args passed on to elastic search HTTP API as parameters.
@@ -17,7 +17,7 @@
 #' (x <- connect())
 #' 
 #' if (!index_exists(x, "plos")) {
-#'   plosdat <- system.file("examples", "plos_data.json", 
+#'   plosdat <- system.file("examples", "plos_data_notypes.json", 
 #'     package = "elastic")
 #'   invisible(docs_bulk(x, plosdat))
 #' }
@@ -29,11 +29,6 @@
 #' 
 #' count(x)
 #' count(x, index='plos')
-#' 
-#' if (x$es_ver() < 700) {
-#'   count(x, index='plos', type='article')
-#' }
-#' 
 #' count(x, index='shakespeare')
 #' count(x, index=c('plos','shakespeare'), q="a*")
 #' count(x, index=c('plos','shakespeare'), q="z*")

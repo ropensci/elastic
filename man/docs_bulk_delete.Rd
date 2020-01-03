@@ -23,8 +23,8 @@ docs_bulk_delete(
 \item{index}{(character) The index name to use. Required for data.frame
 input, but optional for file inputs.}
 
-\item{type}{(character) The type name to use. If left as NULL, will be
-same name as index.}
+\item{type}{(character) The type. default: \code{NULL}. Note that \code{type} is
+deprecated in Elasticsearch v7 and greater, and removed in Elasticsearch v8}
 
 \item{chunk_size}{(integer) Size of each chunk. If your data.frame is smaller
 thank \code{chunk_size}, this parameter is essentially ignored. We write in
@@ -58,16 +58,20 @@ x <- connect()
 if (index_exists(x, "foobar")) index_delete(x, "foobar")
 
 df <- data.frame(name = letters[1:3], size = 1:3, id = 100:102)
-invisible(docs_bulk(x, df, 'foobar', 'foobar', es_ids = FALSE))
+invisible(docs_bulk(x, df, 'foobar', es_ids = FALSE))
 Search(x, "foobar", asdf = TRUE)$hits$hits
 
 # delete using doc ids from the data.frame you used to create
-invisible(docs_bulk_delete(x, df, index = 'foobar', type = 'foobar'))
-Search(x, "foobar", asdf = TRUE)$hits$total
+invisible(docs_bulk_delete(x, df, index = 'foobar'))
+Search(x, "foobar", asdf = TRUE)$hits$total$value
 
 # delete by passing in doc ids
-docs_bulk_delete(x, df, index = 'foobar', type = 'foobar', doc_ids = df$id)
-Search(x, "foobar", asdf = TRUE)$hits$total
+## recreate data first
+if (index_exists(x, "foobar")) index_delete(x, "foobar")
+df <- data.frame(name = letters[1:3], size = 1:3, id = 100:102)
+invisible(docs_bulk(x, df, 'foobar', es_ids = FALSE))
+docs_bulk_delete(x, df, index = 'foobar', doc_ids = df$id)
+Search(x, "foobar", asdf = TRUE)$hits$total$value
 }
 }
 \references{

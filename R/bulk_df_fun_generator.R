@@ -8,7 +8,6 @@ make_bulk_df_generator <- function(fun) {
       stop("index can't be NULL when passing a data.frame",
            call. = FALSE)
     }
-    if (is.null(type)) type <- index
     check_doc_ids(x, doc_ids)
     # make sure document ids passed 
     if (!'id' %in% names(x) && is.null(doc_ids)) {
@@ -37,7 +36,7 @@ make_bulk_df_generator <- function(fun) {
     for (i in seq_along(data_chks)) {
       if (!quiet) setTxtProgressBar(pb, i)
       resl[[i]] <- docs_bulk(conn, fun(x[data_chks[[i]], , drop = FALSE], 
-        index, type, id_chks[[i]]), ...)
+        index, id_chks[[i]], type), ...)
     }
     return(resl)
   }

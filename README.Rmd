@@ -151,14 +151,14 @@ x <- connect()
 if (x$es_ver() < 600) {
   shakespeare <- system.file("examples", "shakespeare_data.json", package = "elastic")
 } else {
-  shakespeare <- system.file("examples", "shakespeare_data_.json", package = "elastic")
+  shakespeare <- system.file("examples", "shakespeare_data_notypes.json", package = "elastic")
 }
 ```
 
 ```{r eval=FALSE}
 shakespeare <- system.file("examples", "shakespeare_data.json", package = "elastic")
-# If you're on Elastic v6 or greater, use this one with 1 type instead of 3:
-shakespeare <- system.file("examples", "shakespeare_data_.json", package = "elastic")
+# If you're on Elastic v6 or greater, use this one
+shakespeare <- system.file("examples", "shakespeare_data_notypes.json", package = "elastic")
 ```
 
 Then load the data into Elasticsearch:
@@ -183,7 +183,7 @@ A dataset inluded in the `elastic` package is metadata for PLOS scholarly articl
 
 ```{r}
 if (index_exists(x, "plos")) index_delete(x, "plos")
-plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+plosdat <- system.file("examples", "plos_data_notypes.json", package = "elastic")
 invisible(docs_bulk(x, plosdat))
 ```
 
@@ -193,7 +193,7 @@ A dataset inluded in the `elastic` package is data for GBIF species occurrence r
 
 ```{r}
 if (index_exists(x, "gbif")) index_delete(x, "gbif")
-gbifdat <- system.file("examples", "gbif_data.json", package = "elastic")
+gbifdat <- system.file("examples", "gbif_data_notypes.json", package = "elastic")
 invisible(docs_bulk(x, gbifdat))
 ```
 
@@ -201,7 +201,7 @@ GBIF geo data with a coordinates element to allow `geo_shape` queries
 
 ```{r}
 if (index_exists(x, "gbifgeo")) index_delete(x, "gbifgeo")
-gbifgeo <- system.file("examples", "gbif_geo.json", package = "elastic")
+gbifgeo <- system.file("examples", "gbif_geo_notypes.json", package = "elastic")
 invisible(docs_bulk(x, gbifgeo))
 ```
 

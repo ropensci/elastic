@@ -11,7 +11,8 @@
 #' @param body body describing pipeline, see examples and Elasticsearch docs
 #' @param filter_path (character) fields to return. deafults to all if not given
 #' @param index (character) an index. only used in `pipeline_attachment`
-#' @param type (character) a type. only used in `pipeline_attachment`
+#' @param type (character) a type. only used in `pipeline_attachment`. by default
+#' ths is set to `NULL` - optional in ES <= v6.3; not allowed in ES >= v6.4
 #' @param pipeline (character) a pipeline name. only used in `pipeline_attachment`
 #' @param ... Curl args passed on to [crul::verb-POST], [crul::verb-GET],
 #' [crul::verb-PUT], or [crul::verb-DELETE]
@@ -113,9 +114,8 @@
 #'   "data": "e1xydGYxXGFuc2kNCkxvcmVtIGlwc3VtIGRvbG9yIHNpdCBhbWV0DQpccGFyIH0="
 #' }'
 #' if (!index_exists(x, "boomarang")) index_create(x, "boomarang")
-#' docs_create(x, 'boomarang', 'boomarang', id = 1, 
-#'   body = list(title = "New title"))
-#' pipeline_attachment(x, "boomarang", "boomarang", "1", "baz", body_attach)
+#' docs_create(x, 'boomarang', id = 1, body = list(title = "New title"))
+#' pipeline_attachment(x, "boomarang", "1", "baz", body_attach)
 #' pipeline_get(x, id = 'baz')
 #' }
 NULL
@@ -131,10 +131,13 @@ pipeline_create <- function(conn, id, body, ...) {
 
 #' @export
 #' @rdname ingest
-pipeline_attachment <- function(conn, index, type, id, pipeline, body, ...) {
+pipeline_attachment <- function(conn, index, id, pipeline, body, type = NULL,
+  ...) {
+
   is_conn(conn)
   pipeline_ver(conn)
   url <- conn$make_url()
+  type <- if (!is.null(type)) esc(type) else "_doc"
   es_PUT(conn, file.path(url, index, type, esc(id)),
     body = body, args = list(pipeline = pipeline), ...)
 }
