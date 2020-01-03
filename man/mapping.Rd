@@ -11,8 +11,8 @@
 mapping_create(
   conn,
   index,
-  type,
   body,
+  type = NULL,
   update_all_types = FALSE,
   include_type_name = NULL,
   ...
@@ -37,9 +37,9 @@ type_exists(conn, index, type, ...)
 
 \item{index}{(character) An index}
 
-\item{type}{(character) A document type}
-
 \item{body}{(list) Either a list or json, representing the query.}
+
+\item{type}{(character) A document type}
 
 \item{update_all_types}{(logical) update all types. default: \code{FALSE}.
 This parameter is deprecated in ES v6.3.0 and higher, see
@@ -88,20 +88,24 @@ type_exists(x, index = "shakespeare", type = "line")
 
 # The put mapping API allows to register specific mapping definition for a specific type.
 ## a good mapping body
-body <- list(citation = list(properties = list(
+body <- list(properties = list(
  journal = list(type="text"),
  year = list(type="long")
-)))
+))
 if (!index_exists(x, "plos")) index_create(x, "plos")
 mapping_create(x, index = "plos", type = "citation", body=body)
+## OR if above fails, try
+mapping_create(x, index = "plos", type = "citation", body=body,
+  include_type_name=TRUE)
+## ES >= 7, no type
+mapping_create(x, index = "plos", body=body)
 
 ### or as json
 body <- '{
-  "citation": {
-    "properties": {
-      "journal": { "type": "text" },
+  "properties": {
+    "journal": { "type": "text" },
       "year": { "type": "long" }
-}}}'
+}}'
 mapping_create(x, index = "plos", type = "citation", body=body)
 mapping_get(x, "plos", "citation")
 
@@ -119,25 +123,27 @@ mapping_get(x, index = c("shakespeare","plos"))
 # mapping_get(x, index = "shakespeare", type = c("act","line"))
 
 # Get field mappings
-plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+plosdat <- system.file("examples", "plos_data_notypes.json",
+  package = "elastic")
 invisible(docs_bulk(x, plosdat))
-field_mapping_get(x, index = "_all", type=c('article', 'line'), field = "text")
-field_mapping_get(x, index = "plos", type = "article", field = "title")
-field_mapping_get(x, index = "plos", type = "article", field = "*")
-field_mapping_get(x, index = "plos", type = "article", field = "title", include_defaults = TRUE)
+field_mapping_get(x, index = "_all", field = "text")
+field_mapping_get(x, index = "plos", field = "title")
+field_mapping_get(x, index = "plos", field = "*")
+field_mapping_get(x, index = "plos", field = "title", include_defaults = TRUE)
 field_mapping_get(x, type = c("article","record"), field = c("title","class"))
 field_mapping_get(x, type = "a*", field = "t*")
 
 # Create geospatial mapping
 if (index_exists(x, "gbifgeopoint")) index_delete(x, "gbifgeopoint")
-file <- system.file("examples", "gbif_geopoint.json", package = "elastic")
+file <- system.file("examples", "gbif_geopoint_notypes.json",
+  package = "elastic")
 index_create(x, "gbifgeopoint")
 body <- '{
  "properties" : {
    "location" : { "type" : "geo_point" }
  }
 }'
-mapping_create(x, "gbifgeopoint", "record", body = body)
+mapping_create(x, "gbifgeopoint", body = body)
 invisible(docs_bulk(x, file))
 
 # update_all_fields, see also ?fielddata
@@ -152,7 +158,7 @@ if (x$es_ver() < 603) {
  }')
 } else {
  index_create(x, 'brownchair')
- mapping_create(x, 'brownchair', 'brown', body = '{
+ mapping_create(x, 'brownchair', body = '{
    "properties": {
      "foo": { 
        "type":     "text",

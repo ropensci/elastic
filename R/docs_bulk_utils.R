@@ -1,4 +1,4 @@
-make_bulk <- function(df, index, type, counter, es_ids, path = NULL) {
+make_bulk <- function(df, index, counter, es_ids, type = NULL, path = NULL) {
   if (!is.character(counter)) {
     if (max(counter) >= 10000000000) {
       scipen <- getOption("scipen")
@@ -6,35 +6,23 @@ make_bulk <- function(df, index, type, counter, es_ids, path = NULL) {
       on.exit(options(scipen = scipen))
     }
   }
-  metadata_fmt <- if (es_ids) {
-    '{"%s":{"_index":"%s","_type":"%s"}}'
-  } else {
-    if (is.character(counter)) {
-      '{"%s":{"_index":"%s","_type":"%s","_id":"%s"}}'
-    } else {
-      '{"%s":{"_index":"%s","_type":"%s","_id":%s}}'
-    }
-  }
+  metadata_fmt <- make_metadata(es_ids, counter, type)
   if (!"es_action" %in% names(df)) {
     action <- "index"
-    metadata <- sprintf(
-      metadata_fmt,
-      action,
-      index,
-      type,
-      counter
-    )
+    metadata <- if (!is.null(type)) {
+      sprintf(metadata_fmt, action, index, type, counter)
+    } else {
+      sprintf(metadata_fmt, action, index, counter)
+    }
     data <- jsonlite::toJSON(df, collapse = FALSE, na = "null", auto_unbox = TRUE)
     towrite <- paste(metadata, data, sep = "\n")
   } else {
     towrite <- unlist(unname(Map(function(a, b) {
-      tmp <- sprintf(
-        metadata_fmt,
-        a$es_action,
-        index,
-        type,
-        b
-      )
+      tmp <- if (!is.null(type)) {
+        sprintf(metadata_fmt, a$es_action, index, type, b)
+      } else {
+        sprintf(metadata_fmt, a$es_action, index, b)
+      }
       if (a$es_action == "delete") return(tmp)
       is_update <- a$es_action == "update"
       a$es_action <- NULL
@@ -46,6 +34,30 @@ make_bulk <- function(df, index, type, counter, es_ids, path = NULL) {
   tmpf <- if (is.null(path)) tempfile("elastic__") else path
   write_utf8(towrite, tmpf)
   invisible(tmpf)
+}
+
+make_metadata <- function(es_ids, counter, type) {
+  if (!is.null(type)) {
+    if (es_ids) {
+      '{"%s":{"_index":"%s","_type":"%s"}}'
+    } else {
+      if (is.character(counter)) {
+        '{"%s":{"_index":"%s","_type":"%s","_id":"%s"}}'
+      } else {
+        '{"%s":{"_index":"%s","_type":"%s","_id":%s}}'
+      }
+    }    
+  } else {
+    if (es_ids) {
+      '{"%s":{"_index":"%s"}}'
+    } else {
+      if (is.character(counter)) {
+        '{"%s":{"_index":"%s","_id":"%s"}}'
+      } else {
+        '{"%s":{"_index":"%s","_id":%s}}'
+      }
+    }
+  }
 }
 
 shift_start <- function(vals, index, type = NULL) {

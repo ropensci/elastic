@@ -25,8 +25,8 @@ docs_bulk_create(
 \item{index}{(character) The index name to use. Required for data.frame
 input, but optional for file inputs.}
 
-\item{type}{(character) The type name to use. If left as NULL, will be
-same name as index.}
+\item{type}{(character) The type. default: \code{NULL}. Note that \code{type} is
+deprecated in Elasticsearch v7 and greater, and removed in Elasticsearch v8}
 
 \item{chunk_size}{(integer) Size of each chunk. If your data.frame is smaller
 thank \code{chunk_size}, this parameter is essentially ignored. We write in
@@ -66,19 +66,19 @@ x <- connect()
 if (index_exists(x, "foobar")) index_delete(x, "foobar")
 
 df <- data.frame(name = letters[1:3], size = 1:3, id = 100:102)
-docs_bulk_create(x, df, 'foobar', 'foobar', es_ids = FALSE)
+docs_bulk_create(x, df, 'foobar', es_ids = FALSE)
 Search(x, "foobar", asdf = TRUE)$hits$hits
 
 # more examples
-docs_bulk_create(x, mtcars, index = "hello", type = "world")
+docs_bulk_create(x, mtcars, index = "hello")
 ## field names cannot contain dots
 names(iris) <- gsub("\\\\.", "_", names(iris))
-docs_bulk_create(x, iris, "iris", "flowers")
+docs_bulk_create(x, iris, "iris")
 ## type can be missing, but index can not
 docs_bulk_create(x, iris, "flowers")
 ## big data.frame, 53K rows, load ggplot2 package first
 # res <- docs_bulk_create(x, diamonds, "diam")
-# Search(x, "diam")$hits$total
+# Search(x, "diam")$hits$total$value
 }
 }
 \references{

@@ -5,8 +5,8 @@
 #' @param x A list, data.frame, or character path to a file. required.
 #' @param index (character) The index name to use. Required for data.frame
 #' input, but optional for file inputs.
-#' @param type (character) The type name to use. If left as NULL, will be
-#' same name as index.
+#' @param type (character) The type. default: `NULL`. Note that `type` is
+#' deprecated in Elasticsearch v7 and greater, and removed in Elasticsearch v8
 #' @param chunk_size (integer) Size of each chunk. If your data.frame is smaller
 #' thank `chunk_size`, this parameter is essentially ignored. We write in
 #' chunks because at some point, depending on size of each document, and
@@ -31,8 +31,8 @@
 #' This function dispatches on data.frame or character input. Character input
 #' has to be a file name or the function stops with an error message.
 #'
-#' If you pass a data.frame to this function, we by default to an index
-#' operation, that is, create the record in the index and type given by those
+#' If you pass a data.frame to this function, we by default do an index
+#' operation, that is, create the record in the index given by those
 #' parameters to the function. Down the road perhaps we will try to support
 #' other operations on the bulk API. if you pass a file, of course in that
 #' file, you can specify any operations you want.
@@ -110,10 +110,10 @@
 #' aliases_get(x)
 #'
 #' # From a data.frame
-#' docs_bulk(x, mtcars, index = "hello", type = "world")
+#' docs_bulk(x, mtcars, index = "hello")
 #' ## field names cannot contain dots
 #' names(iris) <- gsub("\\.", "_", names(iris))
-#' docs_bulk(x, iris, "iris", "flowers")
+#' docs_bulk(x, iris, "iris")
 #' ## type can be missing, but index can not
 #' docs_bulk(x, iris, "flowers")
 #' ## big data.frame, 53K rows, load ggplot2 package first
@@ -121,7 +121,7 @@
 #' # Search(x, "diam")$hits$total
 #'
 #' # From a list
-#' docs_bulk(x, apply(iris, 1, as.list), index="iris", type="flowers")
+#' docs_bulk(x, apply(iris, 1, as.list), index="iris")
 #' docs_bulk(x, apply(USArrests, 1, as.list), index="arrests")
 #' # dim_list <- apply(diamonds, 1, as.list)
 #' # out <- docs_bulk(x, dim_list, index="diamfromlist")
@@ -135,10 +135,10 @@
 #'            system.file("examples", "test3.csv", package = "elastic"))
 #' for (i in seq_along(files)) {
 #'   d <- read.csv(files[[i]])
-#'   docs_bulk(x, d, index = "testes", type = "docs")
+#'   docs_bulk(x, d, index = "testes")
 #'   Sys.sleep(1)
 #' }
-#' count(x, "testes", "docs")
+#' count(x, "testes")
 #' index_delete(x, "testes")
 #'
 #' # You can include your own document id numbers
@@ -153,10 +153,10 @@
 #'            (tt[1] + tt[2] + 1):sum(tt))
 #' for (i in seq_along(files)) {
 #'   d <- read.csv(files[[i]])
-#'   docs_bulk(x, d, index = "testes", type = "docs", doc_ids = ids[[i]],
+#'   docs_bulk(x, d, index = "testes", doc_ids = ids[[i]],
 #'     es_ids = FALSE)
 #' }
-#' count(x, "testes", "docs")
+#' count(x, "testes")
 #' index_delete(x, "testes")
 #'
 #' ## or include in the input data
@@ -168,9 +168,9 @@
 #' readLines(files[[1]])
 #' for (i in seq_along(files)) {
 #'   d <- read.csv(files[[i]])
-#'   docs_bulk(x, d, index = "testes", type = "docs")
+#'   docs_bulk(x, d, index = "testes")
 #' }
-#' count(x, "testes", "docs")
+#' count(x, "testes")
 #' index_delete(x, "testes")
 #'
 #' ### from lists via file inputs
@@ -178,9 +178,9 @@
 #' for (i in seq_along(files)) {
 #'   d <- read.csv(files[[i]])
 #'   d <- apply(d, 1, as.list)
-#'   docs_bulk(x, d, index = "testes", type = "docs")
+#'   docs_bulk(x, d, index = "testes")
 #' }
-#' count(x, "testes", "docs")
+#' count(x, "testes")
 #' index_delete(x, "testes")
 #'
 #' # data.frame's with a single column
@@ -196,10 +196,11 @@
 #' # data.frame with a mix of actions
 #' ## make sure you use a column named 'es_action' or this won't work
 #' ## if you need to delete or update you need document IDs
-#' if (index_exists("baz")) index_delete("baz")
+#' if (index_exists(x, "baz")) index_delete(x, "baz")
 #' df <- data.frame(a = 1:5, b = 6:10, c = letters[1:5], stringsAsFactors = FALSE) 
-#' invisible(docs_bulk(df, "baz"))
-#' (res <- Search('baz', asdf=TRUE)$hits$hits)
+#' invisible(docs_bulk(x, df, "baz"))
+#' Sys.sleep(3)
+#' (res <- Search(x, 'baz', asdf=TRUE)$hits$hits)
 #' df[1, "a"] <- 99
 #' df[1, "c"] <- "aa"
 #' df[3, "c"] <- 33
@@ -207,21 +208,22 @@
 #' df$es_action <- c('update', 'delete', 'update', 'delete', 'delete')
 #' df$id <- res$`_id`
 #' df
-#' invisible(docs_bulk(df, "baz", es_ids = FALSE))
+#' invisible(docs_bulk(x, df, "baz", es_ids = FALSE))
 #' ### or es_ids = FALSE and pass in document ids to doc_ids
 #' # invisible(docs_bulk(df, "baz", es_ids = FALSE, doc_ids = df$id))
-#' Search('baz', asdf=TRUE)$hits$hits
+#' Search(x, 'baz', asdf=TRUE)$hits$hits
 #' 
 #' 
 #' # Curl options
-#' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
-#' docs_bulk(x, plosdat, verbose = TRUE)
+#' plosdat <- system.file("examples", "plos_data_notypes.json",
+#'   package = "elastic")
+#' invisible(docs_bulk(x, plosdat, verbose = TRUE))
 #' 
 #' 
 #' # suppress progress bar
-#' invisible(docs_bulk(x, mtcars, index = "hello", type = "world", quiet = TRUE))
+#' invisible(docs_bulk(x, mtcars, index = "hello", quiet = TRUE))
 #' ## vs. 
-#' invisible(docs_bulk(x, mtcars, index = "hello", type = "world", quiet = FALSE))
+#' invisible(docs_bulk(x, mtcars, index = "hello", quiet = FALSE))
 #' }
 docs_bulk <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
   doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, ...) {
@@ -246,7 +248,6 @@ docs_bulk.data.frame <- function(conn, x, index = NULL, type = NULL, chunk_size 
     stop("index can't be NULL when passing a data.frame",
          call. = FALSE)
   }
-  if (is.null(type)) type <- index
   check_doc_ids(x, doc_ids)
   if (is.factor(doc_ids)) doc_ids <- as.character(doc_ids)
   row.names(x) <- NULL
@@ -270,7 +271,7 @@ docs_bulk.data.frame <- function(conn, x, index = NULL, type = NULL, chunk_size 
   for (i in seq_along(data_chks)) {
     if (!quiet) setTxtProgressBar(pb, i)
     resl[[i]] <- docs_bulk(conn, make_bulk(x[data_chks[[i]], , drop = FALSE], 
-                                     index, type, id_chks[[i]], es_ids), ...)
+                                     index, id_chks[[i]], es_ids, type), ...)
   }
   return(resl)
 }
@@ -286,7 +287,6 @@ docs_bulk.list <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000
     stop("index can't be NULL when passing a list",
          call. = FALSE)
   }
-  if (is.null(type)) type <- index
   check_doc_ids(x, doc_ids)
   if (is.factor(doc_ids)) doc_ids <- as.character(doc_ids)
   x <- unname(x)
@@ -312,7 +312,7 @@ docs_bulk.list <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000
   for (i in seq_along(data_chks)) {
     if (!quiet) setTxtProgressBar(pb, i)
     resl[[i]] <- docs_bulk(conn, make_bulk(x[data_chks[[i]]], index, 
-                                     type, id_chks[[i]], es_ids), ...)
+                                     id_chks[[i]], es_ids, type), ...)
   }
   return(resl)
 }

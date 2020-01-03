@@ -3,9 +3,9 @@
 #' @export
 #' @param conn an Elasticsearch connection object, see [connect()]
 #' @param index (character) The name of the index. Required
-#' @param type (character) The type of the document. Required
 #' @param id (numeric/character) The document ID. Can be numeric or character. 
 #' Required
+#' @param type (character) The type of the document. optional
 #' @param source (logical) If `TRUE` (default), return source. note that 
 #' it is actually set to `NULL` in the function definition, but within 
 #' Elasticsearch, it returns the source by default. alternatively, 
@@ -28,41 +28,37 @@
 #' (x <- connect())
 #' 
 #' if (!index_exists(x, "shakespeare")) {
-#'   shakespeare <- system.file("examples", "shakespeare_data.json",
+#'   shakespeare <- system.file("examples", "shakespeare_data_notypes.json",
 #'     package = "elastic")
 #'   invisible(docs_bulk(x, shakespeare))
 #' }
 #' 
-#' docs_get(x, index='shakespeare', type='line', id=10)
-#' docs_get(x, index='shakespeare', type='line', id=12)
-#' docs_get(x, index='shakespeare', type='line', id=12, source=TRUE)
+#' docs_get(x, index='shakespeare', id=10)
+#' docs_get(x, index='shakespeare', id=12)
+#' docs_get(x, index='shakespeare', id=12, source=TRUE)
 #'
 #' # Get certain fields
 #' if (gsub("\\.", "", x$ping()$version$number) < 500) {
 #'   ### ES < v5
-#'   docs_get(x, index='shakespeare', type='line', id=10, fields='play_name')
-#'   docs_get(x, index='shakespeare', type='line', id=10, 
-#'     fields=c('play_name','speaker'))
+#'   docs_get(x, index='shakespeare', id=10, fields='play_name')
+#'   docs_get(x, index='shakespeare', id=10, fields=c('play_name','speaker'))
 #' } else {
 #'   ### ES > v5
-#'   docs_get(x, index='shakespeare', type='line', id=10, source='play_name')
-#'   docs_get(x, index='shakespeare', type='line', id=10, 
-#'     source=c('play_name','speaker'))
+#'   docs_get(x, index='shakespeare', id=10, source='play_name')
+#'   docs_get(x, index='shakespeare', id=10, source=c('play_name','speaker'))
 #' }
 #'
 #' # Just test for existence of the document
-#' docs_get(x, index='plos', type='article', id=1, exists=TRUE)
-#' docs_get(x, index='plos', type='article', id=123456, exists=TRUE)
+#' docs_get(x, index='plos', id=1, exists=TRUE)
+#' docs_get(x, index='plos', id=123456, exists=TRUE)
 #' 
 #' # source includes / excludes
-#' docs_get(x, index='shakespeare', type='line', id=10,
-#'   source_includes = "play_name")
-#' docs_get(x, index='shakespeare', type='line', id=10,
-#'   source_excludes = "play_name")
+#' docs_get(x, index='shakespeare', id=10, source_includes = "play_name")
+#' docs_get(x, index='shakespeare', id=10, source_excludes = "play_name")
 #' }
 
-docs_get <- function(conn, index, type, id, source = NULL, fields = NULL,
-  source_includes = NULL, source_excludes = NULL, exists=FALSE,
+docs_get <- function(conn, index, id, type = NULL, source = NULL,
+  fields = NULL, source_includes = NULL, source_excludes = NULL, exists=FALSE,
   raw=FALSE, callopts=list(), verbose=TRUE, ...) {
   
   is_conn(conn)
@@ -82,7 +78,8 @@ docs_get <- function(conn, index, type, id, source = NULL, fields = NULL,
   }
   if (length(args) == 0) args <- NULL
 
-  url <- sprintf("%s/%s/%s/%s", url, esc(index), esc(type), esc(id))
+  type <- if (!is.null(type)) esc(type) else "_doc"
+  url <- sprintf("%s/%s/%s/%s", url, esc(index), type, esc(id))
 
   cli <- conn$make_conn(url, list(), callopts)
   if (exists) {

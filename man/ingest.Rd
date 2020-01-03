@@ -11,7 +11,7 @@
 \usage{
 pipeline_create(conn, id, body, ...)
 
-pipeline_attachment(conn, index, type, id, pipeline, body, ...)
+pipeline_attachment(conn, index, id, pipeline, body, type = NULL, ...)
 
 pipeline_get(conn, id, filter_path = NULL, ...)
 
@@ -32,9 +32,10 @@ a wildcard match}
 
 \item{index}{(character) an index. only used in \code{pipeline_attachment}}
 
-\item{type}{(character) a type. only used in \code{pipeline_attachment}}
-
 \item{pipeline}{(character) a pipeline name. only used in \code{pipeline_attachment}}
+
+\item{type}{(character) a type. only used in \code{pipeline_attachment}. by default
+ths is set to \code{NULL} - optional in ES <= v6.3; not allowed in ES >= v6.4}
 
 \item{filter_path}{(character) fields to return. deafults to all if not given}
 }
@@ -143,9 +144,8 @@ body_attach <- '{
   "data": "e1xydGYxXGFuc2kNCkxvcmVtIGlwc3VtIGRvbG9yIHNpdCBhbWV0DQpccGFyIH0="
 }'
 if (!index_exists(x, "boomarang")) index_create(x, "boomarang")
-docs_create(x, 'boomarang', 'boomarang', id = 1, 
-  body = list(title = "New title"))
-pipeline_attachment(x, "boomarang", "boomarang", "1", "baz", body_attach)
+docs_create(x, 'boomarang', id = 1, body = list(title = "New title"))
+pipeline_attachment(x, "boomarang", "1", "baz", body_attach)
 pipeline_get(x, id = 'baz')
 }
 }

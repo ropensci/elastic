@@ -23,8 +23,8 @@ docs_bulk_prep(
 we'll use this path as the prefix, and suffix each file path with a number.
 required.}
 
-\item{type}{(character) The type name to use. If left as NULL, will be
-same name as index.}
+\item{type}{(character) The type. default: \code{NULL}. Note that \code{type} is
+deprecated in Elasticsearch v7 and greater, and removed in Elasticsearch v8}
 
 \item{chunk_size}{(integer) Size of each chunk. If your data.frame is smaller
 thank \code{chunk_size}, this parameter is essentially ignored. We write in
@@ -61,18 +61,18 @@ keep the files make sure to move them outside of the temp directory.
 \dontrun{
 # From a data.frame
 ff <- tempfile(fileext = ".json")
-docs_bulk_prep(mtcars, index = "hello", type = "world", path = ff)
+docs_bulk_prep(mtcars, index = "hello", path = ff)
 readLines(ff)
 
 ## field names cannot contain dots
 names(iris) <- gsub("\\\\.", "_", names(iris))
-docs_bulk_prep(iris, "iris", "flowers", path = tempfile(fileext = ".json"))
+docs_bulk_prep(iris, "iris", path = tempfile(fileext = ".json"))
 
 ## type can be missing, but index can not
 docs_bulk_prep(iris, "flowers", path = tempfile(fileext = ".json"))
 
 # From a list
-docs_bulk_prep(apply(iris, 1, as.list), index="iris", type="flowers",
+docs_bulk_prep(apply(iris, 1, as.list), index="iris",
    path = tempfile(fileext = ".json"))
 docs_bulk_prep(apply(USArrests, 1, as.list), index="arrests",
    path = tempfile(fileext = ".json"))
@@ -92,7 +92,7 @@ files <- c(system.file("examples", "test1.csv", package = "elastic"),
 paths <- vector("list", length = length(files))
 for (i in seq_along(files)) {
   d <- read.csv(files[[i]])
-  paths[i] <- docs_bulk_prep(d, index = "stuff", type = "docs",
+  paths[i] <- docs_bulk_prep(d, index = "stuff",
      path = tempfile(fileext = ".json"))
 }
 unlist(paths)
@@ -109,7 +109,7 @@ ids <- list(1:tt[1],
 paths <- vector("list", length = length(files))
 for (i in seq_along(files)) {
   d <- read.csv(files[[i]])
-  paths[i] <- docs_bulk_prep(d, index = "testes", type = "docs",
+  paths[i] <- docs_bulk_prep(d, index = "testes",
     doc_ids = ids[[i]], path = tempfile(fileext = ".json"))
 }
 unlist(paths)
@@ -122,7 +122,7 @@ files <- c(system.file("examples", "test1_id.csv", package = "elastic"),
 paths <- vector("list", length = length(files))
 for (i in seq_along(files)) {
   d <- read.csv(files[[i]])
-  paths[i] <- docs_bulk_prep(d, index = "testes", type = "docs",
+  paths[i] <- docs_bulk_prep(d, index = "testes",
      path = tempfile(fileext = ".json"))
 }
 unlist(paths)
@@ -132,7 +132,7 @@ paths <- vector("list", length = length(files))
 for (i in seq_along(files)) {
   d <- read.csv(files[[i]])
   d <- apply(d, 1, as.list)
-  paths[i] <- docs_bulk_prep(d, index = "testes", type = "docs",
+  paths[i] <- docs_bulk_prep(d, index = "testes",
       path = tempfile(fileext = ".json"))
 }
 unlist(paths)
@@ -141,13 +141,14 @@ unlist(paths)
 # A mix of actions
 ## make sure you use a column named 'es_action' or this won't work
 ## if you need to delete or update you need document IDs
-if (index_exists("baz")) index_delete("baz")
+if (index_exists(x, "baz")) index_delete(x, "baz")
 df <- data.frame(a = 1:5, b = 6:10, c = letters[1:5], stringsAsFactors = FALSE) 
 f <- tempfile(fileext = ".json")
 invisible(docs_bulk_prep(df, "baz", f))
 cat(readLines(f), sep = "\n")
-docs_bulk(f)
-(res <- Search('baz', asdf=TRUE)$hits$hits)
+docs_bulk(x, f)
+Sys.sleep(2)
+(res <- Search(x, 'baz', asdf=TRUE)$hits$hits)
 
 df[1, "a"] <- 99
 df[1, "c"] <- "aa"
@@ -159,14 +160,14 @@ df
 f <- tempfile(fileext = ".json")
 invisible(docs_bulk_prep(df, "baz", path = f, doc_ids = df$id))
 cat(readLines(f), sep = "\n")
-docs_bulk(f)
+docs_bulk(x, f)
 
 
 # suppress progress bar
-docs_bulk_prep(mtcars, index = "hello", type = "world", 
+docs_bulk_prep(mtcars, index = "hello",
   path = tempfile(fileext = ".json"), quiet = TRUE)
 ## vs. 
-docs_bulk_prep(mtcars, index = "hello", type = "world", 
+docs_bulk_prep(mtcars, index = "hello",
   path = tempfile(fileext = ".json"), quiet = FALSE)
 }
 }

@@ -6,9 +6,9 @@
 \usage{
 explain(
   conn,
-  index = NULL,
+  index,
+  id,
   type = NULL,
-  id = NULL,
   source2 = NULL,
   fields = NULL,
   routing = NULL,
@@ -32,54 +32,61 @@ explain(
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
 
-\item{index}{Only one index}
+\item{index}{Only one index. Required}
 
-\item{type}{Only one document type}
+\item{id}{Document id, only one. Required}
 
-\item{id}{Document id, only one}
+\item{type}{Only one document type, optional}
 
-\item{source2}{(logical) Set to TRUE to retrieve the _source of the document explained. You can
-also retrieve part of the document by using source_include & source_exclude (see Get API
-for more details). This matches the \verb{_source} term, but we want to avoid the leading
-underscore.}
+\item{source2}{(logical) Set to TRUE to retrieve the _source of the document
+explained. You can also retrieve part of the document by using
+source_include & source_exclude (see Get API for more details). This
+matches the \verb{_source} term, but we want to avoid the leading underscore.}
 
-\item{fields}{Allows to control which stored fields to return as part of the document explained.}
+\item{fields}{Allows to control which stored fields to return as part of
+the document explained.}
 
-\item{routing}{Controls the routing in the case the routing was used during indexing.}
+\item{routing}{Controls the routing in the case the routing was used during
+indexing.}
 
 \item{parent}{Same effect as setting the routing parameter.}
 
 \item{preference}{Controls on which shard the explain is executed.}
 
-\item{source}{Allows the data of the request to be put in the query string of the url.}
+\item{source}{Allows the data of the request to be put in the query string
+of the url.}
 
 \item{q}{The query string (maps to the query_string query).}
 
-\item{df}{The default field to use when no field prefix is defined within the query. Defaults
-to _all field.}
+\item{df}{The default field to use when no field prefix is defined within
+the query. Defaults to _all field.}
 
-\item{analyzer}{The analyzer name to be used when analyzing the query string. Defaults to the
-analyzer of the _all field.}
+\item{analyzer}{The analyzer name to be used when analyzing the query
+string. Defaults to the analyzer of the _all field.}
 
-\item{analyze_wildcard}{(logical) Should wildcard and prefix queries be analyzed or not.
-Default: \code{FALSE}}
+\item{analyze_wildcard}{(logical) Should wildcard and prefix queries be
+analyzed or not. Default: \code{FALSE}}
 
-\item{lowercase_expanded_terms}{Should terms be automatically lowercased or not.
-Default: \code{TRUE}}
+\item{lowercase_expanded_terms}{Should terms be automatically lowercased
+or not. Default: \code{TRUE}}
 
-\item{lenient}{If set to true will cause format based failures (like providing text to a
-numeric field) to be ignored. Default: \code{FALSE}}
+\item{lenient}{If set to true will cause format based failures (like
+providing text to a numeric field) to be ignored. Default: \code{FALSE}}
 
-\item{default_operator}{The default operator to be used, can be AND or OR. Defaults to OR.}
+\item{default_operator}{The default operator to be used, can be AND or OR.
+Defaults to OR.}
 
-\item{source_exclude}{A vector of fields to exclude from the returned source2 field}
+\item{source_exclude}{A vector of fields to exclude from the returned
+source2 field}
 
-\item{source_include}{A vector of fields to extract and return from the source2 field}
+\item{source_include}{A vector of fields to extract and return from the
+source2 field}
 
-\item{body}{The query definition using the Query DSL. This is passed in the body of the
-request.}
+\item{body}{The query definition using the Query DSL. This is passed in the
+body of the request.}
 
-\item{raw}{If \code{TRUE} (default), data is parsed to list. If \code{FALSE}, then raw JSON.}
+\item{raw}{If \code{TRUE} (default), data is parsed to list. If \code{FALSE}, then
+raw JSON.}
 
 \item{...}{Curl args passed on to \link[crul:HttpClient]{crul::HttpClient}}
 }
@@ -90,14 +97,14 @@ Explain a search query.
 \dontrun{
 (x <- connect())
 
-explain(x, index = "plos", type = "article", id = 14, q = "title:Germ")
+explain(x, index = "plos", id = 14, q = "title:Germ")
 
 body <- '{
  "query": {
-   "term": { "title": "Germ" }
+   "match": { "title": "Germ" }
  }
 }'
-explain(x, index = "plos", type = "article", id = 14, body=body)
+explain(x, index = "plos", id = 14, body=body)
 }
 }
 \references{

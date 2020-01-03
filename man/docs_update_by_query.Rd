@@ -75,14 +75,14 @@ update documents by query via a POST request
 (x <- connect())
 x$ping()
 
-omdb <- system.file("examples", "omdb.json", package = "elastic")
+omdb <- system.file("examples", "omdb_notypes.json", package = "elastic")
 if (!index_exists(x, "omdb")) invisible(docs_bulk(x, omdb))
 
 # can be sent without a body
 docs_update_by_query(x, index='omdb')
 
 # update
-## note this works with imdbRating, a float, but didn't seem to work 
+## note this works with imdbRating, a float, but didn't seem to work
 ## with Metascore, a long
 ## See link above for Painless API reference
 body <- '{
@@ -96,10 +96,10 @@ body <- '{
     }
   }
 }'
-Search(x, "omdb", q = "Rated:\"R\"", asdf=TRUE, 
+Search(x, "omdb", q = "Rated:\"R\"", asdf=TRUE,
   source = c("Title", "Rated", "imdbRating"))$hits$hits
 docs_update_by_query(x, index='omdb', body = body)
-Search(x, "omdb", q = "Rated:\"R\"", asdf=TRUE, 
+Search(x, "omdb", q = "Rated:\"R\"", asdf=TRUE,
   source = c("Title", "Rated", "imdbRating"))$hits$hits
 }
 }

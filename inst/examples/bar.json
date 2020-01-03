@@ -1,12 +1,12 @@
-{"index":{"_index":"bar","_type":"bar","_id":0}}
+{"index":{"_index":"bar","_id":0}}
 {"item": 1, "caption":"far"}
-{"index":{"_index":"bar","_type":"bar","_id":1}}
+{"index":{"_index":"bar","_id":1}}
 {"item": 2, "caption":"near"}
-{"index":{"_index":"bar","_type":"bar","_id":2}}
+{"index":{"_index":"bar","_id":2}}
 {"item": 3, "caption":"near"}
-{"index":{"_index":"bar","_type":"bar","_id":3}}
+{"index":{"_index":"bar","_id":3}}
 {"item": 4, "caption":"far"}
-{"index":{"_index":"bar","_type":"bar","_id":4}}
+{"index":{"_index":"bar","_id":4}}
 {"item": 5, "caption":"far"}
-{"index":{"_index":"bar","_type":"bar","_id":5}}
+{"index":{"_index":"bar","_id":5}}
 {"item": 6, "caption":"near"}

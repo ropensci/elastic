@@ -20,7 +20,7 @@ Search_uri <- function(conn, index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NU
   is_conn(conn)
   search_GET(conn, search_path, cl(index), type,
     args = ec(list(df = df, analyzer = analyzer,
-      default_operator = default_operator, explain = explain,
+      default_operator = default_operator, explain = as_log(explain),
       `_source` = cl(source), fields = cl(fields), sort = cl(sort),
       track_scores = track_scores, timeout = cn(timeout),
       terminate_after = cn(terminate_after), from = cn(from), size = cn(size),

@@ -7,9 +7,9 @@
 docs_create(
   conn,
   index,
-  type,
-  id = NULL,
   body,
+  type = NULL,
+  id = NULL,
   version = NULL,
   version_type = NULL,
   op_type = NULL,
@@ -28,12 +28,12 @@ docs_create(
 
 \item{index}{(character) The name of the index. Required}
 
-\item{type}{(character) The type of the document. Required}
+\item{body}{The document}
+
+\item{type}{(character) The type of the document. optional}
 
 \item{id}{(numeric/character) The document ID. Can be numeric or character.
 Optional. if not provided, Elasticsearch creates the ID for you as a UUID.}
-
-\item{body}{The document.}
 
 \item{version}{(character) Explicit version number for concurrency control}
 
@@ -72,23 +72,23 @@ Create a document
 (x <- connect())
 
 if (!index_exists(x, 'plos')) {
-  plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+  plosdat <- system.file("examples", "plos_data_notypes.json",
+    package = "elastic")
   invisible(docs_bulk(x, plosdat))
 }
 
 # give a document id
-z <- docs_create(x, index='plos', type='article', id=1002, 
-  body=list(id="12345", title="New title"))
+z <- docs_create(x, index = 'plos', id = 1002,
+  body = list(id = "12345", title = "New title"))
 z
 # and the document is there now
-docs_get(x, index='plos', type='article', id=1002)
+docs_get(x, index = 'plos', id = 1002)
 
 # let Elasticsearch create the document id for you
-z <- docs_create(x, index='plos', type='article', 
-  body=list(id="6789", title="Some title"))
+z <- docs_create(x, index='plos', body=list(id="6789", title="Some title"))
 z
 # and the document is there now
-docs_get(x, index='plos', type='article', id=z$`_id`)
+docs_get(x, index='plos', id=z$`_id`)
 }
 }
 \references{

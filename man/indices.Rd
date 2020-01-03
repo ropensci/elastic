@@ -306,10 +306,8 @@ body <- '{
 ## with mappings
 body <- '{
  "mappings": {
-   "record": {
-     "properties": {
-       "location" : {"type" : "geo_point"}
-      }
+   "properties": {
+     "location" : {"type" : "geo_point"}
    }
  }
 }'
