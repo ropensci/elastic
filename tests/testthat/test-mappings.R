@@ -90,7 +90,7 @@ test_that("mapping_get works", {
 # })
 
 invisible(tryCatch(index_delete(x, index = "plos", verbose = FALSE), error = function(e) e))
-plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+plosdat <- system.file("examples", "plos_data_notypes.json", package = "elastic")
 invisible(docs_bulk(x, plosdat))
 
 test_that("field_mapping_get works", {
@@ -103,16 +103,16 @@ test_that("field_mapping_get works", {
     
     # Get field mappings
     # get all indices
-    fmg1 <- field_mapping_get(x, index = "_all", type = "omdb", field = "Country",
+    fmg1 <- field_mapping_get(x, index = "_all", field = "Country",
       include_type_name = include_type_name)
     # fuzzy field get
-    fmg2 <- field_mapping_get(x, index = "plos", type = "article", field = "*",
+    fmg2 <- field_mapping_get(x, index = "plos", field = "*",
       include_type_name = include_type_name)
     # get defaults
-    fmg3 <- field_mapping_get(x, index = "plos", type = "article", field = "title",
+    fmg3 <- field_mapping_get(x, index = "plos", field = "title",
       include_defaults = TRUE, include_type_name = include_type_name)
     # get many
-    fmg4 <- field_mapping_get(x, type = "article", field = c("title", "id"),
+    fmg4 <- field_mapping_get(x, field = c("title", "id"),
       include_type_name = include_type_name)
     
     expect_is(fmg1, "list")
@@ -121,14 +121,14 @@ test_that("field_mapping_get works", {
     expect_is(fmg4, "list")
     
     expect_equal(length(fmg1$plos$mappings), 0)
-    expect_named(fmg3$plos$mappings$article, "title")
-    expect_named(fmg3$plos$mappings$article$title$mapping, "title")
-    expect_equal(sort(names(fmg4$plos$mappings$article)), c("id", "title"))
+    expect_named(fmg3$plos$mappings, "_doc")
+    expect_named(fmg3$plos$mappings$`_doc`$title$mapping, "title")
+    expect_equal(sort(names(fmg4$plos$mappings$`_doc`)), c("id", "title"))
     
     # fails well
-    expect_error(field_mapping_get(x, index = "_all", field = "text"), "is not TRUE")
-    expect_error(field_mapping_get(x, type = "article"), "argument \"field\" is missing")
-    
+    # expect_error(field_mapping_get(x, index = "_all", field = "text"),
+    #   "is not TRUE")
+    expect_error(field_mapping_get(x), "argument \"field\" is missing")
   }
 })
 

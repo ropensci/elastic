@@ -4,28 +4,32 @@ x <- connect(warn = FALSE)
 
 ## create indices first -----------------------------------
 ind <- "stuff_l"
-invisible(tryCatch(index_delete(x, index = ind, verbose = FALSE), error = function(e) e))
+invisible(tryCatch(index_delete(x, index = ind, verbose = FALSE),
+  error = function(e) e))
 invisible(index_create(x, index = ind, verbose = FALSE))
 
 test_that("docs_create works", {
 
-  invisible(docs_create(x, index = ind, type = 'article', id = 1002, body = list(id = "12345", title = "New title")))
-  a <- docs_get(x, index = ind, type = 'article', id = 1002, verbose = FALSE)
+  invisible(docs_create(x, index = ind, id = 1002,
+    body = list(id = "12345", title = "New title")))
+  a <- docs_get(x, index = ind, id = 1002, verbose = FALSE)
   expect_is(a, "list")
   expect_is(a$`_source`, "list")
   expect_equal(a$`_id`, "1002")
   expect_equal(a$`_source`$id[[1]], "12345")
 
-  # can create docs with an index that doesn't exist yet, should create index on the fly
-  b <- docs_create(x, "bbbbbbb", "stuff", 1, list(a = 5))
+  # can create docs with an index that doesn't exist yet
+  # should create index on the fly
+  b <- docs_create(x, "bbbbbbb", list(a = 5), id = 1)
   expect_true(index_exists(x, "bbbbbbb"))
 })
 
 ind11 <- "stuff_ll"
 test_that("docs_create works with automatically created document IDs", {
 
-  invisible(z<-docs_create(x, index = ind11, type = 'article', body = list(id = "12345", title = "Some title")))
-  a <- docs_get(x, index = ind11, type = 'article', id = z$`_id`, verbose = FALSE)
+  invisible(z<-docs_create(x, index = ind11,
+    body = list(id = "12345", title = "Some title")))
+  a <- docs_get(x, index = ind11, id = z$`_id`, verbose = FALSE)
   expect_is(a, "list")
   expect_is(a$`_source`, "list")
   expect_equal(a$`_source`$id[[1]], "12345")
@@ -33,29 +37,32 @@ test_that("docs_create works with automatically created document IDs", {
 
 test_that("docs_create fails as expected", {
 
-  expect_error(docs_create(x, "adfadf"), "argument \"type\" is missing, with no default")
-  expect_error(docs_create(x, "adfadf", "asdfadf", 1), "argument \"body\" is missing, with no default")
+  expect_error(docs_create(x, "adfadf"),
+    "argument \"body\" is missing, with no default")
 
-  expect_error(docs_get(x, "bbbbbbb"), "argument \"type\" is missing, with no default")
-  expect_error(docs_get(x, "bbbbbbb", "stuff"), "argument \"id\" is missing, with no default")
+  expect_error(docs_get(x),
+    "argument \"index\" is missing, with no default")
+  expect_error(docs_get(x, "bbbbbbb"),
+    "argument \"id\" is missing, with no default")
 })
 
 ## create indices first
 ind2 <- "stuff_f"
-invisible(tryCatch(index_delete(x, index = ind2, verbose = FALSE), error = function(e) e))
+invisible(tryCatch(index_delete(x, index = ind2, verbose = FALSE),
+  error = function(e) e))
 invisible(index_create(x, index = ind2, verbose = FALSE))
 
 test_that("docs_get works", {
 
-  invisible(docs_create(x, index = ind2, type = "things", id = 45, body = '{"hello": "world"}'))
-  c <- docs_get(x, index = ind2, type = "things", id = 45, verbose = FALSE)
+  invisible(docs_create(x, index = ind2, id = 45, body = '{"hello": "world"}'))
+  c <- docs_get(x, index = ind2, id = 45, verbose = FALSE)
   expect_is(c, "list")
   expect_is(c$`_source`, "list")
   expect_true(c$found)
   expect_equal(c$`_id`, "45")
 
   # If field doesn't exist no source returned
-  d <- docs_get(x, "bbbbbbb", "stuff", 1, fields = "b", verbose = FALSE)
+  d <- docs_get(x, "bbbbbbb", 1, fields = "b", verbose = FALSE)
   expect_null(d$`_source`)
   expect_null(d$fields)
 })

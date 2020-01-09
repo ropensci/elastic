@@ -122,7 +122,7 @@ test_that("dataset with NA's", {
   test1 <- mtcars
   row.names(test1) <- NULL
   test1[] <- lapply(test1, function(x) {
-    n <- sample(seq_len(NROW(test1)), size = sample(seq_len(NROW(test1))))
+    n <- sample(seq_len(NROW(test1)), size = sample(seq_len(NROW(test1)), 1))
     x[n] <- NA
     x
   })
@@ -144,7 +144,7 @@ test_that("dataset with NA's", {
   test2 <- mtcars
   row.names(test2) <- NULL
   test2[] <- lapply(test2, function(x) {
-    n <- sample(seq_len(NROW(test2)), size = sample(seq_len(NROW(test2))))
+    n <- sample(seq_len(NROW(test2)), size = sample(seq_len(NROW(test2)), 1))
     x[n] <- NA
     x
   })
@@ -167,7 +167,7 @@ test_that("dataset with NA's", {
   test3 <- mtcars
   row.names(test3) <- NULL
   test3[] <- lapply(test3, function(x) {
-    n <- sample(seq_len(NROW(test3)), size = sample(seq_len(NROW(test3))))
+    n <- sample(seq_len(NROW(test3)), size = sample(seq_len(NROW(test3)), 1))
     x[n] <- NA
     x
   })
