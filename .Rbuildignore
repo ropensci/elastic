@@ -19,3 +19,4 @@ notes-v2.md
 ^_pkgdown\.yml$
 ^docs$
 ^revdep$
+tests/test-all.R
