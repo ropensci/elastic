@@ -2,9 +2,9 @@ context("search_uri")
 
 x <- connect(warn = FALSE)
 load_shakespeare(x)
+Sys.sleep(1)
 
 test_that("basic search_uri works", {
-
   a <- Search_uri(x, index="shakespeare")
   expect_equal(names(a), c('took','timed_out','_shards','hits'))
   expect_is(a, "list")
@@ -13,9 +13,12 @@ test_that("basic search_uri works", {
 })
 
 test_that("search for document type works", {
-
   b <- Search_uri(x, index="shakespeare", type="line")
-  expect_match(vapply(b$hits$hits, "[[", "", "_type"), "line")
+  if (x$es_ver() < 700) {
+    expect_match(vapply(b$hits$hits, "[[", "", "_type"), "line")
+  } else {
+    expect_equal(vapply(b$hits$hits, "[[", "", "_type"), character(0))
+  }
 })
 
 test_that("search for specific fields works", {

@@ -1,6 +1,7 @@
 context("validate")
 
-x <- connect()
+x <- connect(warn = FALSE)
+z <- connect(warn = TRUE)
 
 test_that("validate", {
   if (!index_exists(x, "twitter")) index_create(x, "twitter")
@@ -16,9 +17,9 @@ test_that("validate", {
   expect_equal(sort(names(a)), c('_shards', 'valid'))
   expect_true(a$valid)
   
-  if (x$es_ver() >= 700) {
+  if (z$es_ver() >= 700) {
     expect_warning(
-      validate(x, "twitter", "tweet", q='user:foobar'),
+      validate(z, "twitter", "tweet", q='user:foobar'),
       "Specifying types in validate query requests is deprecated"
     )
   }

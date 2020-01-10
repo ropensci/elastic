@@ -2,6 +2,7 @@ context("explain")
 
 x <- connect(warn = FALSE)
 load_shakespeare(x)
+Sys.sleep(1.5)
 
 test_that("explain", {
   type_ <- if (x$es_ver() < 600) "scene" else "line"

@@ -57,6 +57,9 @@ docs_create <- function(conn, index, body, type = NULL, id = NULL,
 
   is_conn(conn)
   url <- conn$make_url()
+  if (conn$es_ver() < 600 && is.null(type)) {
+    stop("'type' is required for ES <= v6", call.=FALSE)
+  }
   type <- if (!is.null(type)) esc(type) else "_doc"
   if (is.null(id)) {
     method <- 'POST'

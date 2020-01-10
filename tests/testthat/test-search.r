@@ -1,7 +1,10 @@
 context("search")
 
-x <- connect()
+x <- connect(warn = FALSE)
+z <- connect(warn = TRUE)
 load_shakespeare(x)
+load_shakespeare(z)
+Sys.sleep(2) # wait for data to be available
 
 test_that("basic search works", {
 
@@ -14,18 +17,18 @@ test_that("basic search works", {
   } else {
     expect_type(a$hits$total, "integer")
   }
-  expect_equal(names(a$hits$hits[[1]]), c('_index','_type','_id','_score','_source'))
+  expect_equal(names(a$hits$hits[[1]]),
+    c('_index','_type','_id','_score','_source'))
 })
 
 test_that("search for document type works, and differently for different ES versions", {
-  if (x$es_ver() >= 700) {
+  if (z$es_ver() >= 700) {
     expect_warning(
-      bb <- Search(x, index="shakespeare", type="line"),
+      bb <- Search(z, index="shakespeare", type="line"),
       "Specifying types in search requests is deprecated"
     )
-    expect_match(vapply(bb$hits$hits, "[[", "", "_type"), "line")
   } else {
-    cc <- Search(x, index="shakespeare", type="line")
+    cc <- Search(z, index="shakespeare", type="line")
     expect_match(vapply(cc$hits$hits, "[[", "", "_type"), "line")
   }
 })
@@ -65,13 +68,13 @@ test_that("getting json data back from search works", {
 
   suppressMessages(require('jsonlite'))
 
-  if (x$es_ver() >= 700) {
+  if (z$es_ver() >= 700) {
     expect_warning(
-      f <- Search(x, index="shakespeare", type="scene", raw=TRUE),
+      f <- Search(z, index="shakespeare", type="scene", raw=TRUE),
       "Specifying types in search requests is deprecated"
     )
   } else {
-    f <- Search(x, index="shakespeare", type="scene", raw=TRUE)
+    f <- Search(z, index="shakespeare", type="scene", raw=TRUE)
   }
   expect_is(f, "character")
   expect_true(jsonlite::validate(f))
