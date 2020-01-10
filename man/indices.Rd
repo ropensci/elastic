@@ -20,6 +20,7 @@
 \alias{index_analyze}
 \alias{index_flush}
 \alias{index_clear_cache}
+\alias{index_shrink}
 \title{Index API operations}
 \usage{
 index_get(
@@ -123,6 +124,8 @@ index_clear_cache(
   id_cache = FALSE,
   ...
 )
+
+index_shrink(conn, index, index_new, body = NULL, ...)
 }
 \arguments{
 \item{conn}{an Elasticsearch connection object, see \code{\link[=connect]{connect()}}}
@@ -431,6 +434,20 @@ index_create(x, "foobar")
 settings <- list(index = list(number_of_replicas = 4))
 index_settings_update(x, "foobar", body = settings)
 index_get(x, "foobar")$foobar$settings
+
+# Shrink index - Can only shrink an index if it has >1 shard
+## index must be read only, a copy of every shard in the index must
+## reside on the same node, and the cluster health status must be green
+### index_settings_update call to change these
+settings <- list(
+  index.routing.allocation.require._name = "shrink_node_name",
+  index.blocks.write = "true"
+)
+if (index_exists(x, 'barbarbar')) index_delete(x, 'barbarbar')
+index_create(x, "barbarbar")
+index_settings_update(x, "barbarbar", body = settings)
+cat_recovery(x, index='barbarbar')
+# index_shrink(x, "barbarbar", "barfoobbar")
 }
 }
 \references{

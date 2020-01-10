@@ -276,6 +276,20 @@
 #' settings <- list(index = list(number_of_replicas = 4))
 #' index_settings_update(x, "foobar", body = settings)
 #' index_get(x, "foobar")$foobar$settings
+#' 
+#' # Shrink index - Can only shrink an index if it has >1 shard
+#' ## index must be read only, a copy of every shard in the index must
+#' ## reside on the same node, and the cluster health status must be green
+#' ### index_settings_update call to change these
+#' settings <- list(
+#'   index.routing.allocation.require._name = "shrink_node_name",
+#'   index.blocks.write = "true"
+#' )
+#' if (index_exists(x, 'barbarbar')) index_delete(x, 'barbarbar')
+#' index_create(x, "barbarbar")
+#' index_settings_update(x, "barbarbar", body = settings)
+#' cat_recovery(x, index='barbarbar')
+#' # index_shrink(x, "barbarbar", "barfoobbar")
 #' }
 NULL
 
@@ -525,6 +539,15 @@ index_clear_cache <- function(conn, index=NULL, filter=FALSE, filter_keys=NULL,
   cc_POST(conn, url, args, ...)
 }
 
+#' @export
+#' @rdname indices
+index_shrink <- function(conn, index, index_new, body = NULL, ...) {
+  is_conn(conn)
+  url <- conn$make_url()
+  url <- sprintf("%s/%s/_shrink/%s", url, esc(cl(index)), esc(cl(index_new)))
+  body <- check_inputs(body)
+  cc_POST(conn, url, body, ...)
+}
 
 
 ###### HELPERS
