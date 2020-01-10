@@ -7,6 +7,8 @@
 #'
 #' @param conn an Elasticsearch connection object, see [connect()]
 #' @param index (character) A character vector of index names
+#' @param index_new (character) an index name, required. only applies to
+#' index_shrink method
 #' @param features (character) A single feature. One of settings, mappings, or
 #' aliases
 #' @param raw If `TRUE` (default), data is parsed to list. If FALSE, then raw JSON.

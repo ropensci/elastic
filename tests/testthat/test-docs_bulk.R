@@ -243,3 +243,47 @@ test_that("docs_bulk: suppressing progress bar works", {
   expect_match(quiet_false, "=====")
 })
 
+
+test_that("docs_bulk: pipline attachments work", {
+  body <- '{
+    "description" : "Extract attachment information",
+    "processors" : [
+      {
+        "attachment" : {
+          "field" : "data",
+          "target_field": "fulltext",
+          "indexed_chars" : -1,
+          "on_failure" : [
+            {
+              "set" : {
+                "field" : "error",
+                "value" : "{{ _ingest.on_failure_message }}"
+              }
+            }
+          ]
+        },
+      "remove": {
+        "field": "data"
+      }
+      }
+    ]
+  }'
+  pipeline_create(x, id = "attachment", body = body)
+  if (index_exists(x, "myindex")) index_delete(x, "myindex")
+  index_create(x, "myindex")
+  docs <- list(
+    list(data = "e1xydGYxXGFuc2kNCkxvcmVtIGlwc3VtIGRvbG9yIHNpdCBhbWV0DQpccGFyIH0=",
+         category = "lorem ipsum"),
+    list(data = "aGVsbG8gd29ybGQgaGVsbG8gd29ybGQ=",
+         category = "hello world")
+  )
+  invisible(docs_bulk(x, docs, index = "myindex", doc_ids = 1:2, es_ids = FALSE,
+    quiet = TRUE, query = list(pipeline = 'attachment')))
+  Sys.sleep(1)
+  docs <- Search(x, "myindex")
+  doc1 <- docs$hits$hits[[1]]$`_source`
+  expect_equal(sort(names(doc1)), c("category", "fulltext"))
+  expect_equal(sort(names(doc1$fulltext)),
+    c("content", "content_length", "content_type", "language"))
+  expect_equal(doc1$fulltext$content_type, "application/rtf")
+})

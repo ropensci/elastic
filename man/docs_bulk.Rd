@@ -14,6 +14,7 @@ docs_bulk(
   es_ids = TRUE,
   raw = FALSE,
   quiet = FALSE,
+  query = list(),
   ...
 )
 }
@@ -48,6 +49,11 @@ If \code{TRUE}, \code{doc_ids} is ignored. Default: \code{TRUE}}
 you get JSON; if \code{FALSE} you get a list. Default: \code{FALSE}}
 
 \item{quiet}{(logical) Suppress progress bar. Default: \code{FALSE}}
+
+\item{query}{(list) a named list of query parameters. optional.
+options include: pipeline, refresh, routing, _source, _source_excludes,
+_source_includes, timeout, wait_for_active_shards. See the docs bulk
+ES page for details}
 
 \item{...}{Pass on curl options to \link[crul:HttpClient]{crul::HttpClient}}
 }

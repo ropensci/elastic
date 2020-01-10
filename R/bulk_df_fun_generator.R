@@ -1,6 +1,6 @@
 make_bulk_df_generator <- function(fun) {
   function(conn, x, index = NULL, type = NULL, chunk_size = 1000, 
-    doc_ids = NULL, raw = FALSE, quiet = FALSE, ...) {
+    doc_ids = NULL, raw = FALSE, quiet = FALSE, query = list(), ...) {
   
     is_conn(conn)
     assert(quiet, "logical")
@@ -36,7 +36,7 @@ make_bulk_df_generator <- function(fun) {
     for (i in seq_along(data_chks)) {
       if (!quiet) setTxtProgressBar(pb, i)
       resl[[i]] <- docs_bulk(conn, fun(x[data_chks[[i]], , drop = FALSE], 
-        index, id_chks[[i]], type), ...)
+        index, id_chks[[i]], type), query = query, ...)
     }
     return(resl)
   }

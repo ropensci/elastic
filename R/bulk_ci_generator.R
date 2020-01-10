@@ -23,7 +23,8 @@ make_bulk_ <- function(df, index, counter, es_ids, type = NULL, path = NULL,
 
 bulk_ci_generator <- function(action = "index", es_ids = TRUE) {
   tt <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
-           doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, ...) {
+    doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE,
+    query = list(), ...) {
 
     is_conn(conn)
     assert(quiet, "logical")
@@ -56,7 +57,8 @@ bulk_ci_generator <- function(action = "index", es_ids = TRUE) {
       if (!quiet) setTxtProgressBar(pb, i)
       resl[[i]] <- docs_bulk(conn,
         make_bulk_(x[data_chks[[i]], , drop = FALSE],
-        index, id_chks[[i]], es_ids, type, action = action), ...)
+        index, id_chks[[i]], es_ids, type, action = action),
+        query = query, ...)
     }
     return(resl)
   }

@@ -31,16 +31,17 @@
 #' docs_bulk_delete(x, df, index = 'foobar', doc_ids = df$id)
 #' Search(x, "foobar", asdf = TRUE)$hits$total$value
 #' }
-docs_bulk_delete <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
-                             doc_ids = NULL, raw = FALSE, ...) {
+docs_bulk_delete <- function(conn, x, index = NULL, type = NULL,
+  chunk_size = 1000, doc_ids = NULL, raw = FALSE, quiet = FALSE,
+  query = list(), ...) {
 
   UseMethod("docs_bulk_delete", x)
 }
 
 #' @export
 docs_bulk_delete.default <- function(conn, x, index = NULL, type = NULL,
-                                     chunk_size = 1000, doc_ids = NULL,
-                                     raw = FALSE, quiet = FALSE, ...) {
+  chunk_size = 1000, doc_ids = NULL, raw = FALSE, quiet = FALSE,
+  query = list(), ...) {
 
   stop("no 'docs_bulk_delete' method for class ", class(x)[[1L]],
     call. = FALSE)

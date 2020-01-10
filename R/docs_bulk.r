@@ -23,6 +23,10 @@
 #' @param raw (logical) Get raw JSON back or not. If `TRUE` 
 #' you get JSON; if `FALSE` you get a list. Default: `FALSE`
 #' @param quiet (logical) Suppress progress bar. Default: `FALSE`
+#' @param query (list) a named list of query parameters. optional. 
+#' options include: pipeline, refresh, routing, _source, _source_excludes,
+#' _source_includes, timeout, wait_for_active_shards. See the docs bulk
+#' ES page for details
 #' @param ... Pass on curl options to [crul::HttpClient]
 #'
 #' @details More on the Bulk API:
@@ -226,21 +230,21 @@
 #' invisible(docs_bulk(x, mtcars, index = "hello", quiet = FALSE))
 #' }
 docs_bulk <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
-  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, ...) {
+  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, query = list(), ...) {
 
   UseMethod("docs_bulk", x)
 }
 
 #' @export
 docs_bulk.default <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
-  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, ...) {
+  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, query = list(), ...) {
 
   stop("no 'docs_bulk' method for class ", class(x), call. = FALSE)
 }
 
 #' @export
 docs_bulk.data.frame <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
-  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, ...) {
+  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, query = list(), ...) {
 
   is_conn(conn)
   assert(quiet, "logical")
@@ -271,7 +275,7 @@ docs_bulk.data.frame <- function(conn, x, index = NULL, type = NULL, chunk_size 
   for (i in seq_along(data_chks)) {
     if (!quiet) setTxtProgressBar(pb, i)
     resl[[i]] <- docs_bulk(conn, make_bulk(x[data_chks[[i]], , drop = FALSE], 
-                                     index, id_chks[[i]], es_ids, type), ...)
+      index, id_chks[[i]], es_ids, type), query = query, ...)
   }
   return(resl)
 }
@@ -279,7 +283,7 @@ docs_bulk.data.frame <- function(conn, x, index = NULL, type = NULL, chunk_size 
 #' @export
 docs_bulk.list <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
                            doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
-                           quiet = FALSE, ...) {
+                           quiet = FALSE, query = list(), ...) {
 
   is_conn(conn)
   assert(quiet, "logical")
@@ -312,7 +316,7 @@ docs_bulk.list <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000
   for (i in seq_along(data_chks)) {
     if (!quiet) setTxtProgressBar(pb, i)
     resl[[i]] <- docs_bulk(conn, make_bulk(x[data_chks[[i]]], index, 
-                                     id_chks[[i]], es_ids, type), ...)
+      id_chks[[i]], es_ids, type), query = query, ...)
   }
   return(resl)
 }
@@ -320,10 +324,11 @@ docs_bulk.list <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000
 #' @export
 docs_bulk.character <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
                                 doc_ids = NULL, es_ids = TRUE, raw=FALSE, 
-                                quiet = FALSE, ...) {
+                                quiet = FALSE, query = list(), ...) {
 
   is_conn(conn)
   stopifnot(file.exists(x))
+  stopifnot(is.list(query))
   on.exit(close_conns())
   on.exit(cleanup_file(x), add = TRUE)
   url <- file.path(conn$make_url(), '_bulk')
@@ -332,7 +337,13 @@ docs_bulk.character <- function(conn, x, index = NULL, type = NULL, chunk_size =
     opts = c(conn$opts, ...),
     auth = crul::auth(conn$user, conn$pwd)
   )
-  tt <- cli$post(body = crul::upload(x, type = "application/x-ndjson"), encode = "json")
+  if (length(query) > 0) {
+    for (i in seq_along(query)) {
+      query[[i]] <- if (is.logical(query[[i]])) tolower(as.character(query[[i]])) else query[[i]]
+    }
+  }
+  tt <- cli$post(body = crul::upload(x, type = "application/x-ndjson"), 
+    query = query, encode = "json")
   if (conn$warn) catch_warnings(tt)
   geterror(conn, tt)
   res <- tt$parse("UTF-8")

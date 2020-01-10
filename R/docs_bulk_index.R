@@ -31,8 +31,9 @@
 #' # res <- docs_bulk_index(x, diamonds, "diam")
 #' # Search(x, "diam")$hits$total$value
 #' }
-docs_bulk_index <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
-  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, ...) {
+docs_bulk_index <- function(conn, x, index = NULL, type = NULL,
+  chunk_size = 1000, doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE,
+  query = list(), ...) {
   
   UseMethod("docs_bulk_index", x)
 }
@@ -40,7 +41,7 @@ docs_bulk_index <- function(conn, x, index = NULL, type = NULL, chunk_size = 100
 #' @export
 docs_bulk_index.default <- function(conn, x, index = NULL, type = NULL, 
   chunk_size = 1000, doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
-  quiet = FALSE, ...) {
+  quiet = FALSE, query = list(), ...) {
   
   stop("no 'docs_bulk_index' method for class ", class(x)[[1L]], 
     call. = FALSE)

@@ -31,7 +31,7 @@
 #' # Search(x, "diam")$hits$total$value
 #' }
 docs_bulk_create <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
-  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, ...) {
+  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, query = list(), ...) {
   
   UseMethod("docs_bulk_create", x)
 }
@@ -39,7 +39,7 @@ docs_bulk_create <- function(conn, x, index = NULL, type = NULL, chunk_size = 10
 #' @export
 docs_bulk_create.default <- function(conn, x, index = NULL, type = NULL, 
   chunk_size = 1000, doc_ids = NULL, es_ids = FALSE, raw = FALSE, 
-  quiet = FALSE, ...) {
+  quiet = FALSE, query = list(), ...) {
   
   stop("no 'docs_bulk_create' method for class ", class(x)[[1L]], 
     call. = FALSE)

@@ -213,6 +213,9 @@ parameter (default: all)}
 \item{query_cache}{(logical) Clear query caches}
 
 \item{id_cache}{(logical) Clear ID caches for parent/child}
+
+\item{index_new}{(character) an index name, required. only applies to
+index_shrink method}
 }
 \description{
 Index API operations
