@@ -67,8 +67,13 @@ test_that("docs_bulk_update - works with data.frame input", {
   # load bulk
   iris <- stats::setNames(iris, gsub("\\.", "_", names(iris)))
   iris$id <- seq_len(NROW(iris))
-  invisible(docs_bulk(x, iris, "world", quiet = TRUE,
-    es_ids = FALSE))
+  if (x$es_ver() < 700) {
+    invisible(docs_bulk(x, iris, "world", "world", quiet = TRUE,
+      es_ids = FALSE))
+  } else {
+    invisible(docs_bulk(x, iris, "world", quiet = TRUE,
+      es_ids = FALSE))
+  }
 
   # get data
   Sys.sleep(2) # sleep a bit to wait for data to be there
@@ -78,8 +83,13 @@ test_that("docs_bulk_update - works with data.frame input", {
   iris$Sepal_Length <- iris$Sepal_Length / 10
 
   # load again
-  invisible(a <- docs_bulk_update(x, iris, index = "world",
-    quiet = TRUE))
+  if (x$es_ver() < 700) {
+    invisible(a <- docs_bulk_update(x, iris, "world", "world", quiet = TRUE,
+      es_ids = FALSE))
+  } else {
+    invisible(a <- docs_bulk_update(x, iris, "world", quiet = TRUE,
+      es_ids = FALSE))
+  }
 
   # get data again
   Sys.sleep(2) # sleep a bit to wait for data to be updated
@@ -182,15 +192,25 @@ test_that("docs_bulk_update - works with data.frame with boolean types", {
   # index_create(x, "mixed", mixed_mapping)
 
   # load via bulk update
-  invisible(docs_bulk(x, mixed, index = "mixed", quiet = TRUE,
-    es_ids = FALSE))
+  if (x$es_ver() < 700) {
+    invisible(docs_bulk(x, mixed, index = "mixed", type = "mixed",
+      quiet = TRUE, es_ids = FALSE))
+  } else {
+    invisible(docs_bulk(x, mixed, index = "mixed",
+      quiet = TRUE, es_ids = FALSE))
+  }
 
   # add a new row
   mixed <- rbind(mixed, data.frame(id = 4, x = TRUE, y = "d"))
 
   # update data
-  update_res <- docs_bulk_update(x, mixed, index = "mixed",
-    quiet = TRUE)
+  if (x$es_ver() < 700) {
+    update_res <- docs_bulk_update(x, mixed, index = "mixed", type = "mixed",
+      quiet = TRUE)
+  } else {
+    update_res <- docs_bulk_update(x, mixed, index = "mixed",
+      quiet = TRUE)
+  }
   Sys.sleep(1) # sleep a bit to wait for data to be there
 
   # get data frame back from search

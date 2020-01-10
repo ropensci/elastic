@@ -1,6 +1,7 @@
 context("count")
 
-x <- connect()
+x <- connect(warn = FALSE)
+z <- connect(warn = TRUE)
 load_shakespeare(x)
 
 # sleep to make sure data is available as expected
@@ -28,8 +29,8 @@ test_that("count", {
       "no such index||IndexMissingException")
   }
 
-  if (x$es_ver() >= 700) {
-    expect_warning(count(x, 'shakespeare', type = "line"), 
+  if (z$es_ver() >= 700) {
+    expect_warning(count(z, 'shakespeare', type = "line"), 
       "Specifying types in count requests is deprecated")
   }
 })

@@ -1,6 +1,6 @@
 context("alias")
 
-x <- connect()
+x <- connect(warn = FALSE)
 
 test_that("alias_get works", {
   invisible(tryCatch(index_delete(x, "plos", verbose = FALSE), error = function(e) e))

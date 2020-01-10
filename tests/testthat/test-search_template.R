@@ -39,8 +39,13 @@ test_that("basic Search_template works", {
   if (x$es_ver() < 200) skip('feature not in this ES version')
   
   if (index_exists(x, "iris")) invisible(suppressMessages(index_delete(x, "iris")))
-  invisible(docs_bulk(x, iris2, "iris"))
-  
+  if (x$es_ver() < 700) {
+    invisible(docs_bulk(x, iris2, "iris", type = "iris", quiet = TRUE))
+  } else {
+    invisible(docs_bulk(x, iris2, "iris", quiet = TRUE))
+  }
+  Sys.sleep(1)
+
   a <- Search_template(x, body = body1)
   expect_equal(names(a), c('took','timed_out','_shards','hits'))
   expect_is(a, "list")
@@ -63,7 +68,11 @@ test_that("Search_template pre-registration works", {
   if (x$es_ver() < 200) skip('feature not in this ES version')
   
   if (!index_exists(x, "iris")) invisible(suppressMessages(index_delete(x, "iris")))
-  invisible(docs_bulk(x, iris2, "iris"))
+  if (x$es_ver() < 700) {
+    invisible(docs_bulk(x, iris2, "iris", type = "iris", quiet = TRUE))
+  } else {
+    invisible(docs_bulk(x, iris2, "iris", quiet = TRUE))
+  }
 
   if (x$es_ver() < 600) {
     if (x$es_ver() == 566) skip('Search_template_register not working in this ES version')

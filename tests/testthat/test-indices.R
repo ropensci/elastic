@@ -1,6 +1,6 @@
 context("indices")
 
-x <- connect()
+x <- connect(warn = FALSE)
 load_shakespeare(x)
 
 test_that("index_get", {
