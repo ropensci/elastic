@@ -10,14 +10,14 @@
   "codeRepository": "https://github.com/ropensci/elastic",
   "issueTracker": "https://github.com/ropensci/elastic/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.0.0.9321",
+  "version": "1.1.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.6.0",
+    "version": "3.6.2",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.6.0 Patched (2019-04-30 r76446)",
+  "runtimePlatform": "R version 3.6.2 Patched (2019-12-12 r77564)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -29,7 +29,8 @@
       "@type": "Person",
       "givenName": "Scott",
       "familyName": "Chamberlain",
-      "email": "myrmecocystus@gmail.com"
+      "email": "myrmecocystus@gmail.com",
+      "@id": "https://orcid.org/0000-0003-1444-9135"
     }
   ],
   "maintainer": [
@@ -37,23 +38,11 @@
       "@type": "Person",
       "givenName": "Scott",
       "familyName": "Chamberlain",
-      "email": "myrmecocystus@gmail.com"
+      "email": "myrmecocystus@gmail.com",
+      "@id": "https://orcid.org/0000-0003-1444-9135"
     }
   ],
   "softwareSuggestions": [
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "roxygen2",
-      "name": "roxygen2",
-      "version": ">= 6.1.1",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=roxygen2"
-    },
     {
       "@type": "SoftwareApplication",
       "identifier": "knitr",
@@ -102,7 +91,7 @@
       "@type": "SoftwareApplication",
       "identifier": "crul",
       "name": "crul",
-      "version": ">= 0.7.0",
+      "version": ">= 0.9.0",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -137,15 +126,16 @@
       "sameAs": "https://CRAN.R-project.org/package=R6"
     }
   ],
-  "contIntegration": "https://travis-ci.org/ropensci/elastic",
+  "contIntegration": ["https://travis-ci.org/ropensci/elastic", "https://codecov.io/github/ropensci/elastic?branch=master"],
   "releaseNotes": "https://github.com/ropensci/elastic/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/elastic/blob/master/README.md",
-  "fileSize": "1208.386KB",
+  "fileSize": "1213.449KB",
   "applicationCategory": "Databases",
   "isPartOf": "https://ropensci.org",
   "keywords": ["database", "Elasticsearch", "HTTP", "API", "search", "NoSQL", "Java", "JSON", "documents", "elasticsearch", "http", "database-wrapper", "json", "rstats", "r", "r-package", "data-science", "etl"],
   "contributor": {},
   "copyrightHolder": {},
   "funder": {},
-  "developmentStatus": "http://www.repostatus.org/#active"
+  "developmentStatus": "http://www.repostatus.org/#active",
+  "relatedLink": "https://docs.ropensci.org/elastic"
 }
