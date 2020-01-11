@@ -44,7 +44,7 @@ test_that("basic Search_template works", {
   } else {
     invisible(docs_bulk(x, iris2, "iris", quiet = TRUE))
   }
-  Sys.sleep(1)
+  Sys.sleep(2)
 
   a <- Search_template(x, body = body1)
   expect_equal(names(a), c('took','timed_out','_shards','hits'))
