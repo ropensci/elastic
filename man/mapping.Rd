@@ -123,8 +123,9 @@ mapping_get(x, index = c("shakespeare","plos"))
 # mapping_get(x, index = "shakespeare", type = c("act","line"))
 
 # Get field mappings
-plosdat <- system.file("examples", "plos_data_notypes.json",
+plosdat <- system.file("examples", "plos_data.json",
   package = "elastic")
+plosdat <- type_remover(plosdat)
 invisible(docs_bulk(x, plosdat))
 field_mapping_get(x, index = "_all", field = "text")
 field_mapping_get(x, index = "plos", field = "title")
@@ -135,8 +136,9 @@ field_mapping_get(x, type = "a*", field = "t*")
 
 # Create geospatial mapping
 if (index_exists(x, "gbifgeopoint")) index_delete(x, "gbifgeopoint")
-file <- system.file("examples", "gbif_geopoint_notypes.json",
+file <- system.file("examples", "gbif_geopoint.json",
   package = "elastic")
+file <- type_remover(file)
 index_create(x, "gbifgeopoint")
 body <- '{
  "properties" : {

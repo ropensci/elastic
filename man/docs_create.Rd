@@ -72,8 +72,9 @@ Create a document
 (x <- connect())
 
 if (!index_exists(x, 'plos')) {
-  plosdat <- system.file("examples", "plos_data_notypes.json",
+  plosdat <- system.file("examples", "plos_data.json",
     package = "elastic")
+  plosdat <- type_remover(plosdat)
   invisible(docs_bulk(x, plosdat))
 }
 

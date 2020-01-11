@@ -17,8 +17,9 @@ load_shakespeare <- function(conn) {
     shakespeare <- system.file("examples", "shakespeare_data.json",
       package = "elastic")
   } else if (conn$es_ver() >= 700) {
-    shakespeare <- system.file("examples", "shakespeare_data_notypes.json",
+    shakespeare <- system.file("examples", "shakespeare_data_.json",
       package = "elastic")
+    shakespeare <- type_remover(shakespeare)
   } else {
     shakespeare <- system.file("examples", "shakespeare_data_.json",
       package = "elastic")
@@ -28,13 +29,8 @@ load_shakespeare <- function(conn) {
 }
 
 load_plos <- function(conn) {
-  if (conn$es_ver() >= 700) {
-    plos <- system.file("examples", "plos_data_notypes.json",
-      package = "elastic")
-  } else {
-    plos <- system.file("examples", "plos_data.json",
-      package = "elastic")
-  }
+  plos <- system.file("examples", "plos_data.json", package = "elastic")
+  if (conn$es_ver() >= 700) plos <- type_remover(plos)
   if (index_exists(conn, 'plos')) index_delete(conn, 'plos')
   invisible(suppressWarnings(elastic::docs_bulk(conn, plos)))
 }

@@ -8,13 +8,9 @@ test_that("docs_bulk - works with bulk format file", {
     index_delete(x, "gbifnewgeo")
   }
   
-  if (x$es_ver() < 700) {
-    gsmall <- system.file("examples", "gbif_geo.json",
-      package = "elastic")
-  } else {
-    gsmall <- system.file("examples", "gbif_geo_notypes.json",
-      package = "elastic")
-  }
+  gsmall <- system.file("examples", "gbif_geo.json",
+    package = "elastic")
+  if (x$es_ver() >= 700) gsmall <- type_remover(gsmall)
   a <- docs_bulk(x, x = gsmall, quiet = TRUE)
 
   expect_is(a, "list")

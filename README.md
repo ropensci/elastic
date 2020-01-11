@@ -30,8 +30,8 @@ This client is developed following the latest stable releases, currently `v7.5.1
 
 You're fine running ES locally on your machine, but be careful just throwing up ES on a server with a public IP address - make sure to think about security.
 
-* [Shield](https://www.elastic.co/products/shield) - This is a paid product provided by Elastic - so probably only applicable to enterprise users
-* DIY security - there are a variety of techniques for securing your Elasticsearch. A number of resources are collected in a [blog post](http://recology.info/2015/02/secure-elasticsearch/) - tools include putting your ES behind something like Nginx, putting basic auth on top of it, using https, etc.
+* Elastic has paid products - but probably only applicable to enterprise users
+* DIY security - there are a variety of techniques for securing your Elasticsearch installation. A number of resources are collected in a [blog post](http://recology.info/2015/02/secure-elasticsearch/) - tools include putting your ES behind something like Nginx, putting basic auth on top of it, using https, etc.
 
 ## Installation
 
@@ -148,8 +148,9 @@ Elasticsearch provides some data on Shakespeare plays. I've provided a subset of
 
 ```r
 shakespeare <- system.file("examples", "shakespeare_data.json", package = "elastic")
-# If you're on Elastic v6 or greater, use this one with 1 type instead of 3:
+# If you're on Elastic v6 or greater, use this one
 shakespeare <- system.file("examples", "shakespeare_data_.json", package = "elastic")
+shakespeare <- type_remover(shakespeare)
 ```
 
 Then load the data into Elasticsearch:
@@ -179,6 +180,7 @@ if (index_exists(x, "plos")) index_delete(x, "plos")
 #> $acknowledged
 #> [1] TRUE
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+plosdat <- type_remover(plosdat)
 invisible(docs_bulk(x, plosdat))
 ```
 
@@ -192,6 +194,7 @@ if (index_exists(x, "gbif")) index_delete(x, "gbif")
 #> $acknowledged
 #> [1] TRUE
 gbifdat <- system.file("examples", "gbif_data.json", package = "elastic")
+gbifdat <- type_remover(gbifdat)
 invisible(docs_bulk(x, gbifdat))
 ```
 
@@ -203,6 +206,7 @@ if (index_exists(x, "gbifgeo")) index_delete(x, "gbifgeo")
 #> $acknowledged
 #> [1] TRUE
 gbifgeo <- system.file("examples", "gbif_geo.json", package = "elastic")
+gbifgeo <- type_remover(gbifgeo)
 invisible(docs_bulk(x, gbifgeo))
 ```
 
@@ -225,7 +229,7 @@ Search(x, index = "plos", size = 1)$hits$hits
 #> [1] "plos"
 #> 
 #> [[1]]$`_type`
-#> [1] "article"
+#> [1] "_doc"
 #> 
 #> [[1]]$`_id`
 #> [1] "0"
@@ -241,17 +245,17 @@ Search(x, index = "plos", size = 1)$hits$hits
 #> [1] "Phospholipase C-β4 Is Essential for the Progression of the Normal Sleep Sequence and Ultradian Body Temperature Rhythms in Mice"
 ```
 
-Search the `plos` index, and the `article` document type, and query for _antibody_, limit to 1 result
+Search the `plos` index, and query for _antibody_, limit to 1 result
 
 
 ```r
-Search(x, index = "plos", type = "article", q = "antibody", size = 1)$hits$hits
+Search(x, index = "plos", q = "antibody", size = 1)$hits$hits
 #> [[1]]
 #> [[1]]$`_index`
 #> [1] "plos"
 #> 
 #> [[1]]$`_type`
-#> [1] "article"
+#> [1] "_doc"
 #> 
 #> [[1]]$`_id`
 #> [1] "813"
@@ -273,12 +277,12 @@ Get document with id=4
 
 
 ```r
-docs_get(x, index = 'plos', type = 'article', id = 4)
+docs_get(x, index = 'plos', id = 4)
 #> $`_index`
 #> [1] "plos"
 #> 
 #> $`_type`
-#> [1] "article"
+#> [1] "_doc"
 #> 
 #> $`_id`
 #> [1] "4"
@@ -307,12 +311,12 @@ Get certain fields
 
 
 ```r
-docs_get(x, index = 'plos', type = 'article', id = 4, fields = 'id')
+docs_get(x, index = 'plos', id = 4, fields = 'id')
 #> $`_index`
 #> [1] "plos"
 #> 
 #> $`_type`
-#> [1] "article"
+#> [1] "_doc"
 #> 
 #> $`_id`
 #> [1] "4"
@@ -333,18 +337,18 @@ docs_get(x, index = 'plos', type = 'article', id = 4, fields = 'id')
 
 ## Get multiple documents via the multiget API
 
-Same index and type, different document ids
+Same index and different document ids
 
 
 ```r
-docs_mget(x, index = "plos", type = "article", id = 1:2)
+docs_mget(x, index = "plos", id = 1:2)
 #> $docs
 #> $docs[[1]]
 #> $docs[[1]]$`_index`
 #> [1] "plos"
 #> 
 #> $docs[[1]]$`_type`
-#> [1] "article"
+#> [1] "_doc"
 #> 
 #> $docs[[1]]$`_id`
 #> [1] "1"
@@ -375,7 +379,7 @@ docs_mget(x, index = "plos", type = "article", id = 1:2)
 #> [1] "plos"
 #> 
 #> $docs[[2]]$`_type`
-#> [1] "article"
+#> [1] "_doc"
 #> 
 #> $docs[[2]]$`_id`
 #> [1] "2"
@@ -400,40 +404,6 @@ docs_mget(x, index = "plos", type = "article", id = 1:2)
 #> [1] "Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition"
 ```
 
-Different indeces, types, and ids
-
-
-```r
-docs_mget(x, index_type_id = list(c("plos", "article", 1), c("gbif", "record", 1)))$docs[[1]]
-#> $`_index`
-#> [1] "plos"
-#> 
-#> $`_type`
-#> [1] "article"
-#> 
-#> $`_id`
-#> [1] "1"
-#> 
-#> $`_version`
-#> [1] 1
-#> 
-#> $`_seq_no`
-#> [1] 1
-#> 
-#> $`_primary_term`
-#> [1] 1
-#> 
-#> $found
-#> [1] TRUE
-#> 
-#> $`_source`
-#> $`_source`$id
-#> [1] "10.1371/journal.pone.0098602"
-#> 
-#> $`_source`$title
-#> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
-```
-
 ## Parsing
 
 You can optionally get back raw `json` from `Search()`, `docs_get()`, and `docs_mget()` setting parameter `raw=TRUE`.
@@ -442,8 +412,8 @@ For example:
 
 
 ```r
-(out <- docs_mget(x, index = "plos", type = "article", id = 1:2, raw = TRUE))
-#> [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"1\",\"_version\":1,\"_seq_no\":1,\"_primary_term\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098602\",\"title\":\"Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar\"}},{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"2\",\"_version\":1,\"_seq_no\":2,\"_primary_term\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0107757\",\"title\":\"Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition\"}}]}"
+(out <- docs_mget(x, index = "plos", id = 1:2, raw = TRUE))
+#> [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"_doc\",\"_id\":\"1\",\"_version\":1,\"_seq_no\":1,\"_primary_term\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098602\",\"title\":\"Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar\"}},{\"_index\":\"plos\",\"_type\":\"_doc\",\"_id\":\"2\",\"_version\":1,\"_seq_no\":2,\"_primary_term\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0107757\",\"title\":\"Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition\"}}]}"
 #> attr(,"class")
 #> [1] "elastic_mget"
 ```
@@ -454,9 +424,9 @@ Then parse
 ```r
 jsonlite::fromJSON(out)
 #> $docs
-#>   _index   _type _id _version _seq_no _primary_term found
-#> 1   plos article   1        1       1             1  TRUE
-#> 2   plos article   2        1       2             1  TRUE
+#>   _index _type _id _version _seq_no _primary_term found
+#> 1   plos  _doc   1        1       1             1  TRUE
+#> 2   plos  _doc   2        1       2             1  TRUE
 #>                     _source.id
 #> 1 10.1371/journal.pone.0098602
 #> 2 10.1371/journal.pone.0107757

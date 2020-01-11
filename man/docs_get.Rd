@@ -60,8 +60,9 @@ Get documents
 (x <- connect())
 
 if (!index_exists(x, "shakespeare")) {
-  shakespeare <- system.file("examples", "shakespeare_data_notypes.json",
+  shakespeare <- system.file("examples", "shakespeare_data_.json",
     package = "elastic")
+  shakespeare <- type_remover(shakespeare)
   invisible(docs_bulk(x, shakespeare))
 }
 

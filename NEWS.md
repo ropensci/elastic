@@ -1,3 +1,26 @@
+elastic 1.1.0
+=============
+
+### NEW FEATURES
+
+* types were deprecated in Elasticsearch v7 and greater, and will be removed in Elasticsearch v8 and greater. this version makes type optional in all/most functions so that users with older Elasticsearch versions can still use them, but users with v7 or v8 installations don't have to use them  (#251) (#270)
+* gains new method `index_shrink()` for index shrinking (#192)
+* through fixing functionality in `docs_bulk()` to allow pipline attachments to work, all `docs_bulk` methods that do http requests (i.e, not prep fxns) gain the parameter `query` to pass through query parameters to the http request, including for example `pipeline`, `_source` etc. (#253)
+* `Search()` and `Search_uri()` gain the parameter `track_total_hits` (default: `TRUE`) (#262) thanks @orenov
+
+### MINOR IMPROVEMENTS
+
+* the `warn` parameter in `connect()` was not being used across the entire package; now all methods should capture any warnings returned in the Elasticsearch HTTP API headers  (#261)
+* clarify in docs that `connect()` does not create a DBI like connection object (#265)
+* fix warning in `index_analyze()` function where as is method `I()` should only be applied if the input parameter is not `NULL` - to avoid a warning (#269)
+
+### BUG FIXES
+
+* fix to `docs_bulk_update()`: subsetting data.frame's was not working correctly when data.frame's had only 1 column; fixed (#260)
+* fix to internal method `es_ver()` in the `Elasticsearch` class to be more flexible in capturing Elasticsearch version (#268)
+* require newest `crul` version, helps fix a problem with passing along authentication details (#267)
+
+
 elastic 1.0.0
 =============
 

@@ -22,8 +22,9 @@
 #' x$ping()
 #' 
 #' if (!index_exists(x, "plos")) {
-#'  plosdat <- system.file("examples", "plos_data_notypes.json",
-#'    package = "elastic")
+#'  plosdat <- system.file("examples", "plos_data.json",
+#'     package = "elastic")
+#'  plosdat <- type_remover(plosdat)
 #'  docs_bulk(x, plosdat)
 #' }
 #'

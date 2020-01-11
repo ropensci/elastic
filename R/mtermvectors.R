@@ -43,7 +43,8 @@
 #' x <- connect()
 #' 
 #' if (index_exists(x, 'omdb')) index_delete(x, "omdb")
-#' omdb <- system.file("examples", "omdb_notypes.json", package = "elastic")
+#' omdb <- system.file("examples", "omdb.json", package = "elastic")
+#' omdb <- type_remover(omdb)
 #' invisible(docs_bulk(x, omdb))
 #' out <- Search(x, "omdb", size = 2)$hits$hits
 #' ids <- vapply(out, "[[", "", "_id")

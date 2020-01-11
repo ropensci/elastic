@@ -75,7 +75,8 @@ update documents by query via a POST request
 (x <- connect())
 x$ping()
 
-omdb <- system.file("examples", "omdb_notypes.json", package = "elastic")
+omdb <- system.file("examples", "omdb.json", package = "elastic")
+omdb <- type_remover(omdb)
 if (!index_exists(x, "omdb")) invisible(docs_bulk(x, omdb))
 
 # can be sent without a body

@@ -10,18 +10,21 @@
 #' 
 #' # load some data
 #' if (!index_exists(x, "shakespeare")) {
-#'   shakespeare <- system.file("examples", "shakespeare_data_notypes.json",
+#'   shakespeare <- system.file("examples", "shakespeare_data.json",
 #'     package = "elastic")
+#'   shakespeare <- type_remover(shakespeare)
 #'   invisible(docs_bulk(x, shakespeare))
 #' }
 #' if (!index_exists(x, "gbif")) {
-#'   gbif <- system.file("examples", "gbif_data_notypes.json",
+#'   gbif <- system.file("examples", "gbif_data.json",
 #'     package = "elastic")
+#'   gbif <- type_remover(gbif)
 #'   invisible(docs_bulk(x, gbif))
 #' }
 #' if (!index_exists(x, "plos")) {
-#'   plos <- system.file("examples", "plos_data_notypes.json",
+#'   plos <- system.file("examples", "plos_data.json",
 #'     package = "elastic")
+#'   plos <- type_remover(plos)
 #'   invisible(docs_bulk(x, plos))
 #' }
 #' 
@@ -79,8 +82,9 @@
 #'     }
 #'   }'
 #'  )
-#'  shakespeare <- system.file("examples", "shakespeare_data_notypes.json",
+#'  shakespeare <- system.file("examples", "shakespeare_data.json",
 #'    package = "elastic")
+#'  shakespeare <- type_remover(shakespeare)
 #'  invisible(docs_bulk(x, shakespeare))
 #'  z <- Search(x, index="shakespeare", sort="speaker", size = 30)
 #'  vapply(z$hits$hits, function(w) w$`_source`$speaker, "")
@@ -503,8 +507,9 @@
 #'    }
 #' }'
 #' index_recreate(x, index='gbifgeopoint', body=body)
-#' path <- system.file("examples", "gbif_geopoint_notypes.json",
+#' path <- system.file("examples", "gbif_geopoint.json",
 #'   package = "elastic")
+#' path <- type_remover(path)
 #' invisible(docs_bulk(x, path))
 #'
 #' ### Points within a bounding box
@@ -608,8 +613,9 @@
 #'    }
 #' }'
 #' index_recreate(x, index='geoshape', body=body)
-#' path <- system.file("examples", "gbif_geoshape_notypes.json",
+#' path <- system.file("examples", "gbif_geoshape.json",
 #'   package = "elastic")
+#' path <- type_remover(path)
 #' invisible(docs_bulk(x, path))
 #'
 #' #### Get data with a square envelope, w/ point defining upper left and the other

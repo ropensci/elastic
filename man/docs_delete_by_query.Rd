@@ -72,8 +72,9 @@ delete documents by query via a POST request
 (x <- connect())
 x$ping()
 
-plosdat <- system.file("examples", "plos_data_notypes.json",
+plosdat <- system.file("examples", "plos_data.json",
   package = "elastic")
+plosdat <- type_remover(plosdat)
 if (!index_exists(x, "plos")) invisible(docs_bulk(x, plosdat))
 
 # delete with fuzzy matching

@@ -35,8 +35,9 @@ You can also get a count of documents using \code{\link[=Search]{Search()}} or
 (x <- connect())
 
 if (!index_exists(x, "plos")) {
-  plosdat <- system.file("examples", "plos_data_notypes.json", 
+  plosdat <- system.file("examples", "plos_data.json",
     package = "elastic")
+  plosdat <- type_remover(plosdat)
   invisible(docs_bulk(x, plosdat))
 }
 if (!index_exists(x, "shakespeare")) {
