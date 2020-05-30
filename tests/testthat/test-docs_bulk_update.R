@@ -129,7 +129,7 @@ test_that("docs_bulk_update - works with data.frame where ids are factors", {
   a <- docs_bulk_update(x, df, index = "mars", type = "mars", quiet = TRUE)
   Sys.sleep(1)
 
-  expect_is(df$id, "factor")
+  expect_is(df$id, "character")
   expect_is(a, "list")
   expect_equal(length(a), 1)
   expect_named(a[[1]], c('took', 'errors', 'items'))

@@ -58,7 +58,7 @@ test_that("docs_bulk - works with data.frame where ids are factors", {
     a <- docs_bulk(x, df, index = "hello2", quiet = TRUE)
   }
 
-  expect_is(df$id, "factor")
+  expect_is(df$id, "character")
   expect_is(a, "list")
   expect_equal(length(a), 1)
   expect_named(a[[1]], c('took', 'errors', 'items'))
