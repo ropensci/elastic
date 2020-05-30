@@ -1,6 +1,7 @@
 language: r
 cache: packages
 dist: trusty
+os: linux
 
 addons:
   apt:
@@ -10,7 +11,7 @@ env:
   global:
     secure: H5kkOKDCSt3AUreH4dCGFNs053LzlkTUnxumw8T1WvaoKarPNp26BkuD/v2jepP7I5D32GePbypJkAsnf7//axwTv+5pCg+Jvp3QXqVInF7L3firSnMhZYaT103sGoQfirSRR36t8Fs18r+Z5HIMajiQtthcwUT1MsdsOhsPxNg=
 
-matrix:
+jobs:
   include:
     - os: linux
       r: release
