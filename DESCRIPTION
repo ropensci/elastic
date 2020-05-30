@@ -29,7 +29,7 @@ Imports:
 Suggests:
     knitr,
     testthat
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 X-schema.org-applicationCategory: Databases
 X-schema.org-keywords: database, Elasticsearch, HTTP, API, search, NoSQL, Java, JSON, documents
 X-schema.org-isPartOf: https://ropensci.org
