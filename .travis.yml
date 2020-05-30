@@ -2,9 +2,6 @@ language: r
 cache: packages
 dist: trusty
 
-r_github_packages:
-  - ropensci/crul
-
 addons:
   apt:
     packages: oracle-java8-set-default
@@ -44,10 +41,7 @@ matrix:
       env: ES_VERSION=6.5.3
     - os: linux
       r: release
-      env: ES_VERSION=7.5.1 R_CODECOV=true
-
-r_binary_packages:
-  - covr 
+      env: ES_VERSION=7.5.1
 
 before_install:
   - case "$ES_VERSION" in
