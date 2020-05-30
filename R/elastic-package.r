@@ -1,5 +1,5 @@
-#' elastic: An Elasticsearch R client.
-#'
+#' @title elastic
+#' @description An Elasticsearch R client.
 #' @section About:
 #'
 #' This package gives you access to local or remote Elasticsearch databases.
