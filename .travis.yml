@@ -43,6 +43,9 @@ jobs:
     - os: linux
       r: release
       env: ES_VERSION=7.5.1
+    - os: linux
+      r: release
+      env: ES_VERSION=7.7.0
 
 before_install:
   - case "$ES_VERSION" in
@@ -95,6 +98,11 @@ before_install:
 
     "7.5.1")
       export ES_VERSION=7.5.1 ;
+      curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ES_VERSION-amd64.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION-amd64.deb && sudo service elasticsearch start
+      ;;
+
+    "7.7.0")
+      export ES_VERSION=7.7.0 ;
       curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ES_VERSION-amd64.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION-amd64.deb && sudo service elasticsearch start
       ;;
    esac
