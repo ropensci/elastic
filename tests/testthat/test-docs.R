@@ -9,7 +9,7 @@ invisible(tryCatch(index_delete(x, index = ind, verbose = FALSE),
 invisible(index_create(x, index = ind, verbose = FALSE))
 
 test_that("docs_create works", {
-  if (es_version(x) < 600) {
+  if (x$es_ver() < 600) {
     # type not provided
     expect_error(docs_create(x, index = ind, id = 1002, body = list(id = "d")),
       "'type' is required")
@@ -17,6 +17,14 @@ test_that("docs_create works", {
     invisible(docs_create(x, index = ind, id = 1002, type = "stuff",
       body = list(id = "12345", title = "New title")))
     a <- docs_get(x, index = ind, type = "stuff", id = 1002, verbose = FALSE)
+    expect_is(a, "list")
+    expect_is(a$`_source`, "list")
+    expect_equal(a$`_id`, "1002")
+    expect_equal(a$`_source`$id[[1]], "12345")
+  } else if (x$es_ver() < 700) {
+    invisible(docs_create(x, index = ind, type = ind, id = 1002,
+      body = list(id = "12345", title = "New title")))
+    a <- docs_get(x, index = ind, type = ind, id = 1002, verbose = FALSE)
     expect_is(a, "list")
     expect_is(a$`_source`, "list")
     expect_equal(a$`_id`, "1002")
@@ -33,18 +41,29 @@ test_that("docs_create works", {
 
   # can create docs with an index that doesn't exist yet
   # should create index on the fly
-  if (es_version(x) > 600) {
+  if (x$es_ver() > 700) {
     b <- docs_create(x, "bbbbbbb", list(a = 5), id = 1)
+    expect_true(index_exists(x, "bbbbbbb"))
+  }
+  if (x$es_ver() > 600 && x$es_ver() < 700) {
+    b <- docs_create(x, "bbbbbbb", type = "bbbbbbb", list(a = 5), id = 1)
     expect_true(index_exists(x, "bbbbbbb"))
   }
 })
 
 ind11 <- "stuff_ll"
 test_that("docs_create works with automatically created document IDs", {
-  if (es_version(x) < 600) {
+  if (x$es_ver() < 600) {
     expect_error(docs_create(x, index = ind11,
       body = list(id = "12345", title = "Some title")),
       "'type' is required")
+  } else if (x$es_ver() < 700) { 
+    invisible(z<-docs_create(x, index = ind11, type = ind11,
+      body = list(id = "12345", title = "Some title")))
+    a <- docs_get(x, index = ind11, type = ind11, id = z$`_id`, verbose = FALSE)
+    expect_is(a, "list")
+    expect_is(a$`_source`, "list")
+    expect_equal(a$`_source`$id[[1]], "12345")
   } else {
     invisible(z<-docs_create(x, index = ind11,
       body = list(id = "12345", title = "Some title")))
@@ -80,9 +99,15 @@ invisible(tryCatch(index_delete(x, index = ind2, verbose = FALSE),
 invisible(index_create(x, index = ind2, verbose = FALSE))
 
 test_that("docs_get works", {
-  if (es_version(x) < 600) {
+  if (x$es_ver() < 600) {
     expect_error(docs_create(x, index = ind2, id = 45, body = '{"hello": "world"}'),
       "'type' is required")
+  } else if (x$es_ver() < 700 && x$es_ver() >= 600) {
+    c <- docs_create(x, index = ind2, type = ind2, id = 45, body = '{"hello": "world"}')
+    expect_is(c, "list")
+    expect_null(c$`_source`)
+    expect_null(c$found)
+    expect_equal(c$`_id`, "45")
   } else {
     invisible(docs_create(x, index = ind2, id = 45, body = '{"hello": "world"}'))
     c <- docs_get(x, index = ind2, id = 45, verbose = FALSE)

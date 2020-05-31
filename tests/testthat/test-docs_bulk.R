@@ -275,13 +275,24 @@ test_that("docs_bulk: pipline attachments work", {
     list(data = "aGVsbG8gd29ybGQgaGVsbG8gd29ybGQ=",
          category = "hello world")
   )
-  invisible(docs_bulk(x, docs, index = "myindex", doc_ids = 1:2, es_ids = FALSE,
-    quiet = TRUE, query = list(pipeline = 'attachment')))
+  if (x$es_ver() < 700) {
+    invisible(docs_bulk(x, docs, index = "myindex", type = "myindex",
+      doc_ids = 1:2, es_ids = FALSE, quiet = TRUE,
+      query = list(pipeline = 'attachment')))
+  } else {
+    invisible(docs_bulk(x, docs, index = "myindex", doc_ids = 1:2,
+      es_ids = FALSE, quiet = TRUE,
+      query = list(pipeline = 'attachment')))
+  }
   Sys.sleep(1)
   docs <- Search(x, "myindex")
   doc1 <- docs$hits$hits[[1]]$`_source`
   expect_equal(sort(names(doc1)), c("category", "fulltext"))
   expect_equal(sort(names(doc1$fulltext)),
     c("content", "content_length", "content_type", "language"))
-  expect_equal(doc1$fulltext$content_type, "application/rtf")
+  expect_true(
+    grepl(if (x$es_ver() < 700) "text/plain" else "application/rtf", 
+      doc1$fulltext$content_type
+    )
+  )
 })
