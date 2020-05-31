@@ -98,12 +98,12 @@ before_install:
 
     "7.5.1")
       export ES_VERSION=7.5.1 ;
-      curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ES_VERSION-amd64.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION-amd64.deb && sudo service elasticsearch start
+      curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ES_VERSION-amd64.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION-amd64.deb && sudo chown -R elasticsearch:elasticsearch /etc/default/elasticsearch && sudo service elasticsearch start
       ;;
 
     "7.7.0")
       export ES_VERSION=7.7.0 ;
-      curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ES_VERSION-amd64.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION-amd64.deb && sudo service elasticsearch start
+      curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ES_VERSION-amd64.deb && sudo dpkg -i --force-confnew elasticsearch-$ES_VERSION-amd64.deb && sudo chown -R elasticsearch:elasticsearch /etc/default/elasticsearch && sudo service elasticsearch start
       ;;
    esac
 
