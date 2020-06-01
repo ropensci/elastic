@@ -30,6 +30,7 @@ cat_aliases(
   help = FALSE,
   bytes = FALSE,
   parse = FALSE,
+  expand_wildcards = "all",
   ...
 )
 
@@ -189,7 +190,8 @@ cat_fielddata(
 
 \item{...}{Curl args passed on to \link[crul:HttpClient]{crul::HttpClient}}
 
-\item{verbose}{(logical) If \code{TRUE} (default) the url call used printed to console}
+\item{verbose}{(logical) If \code{TRUE} (default) the url call used printed to
+console}
 
 \item{index}{(character) Index name}
 
@@ -198,6 +200,10 @@ cat_fielddata(
 \item{help}{(logical) Output available columns, and their meanings}
 
 \item{bytes}{(logical) Give numbers back machine friendly. Default: \code{FALSE}}
+
+\item{expand_wildcards}{(character) Whether to expand wildcard expression
+to concrete indices that are open, closed or both.  Valid choices: 'open',
+'closed', 'hidden', 'none', 'all'. default: 'all'. Available in ES >= v7.7}
 
 \item{fields}{(character) Fields to return, only used with \code{fielddata}}
 }
@@ -208,8 +214,8 @@ Use the cat Elasticsearch api.
 See \url{https://www.elastic.co/guide/en/elasticsearch/reference/current/cat.html}
 for the cat API documentation.
 
-Note how \code{\link[=cat_]{cat_()}} has an underscore at the end to avoid conflict with the function
-\code{\link[base:cat]{base::cat()}} in base R.
+Note how \code{\link[=cat_]{cat_()}} has an underscore at the end to avoid conflict with the
+function \code{\link[base:cat]{base::cat()}} in base R.
 }
 \examples{
 \dontrun{
@@ -221,7 +227,9 @@ cat_(x)
 
 # Do other cat operations
 cat_aliases(x)
-cat_aliases(x, index='plos')
+alias_create(x, index = "plos", alias = c("tables", "chairs"))
+cat_aliases(x, expand_wildcards='open')
+cat_aliases(x, expand_wildcards='all')
 cat_allocation(x)
 cat_allocation(x, verbose=TRUE)
 cat_count(x)

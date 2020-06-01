@@ -2,20 +2,24 @@
 #'
 #' @name cat
 #' @param conn an Elasticsearch connection object, see [connect()]
-#' @param verbose (logical) If `TRUE` (default) the url call used printed to console
+#' @param verbose (logical) If `TRUE` (default) the url call used printed to
+#' console
 #' @param index (character) Index name
 #' @param fields (character) Fields to return, only used with `fielddata`
 #' @param h (character) Fields to return
 #' @param help (logical) Output available columns, and their meanings
 #' @param bytes (logical) Give numbers back machine friendly. Default: `FALSE`
 #' @param parse (logical) Parse to a data.frame or not. Default: `FALSE`
+#' @param expand_wildcards (character) Whether to expand wildcard expression
+#' to concrete indices that are open, closed or both.  Valid choices: 'open',
+#' 'closed', 'hidden', 'none', 'all'. default: 'all'. Available in ES >= v7.7
 #' @param ... Curl args passed on to [crul::HttpClient]
 #'
 #' @details See <https://www.elastic.co/guide/en/elasticsearch/reference/current/cat.html>
 #' for the cat API documentation.
 #'
-#' Note how [cat_()] has an underscore at the end to avoid conflict with the function
-#' [base::cat()] in base R.
+#' Note how [cat_()] has an underscore at the end to avoid conflict with the
+#' function [base::cat()] in base R.
 #'
 #' @examples \dontrun{
 #' # connection setup
@@ -26,7 +30,9 @@
 #'
 #' # Do other cat operations
 #' cat_aliases(x)
-#' cat_aliases(x, index='plos')
+#' alias_create(x, index = "plos", alias = c("tables", "chairs"))
+#' cat_aliases(x, expand_wildcards='open')
+#' cat_aliases(x, expand_wildcards='all')
 #' cat_allocation(x)
 #' cat_allocation(x, verbose=TRUE)
 #' cat_count(x)
@@ -87,10 +93,12 @@ cat_ <- function(conn, parse = FALSE, ...) {
 
 #' @export
 #' @rdname cat
-cat_aliases <- function(conn, verbose=FALSE, index=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
+cat_aliases <- function(conn, verbose=FALSE, index=NULL, h=NULL, help=FALSE,
+  bytes=FALSE, parse=FALSE, expand_wildcards="all", ...) {
   is_conn(conn)
   conn$stop_es_version(110, "cat_aliases")
-  cat_helper(conn, 'aliases', v=verbose, i=index, h=h, help=help, bytes=bytes, parse=parse, ...)
+  cat_helper(conn, 'aliases', v=verbose, i=index, h=h, help=help, bytes=bytes,
+    parse=parse, expand_wildcards=expand_wildcards, ...)
 }
 
 #' @export
@@ -217,16 +225,23 @@ cat_fielddata <- function(conn, verbose=FALSE, index=NULL, fields=NULL, h=NULL, 
 # }
 
 
-cat_helper <- function(conn, what='', v=FALSE, i=NULL, f=NULL, h=NULL, help=FALSE, bytes=FALSE, parse=FALSE, ...) {
-  stopifnot(is.logical(v), is.logical(help), is.logical(parse), is.logical(bytes))
+cat_helper <- function(conn, what='', v=FALSE, i=NULL, f=NULL, h=NULL,
+  help=FALSE, bytes=FALSE, parse=FALSE, expand_wildcards=NULL, ...) {
+
+  stopifnot(is.logical(v), is.logical(help), is.logical(parse),
+    is.logical(bytes))
   help_or_verbose(v, help)
+  if (!is.null(expand_wildcards)) {
+    expand_wildcards <- paste0(expand_wildcards, collapse = ",")
+  }
   url <- conn$make_url()
   if (!is.null(f)) f <- paste(f, collapse = ",")
   url <- sprintf("%s/_cat/%s", url, what)
   if (!is.null(i)) url <- paste0(url, '/', i)
   args <- ec(list(v = lnull(v), help = lnull(help), fields = f,
                   h = asnull(paste0(h, collapse = ",")),
-                  bytes = ifbytes(bytes)))
+                  bytes = ifbytes(bytes),
+                  expand_wildcards = asnull(expand_wildcards)))
   cli <- crul::HttpClient$new(url = url,
     headers = c(conn$headers), 
     opts = c(conn$opts, ...),
