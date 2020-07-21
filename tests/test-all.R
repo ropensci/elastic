@@ -2,6 +2,8 @@ library('testthat')
 library('elastic')
 
 x <- elastic::connect()
+try_conn <- tryCatch(x$ping(), error = function(e) e)
+if (inherits(try_conn, "error")) skip("Elasticsearch not available, skipping tests")
 
 if (x$es_ver() < 600) {
   shakespeare <- system.file("examples", "shakespeare_data.json", package = "elastic")
