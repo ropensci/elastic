@@ -8,7 +8,7 @@ Description: Connect to 'Elasticsearch', a 'NoSQL' database built on the 'Java'
     requests. In addition, 'elastic' provides functions for interacting with API's
     for 'indices', documents, nodes, clusters, an interface to the cat API, and
     more.
-Version: 1.1.0.91
+Version: 1.1.0.92
 License: MIT + file LICENSE
 Authors@R: person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "myrmecocystus@gmail.com",
@@ -29,7 +29,7 @@ Imports:
 Suggests:
     knitr,
     testthat
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 X-schema.org-applicationCategory: Databases
 X-schema.org-keywords: database, Elasticsearch, HTTP, API, search, NoSQL, Java, JSON, documents
 X-schema.org-isPartOf: https://ropensci.org

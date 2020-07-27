@@ -75,4 +75,6 @@
 #' that's the data that's streamed out, and pass a file path instead of a 
 #' connection to \code{con}. \code{pagesize} param doesn't do much as 
 #' that's more or less controlled by paging with ES.
+#' @param ignore_unavailable (logical) What to do if an specified index name
+#' doesn't exist. If set to \code{TRUE} then those indices are ignored.
 #' @param ... Curl args passed on to \code{\link[crul]{verb-POST}}

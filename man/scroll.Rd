@@ -35,7 +35,7 @@ to parse JSON directly to a data.frame. If \code{FALSE} (Default), list
 output is given.}
 
 \item{stream_opts}{(list) A list of options passed to
-\code{\link[jsonlite:stream_out]{jsonlite::stream_out()}} - Except that you can't pass \code{x} as
+\code{\link[jsonlite:stream_in]{jsonlite::stream_out()}} - Except that you can't pass \code{x} as
 that's the data that's streamed out, and pass a file path sinstead of a
 connection to \code{con}. \code{pagesize} param doesn't do much as
 that's more or less controlled by paging with ES.}

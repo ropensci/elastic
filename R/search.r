@@ -20,8 +20,9 @@ Search <- function(conn, index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL,
   default_operator=NULL, explain=NULL, source=NULL, fields=NULL, sort=NULL, 
   track_scores=NULL, timeout=NULL, terminate_after=NULL, from=NULL, size=NULL, 
   search_type=NULL, lowercase_expanded_terms=NULL, analyze_wildcard=NULL, 
-  version=NULL, lenient=FALSE, body=list(), raw=FALSE, asdf=FALSE, track_total_hits = TRUE,
-  time_scroll=NULL, search_path="_search", stream_opts=list(), ...) {
+  version=NULL, lenient=FALSE, body=list(), raw=FALSE, asdf=FALSE,
+  track_total_hits = TRUE, time_scroll=NULL, search_path="_search",
+  stream_opts=list(), ignore_unavailable = FALSE, ...) {
 
   is_conn(conn)
   tmp <- search_POST(conn, search_path, cl(index), cl(type),
@@ -33,7 +34,9 @@ Search <- function(conn, index=NULL, type=NULL, q=NULL, df=NULL, analyzer=NULL,
       search_type = search_type, 
       lowercase_expanded_terms = lowercase_expanded_terms, 
       analyze_wildcard = analyze_wildcard, version = as_log(version), q = q, 
-      scroll = time_scroll, lenient = as_log(lenient), track_total_hits = ck(track_total_hits))), body, raw, asdf,
+      ignore_unavailable = as_log(ignore_unavailable),
+      scroll = time_scroll, lenient = as_log(lenient),
+      track_total_hits = ck(track_total_hits))), body, raw, asdf,
     stream_opts, ...)
   if (!is.null(time_scroll)) attr(tmp, "scroll") <- time_scroll
   return(tmp)

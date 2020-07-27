@@ -31,6 +31,7 @@ Search_uri(
   track_total_hits = TRUE,
   search_path = "_search",
   stream_opts = list(),
+  ignore_unavailable = FALSE,
   ...
 )
 }
@@ -141,6 +142,9 @@ to \code{NULL}}
 that's the data that's streamed out, and pass a file path instead of a
 connection to \code{con}. \code{pagesize} param doesn't do much as
 that's more or less controlled by paging with ES.}
+
+\item{ignore_unavailable}{(logical) What to do if an specified index name
+doesn't exist. If set to \code{TRUE} then those indices are ignored.}
 
 \item{...}{Curl args passed on to \code{\link[crul]{verb-POST}}}
 }
