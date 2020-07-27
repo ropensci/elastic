@@ -1,20 +1,15 @@
 PACKAGE := $(shell grep '^Package:' DESCRIPTION | sed -E 's/^Package:[[:space:]]+//')
 RSCRIPT = Rscript --no-init-file
 
-all: move rmd2md
-
-vignettes:
-		cd inst/vign;\
-		Rscript -e 'library(knitr); knit("search.Rmd"); knit("elastic.Rmd")'
-
-move:
-		cp inst/vign/search.md vignettes;\
-		cp inst/vign/elastic.md vignettes
-
-rmd2md:
+vign_elastic:
 		cd vignettes;\
-		mv search.md search.Rmd;\
-		mv elastic.md elastic.Rmd
+		${RSCRIPT} -e "Sys.setenv(NOT_CRAN='true'); knitr::knit('elastic.Rmd.og', output = 'elastic.Rmd')";\
+		cd ..
+
+vign_search:
+		cd vignettes;\
+		${RSCRIPT} -e "Sys.setenv(NOT_CRAN='true'); knitr::knit('search.Rmd.og', output = 'search.Rmd')";\
+		cd ..
 
 install: doc build
 	R CMD INSTALL . && rm *.tar.gz

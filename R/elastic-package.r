@@ -47,8 +47,7 @@
 #' worries, but if you install on a server with a public IP address, take the
 #' necessary precautions. There are a few options:
 #'
-#' - Shield <https://www.elastic.co/products/shield` - This is a paid
-#'  product - so probably only applicable to enterprise users
+#' - Shield - A paid product - so probably only applicable to enterprise users
 #' - DIY security - there are a variety of techniques for securing your
 #'  Elasticsearch. I collected a number of resources in a blog post at
 #'  <http://recology.info/2015/02/secure-elasticsearch/>
@@ -77,6 +76,6 @@
 #' @importFrom R6 R6Class
 #' @docType package
 #' @aliases elastic-package
-#' @author Scott Chamberlain \email{myrmecocystus@@gmail.com}
+#' @author Scott Chamberlain
 #' @name elastic
 NULL

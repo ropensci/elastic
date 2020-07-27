@@ -2,7 +2,7 @@ Package: elastic
 Title: General Purpose Interface to 'Elasticsearch'
 Description: Connect to 'Elasticsearch', a 'NoSQL' database built on the 'Java'
     Virtual Machine. Interacts with the 'Elasticsearch' 'HTTP' API
-    (<https://www.elastic.co/products/elasticsearch>), including functions for
+    (<https://www.elastic.co/elasticsearch/>), including functions for
     setting connection details to 'Elasticsearch' instances, loading bulk data,
     searching for documents with both 'HTTP' query variables and 'JSON' based body
     requests. In addition, 'elastic' provides functions for interacting with API's
@@ -28,6 +28,7 @@ Imports:
     R6
 Suggests:
     knitr,
+    rmarkdown,
     testthat
 RoxygenNote: 7.1.1
 X-schema.org-applicationCategory: Databases

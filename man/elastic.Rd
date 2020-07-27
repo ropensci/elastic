@@ -62,8 +62,7 @@ locally on your own machine without exposing a port to the outside world, no
 worries, but if you install on a server with a public IP address, take the
 necessary precautions. There are a few options:
 \itemize{
-\item Shield <https://www.elastic.co/products/shield` - This is a paid
-product - so probably only applicable to enterprise users
+\item Shield - A paid product - so probably only applicable to enterprise users
 \item DIY security - there are a variety of techniques for securing your
 Elasticsearch. I collected a number of resources in a blog post at
 \url{http://recology.info/2015/02/secure-elasticsearch/}
@@ -92,5 +91,5 @@ also illegal.
 }
 
 \author{
-Scott Chamberlain \email{myrmecocystus@gmail.com}
+Scott Chamberlain
 }

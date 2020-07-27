@@ -1,8 +1,13 @@
-<!--
-%\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{Search}
-%\VignetteEncoding{UTF-8}
--->
+---
+title: elastic searching
+author: Scott Chamberlain
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+    %\VignetteIndexEntry{elastic searching}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
 
 ```{r, eval=TRUE, echo=FALSE}
 knitr::opts_chunk$set(
@@ -11,9 +16,6 @@ knitr::opts_chunk$set(
   message = FALSE
 )
 ```
-
-elastic searching
-======
 
 ## Load elastic
 
@@ -47,7 +49,7 @@ out$hits$hits[[1]]
 ### Search an index by type
 
 ```{r}
-Search(x, index = "shakespeare", type = "line")$hits$hits[[1]]
+Search(x, index = "shakespeare")$hits$hits[[1]]
 ```
 
 ### Return certain fields
@@ -70,7 +72,7 @@ Search(x, index="shakespeare", size=1, from=1)$hits
 Using the `q` parameter you can pass in a query, which gets passed in the URI of the query. This type of query is less powerful than the below query passed in the body of the request, using the `body` parameter.
 
 ```{r}
-Search(x, index="shakespeare", type="line", q="speaker:KING HENRY IV")$hits$total
+Search(x, index="shakespeare", q="speaker:KING HENRY IV")$hits$total
 ```
 
 #### More complex queries
@@ -92,7 +94,7 @@ sapply(Search(x, index="shakespeare", version=TRUE, size=2)$hits$hits, "[[", "_v
 ### Get raw data
 
 ```{r}
-Search(x, index="shakespeare", type="line", raw=TRUE)
+Search(x, index="shakespeare", raw=TRUE)
 ```
 
 ### Curl debugging
@@ -100,7 +102,7 @@ Search(x, index="shakespeare", type="line", raw=TRUE)
 Common options are `verbose=TRUE`, `timeout_ms=1`, `followlocation=TRUE`.
 
 ```{r}
-out <- Search(x, index="shakespeare", type="line", verbose = TRUE)
+out <- Search(x, index="shakespeare", verbose = TRUE)
 ```
 
 ### Query DSL searches - queries sent in the body of the request
@@ -108,7 +110,7 @@ out <- Search(x, index="shakespeare", type="line", verbose = TRUE)
 Pass in as an R list
 
 ```{r}
-mapping_create(x, "shakespeare", "line", update_all_types = TRUE, body = '{
+mapping_create(x, "shakespeare", update_all_types = TRUE, body = '{
    "properties": {
      "text_entry": {
        "type":     "text",
@@ -260,7 +262,7 @@ body <- '{
    }
  }
 }'
-out <- Search(x, 'plos', 'article', body=body)
+out <- Search(x, 'plos', body=body)
 out$hits$total
 ```
 

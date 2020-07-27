@@ -1,37 +1,42 @@
-<!--
-%\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{elastic introduction}
-%\VignetteEncoding{UTF-8}
--->
+---
+title: elastic introduction
+author: Scott Chamberlain
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+    %\VignetteIndexEntry{elastic introduction}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
 
+```{r, eval=TRUE, echo=FALSE}
+knitr::opts_chunk$set(
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
+)
+```
 
-
-elastic introduction
-======
-
-`elastic` is an R client for [Elasticsearch](https://www.elastic.co/products/elasticsearch). This vignette is an introduction to the package, while other vignettes dive into the details of various topics.
+`elastic` is an R client for [Elasticsearch](https://www.elastic.co/elasticsearch). This vignette is an introduction to the package, while other vignettes dive into the details of various topics.
 
 ## Installation
 
 You can install from CRAN (once the package is up there)
 
-
-```r
+```{r eval=FALSE}
 install.packages("elastic")
 ```
 
 Or the development version from GitHub
 
-
-```r
-install.packages("devtools")
-devtools::install_github("ropensci/elastic")
+```{r eval=FALSE}
+install.packages("remotes")
+remotes::install_github("ropensci/elastic")
 ```
 
 Then load the package
 
-
-```r
+```{r}
 library("elastic")
 ```
 
@@ -74,23 +79,9 @@ __Note:__ Windows users should run the `elasticsearch.bat` file
 
 The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
 
-
-```r
+```{r}
 x <- connect()
 x
-```
-
-```
-#> <Elasticsearch Connection> 
-#>   transport:  http 
-#>   host:       127.0.0.1 
-#>   port:       9200 
-#>   path:       NULL 
-#>   username:   NULL 
-#>   password:   NULL 
-#>   errors:     simple 
-#>   headers (names):   
-#>   cainfo:  NULL
 ```
 
 On package load, your base url and port are set to `http://127.0.0.1` and `9200`, respectively. You can of course override these settings per session or for all sessions.
@@ -105,15 +96,13 @@ I have prepared a non-exported function useful for preparing the weird format th
 
 Elasticsearch provides some data on Shakespeare plays. I've provided a subset of this data in this package. Get the path for the file specific to your machine:
 
-
-```r
+```{r}
 shakespeare <- system.file("examples", "shakespeare_data.json", package = "elastic")
 ```
 
 Then load the data into Elasticsearch:
 
-
-```r
+```{r eval=FALSE}
 docs_bulk(x, shakespeare)
 ```
 
@@ -128,8 +117,7 @@ curl -XPUT localhost:9200/_bulk --data-binary @shakespeare.json
 
 A dataset inluded in the `elastic` package is metadata for PLOS scholarly articles. Get the file path, then load:
 
-
-```r
+```{r eval=FALSE}
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 docs_bulk(x, plosdat)
 ```
@@ -138,16 +126,14 @@ docs_bulk(x, plosdat)
 
 A dataset inluded in the `elastic` package is data for GBIF species occurrence records. Get the file path, then load:
 
-
-```r
+```{r eval=FALSE}
 gbifdat <- system.file("examples", "gbif_data.json", package = "elastic")
 docs_bulk(x, gbifdat)
 ```
 
 GBIF geo data with a coordinates element to allow `geo_shape` queries
 
-
-```r
+```{r eval=FALSE}
 gbifgeo <- system.file("examples", "gbif_geo.json", package = "elastic")
 docs_bulk(x, gbifgeo)
 ```
@@ -160,208 +146,42 @@ There are more datasets formatted for bulk loading in the `ropensci/elastic_data
 
 Search the `plos` index and only return 1 result
 
-
-```r
+```{r}
 Search(x, index="plos", size=1)$hits$hits
-```
-
-```
-#> [[1]]
-#> [[1]]$`_index`
-#> [1] "plos"
-#> 
-#> [[1]]$`_type`
-#> [1] "article"
-#> 
-#> [[1]]$`_id`
-#> [1] "0"
-#> 
-#> [[1]]$`_score`
-#> [1] 1
-#> 
-#> [[1]]$`_source`
-#> [[1]]$`_source`$id
-#> [1] "10.1371/journal.pone.0007737"
-#> 
-#> [[1]]$`_source`$title
-#> [1] "Phospholipase C-β4 Is Essential for the Progression of the Normal Sleep Sequence and Ultradian Body Temperature Rhythms in Mice"
 ```
 
 Search the `plos` index, and the `article` document type, and query for _antibody_, limit to 1 result
 
-
-```r
+```{r}
 Search(x, index="plos", type="article", q="antibody", size=1)$hits$hits
-```
-
-```
-#> [[1]]
-#> [[1]]$`_index`
-#> [1] "plos"
-#> 
-#> [[1]]$`_type`
-#> [1] "article"
-#> 
-#> [[1]]$`_id`
-#> [1] "216"
-#> 
-#> [[1]]$`_score`
-#> [1] 4.423327
-#> 
-#> [[1]]$`_source`
-#> [[1]]$`_source`$id
-#> [1] "10.1371/journal.pone.0107664"
-#> 
-#> [[1]]$`_source`$title
-#> [1] "Antibody-Validated Proteins in Inflamed Islets of Fulminant Type 1 Diabetes Profiled by Laser-Capture Microdissection Followed by Mass Spectrometry"
 ```
 
 ## Get documents
 
 Get document with `id=1`
 
-
-```r
+```{r}
 docs_get(x, index='plos', type='article', id=1)
-```
-
-```
-#> $`_index`
-#> [1] "plos"
-#> 
-#> $`_type`
-#> [1] "article"
-#> 
-#> $`_id`
-#> [1] "1"
-#> 
-#> $`_version`
-#> [1] 1
-#> 
-#> $found
-#> [1] TRUE
-#> 
-#> $`_source`
-#> $`_source`$id
-#> [1] "10.1371/journal.pone.0098602"
-#> 
-#> $`_source`$title
-#> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
 ```
 
 Get certain fields
 
-
-```r
+```{r}
 docs_get(x, index='plos', type='article', id=1, fields='id')
-```
-
-```
-#> $`_index`
-#> [1] "plos"
-#> 
-#> $`_type`
-#> [1] "article"
-#> 
-#> $`_id`
-#> [1] "1"
-#> 
-#> $`_version`
-#> [1] 1
-#> 
-#> $found
-#> [1] TRUE
 ```
 
 ## Get multiple documents at once
 
 Same index and type, different document ids
 
-
-```r
+```{r}
 docs_mget(x, index="plos", type="article", id=3:4)
-```
-
-```
-#> $docs
-#> $docs[[1]]
-#> $docs[[1]]$`_index`
-#> [1] "plos"
-#> 
-#> $docs[[1]]$`_type`
-#> [1] "article"
-#> 
-#> $docs[[1]]$`_id`
-#> [1] "3"
-#> 
-#> $docs[[1]]$`_version`
-#> [1] 1
-#> 
-#> $docs[[1]]$found
-#> [1] TRUE
-#> 
-#> $docs[[1]]$`_source`
-#> $docs[[1]]$`_source`$id
-#> [1] "10.1371/journal.pone.0107756"
-#> 
-#> $docs[[1]]$`_source`$title
-#> [1] "The Effect of S-Adenosylmethionine on Cognitive Performance in Mice: An Animal Model Meta-Analysis"
-#> 
-#> 
-#> 
-#> $docs[[2]]
-#> $docs[[2]]$`_index`
-#> [1] "plos"
-#> 
-#> $docs[[2]]$`_type`
-#> [1] "article"
-#> 
-#> $docs[[2]]$`_id`
-#> [1] "4"
-#> 
-#> $docs[[2]]$`_version`
-#> [1] 1
-#> 
-#> $docs[[2]]$found
-#> [1] TRUE
-#> 
-#> $docs[[2]]$`_source`
-#> $docs[[2]]$`_source`$id
-#> [1] "10.1371/journal.pone.0107758"
-#> 
-#> $docs[[2]]$`_source`$title
-#> [1] "Lactobacilli Inactivate Chlamydia trachomatis through Lactic Acid but Not H2O2"
 ```
 
 Different indeces, types, and ids
 
-
-```r
+```{r}
 docs_mget(x, index_type_id=list(c("plos","article",1), c("gbif","record",1)))$docs[[1]]
-```
-
-```
-#> $`_index`
-#> [1] "plos"
-#> 
-#> $`_type`
-#> [1] "article"
-#> 
-#> $`_id`
-#> [1] "1"
-#> 
-#> $`_version`
-#> [1] 1
-#> 
-#> $found
-#> [1] TRUE
-#> 
-#> $`_source`
-#> $`_source`$id
-#> [1] "10.1371/journal.pone.0098602"
-#> 
-#> $`_source`$title
-#> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
 ```
 
 ## Raw JSON data
@@ -370,30 +190,12 @@ You can optionally get back raw `json` from `Search()`, `docs_get()`, and `docs_
 
 For example:
 
-
-```r
+```{r}
 (out <- docs_mget(x, index="plos", type="article", id=5:6, raw=TRUE))
-```
-
-```
-#> [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"5\",\"_version\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0085123\",\"title\":\"MiR-21 Is under Control of STAT5 but Is Dispensable for Mammary Development and Lactation\"}},{\"_index\":\"plos\",\"_type\":\"article\",\"_id\":\"6\",\"_version\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098600\",\"title\":\"Correction: Designing Mixed Species Tree Plantations for the Tropics: Balancing Ecological Attributes of Species with Landholder Preferences in the Philippines\"}}]}"
-#> attr(,"class")
-#> [1] "elastic_mget"
 ```
 
 Then parse
 
-
-```r
+```{r}
 jsonlite::fromJSON(out)
-```
-
-```
-#> $docs
-#>   _index   _type _id _version found                   _source.id
-#> 1   plos article   5        1  TRUE 10.1371/journal.pone.0085123
-#> 2   plos article   6        1  TRUE 10.1371/journal.pone.0098600
-#>                                                                                                                                                     _source.title
-#> 1                                                                       MiR-21 Is under Control of STAT5 but Is Dispensable for Mammary Development and Lactation
-#> 2 Correction: Designing Mixed Species Tree Plantations for the Tropics: Balancing Ecological Attributes of Species with Landholder Preferences in the Philippines
 ```
