@@ -16,6 +16,7 @@ connect(
   force = FALSE,
   errors = "simple",
   warn = TRUE,
+  ignore_version = FALSE,
   ...
 )
 }
@@ -53,6 +54,14 @@ server when provided. Pulls warnings from response headers when given.
 default: \code{TRUE}. To turn these off, you can set \code{warn=FALSE} or
 wrap function calls in \code{\link[=suppressWarnings]{suppressWarnings()}}. You can also see warnings in
 headers by using curl verbose.}
+
+\item{ignore_version}{(logical) ignore Elasticsearch version checks?
+default: \code{FALSE}. Setting this to \code{TRUE} may cause some problems, it
+has not been fully tested yet. You may want to set this to \code{TRUE} if
+it's not possible to ping the root route of the Elasticsearch instance,
+which has the Elasticsearch version. We use the version to do
+alter what request is sent as different Elasticsearch versions allow
+different parameters.}
 
 \item{...}{additional curl options to be passed in ALL http requests}
 }

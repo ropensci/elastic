@@ -25,7 +25,7 @@ Search_uri(
   lowercase_expanded_terms = NULL,
   analyze_wildcard = NULL,
   version = NULL,
-  lenient = FALSE,
+  lenient = NULL,
   raw = FALSE,
   asdf = FALSE,
   track_total_hits = TRUE,
@@ -118,7 +118,7 @@ analyzed or not. Default: \code{FALSE}.}
 \item{version}{(logical) Print the document version with each document.}
 
 \item{lenient}{(logical) If \code{TRUE} will cause format based failures (like
-providing text to a numeric field) to be ignored. Default: \code{FALSE}}
+providing text to a numeric field) to be ignored. Default: \code{NULL}}
 
 \item{raw}{(logical) If \code{FALSE} (default), data is parsed to list.
 If \code{TRUE}, then raw JSON returned}

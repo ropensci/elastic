@@ -60,7 +60,7 @@
 #' analyzed or not. Default: \code{FALSE}.
 #' @param version (logical) Print the document version with each document.
 #' @param lenient (logical) If \code{TRUE} will cause format based failures (like 
-#' providing text to a numeric field) to be ignored. Default: \code{FALSE}
+#' providing text to a numeric field) to be ignored. Default: \code{NULL}
 #' @param track_total_hits (logical, numeric) If \code{TRUE} will always track 
 #' the number of hits that match the query accurately. If \code{FALSE} will 
 #' count documents accurately up to 10000 documents. If \code{is.integer} will 

@@ -6,6 +6,21 @@ test_that("connection works", {
   expect_equal(x$port, 9200)
 })
 
+test_that("ignore_version works as expected", {
+  x <- connect(ignore_version=TRUE)
+  expect_true(x$ignore_version)
+
+  # ping skips the http request and returns message, returns NULL
+  expect_message((z=x$ping()), "is set to TRUE")
+  expect_null(z)
+
+  # stop_es_version is skipped, returns NULL
+  expect_null((z=x$stop_es_version(110, "cat_aliases")))
+
+  # es_ver doesn't work
+  expect_error(suppressMessages(x$es_ver()))
+})
+
 test_that("errors choice doesn't affect other client connections", {
   a <- connect(errors = "simple")
   b <- connect(errors = "complete")

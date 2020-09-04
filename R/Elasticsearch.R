@@ -26,6 +26,13 @@ elastic_env <- new.env()
 #' @param headers named list of headers. These headers are used in all requests
 #' @param cainfo (character) path to a crt bundle, passed to curl option
 #' `cainfo`
+#' @param ignore_version (logical) ignore Elasticsearch version checks?
+#' default: `FALSE`. Setting this to `TRUE` may cause some problems, it 
+#' has not been fully tested yet. You may want to set this to `TRUE` if
+#' it's not possible to ping the root route of the Elasticsearch instance,
+#' which has the Elasticsearch version. We use the version to do
+#' alter what request is sent as different Elasticsearch versions allow
+#' different parameters.
 #' @param ... additional curl options to be passed in ALL http requests
 #'
 #' @details The default configuration is set up for localhost access on port
@@ -88,12 +95,12 @@ elastic_env <- new.env()
 connect <- function(host = "127.0.0.1", port = 9200, path = NULL,
   transport_schema = "http", user = NULL, pwd = NULL,
   headers = NULL, cainfo = NULL, force = FALSE,
-  errors = "simple", warn = TRUE, ...) {
+  errors = "simple", warn = TRUE, ignore_version = FALSE, ...) {
 
   Elasticsearch$new(host = host, port = port, path = path,
       transport_schema = transport_schema, user = user, pwd = pwd,
-      headers = headers, cainfo = cainfo, force = FALSE,
-      errors = errors, warn = warn, ...)
+      headers = headers, cainfo = cainfo, force = force,
+      errors = errors, warn = warn, ignore_version = ignore_version, ...)
 }
 
 Elasticsearch <- R6::R6Class(
@@ -111,11 +118,12 @@ Elasticsearch <- R6::R6Class(
     errors = "simple",
     opts = NULL,
     warn = TRUE,
+    ignore_version = FALSE,
 
     initialize = function(host = "127.0.0.1", port = 9200, path = NULL,
       transport_schema = "http", user = NULL, pwd = NULL,
       headers = NULL, cainfo = NULL, force = FALSE,
-      errors = "simple", warn = TRUE, ...) {
+      errors = "simple", warn = TRUE, ignore_version = FALSE, ...) {
 
       self$port <- port
       self$transport_schema <- transport_schema
@@ -125,6 +133,7 @@ Elasticsearch <- R6::R6Class(
       self$cainfo <- cainfo
       self$force <- force
       self$warn <- warn
+      self$ignore_version <- ignore_version
 
       # validate and store user error preference
       errors <- match.arg(errors, c('simple', 'complete'))
@@ -165,6 +174,7 @@ Elasticsearch <- R6::R6Class(
       cat(paste('  errors:    ', fun(self$errors)), "\n")
       cat(paste('  headers (names): ', ph(self)), "\n")
       cat(paste('  cainfo: ', if (!is.null(self$cainfo)) "<secret>" else 'NULL'), "\n")
+      cat(paste('  ignore ES version?: ', self$ignore_version), "\n")
     },
 
     make_url = function() {
@@ -180,7 +190,10 @@ Elasticsearch <- R6::R6Class(
       url
     },
 
-    ping = function(...) es_GET_(self, self$make_url(), ...),
+    ping = function(...) {
+      if (self$ignore_version) return(message("ignore_version is set to TRUE; see ?connect"))
+      es_GET_(self, self$make_url(), ...)
+    },
 
     info = function(...) {
       cli <- crul::HttpClient$new(self$make_url(), auth = self$make_up())
@@ -210,9 +223,11 @@ Elasticsearch <- R6::R6Class(
     },
 
     stop_es_version = function(ver_check, fxn) {
-      if (self$es_ver() < ver_check) {
-        stop(fxn, " is not available for this Elasticsearch version",
-             call. = FALSE)
+      if (!self$ignore_version) {
+        if (self$es_ver() < ver_check) {
+          stop(fxn, " is not available for this Elasticsearch version",
+               call. = FALSE)
+        }
       }
     },
 

@@ -25,7 +25,7 @@ Search(
   lowercase_expanded_terms = NULL,
   analyze_wildcard = NULL,
   version = NULL,
-  lenient = FALSE,
+  lenient = NULL,
   body = list(),
   raw = FALSE,
   asdf = FALSE,
@@ -120,7 +120,7 @@ analyzed or not. Default: \code{FALSE}.}
 \item{version}{(logical) Print the document version with each document.}
 
 \item{lenient}{(logical) If \code{TRUE} will cause format based failures (like
-providing text to a numeric field) to be ignored. Default: \code{FALSE}}
+providing text to a numeric field) to be ignored. Default: \code{NULL}}
 
 \item{body}{Query, either a list or json.}
 
