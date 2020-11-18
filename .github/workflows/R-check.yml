@@ -14,6 +14,14 @@ jobs:
         config:
         - { os: ubuntu-16.04, r: 'latest', es_ver: '7.9.3', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
         - { os: ubuntu-16.04, r: 'latest', es_ver: '7.5.1', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        - { os: ubuntu-16.04, r: 'latest', es_ver: '6.5.3', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        - { os: ubuntu-16.04, r: 'latest', es_ver: '5.5', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        - { os: ubuntu-16.04, r: 'latest', es_ver: '5.0', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        - { os: ubuntu-16.04, r: 'latest', es_ver: '2.3', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        - { os: ubuntu-16.04, r: 'latest', es_ver: '2', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        - { os: ubuntu-16.04, r: 'latest', es_ver: '1.7.2', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        - { os: ubuntu-16.04, r: 'latest', es_ver: '1.4', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        - { os: ubuntu-16.04, r: 'latest', es_ver: '1', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
