@@ -1,7 +1,9 @@
 library('testthat')
 library('elastic')
 
-x <- elastic::connect()
+port <- Sys.getenv("CI_ES_PORT", "")
+port <- if (!nzchar(port)) 9200 else port
+x <- elastic::connect(port = port)
 try_conn <- tryCatch(x$ping(), error = function(e) e)
 if (inherits(try_conn, "error")) {
   cat("Elasticsearch not available, skipping tests")
