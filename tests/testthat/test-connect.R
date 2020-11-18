@@ -3,7 +3,7 @@ context("connect")
 test_that("connection works", {
   x <- connect(port = Sys.getenv("TEST_ES_PORT"))
   expect_is(x, "Elasticsearch")
-  expect_equal(x$port, 9200)
+  expect_equal(x$port, Sys.getenv("TEST_ES_PORT"))
 })
 
 test_that("ignore_version works as expected", {

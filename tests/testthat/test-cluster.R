@@ -18,7 +18,9 @@ test_that("cluster_health", {
 
   expect_named(out2)
   expect_is(out2, "list")
-  expect_equal(out2$cluster_name, "elasticsearch")
+  # just test for class of cluster_name, can very depending on
+  # where ES is running (docker vs. binary, etc)
+  expect_is(out2$cluster_name, "character")
   expect_is(cluster_health(x), "list")
   expect_is(cluster_health(x, "shakespeare"), "list")
 })
@@ -29,7 +31,9 @@ test_that("cluster_state", {
 
   expect_named(out3)
   expect_is(out3, "list")
-  expect_equal(out3$cluster_name, "elasticsearch")
+  # just test for class of cluster_name, can very depending on
+  # where ES is running (docker vs. binary, etc)
+  expect_is(out3$cluster_name, "character")
   expect_is(cluster_state(x, raw = TRUE), "elastic_cluster_state")
 })
 

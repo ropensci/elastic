@@ -241,7 +241,7 @@ test_that("docs_bulk: suppressing progress bar works", {
 
 
 test_that("docs_bulk: pipline attachments work", {
-  skip_on_travis() # would need an ES plugin
+  skip_on_ci() # would need an ES plugin
 
   body <- '{
     "description" : "Extract attachment information",

@@ -94,7 +94,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
+          name: ${{ runner.os }}-r${{ matrix.config.r }}-r${{ matrix.config.es_ver }}-results
           path: check
 
       - name: Test coverage
