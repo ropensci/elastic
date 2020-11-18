@@ -1,7 +1,3 @@
-port <- Sys.getenv("CI_ES_PORT", "9200")
-# Sys.getenv("TEST_ES_PORT")
-Sys.setenv(TEST_ES_PORT = port)
-
 stop_es_version <- function(conn, ver_check, fxn) {
   ver <- es_version(conn)
   if (ver < ver_check) {
