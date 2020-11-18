@@ -1,6 +1,6 @@
 context("docs_bulk")
 
-x <- connect(warn = FALSE)
+x <- connect(port = Sys.getenv("TEST_ES_PORT"), warn = FALSE)
 
 test_that("docs_bulk - works with bulk format file", {
   # remove index if it exists

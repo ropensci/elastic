@@ -1,6 +1,6 @@
 context("docs")
 
-x <- connect(warn = FALSE)
+x <- connect(port = Sys.getenv("TEST_ES_PORT"), warn = FALSE)
 
 ## create indices first -----------------------------------
 ind <- "stuff_l"

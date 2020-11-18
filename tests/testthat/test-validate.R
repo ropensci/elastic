@@ -1,7 +1,7 @@
 context("validate")
 
-x <- connect(warn = FALSE)
-z <- connect(warn = TRUE)
+x <- connect(port = Sys.getenv("TEST_ES_PORT"), warn = FALSE)
+z <- connect(port = Sys.getenv("TEST_ES_PORT"), warn = TRUE)
 
 test_that("validate", {
   if (!index_exists(x, "twitter")) index_create(x, "twitter")

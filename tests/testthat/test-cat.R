@@ -1,6 +1,6 @@
 context("cat")
 
-x <- connect(warn = FALSE)
+x <- connect(port = Sys.getenv("TEST_ES_PORT"), warn = FALSE)
 load_shakespeare(x)
 
 test_that("cat_", {

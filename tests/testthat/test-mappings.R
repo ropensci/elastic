@@ -1,6 +1,6 @@
 context("mappings")
 
-x <- connect(warn = FALSE)
+x <- connect(port = Sys.getenv("TEST_ES_PORT"), warn = FALSE)
 load_omdb(x)
 load_plos(x)
 Sys.sleep(1)

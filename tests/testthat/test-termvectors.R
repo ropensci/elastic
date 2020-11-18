@@ -1,6 +1,6 @@
 context("termvectors")
 
-x <- connect(warn = FALSE)
+x <- connect(port = Sys.getenv("TEST_ES_PORT"), warn = FALSE)
 
 if (!index_exists(x, 'omdb')) {
   omdb <- system.file("examples", "omdb.json", package = "elastic")

@@ -1,7 +1,7 @@
 context("count")
 
-x <- connect(warn = FALSE)
-z <- connect(warn = TRUE)
+x <- connect(port = Sys.getenv("TEST_ES_PORT"), warn = FALSE)
+z <- connect(port = Sys.getenv("TEST_ES_PORT"), warn = TRUE)
 load_shakespeare(x)
 
 # sleep to make sure data is available as expected

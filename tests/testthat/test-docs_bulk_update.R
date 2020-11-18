@@ -1,6 +1,6 @@
 context("docs_bulk_update")
 
-x <- connect(warn = FALSE)
+x <- connect(port = Sys.getenv("TEST_ES_PORT"), warn = FALSE)
 
 test_that("docs_bulk_update - works with data.frame input", {
   # remove index if it exists

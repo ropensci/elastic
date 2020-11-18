@@ -1,6 +1,6 @@
 context("ingest/pipeline")
 
-x <- connect()
+x <- connect(port = Sys.getenv("TEST_ES_PORT"))
 
 body1 <- '{
   "description" : "do a thing",

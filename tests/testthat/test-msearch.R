@@ -1,6 +1,6 @@
 context("msearch")
 
-x <- connect(warn = FALSE)
+x <- connect(port = Sys.getenv("TEST_ES_PORT"), warn = FALSE)
 load_shakespeare(x)
 
 test_that("basic multi-search works", {
@@ -45,7 +45,7 @@ test_that("multi-search fails well", {
   }
 
   ### same, but complete errors
-  x <- connect(errors = "complete")
+  x <- connect(port = Sys.getenv("TEST_ES_PORT"), errors = "complete")
   expect_error(msearch(x, ff), 
     "action_request_validation_exception||ActionRequestValidationException")
 
