@@ -21,7 +21,7 @@ elastic
 
 ## Compatibility
 
-This client is developed following the latest stable releases, currently `v7.8.0`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
+This client is developed following the latest stable releases, currently `v7.10.0`. It is generally compatible with older versions of Elasticsearch. Unlike the [Python client](https://github.com/elastic/elasticsearch-py#compatibility), we try to keep as much compatibility as possible within a single version of this client, as that's an easier setup in R world.
 
 ## Security
 
@@ -75,12 +75,12 @@ If you're using boot2docker, you'll need to use the IP address in place of local
 
 __on OSX__
 
-+ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.8.0-darwin-x86_64.tar.gz`
-+ Extract: `tar -zxvf elasticsearch-7.8.0-darwin-x86_64.tar.gz`
-+ Move it: `sudo mv elasticsearch-7.8.0 /usr/local`
++ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.10.0-darwin-x86_64.tar.gz`
++ Extract: `tar -zxvf elasticsearch-7.10.0-darwin-x86_64.tar.gz`
++ Move it: `sudo mv elasticsearch-7.10.0 /usr/local`
 + Navigate to /usr/local: `cd /usr/local`
 + Delete symlinked `elasticsearch` directory: `rm -rf elasticsearch`
-+ Add shortcut: `sudo ln -s elasticsearch-7.8.0 elasticsearch` (replace version with your version)
++ Add shortcut: `sudo ln -s elasticsearch-7.10.0 elasticsearch` (replace version with your version)
 
 You can also install via Homebrew: `brew install elasticsearch`
 
@@ -173,8 +173,6 @@ A dataset inluded in the `elastic` package is metadata for PLOS scholarly articl
 
 ```r
 if (index_exists(x, "plos")) index_delete(x, "plos")
-#> $acknowledged
-#> [1] TRUE
 plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 plosdat <- type_remover(plosdat)
 invisible(docs_bulk(x, plosdat))
@@ -187,8 +185,6 @@ A dataset inluded in the `elastic` package is data for GBIF species occurrence r
 
 ```r
 if (index_exists(x, "gbif")) index_delete(x, "gbif")
-#> $acknowledged
-#> [1] TRUE
 gbifdat <- system.file("examples", "gbif_data.json", package = "elastic")
 gbifdat <- type_remover(gbifdat)
 invisible(docs_bulk(x, gbifdat))
@@ -199,8 +195,6 @@ GBIF geo data with a coordinates element to allow `geo_shape` queries
 
 ```r
 if (index_exists(x, "gbifgeo")) index_delete(x, "gbifgeo")
-#> $acknowledged
-#> [1] TRUE
 gbifgeo <- system.file("examples", "gbif_geo.json", package = "elastic")
 gbifgeo <- type_remover(gbifgeo)
 invisible(docs_bulk(x, gbifgeo))
