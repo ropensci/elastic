@@ -19,6 +19,13 @@ jobs:
       RSPM: ${{ matrix.config.rspm }}
       ES_VER: ${{ matrix.config.es_ver }}
 
+    services:
+      elasticsearch:
+        image: elasticsearch:7.10.0
+        ports:
+        - 9200/tcp
+        options: -e="discovery.type=single-node" --health-cmd="curl http://localhost:9200/_cluster/health" --health-interval=10s --health-timeout=5s --health-retries=10
+
     steps:
       - uses: actions/checkout@v2
 
@@ -50,17 +57,24 @@ jobs:
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(pak::local_system_requirements("ubuntu", "16.04"))')
       
-      - name: Configure sysctl limits
-        run: |
-          sudo swapoff -a
-          sudo sysctl -w vm.swappiness=1
-          sudo sysctl -w fs.file-max=262144
-          sudo sysctl -w vm.max_map_count=262144
+      # - name: Configure sysctl limits
+      #   run: |
+      #     sudo swapoff -a
+      #     sudo sysctl -w vm.swappiness=1
+      #     sudo sysctl -w fs.file-max=262144
+      #     sudo sysctl -w vm.max_map_count=262144
 
-      - name: Run Elasticsearch
-        uses: elastic/elastic-github-actions/elasticsearch@master
-        with:
-          stack-version: matrix.config.es_ver
+      # - name: Run Elasticsearch
+      #   uses: elastic/elastic-github-actions/elasticsearch@master
+      #   with:
+      #     stack-version: matrix.config.es_ver
+
+      - name: Verify Elasticsearch connection from host
+        env:
+          ELASTIC_SEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports[9200] }}
+        run: |
+          echo $ELASTIC_SEARCH_URL
+          curl -fsSL "$ELASTIC_SEARCH_URL/_cat/health?h=status"
 
       - name: Install dependencies
         run: |
