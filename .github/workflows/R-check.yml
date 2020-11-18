@@ -6,13 +6,14 @@ jobs:
   R-check:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }}) (${{ matrix.config.es_ver }})
 
     strategy:
       fail-fast: false
       matrix:
         config:
-        - { os: ubuntu-16.04, r: 'latest', es_ver: '7.10.0', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        - { os: ubuntu-16.04, r: 'latest', es_ver: '7.9.3', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        - { os: ubuntu-16.04, r: 'latest', es_ver: '7.5.1', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -21,7 +22,7 @@ jobs:
 
     services:
       elasticsearch:
-        image: elasticsearch:7.9.3
+        image: elasticsearch:${{ matrix.config.es_ver }}
         ports:
         - 9200/tcp
         options: -e="discovery.type=single-node" --health-cmd="curl http://localhost:9200/_cluster/health" --health-interval=10s --health-timeout=5s --health-retries=10
@@ -56,18 +57,6 @@ jobs:
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(pak::local_system_requirements("ubuntu", "16.04"))')
-      
-      # - name: Configure sysctl limits
-      #   run: |
-      #     sudo swapoff -a
-      #     sudo sysctl -w vm.swappiness=1
-      #     sudo sysctl -w fs.file-max=262144
-      #     sudo sysctl -w vm.max_map_count=262144
-
-      # - name: Run Elasticsearch
-      #   uses: elastic/elastic-github-actions/elasticsearch@master
-      #   with:
-      #     stack-version: matrix.config.es_ver
 
       - name: Verify Elasticsearch connection from host
         env:
@@ -109,6 +98,6 @@ jobs:
           path: check
 
       - name: Test coverage
-        if: matrix.config.os == 'macOS-latest' && matrix.config.r == 'latest'
+        if: matrix.config.os == 'ubuntu-16.04' && matrix.config.r == 'latest' && matrix.config.es_ver == '7.9.3'
         run: |
           Rscript -e 'install.packages("covr")' -e 'covr::codecov(token = "${{secrets.CODECOV_TOKEN}}")'
