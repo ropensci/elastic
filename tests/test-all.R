@@ -2,7 +2,6 @@ library('testthat')
 library('elastic')
 
 port <- Sys.getenv("CI_ES_PORT", "9200")
-# Sys.getenv("TEST_ES_PORT")
 Sys.setenv(TEST_ES_PORT = port)
 
 x <- elastic::connect(port = Sys.getenv("TEST_ES_PORT"))
