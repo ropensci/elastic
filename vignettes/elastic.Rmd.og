@@ -140,7 +140,7 @@ docs_bulk(x, gbifgeo)
 
 ### More data sets
 
-There are more datasets formatted for bulk loading in the `ropensci/elastic_data` GitHub repository. Find it at [https://github.com/ropensci/elastic_data](https://github.com/ropensci/elastic_data)
+There are more datasets formatted for bulk loading in the `sckott/elastic_data` GitHub repository. Find it at [https://github.com/sckott/elastic_data](https://github.com/sckott/elastic_data)
 
 ## Search
 
