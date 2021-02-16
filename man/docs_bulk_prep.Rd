@@ -11,7 +11,8 @@ docs_bulk_prep(
   type = NULL,
   chunk_size = 1000,
   doc_ids = NULL,
-  quiet = FALSE
+  quiet = FALSE,
+  digits = NA
 )
 }
 \arguments{
@@ -39,6 +40,10 @@ passing in, and will error if not. If you pass a factor we convert to
 character. Default: not passed}
 
 \item{quiet}{(logical) Suppress progress bar. Default: \code{FALSE}}
+
+\item{digits}{digits used by the parameter of the same name by
+\code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}} to convert data to JSON before being submitted to
+your ES instance. default: \code{NA}}
 }
 \value{
 File path(s). By default we use temporary files; these are cleaned

@@ -1,5 +1,5 @@
 make_bulk_ <- function(df, index, counter, es_ids, type = NULL, path = NULL,
-  action = "index") {
+  action = "index", digits = NA) {
 
   if (!is.character(counter)) {
     if (max(counter) >= 10000000000) {
@@ -15,7 +15,7 @@ make_bulk_ <- function(df, index, counter, es_ids, type = NULL, path = NULL,
     sprintf(metadata_fmt, action, index, counter)
   }
   data <- jsonlite::toJSON(df, collapse = FALSE, na = "null",
-    auto_unbox = TRUE)
+    auto_unbox = TRUE, digits = digits)
   tmpf <- if (is.null(path)) tempfile("elastic__") else path
   write_utf8(paste(metadata, data, sep = "\n"), tmpf)
   invisible(tmpf)
@@ -24,7 +24,7 @@ make_bulk_ <- function(df, index, counter, es_ids, type = NULL, path = NULL,
 bulk_ci_generator <- function(action = "index", es_ids = TRUE) {
   tt <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
     doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE,
-    query = list(), ...) {
+    query = list(), digits = NA, ...) {
 
     is_conn(conn)
     assert(quiet, "logical")
@@ -57,7 +57,7 @@ bulk_ci_generator <- function(action = "index", es_ids = TRUE) {
       if (!quiet) setTxtProgressBar(pb, i)
       resl[[i]] <- docs_bulk(conn,
         make_bulk_(x[data_chks[[i]], , drop = FALSE],
-        index, id_chks[[i]], es_ids, type, action = action),
+        index, id_chks[[i]], es_ids, type, action = action, digits = digits),
         query = query, ...)
     }
     return(resl)

@@ -2,6 +2,7 @@
 #'
 #' @export
 #' @inheritParams docs_bulk
+#' @param digits ignored, used in other docs bulk functions but not used here
 #' @details
 #'
 #' For doing deletes with a file already prepared for the bulk API,
@@ -33,7 +34,7 @@
 #' }
 docs_bulk_delete <- function(conn, x, index = NULL, type = NULL,
   chunk_size = 1000, doc_ids = NULL, raw = FALSE, quiet = FALSE,
-  query = list(), ...) {
+  query = list(), digits = NA, ...) {
 
   UseMethod("docs_bulk_delete", x)
 }
@@ -41,7 +42,7 @@ docs_bulk_delete <- function(conn, x, index = NULL, type = NULL,
 #' @export
 docs_bulk_delete.default <- function(conn, x, index = NULL, type = NULL,
   chunk_size = 1000, doc_ids = NULL, raw = FALSE, quiet = FALSE,
-  query = list(), ...) {
+  query = list(), digits = NA, ...) {
 
   stop("no 'docs_bulk_delete' method for class ", class(x)[[1L]],
     call. = FALSE)
@@ -51,7 +52,10 @@ docs_bulk_delete.default <- function(conn, x, index = NULL, type = NULL,
 docs_bulk_delete.data.frame <- make_bulk_df_generator(make_bulk_delete)
 
 # helpers
-make_bulk_delete <- function(df, index, counter, type = NULL, path = NULL) {
+make_bulk_delete <- function(df, index, counter, type = NULL, path = NULL,
+  digits = NULL) {
+  # digits is ignored within this function
+
   if (!is.character(counter)) {
     if (max(counter) >= 10000000000) {
       scipen <- getOption("scipen")

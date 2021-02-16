@@ -133,21 +133,21 @@
 #'   path = tempfile(fileext = ".json"), quiet = FALSE)
 #' }
 docs_bulk_prep <- function(x, index, path, type = NULL, chunk_size = 1000,
-  doc_ids = NULL, quiet = FALSE) {
+  doc_ids = NULL, quiet = FALSE, digits = NA) {
 
   UseMethod("docs_bulk_prep")
 }
 
 #' @export
 docs_bulk_prep.default <- function(x, index, path, type = NULL,
-  chunk_size = 1000, doc_ids = NULL, quiet = FALSE) {
+  chunk_size = 1000, doc_ids = NULL, quiet = FALSE, digits = NA) {
 
   stop("no 'docs_bulk_prep' method for class ", class(x), call. = FALSE)
 }
 
 #' @export
 docs_bulk_prep.data.frame <- function(x, index, path, type = NULL,
-  chunk_size = 1000, doc_ids = NULL, quiet = FALSE) {
+  chunk_size = 1000, doc_ids = NULL, quiet = FALSE, digits = NA) {
 
   assert(quiet, "logical")
   check_doc_ids(x, doc_ids)
@@ -175,7 +175,8 @@ docs_bulk_prep.data.frame <- function(x, index, path, type = NULL,
     if (!quiet) setTxtProgressBar(pb, i)
     resl[[i]] <- make_bulk(
       x[data_chks[[i]], , drop = FALSE], index, id_chks[[i]], es_ids, type,
-      path = if (length(data_chks) > 1) adjust_path(path, i) else path
+      path = if (length(data_chks) > 1) adjust_path(path, i) else path,
+      digits = digits
     )
   }
   return(unlist(resl))
@@ -183,7 +184,7 @@ docs_bulk_prep.data.frame <- function(x, index, path, type = NULL,
 
 #' @export
 docs_bulk_prep.list <- function(x, index, path, type = NULL,
-  chunk_size = 1000, doc_ids = NULL, quiet = FALSE) {
+  chunk_size = 1000, doc_ids = NULL, quiet = FALSE, digits = NA) {
 
   assert(quiet, "logical")
   check_doc_ids(x, doc_ids)
@@ -213,7 +214,8 @@ docs_bulk_prep.list <- function(x, index, path, type = NULL,
     if (!quiet) setTxtProgressBar(pb, i)
     resl[[i]] <- make_bulk(
       x[data_chks[[i]]], index, id_chks[[i]], es_ids, type,
-      path = if (length(data_chks) > 1) adjust_path(path, i) else path
+      path = if (length(data_chks) > 1) adjust_path(path, i) else path,
+      digits = digits
     )
   }
   return(unlist(resl))

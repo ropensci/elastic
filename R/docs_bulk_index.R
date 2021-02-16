@@ -33,7 +33,7 @@
 #' }
 docs_bulk_index <- function(conn, x, index = NULL, type = NULL,
   chunk_size = 1000, doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE,
-  query = list(), ...) {
+  query = list(), digits = NA, ...) {
   
   UseMethod("docs_bulk_index", x)
 }
@@ -41,7 +41,7 @@ docs_bulk_index <- function(conn, x, index = NULL, type = NULL,
 #' @export
 docs_bulk_index.default <- function(conn, x, index = NULL, type = NULL, 
   chunk_size = 1000, doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
-  quiet = FALSE, query = list(), ...) {
+  quiet = FALSE, query = list(), digits = NA, ...) {
   
   stop("no 'docs_bulk_index' method for class ", class(x)[[1L]], 
     call. = FALSE)

@@ -37,7 +37,7 @@
 #' }
 docs_bulk_update <- function(conn, x, index = NULL, type = NULL,
   chunk_size = 1000, doc_ids = NULL, raw = FALSE, quiet = FALSE, 
-  query = list(), ...) {
+  query = list(), digits = NA, ...) {
 
   UseMethod("docs_bulk_update", x)
 }
@@ -45,7 +45,7 @@ docs_bulk_update <- function(conn, x, index = NULL, type = NULL,
 #' @export
 docs_bulk_update.default <- function(conn, x, index = NULL, type = NULL,
   chunk_size = 1000, doc_ids = NULL, raw = FALSE, quiet = FALSE,
-  query = list(), ...) {
+  query = list(), digits = NA, ...) {
 
   stop("no 'docs_bulk_update' method for class ", class(x)[[1L]],
     call. = FALSE)
@@ -55,7 +55,9 @@ docs_bulk_update.default <- function(conn, x, index = NULL, type = NULL,
 docs_bulk_update.data.frame <- make_bulk_df_generator(make_bulk_update)
 
 # helpers
-make_bulk_update <- function(df, index, counter, type = NULL, path = NULL) {
+make_bulk_update <- function(df, index, counter, type = NULL, path = NULL,
+  digits = NA) {
+  
   if (!is.character(counter)) {
     if (max(counter) >= 10000000000) {
       scipen <- getOption("scipen")
@@ -84,7 +86,8 @@ make_bulk_update <- function(df, index, counter, type = NULL, path = NULL) {
   df$id <- NULL
   data <- lapply(seq_len(nrow(df)), function(i) {
     z <- list(doc = jsonlite::unbox(df[i,,drop=FALSE]), doc_as_upsert = TRUE)
-    jsonlite::toJSON(z, auto_unbox = TRUE, na = "null", null = "null")
+    jsonlite::toJSON(z, auto_unbox = TRUE, na = "null", null = "null",
+      digits = digits)
   })
 
   tmpf <- if (is.null(path)) tempfile("elastic__") else path

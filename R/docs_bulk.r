@@ -27,6 +27,9 @@
 #' options include: pipeline, refresh, routing, _source, _source_excludes,
 #' _source_includes, timeout, wait_for_active_shards. See the docs bulk
 #' ES page for details
+#' @param digits digits used by the parameter of the same name by
+#' [jsonlite::toJSON()] to convert data to JSON before being submitted to
+#' your ES instance. default: `NA`
 #' @param ... Pass on curl options to [crul::HttpClient]
 #'
 #' @details More on the Bulk API:
@@ -231,21 +234,24 @@
 #' invisible(docs_bulk(x, mtcars, index = "hello", quiet = FALSE))
 #' }
 docs_bulk <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
-  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, query = list(), ...) {
+  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, query = list(),
+  digits = NA, ...) {
 
   UseMethod("docs_bulk", x)
 }
 
 #' @export
 docs_bulk.default <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
-  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, query = list(), ...) {
+  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, query = list(),
+  digits = NA, ...) {
 
   stop("no 'docs_bulk' method for class ", class(x), call. = FALSE)
 }
 
 #' @export
 docs_bulk.data.frame <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
-  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, query = list(), ...) {
+  doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, query = list(),
+  digits = NA, ...) {
 
   is_conn(conn)
   assert(quiet, "logical")
@@ -276,7 +282,7 @@ docs_bulk.data.frame <- function(conn, x, index = NULL, type = NULL, chunk_size 
   for (i in seq_along(data_chks)) {
     if (!quiet) setTxtProgressBar(pb, i)
     resl[[i]] <- docs_bulk(conn, make_bulk(x[data_chks[[i]], , drop = FALSE], 
-      index, id_chks[[i]], es_ids, type), query = query, ...)
+      index, id_chks[[i]], es_ids, type, digits = digits), query = query, ...)
   }
   return(resl)
 }
@@ -284,7 +290,7 @@ docs_bulk.data.frame <- function(conn, x, index = NULL, type = NULL, chunk_size 
 #' @export
 docs_bulk.list <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
                            doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
-                           quiet = FALSE, query = list(), ...) {
+                           quiet = FALSE, query = list(), digits = NA, ...) {
 
   is_conn(conn)
   assert(quiet, "logical")
@@ -317,7 +323,7 @@ docs_bulk.list <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000
   for (i in seq_along(data_chks)) {
     if (!quiet) setTxtProgressBar(pb, i)
     resl[[i]] <- docs_bulk(conn, make_bulk(x[data_chks[[i]]], index, 
-      id_chks[[i]], es_ids, type), query = query, ...)
+      id_chks[[i]], es_ids, type, digits = digits), query = query, ...)
   }
   return(resl)
 }
@@ -325,7 +331,7 @@ docs_bulk.list <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000
 #' @export
 docs_bulk.character <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
                                 doc_ids = NULL, es_ids = TRUE, raw=FALSE, 
-                                quiet = FALSE, query = list(), ...) {
+                                quiet = FALSE, query = list(), digits = NA, ...) {
 
   is_conn(conn)
   stopifnot(file.exists(x))

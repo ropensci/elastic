@@ -1,4 +1,6 @@
-make_bulk <- function(df, index, counter, es_ids, type = NULL, path = NULL) {
+make_bulk <- function(df, index, counter, es_ids, type = NULL, path = NULL, 
+  digits = NA) {
+
   if (!is.character(counter)) {
     if (max(counter) >= 10000000000) {
       scipen <- getOption("scipen")
@@ -14,7 +16,8 @@ make_bulk <- function(df, index, counter, es_ids, type = NULL, path = NULL) {
     } else {
       sprintf(metadata_fmt, action, index, counter)
     }
-    data <- jsonlite::toJSON(df, collapse = FALSE, na = "null", auto_unbox = TRUE)
+    data <- jsonlite::toJSON(df, collapse = FALSE, na = "null",
+      auto_unbox = TRUE, digits = digits)
     towrite <- paste(metadata, data, sep = "\n")
   } else {
     towrite <- unlist(unname(Map(function(a, b) {
@@ -26,7 +29,8 @@ make_bulk <- function(df, index, counter, es_ids, type = NULL, path = NULL) {
       if (a$es_action == "delete") return(tmp)
       is_update <- a$es_action == "update"
       a$es_action <- NULL
-      dat <- jsonlite::toJSON(a, collapse = FALSE, na = "null", auto_unbox = TRUE)
+      dat <- jsonlite::toJSON(a, collapse = FALSE, na = "null",
+        auto_unbox = TRUE, digits = digits)
       if (is_update) dat <- sprintf('{"doc": %s, "doc_as_upsert": true}', dat)
       c(tmp, dat)
     }, split(df, seq_along(df)), counter)))

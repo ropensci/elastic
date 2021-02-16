@@ -14,6 +14,7 @@ docs_bulk_update(
   raw = FALSE,
   quiet = FALSE,
   query = list(),
+  digits = NA,
   ...
 )
 }
@@ -49,6 +50,10 @@ you get JSON; if \code{FALSE} you get a list. Default: \code{FALSE}}
 options include: pipeline, refresh, routing, _source, _source_excludes,
 _source_includes, timeout, wait_for_active_shards. See the docs bulk
 ES page for details}
+
+\item{digits}{digits used by the parameter of the same name by
+\code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}} to convert data to JSON before being submitted to
+your ES instance. default: \code{NA}}
 
 \item{...}{Pass on curl options to \link[crul:HttpClient]{crul::HttpClient}}
 }
