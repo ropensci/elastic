@@ -40,7 +40,7 @@ library("elastic")
 ## Elasticsearch info
 
 + [Elasticsearch home page](https://www.elastic.co/)
-+ [API docs](http://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
++ [API docs](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
 
 ## Install Elasticsearch
 

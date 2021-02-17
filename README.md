@@ -6,7 +6,7 @@ elastic
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-check](https://github.com/ropensci/elastic/workflows/R-check/badge.svg)](https://github.com/ropensci/elastic/actions?query=workflow%3AR-check)
 [![cran checks](https://cranchecks.info/badges/worst/elastic)](https://cranchecks.info/pkgs/elastic)
-[![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/elastic?color=E664A4)](https://github.com/metacran/cranlogs.app)
+[![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/elastic?color=E664A4)](https://github.com/r-hub/cranlogs.app)
 [![cran version](https://www.r-pkg.org/badges/version/elastic)](https://cran.r-project.org/package=elastic)
 [![codecov.io](https://codecov.io/github/ropensci/elastic/coverage.svg?branch=master)](https://codecov.io/github/ropensci/elastic?branch=master)
 
@@ -91,7 +91,7 @@ You can also install via Homebrew: `brew install elasticsearch`
 
 I am not totally clear on best practice here, but from what I understand, when you upgrade to a new version of Elasticsearch, place old `elasticsearch/data` and `elasticsearch/config` directories into the new installation (`elasticsearch/` dir). The new elasticsearch instance with replaced data and config directories should automatically update data to the new version and start working. Maybe if you use homebrew on a Mac to upgrade it takes care of this for you - not sure.
 
-Obviously, upgrading Elasticsearch while keeping it running is a different thing ([some help here from Elastic](http://www.elastic.co/guide/en/elasticsearch/reference/current/setup-upgrade.html)).
+Obviously, upgrading Elasticsearch while keeping it running is a different thing ([some help here from Elastic](https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-upgrade.html)).
 
 ## Start Elasticsearch
 
@@ -233,7 +233,7 @@ Search(x, index = "plos", size = 1)$hits$hits
 #> [1] "10.1371/journal.pone.0007737"
 #> 
 #> [[1]]$`_source`$title
-#> [1] "Phospholipase C-β4 Is Essential for the Progression of the Normal Sleep Sequence and Ultradian Body Temperature Rhythms in Mice"
+#> [1] "Phospholipase C-\u03b24 Is Essential for the Progression of the Normal Sleep Sequence and Ultradian Body Temperature Rhythms in Mice"
 ```
 
 Search the `plos` index, and query for _antibody_, limit to 1 result
@@ -392,7 +392,7 @@ docs_mget(x, index = "plos", id = 1:2)
 #> [1] "10.1371/journal.pone.0107757"
 #> 
 #> $docs[[2]]$`_source`$title
-#> [1] "Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition"
+#> [1] "Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1\u03b1 in Mesenchymal Transition"
 ```
 
 ## Parsing
@@ -404,7 +404,7 @@ For example:
 
 ```r
 (out <- docs_mget(x, index = "plos", id = 1:2, raw = TRUE))
-#> [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"_doc\",\"_id\":\"1\",\"_version\":1,\"_seq_no\":1,\"_primary_term\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098602\",\"title\":\"Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar\"}},{\"_index\":\"plos\",\"_type\":\"_doc\",\"_id\":\"2\",\"_version\":1,\"_seq_no\":2,\"_primary_term\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0107757\",\"title\":\"Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition\"}}]}"
+#> [1] "{\"docs\":[{\"_index\":\"plos\",\"_type\":\"_doc\",\"_id\":\"1\",\"_version\":1,\"_seq_no\":1,\"_primary_term\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0098602\",\"title\":\"Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar\"}},{\"_index\":\"plos\",\"_type\":\"_doc\",\"_id\":\"2\",\"_version\":1,\"_seq_no\":2,\"_primary_term\":1,\"found\":true,\"_source\":{\"id\":\"10.1371/journal.pone.0107757\",\"title\":\"Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1\u03b1 in Mesenchymal Transition\"}}]}"
 #> attr(,"class")
 #> [1] "elastic_mget"
 ```
@@ -423,7 +423,7 @@ jsonlite::fromJSON(out)
 #> 2 10.1371/journal.pone.0107757
 #>                                                                                                                                                _source.title
 #> 1 Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar
-#> 2                                     Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition
+#> 2                                Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1\u03b1 in Mesenchymal Transition
 ```
 
 ## Known pain points
@@ -445,5 +445,3 @@ A screencast introducing the package: <a href="https://vimeo.com/124659179">vime
 * License: MIT
 * Get citation information for `elastic` in R doing `citation(package = 'elastic')`
 * Please note that this package is released with a [Contributor Code of Conduct](https://ropensci.org/code-of-conduct/). By contributing to this project, you agree to abide by its terms.
-
-[![rofooter](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)

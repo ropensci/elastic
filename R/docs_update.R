@@ -14,7 +14,7 @@
 #' @param parent ID of the parent document. Is is only used for routing and
 #' when for the upsert request
 #' @param refresh Refresh the index after performing the operation. See
-#' <http://bit.ly/2ezW9Zr> for details
+#' <https://bit.ly/2ezW9Zr> for details
 #' @param retry_on_conflict Specify how many times should the operation be
 #' retried when a conflict occurs (default: 0)
 #' @param routing (character) Specific routing value
@@ -29,16 +29,16 @@
 #' a number (in milliseconds) or any valid time value (e.g, 86400000, 1d).
 #' @param wait_for_active_shards The number of shard copies required to be
 #' active before proceeding with the update operation.
-#' See <http://bit.ly/2fbqkZ1> for details.
+#' See <https://bit.ly/2fbqkZ1> for details.
 #' @param source Allows to control if and how the updated source should be
 #' returned in the response. By default the updated source is not returned.
-#' See <http://bit.ly/2efmYiE> filtering for details
+#' See <https://bit.ly/2efmYiE> filtering for details
 #' @param detect_noop (logical) Specifying `TRUE` will cause Elasticsearch
 #' to check if there are changes and, if there aren't, turn the update request
 #' into a noop.
 #' @param callopts Curl options passed on to [crul::HttpClient]
 #' @param ... Further args to query DSL
-#' @references <http://bit.ly/2eVYqLz>
+#' @references <https://bit.ly/2eVYqLz>
 #' @examples \dontrun{
 #' (x <- connect())
 #' if (!index_exists(x, 'plos')) {
