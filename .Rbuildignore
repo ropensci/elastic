@@ -20,3 +20,4 @@ notes-v2.md
 ^_pkgdown\.yml$
 ^docs$
 ^revdep$
+vignettes
