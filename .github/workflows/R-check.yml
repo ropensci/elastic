@@ -13,15 +13,15 @@ jobs:
       matrix:
         config:
         - { os: ubuntu-16.04, r: 'latest', es_ver: '7.9.3', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-        - { os: ubuntu-16.04, r: 'latest', es_ver: '7.5.1', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-        - { os: ubuntu-16.04, r: 'latest', es_ver: '6.5.3', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-        - { os: ubuntu-16.04, r: 'latest', es_ver: '5.5', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-        - { os: ubuntu-16.04, r: 'latest', es_ver: '5.0', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-        - { os: ubuntu-16.04, r: 'latest', es_ver: '2.3', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-        - { os: ubuntu-16.04, r: 'latest', es_ver: '2', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-        - { os: ubuntu-16.04, r: 'latest', es_ver: '1.7.2', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-        - { os: ubuntu-16.04, r: 'latest', es_ver: '1.4', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-        - { os: ubuntu-16.04, r: 'latest', es_ver: '1', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        # - { os: ubuntu-16.04, r: 'latest', es_ver: '7.5.1', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        # - { os: ubuntu-16.04, r: 'latest', es_ver: '6.5.3', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        # - { os: ubuntu-16.04, r: 'latest', es_ver: '5.5', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        # - { os: ubuntu-16.04, r: 'latest', es_ver: '5.0', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        # - { os: ubuntu-16.04, r: 'latest', es_ver: '2.3', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        # - { os: ubuntu-16.04, r: 'latest', es_ver: '2', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        # - { os: ubuntu-16.04, r: 'latest', es_ver: '1.7.2', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        # - { os: ubuntu-16.04, r: 'latest', es_ver: '1.4', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        # - { os: ubuntu-16.04, r: 'latest', es_ver: '1', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -108,4 +108,4 @@ jobs:
       - name: Test coverage
         if: matrix.config.os == 'ubuntu-16.04' && matrix.config.r == 'latest' && matrix.config.es_ver == '7.9.3'
         run: |
-          Rscript -e 'install.packages("covr")' -e 'covr::codecov(token = "${{secrets.CODECOV_TOKEN}}")'
+          Rscript -e 'install.packages("covr")' -e 'Sys.setenv(NOT_CRAN = "true"); covr::codecov(token = "${{secrets.CODECOV_TOKEN}}")'
