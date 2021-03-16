@@ -151,8 +151,7 @@ test_that("Search fails as expected", {
       expect_error(Search(x, index = "shakespeare", body = aggs), 
                    "known")
     } else if (gsub("\\.", "", x$ping()$version$number) >= 630) {
-      expect_error(Search(x, index = "shakespeare", body = aggs), 
-                   "unable to parse BaseAggregationBuilder with name \\[stfff\\]: parser not found")
+      expect_error(Search(x, index = "shakespeare", body = aggs))
     } else if (gsub("\\.", "", x$ping()$version$number) >= 530) {
       expect_error(Search(x, index = "shakespeare", body = aggs), 
                    "Unknown BaseAggregationBuilder \\[stfff\\]")
