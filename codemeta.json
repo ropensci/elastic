@@ -5,19 +5,18 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "elastic",
-  "description": "Connect to 'Elasticsearch', a 'NoSQL' database built on the 'Java'\n    Virtual Machine. Interacts with the 'Elasticsearch' 'HTTP' API\n    (<https://www.elastic.co/products/elasticsearch>), including functions for\n    setting connection details to 'Elasticsearch' instances, loading bulk data,\n    searching for documents with both 'HTTP' query variables and 'JSON' based body\n    requests. In addition, 'elastic' provides functions for interacting with API's\n    for 'indices', documents, nodes, clusters, an interface to the cat API, and\n    more.",
+  "description": "Connect to 'Elasticsearch', a 'NoSQL' database built on the 'Java'\n    Virtual Machine. Interacts with the 'Elasticsearch' 'HTTP' API\n    (<https://www.elastic.co/elasticsearch/>), including functions for\n    setting connection details to 'Elasticsearch' instances, loading bulk data,\n    searching for documents with both 'HTTP' query variables and 'JSON' based body\n    requests. In addition, 'elastic' provides functions for interacting with API's\n    for 'indices', documents, nodes, clusters, an interface to the cat API, and\n    more.",
   "name": "elastic: General Purpose Interface to 'Elasticsearch'",
   "codeRepository": "https://github.com/ropensci/elastic",
   "issueTracker": "https://github.com/ropensci/elastic/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.6.2",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.6.2 Patched (2019-12-12 r77564)",
+  "runtimePlatform": "R version 4.0.4 Patched (2021-02-17 r80031)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -43,18 +42,6 @@
     }
   ],
   "softwareSuggestions": [
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "knitr",
-      "name": "knitr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=knitr"
-    },
     {
       "@type": "SoftwareApplication",
       "identifier": "testthat",
@@ -126,16 +113,15 @@
       "sameAs": "https://CRAN.R-project.org/package=R6"
     }
   ],
-  "contIntegration": ["https://travis-ci.org/ropensci/elastic", "https://codecov.io/github/ropensci/elastic?branch=master"],
   "releaseNotes": "https://github.com/ropensci/elastic/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/elastic/blob/master/README.md",
-  "fileSize": "1213.449KB",
+  "fileSize": "5087.624KB",
   "applicationCategory": "Databases",
   "isPartOf": "https://ropensci.org",
   "keywords": ["database", "Elasticsearch", "HTTP", "API", "search", "NoSQL", "Java", "JSON", "documents", "elasticsearch", "http", "database-wrapper", "json", "rstats", "r", "r-package", "data-science", "etl"],
   "contributor": {},
   "copyrightHolder": {},
   "funder": {},
-  "developmentStatus": "http://www.repostatus.org/#active",
-  "relatedLink": "https://docs.ropensci.org/elastic"
+  "developmentStatus": "https://www.repostatus.org/#active",
+  "relatedLink": ["https://docs.ropensci.org/elastic", "https://docs.ropensci.org/elastic/"]
 }
