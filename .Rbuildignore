@@ -21,4 +21,3 @@ notes-v2.md
 ^docs$
 ^revdep$
 vignettes
-tests/test-all.R
