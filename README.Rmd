@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 [![cran checks](https://cranchecks.info/badges/worst/elastic)](https://cranchecks.info/pkgs/elastic)
 [![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/elastic?color=E664A4)](https://github.com/r-hub/cranlogs.app)
 [![cran version](https://www.r-pkg.org/badges/version/elastic)](https://cran.r-project.org/package=elastic)
-[![codecov.io](https://codecov.io/github/ropensci/elastic/coverage.svg?branch=master)](https://codecov.io/github/ropensci/elastic?branch=master)
+<!-- [![codecov.io](https://codecov.io/github/ropensci/elastic/coverage.svg?branch=master)](https://codecov.io/github/ropensci/elastic?branch=master) -->
 
 **A general purpose R interface to [Elasticsearch](https://www.elastic.co/elasticsearch/)**
 
