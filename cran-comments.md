@@ -1,7 +1,7 @@
 ## Test environments
 
-* local OS X install, R 3.6.2 patched
-* ubuntu 14.04 (on travis-ci), R 3.6.2
+* local macOS install, R 4.0.4 patched
+* ubuntu 16.04 (on github actions), R 4.0.4
 * win-builder (devel and release)
 
 ## R CMD check results
@@ -10,12 +10,12 @@
 
 ## Reverse dependencies
 
-* I have run R CMD check on the 1 downstream dependency
+* I have run R CMD check on the 2 downstream dependencies, with no problems 
 (<https://github.com/ropensci/elastic/blob/master/revdep/README.md>).
 
 -------
 
-This version makes some changes to support newer versions of Elasticsearch, and fixes some bugs.
+This version xxxx.
 
 Thanks! 
 Scott Chamberlain
