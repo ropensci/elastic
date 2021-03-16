@@ -23,8 +23,6 @@
 #' @param ... Curl args passed on to [crul::verb-POST]
 #'
 #' @seealso [Search()]
-#' @references
-#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-scroll.html>
 #'
 #' @return `scroll()` returns a list, identical to what
 #' [Search()] returns. With attribute `scroll` that is the

@@ -50,7 +50,7 @@
 #' - Shield - A paid product - so probably only applicable to enterprise users
 #' - DIY security - there are a variety of techniques for securing your
 #'  Elasticsearch. I collected a number of resources in a blog post at
-#'  <http://recology.info/2015/02/secure-elasticsearch/>
+#'  <https://recology.info/2015/02/secure-elasticsearch/>
 #'
 #' @section Elasticsearch changes:
 #' As of Elasticsearch v2:

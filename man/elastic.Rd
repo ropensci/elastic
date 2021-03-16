@@ -65,7 +65,7 @@ necessary precautions. There are a few options:
 \item Shield - A paid product - so probably only applicable to enterprise users
 \item DIY security - there are a variety of techniques for securing your
 Elasticsearch. I collected a number of resources in a blog post at
-\url{http://recology.info/2015/02/secure-elasticsearch/}
+\url{https://recology.info/2015/02/secure-elasticsearch/}
 }
 }
 

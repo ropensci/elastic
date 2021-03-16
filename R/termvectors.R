@@ -33,7 +33,7 @@
 #' @param ... Curl args passed on to [crul::verb-POST]
 #'
 #' @references
-#' <http://www.elastic.co/guide/en/elasticsearch/reference/current/docs-termvectors.html>
+#' <https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-termvectors.html>
 #'
 #' @details Returns information and statistics on terms in the fields of a
 #' particular document. The document could be stored in the index or

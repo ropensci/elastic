@@ -52,7 +52,7 @@
 #' @param search_type (character) The type of the search operation to perform. 
 #' Can be \code{query_then_fetch} (default) or \code{dfs_query_then_fetch}. 
 #' Types \code{scan} and \code{count} are deprecated. 
-#' See \url{https://bsit.ly/19Am9xP} for more details on the different types of 
+#' See Elasticsearch docs for more details on the different types of 
 #' search that can be performed.
 #' @param lowercase_expanded_terms (logical) Should terms be automatically 
 #' lowercased or not. Default: \code{TRUE}.

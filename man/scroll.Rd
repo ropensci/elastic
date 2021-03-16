@@ -248,9 +248,6 @@ NROW(df <- jsonlite::stream_in(file(file)))
 head(df)
 }
 }
-\references{
-\url{https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-scroll.html}
-}
 \seealso{
 \code{\link[=Search]{Search()}}
 }

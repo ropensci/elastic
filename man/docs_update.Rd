@@ -42,8 +42,7 @@ Required}
 \item{fields}{A comma-separated list of fields to return in the response}
 
 \item{source}{Allows to control if and how the updated source should be
-returned in the response. By default the updated source is not returned.
-See \url{https://bit.ly/2efmYiE} filtering for details}
+returned in the response. By default the updated source is not returned.}
 
 \item{version}{(character) Explicit version number for concurrency control}
 
@@ -64,8 +63,7 @@ of the document,  meaning it can be based on the time of indexing or on
 any time provided. The provided ttl must be strictly positive and can be
 a number (in milliseconds) or any valid time value (e.g, 86400000, 1d).}
 
-\item{refresh}{Refresh the index after performing the operation. See
-\url{https://bit.ly/2ezW9Zr} for details}
+\item{refresh}{Refresh the index after performing the operation.}
 
 \item{timeout}{(character) Explicit operation timeout, e.g,. 5m (for
 5 minutes)}
@@ -74,8 +72,7 @@ a number (in milliseconds) or any valid time value (e.g, 86400000, 1d).}
 retried when a conflict occurs (default: 0)}
 
 \item{wait_for_active_shards}{The number of shard copies required to be
-active before proceeding with the update operation.
-See \url{https://bit.ly/2fbqkZ1} for details.}
+active before proceeding with the update operation.}
 
 \item{detect_noop}{(logical) Specifying \code{TRUE} will cause Elasticsearch
 to check if there are changes and, if there aren't, turn the update request
@@ -117,7 +114,4 @@ docs_update(x, index='stuffthings', id=1,
   body = list(doc = list(name = "hello", what = "bar")),
   source = 'name')
 }
-}
-\references{
-\url{https://bit.ly/2eVYqLz}
 }
