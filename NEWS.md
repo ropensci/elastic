@@ -3,21 +3,13 @@ elastic 1.2.0
 
 ### NEW FEATURES
 
-* xxx (#xxx)
-* xxx (#xxx)
-* xxx (#xxx)
+* `Search()` and `Search_uri()` gain new parameter `ignore_unavailable` to determine what happens if an index name does not exist (#273)
+* `connect()` gains new parameter `ignore_version`. Internally, `elastic` sometimes checks the Elasticsearch version that the user is connected to to determine what to do. may be useful when it's not possible to check the Elasticsearch version, e.g., when its not possible to ping the root route of the API  (#275)
+* all docs bulk functions gain parameter `digits` that is passed down to `jsonlite::toJSON() used internally`. thus, `digits` will control the number of decimal digits used in the JSON the package creates to be bulk loaded into Elasticsearch (#279)
 
 ### MINOR IMPROVEMENTS
 
-* xxx (#xxx)
-* xxx (#xxx)
-* xxx (#xxx)
-
-### BUG FIXES
-
-* xxx (#xxx)
-* xxx (#xxx)
-* xxx (#xxx)
+* fix README instructions on installing Elasticsearch from docker; there's no latest tag, so use a specific version (#277) thanks @ColinFay
 
 
 elastic 1.1.0

@@ -15,7 +15,7 @@
 
 -------
 
-This version xxxx.
+This version adds new parameters and improves documentation.
 
 Thanks! 
 Scott Chamberlain
