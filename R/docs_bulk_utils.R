@@ -17,7 +17,7 @@ make_bulk <- function(df, index, counter, es_ids, type = NULL, path = NULL,
       sprintf(metadata_fmt, action, index, counter)
     }
     data <- jsonlite::toJSON(df, collapse = FALSE, na = "null",
-      auto_unbox = TRUE, digits = digits)
+      auto_unbox = TRUE, digits = digits, sf = "features")
     towrite <- paste(metadata, data, sep = "\n")
   } else {
     towrite <- unlist(unname(Map(function(a, b) {
@@ -30,7 +30,7 @@ make_bulk <- function(df, index, counter, es_ids, type = NULL, path = NULL,
       is_update <- a$es_action == "update"
       a$es_action <- NULL
       dat <- jsonlite::toJSON(a, collapse = FALSE, na = "null",
-        auto_unbox = TRUE, digits = digits)
+        auto_unbox = TRUE, digits = digits, sf = "features")
       if (is_update) dat <- sprintf('{"doc": %s, "doc_as_upsert": true}', dat)
       c(tmp, dat)
     }, split(df, seq_along(df)), counter)))

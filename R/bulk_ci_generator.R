@@ -15,7 +15,7 @@ make_bulk_ <- function(df, index, counter, es_ids, type = NULL, path = NULL,
     sprintf(metadata_fmt, action, index, counter)
   }
   data <- jsonlite::toJSON(df, collapse = FALSE, na = "null",
-    auto_unbox = TRUE, digits = digits)
+    auto_unbox = TRUE, digits = digits, sf = "features")
   tmpf <- if (is.null(path)) tempfile("elastic__") else path
   write_utf8(paste(metadata, data, sep = "\n"), tmpf)
   invisible(tmpf)

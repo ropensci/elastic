@@ -87,7 +87,7 @@ make_bulk_update <- function(df, index, counter, type = NULL, path = NULL,
   data <- lapply(seq_len(nrow(df)), function(i) {
     z <- list(doc = jsonlite::unbox(df[i,,drop=FALSE]), doc_as_upsert = TRUE)
     jsonlite::toJSON(z, auto_unbox = TRUE, na = "null", null = "null",
-      digits = digits)
+      digits = digits, sf = "features")
   })
 
   tmpf <- if (is.null(path)) tempfile("elastic__") else path
