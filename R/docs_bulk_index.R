@@ -1,25 +1,25 @@
 #' Use the bulk API to index documents
-#' 
+#'
 #' @export
 #' @inheritParams docs_bulk
-#' @details 
-#' 
-#' For doing index with a file already prepared for the bulk API, 
+#' @details
+#'
+#' For doing index with a file already prepared for the bulk API,
 #' see [docs_bulk()]
-#' 
+#'
 #' Only data.frame's are supported for now.
 #' @family bulk-functions
-#' @references 
+#' @references
 #' <https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html>
 #' @examples \dontrun{
 #' x <- connect()
 #' if (index_exists(x, "foobar")) index_delete(x, "foobar")
-#' 
+#'
 #' df <- data.frame(name = letters[1:3], size = 1:3, id = 100:102)
 #' docs_bulk_index(x, df, 'foobar')
 #' docs_bulk_index(x, df, 'foobar', es_ids = FALSE)
 #' Search(x, "foobar", asdf = TRUE)$hits$hits
-#' 
+#'
 #' # more examples
 #' docs_bulk_index(x, mtcars, index = "hello")
 #' ## field names cannot contain dots
@@ -33,17 +33,17 @@
 #' }
 docs_bulk_index <- function(conn, x, index = NULL, type = NULL,
   chunk_size = 1000, doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE,
-  query = list(), digits = NA, ...) {
-  
+  query = list(), digits = NA, sf = NULL, ...) {
+
   UseMethod("docs_bulk_index", x)
 }
 
 #' @export
-docs_bulk_index.default <- function(conn, x, index = NULL, type = NULL, 
-  chunk_size = 1000, doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
-  quiet = FALSE, query = list(), digits = NA, ...) {
-  
-  stop("no 'docs_bulk_index' method for class ", class(x)[[1L]], 
+docs_bulk_index.default <- function(conn, x, index = NULL, type = NULL,
+  chunk_size = 1000, doc_ids = NULL, es_ids = TRUE, raw = FALSE,
+  quiet = FALSE, query = list(), digits = NA, sf = NULL, ...) {
+
+  stop("no 'docs_bulk_index' method for class ", class(x)[[1L]],
     call. = FALSE)
 }
 

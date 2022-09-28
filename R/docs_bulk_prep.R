@@ -9,13 +9,13 @@
 #' required.
 #' @return File path(s). By default we use temporary files; these are cleaned
 #' up at the end of a session
-#' 
+#'
 #' @section Tempfiles:
-#' In `docs_bulk` we create temporary files in some cases, and delete 
+#' In `docs_bulk` we create temporary files in some cases, and delete
 #' those before the function exits. However, we don't clean up those files
-#' in this function because the point of the function is to create the 
+#' in this function because the point of the function is to create the
 #' newline delimited JSON files that you need. Tempfiles are cleaned up
-#' when you R session ends though - be aware of that. If you want to 
+#' when you R session ends though - be aware of that. If you want to
 #' keep the files make sure to move them outside of the temp directory.
 #'
 #' @family bulk-functions
@@ -25,11 +25,11 @@
 #' ff <- tempfile(fileext = ".json")
 #' docs_bulk_prep(mtcars, index = "hello", path = ff)
 #' readLines(ff)
-#' 
+#'
 #' ## field names cannot contain dots
 #' names(iris) <- gsub("\\.", "_", names(iris))
 #' docs_bulk_prep(iris, "iris", path = tempfile(fileext = ".json"))
-#' 
+#'
 #' ## type can be missing, but index can not
 #' docs_bulk_prep(iris, "flowers", path = tempfile(fileext = ".json"))
 #'
@@ -99,19 +99,19 @@
 #' }
 #' unlist(paths)
 #'
-#' 
+#'
 #' # A mix of actions
 #' ## make sure you use a column named 'es_action' or this won't work
 #' ## if you need to delete or update you need document IDs
 #' if (index_exists(x, "baz")) index_delete(x, "baz")
-#' df <- data.frame(a = 1:5, b = 6:10, c = letters[1:5], stringsAsFactors = FALSE) 
+#' df <- data.frame(a = 1:5, b = 6:10, c = letters[1:5], stringsAsFactors = FALSE)
 #' f <- tempfile(fileext = ".json")
 #' invisible(docs_bulk_prep(df, "baz", f))
 #' cat(readLines(f), sep = "\n")
 #' docs_bulk(x, f)
 #' Sys.sleep(2)
 #' (res <- Search(x, 'baz', asdf=TRUE)$hits$hits)
-#' 
+#'
 #' df[1, "a"] <- 99
 #' df[1, "c"] <- "aa"
 #' df[3, "c"] <- 33
@@ -123,31 +123,31 @@
 #' invisible(docs_bulk_prep(df, "baz", path = f, doc_ids = df$id))
 #' cat(readLines(f), sep = "\n")
 #' docs_bulk(x, f)
-#' 
-#' 
+#'
+#'
 #' # suppress progress bar
 #' docs_bulk_prep(mtcars, index = "hello",
 #'   path = tempfile(fileext = ".json"), quiet = TRUE)
-#' ## vs. 
+#' ## vs.
 #' docs_bulk_prep(mtcars, index = "hello",
 #'   path = tempfile(fileext = ".json"), quiet = FALSE)
 #' }
 docs_bulk_prep <- function(x, index, path, type = NULL, chunk_size = 1000,
-  doc_ids = NULL, quiet = FALSE, digits = NA) {
+  doc_ids = NULL, quiet = FALSE, digits = NA, sf = NULL) {
 
   UseMethod("docs_bulk_prep")
 }
 
 #' @export
 docs_bulk_prep.default <- function(x, index, path, type = NULL,
-  chunk_size = 1000, doc_ids = NULL, quiet = FALSE, digits = NA) {
+  chunk_size = 1000, doc_ids = NULL, quiet = FALSE, digits = NA, sf = NULL) {
 
   stop("no 'docs_bulk_prep' method for class ", class(x), call. = FALSE)
 }
 
 #' @export
 docs_bulk_prep.data.frame <- function(x, index, path, type = NULL,
-  chunk_size = 1000, doc_ids = NULL, quiet = FALSE, digits = NA) {
+  chunk_size = 1000, doc_ids = NULL, quiet = FALSE, digits = NA, sf = NULL) {
 
   assert(quiet, "logical")
   check_doc_ids(x, doc_ids)
@@ -176,7 +176,7 @@ docs_bulk_prep.data.frame <- function(x, index, path, type = NULL,
     resl[[i]] <- make_bulk(
       x[data_chks[[i]], , drop = FALSE], index, id_chks[[i]], es_ids, type,
       path = if (length(data_chks) > 1) adjust_path(path, i) else path,
-      digits = digits
+      digits = digits, sf = sf
     )
   }
   return(unlist(resl))
@@ -184,7 +184,7 @@ docs_bulk_prep.data.frame <- function(x, index, path, type = NULL,
 
 #' @export
 docs_bulk_prep.list <- function(x, index, path, type = NULL,
-  chunk_size = 1000, doc_ids = NULL, quiet = FALSE, digits = NA) {
+  chunk_size = 1000, doc_ids = NULL, quiet = FALSE, digits = NA, sf = NULL) {
 
   assert(quiet, "logical")
   check_doc_ids(x, doc_ids)
@@ -215,7 +215,7 @@ docs_bulk_prep.list <- function(x, index, path, type = NULL,
     resl[[i]] <- make_bulk(
       x[data_chks[[i]]], index, id_chks[[i]], es_ids, type,
       path = if (length(data_chks) > 1) adjust_path(path, i) else path,
-      digits = digits
+      digits = digits, sf = sf
     )
   }
   return(unlist(resl))

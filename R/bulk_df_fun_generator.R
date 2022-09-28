@@ -1,8 +1,8 @@
 make_bulk_df_generator <- function(fun) {
-  function(conn, x, index = NULL, type = NULL, chunk_size = 1000, 
+  function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
     doc_ids = NULL, raw = FALSE, quiet = FALSE, query = list(),
-    digits = NA, ...) {
-  
+    digits = NA, sf = NULL, ...) {
+
     is_conn(conn)
     assert(quiet, "logical")
     if (is.null(index)) {
@@ -10,7 +10,7 @@ make_bulk_df_generator <- function(fun) {
            call. = FALSE)
     }
     check_doc_ids(x, doc_ids)
-    # make sure document ids passed 
+    # make sure document ids passed
     if (!'id' %in% names(x) && is.null(doc_ids)) {
       stop('data.frame must have a column "id" or pass param "doc_ids"')
     }
@@ -29,15 +29,15 @@ make_bulk_df_generator <- function(fun) {
     }
 
     if (!quiet) {
-      pb <- txtProgressBar(min = 0, max = length(data_chks), 
+      pb <- txtProgressBar(min = 0, max = length(data_chks),
         initial = 0, style = 3)
       on.exit(close(pb))
     }
     resl <- vector(mode = "list", length = length(data_chks))
     for (i in seq_along(data_chks)) {
       if (!quiet) setTxtProgressBar(pb, i)
-      resl[[i]] <- docs_bulk(conn, fun(x[data_chks[[i]], , drop = FALSE], 
-        index, id_chks[[i]], type, digits = digits), query = query, ...)
+      resl[[i]] <- docs_bulk(conn, fun(x[data_chks[[i]], , drop = FALSE],
+        index, id_chks[[i]], type, digits = digits, sf = sf), query = query, ...)
     }
     return(resl)
   }

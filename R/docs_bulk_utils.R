@@ -1,5 +1,5 @@
-make_bulk <- function(df, index, counter, es_ids, type = NULL, path = NULL, 
-  digits = NA) {
+make_bulk <- function(df, index, counter, es_ids, type = NULL, path = NULL,
+  digits = NA, sf = NULL) {
 
   if (!is.character(counter)) {
     if (max(counter) >= 10000000000) {
@@ -17,7 +17,7 @@ make_bulk <- function(df, index, counter, es_ids, type = NULL, path = NULL,
       sprintf(metadata_fmt, action, index, counter)
     }
     data <- jsonlite::toJSON(df, collapse = FALSE, na = "null",
-      auto_unbox = TRUE, digits = digits, sf = "features")
+      auto_unbox = TRUE, digits = digits, sf = sf)
     towrite <- paste(metadata, data, sep = "\n")
   } else {
     towrite <- unlist(unname(Map(function(a, b) {
@@ -30,7 +30,7 @@ make_bulk <- function(df, index, counter, es_ids, type = NULL, path = NULL,
       is_update <- a$es_action == "update"
       a$es_action <- NULL
       dat <- jsonlite::toJSON(a, collapse = FALSE, na = "null",
-        auto_unbox = TRUE, digits = digits, sf = "features")
+        auto_unbox = TRUE, digits = digits, sf = sf)
       if (is_update) dat <- sprintf('{"doc": %s, "doc_as_upsert": true}', dat)
       c(tmp, dat)
     }, split(df, seq_along(df)), counter)))
@@ -50,7 +50,7 @@ make_metadata <- function(es_ids, counter, type) {
       } else {
         '{"%s":{"_index":"%s","_type":"%s","_id":%s}}'
       }
-    }    
+    }
   } else {
     if (es_ids) {
       '{"%s":{"_index":"%s"}}'
@@ -77,10 +77,10 @@ check_doc_ids <- function(x, ids) {
   if (!is.null(ids)) {
     # check class type
     if (!class(ids) %in% c('character', 'factor', 'numeric', 'integer')) {
-      stop("doc_ids must be of class character, numeric or integer", 
+      stop("doc_ids must be of class character, numeric or integer",
            call. = FALSE)
     }
-    
+
     # check appropriate length
     if (!all(1:NROW(x) == 1:length(ids))) {
       stop("doc_ids length must equal number of documents", call. = FALSE)
@@ -106,7 +106,7 @@ has_ids <- function(x) {
 
 close_conns <- function() {
   cons <- showConnections()
-  ours <- as.integer(rownames(cons)[grepl("/elastic__", cons[, "description"], 
+  ours <- as.integer(rownames(cons)[grepl("/elastic__", cons[, "description"],
                                           fixed = TRUE)])
   for (i in ours) {
     close(getConnection(i))

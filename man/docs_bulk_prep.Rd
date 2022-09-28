@@ -12,7 +12,8 @@ docs_bulk_prep(
   chunk_size = 1000,
   doc_ids = NULL,
   quiet = FALSE,
-  digits = NA
+  digits = NA,
+  sf = NULL
 )
 }
 \arguments{
@@ -44,6 +45,9 @@ character. Default: not passed}
 \item{digits}{digits used by the parameter of the same name by
 \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}} to convert data to JSON before being submitted to
 your ES instance. default: \code{NA}}
+
+\item{sf}{used by \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}} to convert sf objects.
+Set to "features" for conversion to GeoJSON. default: "dataframe"}
 }
 \value{
 File path(s). By default we use temporary files; these are cleaned
@@ -147,7 +151,7 @@ unlist(paths)
 ## make sure you use a column named 'es_action' or this won't work
 ## if you need to delete or update you need document IDs
 if (index_exists(x, "baz")) index_delete(x, "baz")
-df <- data.frame(a = 1:5, b = 6:10, c = letters[1:5], stringsAsFactors = FALSE) 
+df <- data.frame(a = 1:5, b = 6:10, c = letters[1:5], stringsAsFactors = FALSE)
 f <- tempfile(fileext = ".json")
 invisible(docs_bulk_prep(df, "baz", f))
 cat(readLines(f), sep = "\n")
@@ -171,7 +175,7 @@ docs_bulk(x, f)
 # suppress progress bar
 docs_bulk_prep(mtcars, index = "hello",
   path = tempfile(fileext = ".json"), quiet = TRUE)
-## vs. 
+## vs.
 docs_bulk_prep(mtcars, index = "hello",
   path = tempfile(fileext = ".json"), quiet = FALSE)
 }
