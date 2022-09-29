@@ -16,6 +16,7 @@ docs_bulk_index(
   quiet = FALSE,
   query = list(),
   digits = NA,
+  sf = NULL,
   ...
 )
 }
@@ -59,6 +60,9 @@ ES page for details}
 \item{digits}{digits used by the parameter of the same name by
 \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}} to convert data to JSON before being submitted to
 your ES instance. default: \code{NA}}
+
+\item{sf}{used by \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}} to convert sf objects.
+Set to "features" for conversion to GeoJSON. default: "dataframe"}
 
 \item{...}{Pass on curl options to \link[crul:HttpClient]{crul::HttpClient}}
 }

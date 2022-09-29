@@ -20,16 +20,18 @@
 #' @param es_ids (boolean) Let Elasticsearch assign document IDs as UUIDs.
 #' These are sequential, so there is order to the IDs they assign.
 #' If `TRUE`, \code{doc_ids} is ignored. Default: `TRUE`
-#' @param raw (logical) Get raw JSON back or not. If `TRUE` 
+#' @param raw (logical) Get raw JSON back or not. If `TRUE`
 #' you get JSON; if `FALSE` you get a list. Default: `FALSE`
 #' @param quiet (logical) Suppress progress bar. Default: `FALSE`
-#' @param query (list) a named list of query parameters. optional. 
+#' @param query (list) a named list of query parameters. optional.
 #' options include: pipeline, refresh, routing, _source, _source_excludes,
 #' _source_includes, timeout, wait_for_active_shards. See the docs bulk
 #' ES page for details
 #' @param digits digits used by the parameter of the same name by
 #' [jsonlite::toJSON()] to convert data to JSON before being submitted to
 #' your ES instance. default: `NA`
+#' @param sf used by [jsonlite::toJSON()] to convert sf objects.
+#' Set to "features" for conversion to GeoJSON. default: "dataframe"
 #' @param ... Pass on curl options to [crul::HttpClient]
 #'
 #' @details More on the Bulk API:
@@ -58,12 +60,12 @@
 #' in data.frame or list, but not with files. If ids are not passed to
 #' `doc_ids`, we assign document IDs from 1 to length of the object
 #' (rows of a data.frame, or length of a list). In the future we may allow the
-#' user to select whether they want to assign sequential numeric IDs or 
-#' to allow Elasticsearch to assign IDs, which are UUIDs that are actually 
+#' user to select whether they want to assign sequential numeric IDs or
+#' to allow Elasticsearch to assign IDs, which are UUIDs that are actually
 #' sequential, so you still can determine an order of your documents.
-#' 
+#'
 #' @section Document IDs and Factors:
-#' If you pass in ids that are of class factor, we coerce them to character 
+#' If you pass in ids that are of class factor, we coerce them to character
 #' with `as.character`. This applies to both data.frame and list inputs, but
 #' not to file inputs.
 #'
@@ -86,29 +88,29 @@
 #' This function returns the response from Elasticsearch, but you'll likely
 #' not be that interested in the response. If not, wrap your call to
 #' `docs_bulk` in [invisible()], like so: `invisible(docs_bulk(...))`
-#' 
+#'
 #' @section Connections/Files:
-#' We create temporary files, and connections to those files, when data.frame's 
-#' and lists are passed in to `docs_bulk()` (not when a file is passed in 
-#' since we don't need to create a file). After inserting data into your 
+#' We create temporary files, and connections to those files, when data.frame's
+#' and lists are passed in to `docs_bulk()` (not when a file is passed in
+#' since we don't need to create a file). After inserting data into your
 #' Elasticsearch instance, we close the connections and delete the temporary files.
-#' 
-#' There are some exceptions though. When you pass in your own file, whether a 
-#' tempfile or not, we don't delete those files after using them - in case 
-#' you need those files again. Your own tempfile's will be cleaned up/delete 
+#'
+#' There are some exceptions though. When you pass in your own file, whether a
+#' tempfile or not, we don't delete those files after using them - in case
+#' you need those files again. Your own tempfile's will be cleaned up/delete
 #' when the R session ends. Non-tempfile's won't be cleaned up/deleted after
-#' the R session ends. 
-#' 
+#' the R session ends.
+#'
 #' @section Elasticsearch versions that don't support type:
 #' See the [type_remover()] function.
 #'
 #' @return A list
 #' @family bulk-functions
-#' 
+#'
 #' @examples \dontrun{
 #' # connection setup
 #' (x <- connect())
-#' 
+#'
 #' # From a file already in newline delimited JSON format
 #' plosdat <- system.file("examples", "plos_data.json", package = "elastic")
 #' docs_bulk(x, plosdat)
@@ -198,13 +200,13 @@
 #' out <- docs_bulk(x, res, index = db)
 #' count(x, db)
 #' index_delete(x, db)
-#' 
-#' 
+#'
+#'
 #' # data.frame with a mix of actions
 #' ## make sure you use a column named 'es_action' or this won't work
 #' ## if you need to delete or update you need document IDs
 #' if (index_exists(x, "baz")) index_delete(x, "baz")
-#' df <- data.frame(a = 1:5, b = 6:10, c = letters[1:5], stringsAsFactors = FALSE) 
+#' df <- data.frame(a = 1:5, b = 6:10, c = letters[1:5], stringsAsFactors = FALSE)
 #' invisible(docs_bulk(x, df, "baz"))
 #' Sys.sleep(3)
 #' (res <- Search(x, 'baz', asdf=TRUE)$hits$hits)
@@ -219,23 +221,23 @@
 #' ### or es_ids = FALSE and pass in document ids to doc_ids
 #' # invisible(docs_bulk(df, "baz", es_ids = FALSE, doc_ids = df$id))
 #' Search(x, 'baz', asdf=TRUE)$hits$hits
-#' 
-#' 
+#'
+#'
 #' # Curl options
 #' plosdat <- system.file("examples", "plos_data.json",
 #'   package = "elastic")
 #' plosdat <- type_remover(plosdat)
 #' invisible(docs_bulk(x, plosdat, verbose = TRUE))
-#' 
-#' 
+#'
+#'
 #' # suppress progress bar
 #' invisible(docs_bulk(x, mtcars, index = "hello", quiet = TRUE))
-#' ## vs. 
+#' ## vs.
 #' invisible(docs_bulk(x, mtcars, index = "hello", quiet = FALSE))
 #' }
 docs_bulk <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
   doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, query = list(),
-  digits = NA, ...) {
+  digits = NA, sf = NULL, ...) {
 
   UseMethod("docs_bulk", x)
 }
@@ -243,7 +245,7 @@ docs_bulk <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
 #' @export
 docs_bulk.default <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
   doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, query = list(),
-  digits = NA, ...) {
+  digits = NA, sf = NULL, ...) {
 
   stop("no 'docs_bulk' method for class ", class(x), call. = FALSE)
 }
@@ -251,7 +253,7 @@ docs_bulk.default <- function(conn, x, index = NULL, type = NULL, chunk_size = 1
 #' @export
 docs_bulk.data.frame <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
   doc_ids = NULL, es_ids = TRUE, raw = FALSE, quiet = FALSE, query = list(),
-  digits = NA, ...) {
+  digits = NA, sf = NULL, ...) {
 
   is_conn(conn)
   assert(quiet, "logical")
@@ -273,7 +275,7 @@ docs_bulk.data.frame <- function(conn, x, index = NULL, type = NULL, chunk_size 
     rws <- shift_start(rws, index, type)
     id_chks <- split(rws, ceiling(seq_along(rws) / chunk_size))
   }
-  
+
   if (!quiet) {
     pb <- txtProgressBar(min = 0, max = length(data_chks), initial = 0, style = 3)
     on.exit(close(pb))
@@ -281,16 +283,16 @@ docs_bulk.data.frame <- function(conn, x, index = NULL, type = NULL, chunk_size 
   resl <- vector(mode = "list", length = length(data_chks))
   for (i in seq_along(data_chks)) {
     if (!quiet) setTxtProgressBar(pb, i)
-    resl[[i]] <- docs_bulk(conn, make_bulk(x[data_chks[[i]], , drop = FALSE], 
-      index, id_chks[[i]], es_ids, type, digits = digits), query = query, ...)
+    resl[[i]] <- docs_bulk(conn, make_bulk(x[data_chks[[i]], , drop = FALSE],
+      index, id_chks[[i]], es_ids, type, digits = digits, sf = sf), query = query, ...)
   }
   return(resl)
 }
 
 #' @export
 docs_bulk.list <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
-                           doc_ids = NULL, es_ids = TRUE, raw = FALSE, 
-                           quiet = FALSE, query = list(), digits = NA, ...) {
+                           doc_ids = NULL, es_ids = TRUE, raw = FALSE,
+                           quiet = FALSE, query = list(), digits = NA, sf = NULL, ...) {
 
   is_conn(conn)
   assert(quiet, "logical")
@@ -322,16 +324,16 @@ docs_bulk.list <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000
   resl <- vector(mode = "list", length = length(data_chks))
   for (i in seq_along(data_chks)) {
     if (!quiet) setTxtProgressBar(pb, i)
-    resl[[i]] <- docs_bulk(conn, make_bulk(x[data_chks[[i]]], index, 
-      id_chks[[i]], es_ids, type, digits = digits), query = query, ...)
+    resl[[i]] <- docs_bulk(conn, make_bulk(x[data_chks[[i]]], index,
+      id_chks[[i]], es_ids, type, digits = digits, sf = sf), query = query, ...)
   }
   return(resl)
 }
 
 #' @export
 docs_bulk.character <- function(conn, x, index = NULL, type = NULL, chunk_size = 1000,
-                                doc_ids = NULL, es_ids = TRUE, raw=FALSE, 
-                                quiet = FALSE, query = list(), digits = NA, ...) {
+                                doc_ids = NULL, es_ids = TRUE, raw=FALSE,
+                                quiet = FALSE, query = list(), digits = NA, sf = NULL, ...) {
 
   is_conn(conn)
   stopifnot(file.exists(x))
@@ -340,7 +342,7 @@ docs_bulk.character <- function(conn, x, index = NULL, type = NULL, chunk_size =
   on.exit(cleanup_file(x), add = TRUE)
   url <- file.path(conn$make_url(), '_bulk')
   cli <- crul::HttpClient$new(url = url,
-    headers = conn$headers, 
+    headers = conn$headers,
     opts = c(conn$opts, ...),
     auth = crul::auth(conn$user, conn$pwd)
   )
@@ -349,7 +351,7 @@ docs_bulk.character <- function(conn, x, index = NULL, type = NULL, chunk_size =
       query[[i]] <- if (is.logical(query[[i]])) tolower(as.character(query[[i]])) else query[[i]]
     }
   }
-  tt <- cli$post(body = crul::upload(x, type = "application/x-ndjson"), 
+  tt <- cli$post(body = crul::upload(x, type = "application/x-ndjson"),
     query = query, encode = "json")
   if (conn$warn) catch_warnings(tt)
   geterror(conn, tt)

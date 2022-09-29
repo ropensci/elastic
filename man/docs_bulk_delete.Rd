@@ -15,6 +15,7 @@ docs_bulk_delete(
   quiet = FALSE,
   query = list(),
   digits = NA,
+  sf = NULL,
   ...
 )
 }
@@ -51,7 +52,7 @@ options include: pipeline, refresh, routing, _source, _source_excludes,
 _source_includes, timeout, wait_for_active_shards. See the docs bulk
 ES page for details}
 
-\item{digits}{ignored, used in other docs bulk functions but not used here}
+\item{digits, sf}{ignored, used in other docs bulk functions but not used here}
 
 \item{...}{Pass on curl options to \link[crul:HttpClient]{crul::HttpClient}}
 }

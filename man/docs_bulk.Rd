@@ -16,6 +16,7 @@ docs_bulk(
   quiet = FALSE,
   query = list(),
   digits = NA,
+  sf = NULL,
   ...
 )
 }
@@ -59,6 +60,9 @@ ES page for details}
 \item{digits}{digits used by the parameter of the same name by
 \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}} to convert data to JSON before being submitted to
 your ES instance. default: \code{NA}}
+
+\item{sf}{used by \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}} to convert sf objects.
+Set to "features" for conversion to GeoJSON. default: "dataframe"}
 
 \item{...}{Pass on curl options to \link[crul:HttpClient]{crul::HttpClient}}
 }
@@ -253,7 +257,7 @@ index_delete(x, db)
 ## make sure you use a column named 'es_action' or this won't work
 ## if you need to delete or update you need document IDs
 if (index_exists(x, "baz")) index_delete(x, "baz")
-df <- data.frame(a = 1:5, b = 6:10, c = letters[1:5], stringsAsFactors = FALSE) 
+df <- data.frame(a = 1:5, b = 6:10, c = letters[1:5], stringsAsFactors = FALSE)
 invisible(docs_bulk(x, df, "baz"))
 Sys.sleep(3)
 (res <- Search(x, 'baz', asdf=TRUE)$hits$hits)
@@ -279,7 +283,7 @@ invisible(docs_bulk(x, plosdat, verbose = TRUE))
 
 # suppress progress bar
 invisible(docs_bulk(x, mtcars, index = "hello", quiet = TRUE))
-## vs. 
+## vs.
 invisible(docs_bulk(x, mtcars, index = "hello", quiet = FALSE))
 }
 }

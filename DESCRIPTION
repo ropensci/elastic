@@ -23,7 +23,7 @@ Imports:
     utils,
     curl (>= 2.2),
     crul (>= 0.9.0),
-    jsonlite (>= 1.1),
+    jsonlite,
     R6
 Suggests:
     testthat
