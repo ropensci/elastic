@@ -10,9 +10,10 @@ Description: Connect to 'Elasticsearch', a 'NoSQL' database built on the 'Java'
     more.
 Version: 1.2.1.91
 License: MIT + file LICENSE
-Authors@R: person("Scott", "Chamberlain", role = c("aut", "cre"),
-    email = "myrmecocystus@gmail.com",
-    comment = c(ORCID="0000-0003-1444-9135"))
+Authors@R: c(
+person("Scott", "Chamberlain", role = c("aut", "cre"), email = "myrmecocystus@gmail.com",comment = c(ORCID="0000-0003-1444-9135")),
+person("Beier", "Maximilian", role ="ctb", email = "beiersmaxi@gmail.com")
+)
 URL: https://docs.ropensci.org/elastic/ (website),
     https://github.com/ropensci/elastic
 BugReports: https://github.com/ropensci/elastic/issues
