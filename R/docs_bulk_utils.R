@@ -12,9 +12,17 @@ make_bulk <- function(df, index, counter, es_ids, type = NULL, path = NULL,
   if (!"es_action" %in% names(df)) {
     action <- "index"
     metadata <- if (!is.null(type)) {
-      sprintf(metadata_fmt, action, index, type, counter)
+      if (!es_ids) {
+        sprintf(metadata_fmt, action, index, type, counter) 
+      } else {
+        sprintf(metadata_fmt, action, index, type)
+      }
     } else {
-      sprintf(metadata_fmt, action, index, counter)
+      if (!es_ids) {
+        sprintf(metadata_fmt, action, index, counter) 
+      } else {
+        sprintf(metadata_fmt, action, index)
+      }
     }
     data <- jsonlite::toJSON(df, collapse = FALSE, na = "null",
       auto_unbox = TRUE, digits = digits, sf = sf)
@@ -22,9 +30,17 @@ make_bulk <- function(df, index, counter, es_ids, type = NULL, path = NULL,
   } else {
     towrite <- unlist(unname(Map(function(a, b) {
       tmp <- if (!is.null(type)) {
-        sprintf(metadata_fmt, a$es_action, index, type, b)
+        if (!es_ids) {
+          sprintf(metadata_fmt, a$es_action, index, type, b) 
+        } else {
+          sprintf(metadata_fmt, a$es_action, index, type)
+        }
       } else {
-        sprintf(metadata_fmt, a$es_action, index, b)
+        if (!es_ids) {
+          sprintf(metadata_fmt, a$es_action, index, b) 
+        } else {
+          sprintf(metadata_fmt, a$es_action, index)
+        }
       }
       if (a$es_action == "delete") return(tmp)
       is_update <- a$es_action == "update"

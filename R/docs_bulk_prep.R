@@ -151,7 +151,7 @@ docs_bulk_prep.data.frame <- function(x, index, path, type = NULL,
 
   assert(quiet, "logical")
   check_doc_ids(x, doc_ids)
-  es_ids <- if (!is.null(doc_ids)) FALSE else TRUE
+  es_ids <- if (is.null(doc_ids)) FALSE else TRUE
   if (is.factor(doc_ids)) doc_ids <- as.character(doc_ids)
   row.names(x) <- NULL
   rws <- seq_len(NROW(x))
@@ -188,7 +188,7 @@ docs_bulk_prep.list <- function(x, index, path, type = NULL,
 
   assert(quiet, "logical")
   check_doc_ids(x, doc_ids)
-  es_ids <- if (!is.null(doc_ids)) TRUE else FALSE
+  es_ids <- if (is.null(doc_ids)) TRUE else FALSE
   if (is.factor(doc_ids)) doc_ids <- as.character(doc_ids)
   x <- unname(x)
   x <- check_named_vectors(x)
